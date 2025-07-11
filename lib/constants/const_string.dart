@@ -1,0 +1,9 @@
+const String isFirstTime = "isFirstTime";
+const String localToken = "localToken";
+const String refreshToken = "refreshToken";
+const String isLoggedIn = "isLoggedIn";
+const String isLoggedOut = "isLoggedOut";
+const String userId = "userId";
+const String instructorId = "instructorId";
+const String isPassword = "isPassword";
+// const String 

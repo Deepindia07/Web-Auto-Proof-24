@@ -1,0 +1,33 @@
+const String appLogo = "assets/image/Brand Logo 1.png";
+const String splashLogo = "assets/icon/Group 17 (2).png";
+const String carIcon = "assets/image/Car.png";
+const String car1Icon = "assets/image/Car (1).png";
+const String car2Icon = "assets/image/download__3_-removebg-preview 1.png";
+const String contextsIcon = "assets/image/Frame 13.png";
+
+// Icons
+
+const String arrowForwardStyleIcon = "assets/icon/Vector.png";
+const String arrowbackRoundIcon = "assets/icon/Group.png";
+const String arrowForwardRoundIcon = "assets/icon/fi_11399530.png";
+const String lockLayer1Icon = "assets/icon/Layer 2 (1).png";
+const String mailIcon = "assets/icon/Letter.png";
+const String docsIcon = "assets/icon/fi_901533 (1).png";
+const String carShortIcons = "assets/icon/fi_9851278.png";
+const String personIcons = "assets/icon/fi_9623115.png";
+const String docInspectionsIcons = "assets/icon/fi_5531663.png";
+const String checkListIcons = "assets/icon/fi_839860.png";
+const String teamIcons = "assets/icon/Layer_3 (1).png";
+const String previouslyHistory = "assets/icon/Activity History.png";
+const String homeIcon = "assets/icon/fi_9314393.png";
+const String personIcon = "assets/icon/fi_1077063.png";
+const String listIcon = "assets/icon/fi_9623117.png";
+const String notificationsIcon = "assets/icon/Layer 2.png";
+const String headPhoneIcon = "assets/icon/fi_6511790.png";
+const String menuIcon = "assets/icon/Frame 17.png";
+const String arrowBackIcon = "assets/icon/fi_507257 (1).png";
+const String alertIcon = "assets/icon/Group (1).png";
+const String cameraIcon = "assets/icon/fi_7713930.png";
+const String passIcon = "assets/icon/fi_561794.png";
+const String personDarkIcon = "assets/icon/fi_1077114.png";
+const String carFrontIcon = "assets/icon/fi_10867526.png";

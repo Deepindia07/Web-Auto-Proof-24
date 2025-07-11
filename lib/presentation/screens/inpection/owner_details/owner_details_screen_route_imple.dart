@@ -1,0 +1,14 @@
+library owner_details_screen_route_imple.dart;
+
+import 'package:auto_proof/constants/const_color.dart';
+import 'package:auto_proof/presentation/screens/inpection/owner_details/bloc/owner_details_screen_bloc.dart';
+import 'package:auto_proof/utilities/custom_switch_button.dart';
+import 'package:auto_proof/utilities/custom_textfields.dart';
+import 'package:auto_proof/utilities/custom_widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../utilities/custom_button.dart';
+import '../../../../utilities/custom_textstyle.dart';
+
+part 'owner_details_screen.dart';
