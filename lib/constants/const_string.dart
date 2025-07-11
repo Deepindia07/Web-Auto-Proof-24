@@ -6,4 +6,5 @@ const String isLoggedOut = "isLoggedOut";
 const String userId = "userId";
 const String instructorId = "instructorId";
 const String isPassword = "isPassword";
-// const String 
+const String emailKey = "emailKey";
+const String phoneKey = "phoneKey";

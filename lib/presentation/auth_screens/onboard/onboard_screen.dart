@@ -71,7 +71,7 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                     ),
                     SizedBox(height: screenHeight * 0.015),
                     Text(
-                      "Auto Proof",
+                      "Auto Proof 24",
                       style: MontserratStyles.montserratBoldTextStyle(
                         color: AppColor().darkCharcoalBlueColor,
                         size: screenWidth * 0.10,

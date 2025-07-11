@@ -51,7 +51,7 @@ Exception handleDioError(DioException dioError) {
   }
 }
 
-String _getDioErrorMessage(DioException dioError) {
+String getDioErrorMessage(DioException dioError) {  /*deep07developer1@gmail.com    123456*/
   switch (dioError.type) {
     case DioExceptionType.connectionTimeout:
       return 'Connection timeout. Please check your internet connection.';

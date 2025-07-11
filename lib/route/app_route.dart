@@ -47,32 +47,42 @@ class AppRouter {
       GoRoute(
         path: AppRoute.forgotScreen,
         name: 'forgot',
-        pageBuilder: (context, state) => _buildPageWithAnimation(
-          state: state,
-          child: const ForgotScreen(),
-          animation: AppAnimations.slideFromRightWithScale,
-          duration: const Duration(milliseconds: 500),
-        ),
+        pageBuilder: (context, state) {
+          final extraData = state.extra as Map<String, dynamic>?;
+          final email = extraData?['email'] ?? '';
+          return _buildPageWithAnimation(
+            state: state,
+            child: ForgotScreen(emailOrPhone: email,),
+            animation: AppAnimations.slideFromRightWithScale,
+            duration: const Duration(milliseconds: 500),
+          );
+        },
       ),
       GoRoute(
         path: AppRoute.otpScreen,
         name: 'otp',
-        pageBuilder: (context, state) => _buildPageWithAnimation(
-          state: state,
-          child: const OtpScreen(),
-          animation: AppAnimations.slideFromRightWithScale,
-          duration: const Duration(milliseconds: 500),
-        ),
+        pageBuilder: (context, state) {
+          final email = state.extra.toString();
+          return _buildPageWithAnimation(
+            state: state,
+            child: OtpScreen(email: email,),
+            animation: AppAnimations.slideFromBottom,
+            duration: const Duration(milliseconds: 500),
+          );
+        }
       ),
       GoRoute(
         path: AppRoute.resetPasswordScreen,
         name: 'resetpassword',
-        pageBuilder: (context, state) => _buildPageWithAnimation(
-          state: state,
-          child: const ResetPasswordScreen(),
-          animation: AppAnimations.slideFromRightWithScale,
-          duration: const Duration(milliseconds: 500),
-        ),
+        pageBuilder: (context, state){
+          final email = state.extra.toString();
+          return _buildPageWithAnimation(
+            state: state,
+            child: ResetPasswordScreen(email: email,),
+            animation: AppAnimations.slideFromRightWithScale,
+            duration: const Duration(milliseconds: 500),
+          );
+        },
       ),
 
       GoRoute(

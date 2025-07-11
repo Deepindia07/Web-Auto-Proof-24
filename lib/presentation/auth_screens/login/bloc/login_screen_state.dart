@@ -1,20 +1,55 @@
 part of 'login_screen_bloc.dart';
 
 @immutable
-sealed class LoginScreenState {}
+abstract class LoginScreenState extends Equatable {
+  const LoginScreenState();
 
-final class LoginScreenInitial extends LoginScreenState {}
+  @override
+  List<Object> get props => [];
+}
+
+class LoginScreenInitial extends LoginScreenState {}
 
 class LoginLoading extends LoginScreenState {}
 
 class LoginSuccess extends LoginScreenState {
   final LoginResponseModel loginResponse;
 
-  LoginSuccess({required this.loginResponse});
+  const LoginSuccess({required this.loginResponse});
+
+  @override
+  List<Object> get props => [loginResponse];
 }
 
 class LoginFailure extends LoginScreenState {
   final String error;
 
-  LoginFailure({required this.error});
+  const LoginFailure({required this.error});
+
+  @override
+  List<Object> get props => [error];
+}
+
+class EmailValidationLoading extends LoginScreenState {}
+
+class EmailValidationSuccess extends LoginScreenState {
+  final String emailOrPhone;
+  final ForgotResponseModel forgotResponse;
+
+  const EmailValidationSuccess({
+    required this.emailOrPhone,
+    required this.forgotResponse,
+  });
+
+  @override
+  List<Object> get props => [emailOrPhone, forgotResponse];
+}
+
+class EmailValidationFailure extends LoginScreenState {
+  final String error;
+
+  const EmailValidationFailure({required this.error});
+
+  @override
+  List<Object> get props => [error];
 }

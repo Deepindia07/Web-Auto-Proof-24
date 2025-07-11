@@ -227,6 +227,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
 class CustomPasswordField extends StatefulWidget {
   final String? hintText;
   final Widget? prefix;
+  final Color? focusedBorderColor;
+  final TextStyle? textStyle;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final FormFieldValidator<String>? validator;
@@ -238,7 +240,9 @@ class CustomPasswordField extends StatefulWidget {
     Key? key,
     this.hintText = 'Enter password',
     this.prefix,
+    this.textStyle,
     this.controller,
+    this.focusedBorderColor,
     this.onChanged,
     this.fillColor,
     this.validator,
@@ -257,7 +261,9 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
   Widget build(BuildContext context) {
     return CustomTextField(
       hintText: widget.hintText,
+      textStyle: widget.textStyle,
       controller: widget.controller,
+      focusedBorderColor: widget.focusedBorderColor,
       obscureText: _obscureText,
       prefixIcon: widget.prefix,
       hintStyle: MontserratStyles.montserratRegularTextStyle(size: 16,color: AppColor().silverShadeGrayColor),

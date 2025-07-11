@@ -1,67 +1,117 @@
+// forgot_screen_route_imple.dart
 part of 'forgot_screen_route_imple.dart';
 
 class ForgotScreen extends StatelessWidget {
-  const ForgotScreen({super.key});
+  final String emailOrPhone;
+  const ForgotScreen({required this.emailOrPhone, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const ForgotScreenView();
+    return BlocProvider<ForgotScreenBloc>(
+      create: (context) => ForgotScreenBloc(
+        apiRepository: AuthenticationApiCall(),
+      ),
+      child: ForgotScreenView(emailOrPhone: emailOrPhone),
+    );
   }
 }
 
 class ForgotScreenView extends StatefulWidget {
-  const ForgotScreenView({super.key});
+  final String emailOrPhone;
+  const ForgotScreenView({required this.emailOrPhone, super.key});
 
   @override
   State<ForgotScreenView> createState() => _ForgotScreenViewState();
 }
 
 class _ForgotScreenViewState extends State<ForgotScreenView> {
+  final TextEditingController _emailOrPhoneController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.emailOrPhone.isNotEmpty) {
+      _emailOrPhoneController.text = widget.emailOrPhone;
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailOrPhoneController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
-      body: _buildBody(context),
       bottomSheet: _buildBottomSheet(context),
+      body: BlocConsumer<ForgotScreenBloc, ForgotScreenState>(
+        listener: (context, state) {
+          if (state is! ForgotScreenLoading) {
+            CustomLoader.hidePopupLoader(context);
+          }
+
+          if (state is ForgotScreenSuccess) {
+            CherryToast.success(context, state.message);
+            context.push(AppRoute.otpScreen, extra: state.email);
+          } else if (state is ForgotScreenError) {
+            CherryToast.error(context, state.error);
+          }
+        },
+        builder: (context, state) {
+          return _buildBody(context);
+        },
+      ),
     );
   }
 
   Widget _buildBody(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 120.0, left: 70, right: 60.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            lockLayer1Icon,
-            height: 100,
-            width: 100,
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                lockLayer1Icon,
+                height: 120,
+                width: 120,
+              ),
+              const SizedBox(height: 15),
+              Text(
+                "Forgot",
+                style: MontserratStyles.montserratBoldTextStyle(
+                  size: 36,
+                  color: AppColor().darkCharcoalBlueColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Password?",
+                style: MontserratStyles.montserratRegularTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 36,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "No worries, we'll send you\nreset instructions",
+                style: MontserratStyles.montserratNormalTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 18,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 300),
+            ],
           ),
-          Text(
-            "Forgot",
-            style: MontserratStyles.montserratBoldTextStyle(
-              size: 40,
-              color: AppColor().darkCharcoalBlueColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "Password?",
-            style: MontserratStyles.montserratRegularTextStyle(
-              color: AppColor().darkCharcoalBlueColor,
-              size: 50,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "No worries, we'll send you \n   reset instructions",
-            style: MontserratStyles.montserratNormalTextStyle(
-              color: AppColor().darkCharcoalBlueColor,
-              size: 16,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -72,9 +122,9 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
       onClosing: () {},
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.51,
+          height: MediaQuery.of(context).size.height * 0.45,
           width: double.infinity,
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
           decoration: BoxDecoration(
             color: AppColor().darkCharcoalBlueColor,
             borderRadius: const BorderRadius.only(
@@ -89,56 +139,92 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
   }
 
   Widget _buildFormContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          CustomTextField(
-            borderRadius: 48,
-            prefixIcon: Icon(
-              Icons.mail_outline,
-              size: 20,
-              color: AppColor().darkYellowColor,
-            ),
-            hintText: "Enter Your Email/Phone No.",
-            borderWidth: 2,
-            hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
-              size: 16,
-              color: AppColor().darkYellowColor,
-            ),
-            borderColor: AppColor().darkYellowColor,
-            fillColor: AppColor().darkCharcoalBlueColor,
-          ),
           const SizedBox(height: 20),
-          CustomButton(
-            height: 55,
-            width: MediaQuery.of(context).size.width * 0.8,
-            borderRadius: 48,
-            onPressed: _handleResetPassword,
-            backgroundColor: AppColor().darkYellowColor,
-            text: "Reset Password",
-            textStyle: MontserratStyles.montserratSemiBoldTextStyle(
-              size: 16,
-              color: AppColor().darkCharcoalBlueColor,
+          SizedBox(
+            width: double.infinity,
+            child: CustomTextField(
+              textStyle: MontserratStyles.montserratSemiBoldTextStyle(
+                size: 16,
+                color: AppColor().darkYellowColor,
+              ),
+              controller: _emailOrPhoneController,
+              borderRadius: 48,
+              prefixIcon: Icon(
+                Icons.mail_outline,
+                size: 20,
+                color: AppColor().darkYellowColor,
+              ),
+              hintText: "Enter Your Email/Phone No.",
+              borderWidth: 2,
+              hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
+                size: 16,
+                color: AppColor().darkYellowColor,
+              ),
+              borderColor: AppColor().darkYellowColor,
+              fillColor: AppColor().darkCharcoalBlueColor,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter your email or phone number';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  context.read<ForgotScreenBloc>().add(ValidateEmailEvent(value));
+                }
+              },
             ),
           ),
-          const SizedBox(height: 25),
-          Text(
-            "Back To Login",
-            style: MontserratStyles.montserratMediumTextStyle(
-              size: 16,
-              color: AppColor().darkYellowColor,
-            ),
+          const SizedBox(height: 30),
+          BlocBuilder<ForgotScreenBloc, ForgotScreenState>(
+            builder: (context, state) {
+              return SizedBox(
+                height: 55,
+                width: double.infinity,
+                child: CustomButton(
+                  height: 55,
+                  width: double.infinity,
+                  borderRadius: 48,
+                  onPressed: state is ForgotScreenLoading ? null : _handleResetPassword,
+                  backgroundColor: state is ForgotScreenLoading
+                      ? AppColor().darkYellowColor.withOpacity(0.6)
+                      : AppColor().darkYellowColor,
+                  text: state is ForgotScreenLoading ? "Sending..." : "Reset Password",
+                  textStyle: MontserratStyles.montserratSemiBoldTextStyle(
+                    size: 16,
+                    color: AppColor().darkCharcoalBlueColor,
+                  ),
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
           GestureDetector(
             onTap: () => context.pop(),
-            child: Image.asset(
-              arrowbackRoundIcon,
-              height: 30,
-              width: 30,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Back To Login",
+                  style: MontserratStyles.montserratMediumTextStyle(
+                    size: 16,
+                    color: AppColor().darkYellowColor,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Image.asset(
+                  arrowbackRoundIcon,
+                  height: 35,
+                  width: 35,
+                ),
+              ],
             ),
           ),
         ],
@@ -147,7 +233,23 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
   }
 
   void _handleResetPassword() {
-    // TODO: Implement reset password logic
-    context.push(AppRoute.otpScreen);
+    // Validate form first
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    final email = _emailOrPhoneController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your email address'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    CustomLoader.showPopupLoader(context);
+    context.read<ForgotScreenBloc>().add(SendOtpEvent(email));
   }
 }

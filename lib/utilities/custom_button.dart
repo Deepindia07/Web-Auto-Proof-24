@@ -15,6 +15,7 @@ class CustomButton extends StatelessWidget {
   final IconData? icon;
   final double? elevation;
   final BorderSide? side;
+  final Widget? child;
 
   const CustomButton({
     Key? key,
@@ -31,6 +32,7 @@ class CustomButton extends StatelessWidget {
     this.elevation,
     this.side,
     this.icon,
+    this.child,
   }) : super(key: key);
 
   @override
@@ -50,8 +52,7 @@ class CustomButton extends StatelessWidget {
           ),
           elevation: elevation,
         ),
-        child: isLoading
-            ? const SizedBox(
+        child: child!=null ? const SizedBox(
           width: 20,
           height: 20,
           child: CircularProgressIndicator(

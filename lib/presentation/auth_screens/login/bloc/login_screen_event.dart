@@ -1,16 +1,35 @@
 part of 'login_screen_bloc.dart';
 
 @immutable
-sealed class LoginScreenEvent {}
+abstract class LoginScreenEvent extends Equatable {
+  const LoginScreenEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class LoginSubmitted extends LoginScreenEvent {
   final String emailOrPhone;
   final String password;
 
-  LoginSubmitted({
+  const LoginSubmitted({
     required this.emailOrPhone,
     required this.password,
   });
+
+  @override
+  List<Object> get props => [emailOrPhone, password];
 }
 
 class LoginReset extends LoginScreenEvent {}
+
+class EmailValidationCheck extends LoginScreenEvent {
+  final String emailOrPhone;
+
+  const EmailValidationCheck({
+    required this.emailOrPhone,
+  });
+
+  @override
+  List<Object> get props => [emailOrPhone];
+}
