@@ -5,6 +5,7 @@ class AppRoute{
   static const String loginScreen = "/loginScreen";
   static const String signUpScreen = "/signUpScreen";
   static const String forgotScreen = "/forgotScreen";
+  static const String changeScreen = "/changeScreen";
   static const String otpScreen = "/otpScreen";
   static const String resetPasswordScreen = "/resetPasswordScreen";
   static const String homeScreen = "/homeScreen";
@@ -19,6 +20,9 @@ class AppRoute{
   static const String clientDetailsScreen = '/clientDetailsScreen';
   static const String carImageInpectionScreen = "/carImageInpectionScreen";
   static const String ownerSignatureViewScreen = "/ownerSignatureViewScreen";
+  static const String teamSreenView = "/teamScreenView";
+  static const String vehiclesScreenView = "/vehiclesScreenView";
+  static const String historyScreenView = "/historyScreenView";
   static const String clientSignatureViewScreen = "/clientSignatureViewScreen";
   static const String inpectionScreenViewScreen = "/inpectionScreenViewScreen";
 }

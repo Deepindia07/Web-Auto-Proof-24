@@ -36,6 +36,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
     if (resultResponse.isSuccess){
       SharedPrefsHelper.instance.setString(localToken, "${resultResponse.data.token}");
       SharedPrefsHelper.instance.setString(emailKey, resultResponse.data.user!.email.toString());
+      SharedPrefsHelper.instance.setString(isFirstTime, "isFirstTime");
       print("token: = ${SharedPrefsHelper.instance.getString(localToken)}");
       emit(LoginSuccess(loginResponse: resultResponse.data));
     } else {

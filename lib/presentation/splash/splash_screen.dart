@@ -203,6 +203,12 @@ class _SplashScreenViewState extends State<SplashScreenView>
   }
 
   void _navigateToOnboarding() {
-    context.pushReplacement("/onBoardScreenRoute");
+    final token = SharedPrefsHelper.instance.getString(localToken);
+    if(token != null ){
+      context.pushReplacement("/homeScreen");
+    }else{
+      context.pushReplacement("/onBoardScreenRoute");
+    }
+
   }
 }

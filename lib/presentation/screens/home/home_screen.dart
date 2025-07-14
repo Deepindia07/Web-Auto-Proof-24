@@ -18,7 +18,7 @@ class HomeScreenView extends StatefulWidget {
 
 class _HomeScreenViewState extends State<HomeScreenView> {
   final List<ContainersData> _appSectionsInfo = AppSectionsData.getAppSections();
-  int _currentIndex = 0; // Track current selected tab
+  int _currentIndex = 0;
 
   final List<BottomNavItem> _navItems = [
     BottomNavItem(
@@ -119,7 +119,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       BlendMode.srcIn,
                     ),
                     child: Image.asset(
-                      "${isSelected ? item.activeIcon : item.icon}",
+                      isSelected ? item.activeIcon : item.icon,
                       height: 28,
                     ),
                   ),
@@ -324,13 +324,13 @@ class _HomeScreenViewState extends State<HomeScreenView> {
         context.push(AppRoute.inpectionScreenViewScreen);
         break;
       case 4:
-        Navigator.pushNamed(context, '/tasks');
+        context.push(AppRoute.teamSreenView);
         break;
       case 5:
-        Navigator.pushNamed(context, '/messages');
+        context.push(AppRoute.vehiclesScreenView);
         break;
       case 6:
-        Navigator.pushNamed(context, '/settings');
+        context.push(AppRoute.historyScreenView);
         break;
       default:
         _showContainerDialog(context, title);
@@ -381,11 +381,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Welcome Back!", style: MontserratStyles.montserratMediumTextStyle(size: 16, color: AppColor().darkYellowColor)),
-              Text("Jonathan Patterson", style: MontserratStyles.montserratMediumTextStyle(size: 20, color: AppColor().darkCharcoalBlueColor))
+              Text("Jonathan Patterson", style: MontserratStyles.montserratMediumTextStyle(size: 20, color: AppColor().darkCharcoalBlueColor)),
+              vGap(10),
+              Row(
+                spacing: 5,
+                children: [
+                  Image.asset(locationIcon,height: 18,width: 18,),
+                  Text("123 Anywhere Street, Any City", style: MontserratStyles.montserratSemiBoldTextStyle(size: 14, color: AppColor().darkCharcoalBlueColor)),
+                ],
+              )
             ],
           ),
-          Spacer(),
-          Icon(Icons.keyboard_arrow_down_outlined)
         ],
       ),
     );

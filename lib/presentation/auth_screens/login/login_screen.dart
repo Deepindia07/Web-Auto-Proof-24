@@ -54,22 +54,19 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
       CherryToast.error(context, 'Please enter email or phone number first');
       return;
     }
-
-    // Validate email/phone format (optional)
     if (!_isValidEmailOrPhone(emailOrPhone)) {
       CherryToast.error(context, 'Please enter a valid email or phone number');
       return;
     }
-    // Trigger email validation check
+
     context.read<LoginScreenBloc>().add(
       EmailValidationCheck(emailOrPhone: emailOrPhone),
     );
   }
 
+  ///  Validation
   bool _isValidEmailOrPhone(String input) {
-    // Email validation
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    // Phone validation (adjust regex based on your requirements)
     final phoneRegex = RegExp(r'^[\+]?[1-9][\d]{0,15}$');
 
     return emailRegex.hasMatch(input) || phoneRegex.hasMatch(input);

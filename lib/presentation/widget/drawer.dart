@@ -1,9 +1,13 @@
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_color.dart';
+import 'package:auto_proof/constants/const_route_string.dart';
+import 'package:auto_proof/constants/const_string.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:auto_proof/utilities/responsive_screen_sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileDrawer extends StatelessWidget {
   const ProfileDrawer({Key? key}) : super(key: key);
@@ -116,7 +120,7 @@ class ProfileDrawer extends StatelessWidget {
                   icon: Icons.card_membership,
                   title: 'My Subscription',
                   onTap: () {
-                    Navigator.pop(context);
+                    context.push(AppRoute.reportsScreen);
                     // Handle subscription tap
                   },
                 ),
@@ -124,25 +128,20 @@ class ProfileDrawer extends StatelessWidget {
                   icon: Icons.group,
                   title: 'My Team',
                   onTap: () {
-                    Navigator.pop(context);
-                    // Handle team tap
+                    context.push(AppRoute.teamSreenView);
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.lock,
                   title: 'Change Password',
                   onTap: () {
-                    Navigator.pop(context);
-                    // Handle password change tap
+                    context.push(AppRoute.changeScreen);
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.language,
                   title: 'Change Language',
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Handle language change tap
-                  },
+                  onTap: () {},
                 ),
 
                 vGap(20),
@@ -161,8 +160,7 @@ class ProfileDrawer extends StatelessWidget {
                   icon: Icons.history,
                   title: 'Payment History',
                   onTap: () {
-                    Navigator.pop(context);
-                    // Handle about app tap
+                    context.push(AppRoute.historyScreenView);// Handle about app tap
                   },
                 ),
 
@@ -204,7 +202,9 @@ class ProfileDrawer extends StatelessWidget {
 
           CustomButton(
             side: BorderSide.none,
-            onPressed: (){},
+            onPressed: (){
+               _showSignOutDialog(context);
+            },
             borderRadius: 12,
               text: "Sign Out",
               padding: EdgeInsets.symmetric(horizontal: screenSize.width*0.24)
@@ -263,8 +263,9 @@ class ProfileDrawer extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                // Handle sign out logic here
+                SharedPrefsHelper.instance.remove(localToken);
+                context.pushReplacement(AppRoute.loginScreen);
+                // _onLoginOutMethodCall(context);
               },
               child: const Text('Sign Out'),
             ),
@@ -272,5 +273,15 @@ class ProfileDrawer extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+void _onLoginOutMethodCall(BuildContext context){
+  final token = SharedPrefsHelper.instance.getString(localToken);
+  if (token != null){
+    SharedPrefsHelper.instance.remove(token);
+    context.pushReplacementNamed(AppRoute.loginScreen);
+  }else{
+    context.pushReplacement(AppRoute.homeScreen);
   }
 }

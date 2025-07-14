@@ -122,7 +122,7 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                               children: [
                                 vGap(screenHeight * 0.01),
                                 Text(
-                                  page.title,
+                                 "${AppLocalizations.of(context)!.welcome}!",
                                   style: MontserratStyles.montserratBoldTextStyle(
                                     color: AppColor().darkCharcoalBlueColor,
                                     size: screenWidth * 0.08,

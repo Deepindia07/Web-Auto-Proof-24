@@ -16,6 +16,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   final _retypePasswordController = TextEditingController();
   bool _agreeToTerms = false;
+  bool _isVerified = false; // Changed from late to regular bool
 
   @override
   void dispose() {
@@ -58,6 +59,49 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
     }
   }
 
+  void _handleEmailVerification() {
+    // Check if email is entered
+    if (_emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your email address first'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check if email is valid
+    if (!_emailController.text.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid email address'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Toggle verification state
+    setState(() {
+      _isVerified = !_isVerified;
+    });
+
+    // Show success message when verified
+    if (_isVerified) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email verified successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+
+    // Here you can add actual email verification logic
+    // For example, navigate to OTP screen or send verification email
+    // context.push(AppRoute.otpScreen);
+  }
+
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery
@@ -69,7 +113,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
     return BlocProvider<SignUpScreenBloc>(
       create: (context) =>
           SignUpScreenBloc(
-            apiRepository: AuthenticationApiCall()
+              apiRepository: AuthenticationApiCall()
           ),
       child: Scaffold(
         backgroundColor: AppColor().backgroundColor,
@@ -78,8 +122,8 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
             if (state is SignUpScreenSuccess) {
               CustomLoader.showPopupLoader(context);
               CherryToast.success(context, "Account created successfully!");
-             context.pushNamed("login");
-             CustomLoader.hidePopupLoader(context);
+              context.pushNamed("login");
+              CustomLoader.hidePopupLoader(context);
             } else if (state is SignUpScreenError) {
               CustomLoader.hidePopupLoader(context);
               CherryToast.error(context, state.message);
@@ -122,13 +166,15 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                               controller: _emailController,
                               hint: 'Email Address',
                               suffix: TextButton(
-                                onPressed: () {},
+                                onPressed: _handleEmailVerification,
                                 child: Text(
-                                  "Verify!",
+                                  _isVerified ? "Verified" : "Verify",
                                   textAlign: TextAlign.center,
                                   style: MontserratStyles
                                       .montserratMediumTextStyle(
-                                    color: AppColor().darkYellowColor,
+                                    color: _isVerified
+                                        ? Colors.green
+                                        : AppColor().darkYellowColor,
                                   ),
                                 ),
                               ),
@@ -139,7 +185,9 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                               controller: _phoneController,
                               hint: 'Phone',
                               suffix: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  // Add phone verification logic here
+                                },
                                 child: Text(
                                   "Verify!",
                                   textAlign: TextAlign.center,

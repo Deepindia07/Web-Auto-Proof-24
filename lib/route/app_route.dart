@@ -226,6 +226,56 @@ class AppRouter {
           duration: const Duration(milliseconds: 500),
         ),
       ),
+      GoRoute(
+        path: AppRoute.changeScreen,
+        name: 'changeScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: ChangePasswordScreen(),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.teamSreenView,
+        name: 'teamScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: TeamScreen(),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.vehiclesScreenView,
+        name: 'vehiclesScreenView',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: VehiclesScreen(),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.historyScreenView,
+        name: 'historyScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: HistoryScreenView(),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
+        ),
+      ),
+      // GoRoute(
+      //   path: AppRoute.subscriptionView,
+      //   name: 'subscription',
+      //   pageBuilder: (context, state) => _buildPageWithAnimation(
+      //     state: state,
+      //     child: ReportsScreen(),
+      //     animation: AppAnimations.slideFromRightWithScale,
+      //     duration: const Duration(milliseconds: 500),
+      //   ),
+      // ),
     ],
     errorBuilder: (context, state) => _buildErrorPage(context, state),
   );

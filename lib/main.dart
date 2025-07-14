@@ -1,10 +1,12 @@
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
+import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:auto_proof/presentation/splash/bloc/splash_screen_bloc.dart';
 import 'package:auto_proof/route/app_route_imple.dart';
 import 'package:auto_proof/utilities/di/di_injection_route_imple.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'auth/server/observer/app_bloc_observer.dart';
@@ -34,6 +36,17 @@ class MyApp extends StatelessWidget {
           BlocProvider<SplashScreenBloc>(create: (context)=> SplashScreenBloc())
         ],
         child: MaterialApp.router(
+          locale: Locale('en'),
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate
+          ],
+          supportedLocales: [
+            Locale("en"),
+            Locale("fr")
+          ],
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(

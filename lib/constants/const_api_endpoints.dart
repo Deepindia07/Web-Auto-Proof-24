@@ -7,5 +7,5 @@ class ApiEndPoints {
   static const String forgetPassword = "api/auth/forget-password";
   static const String resetPassword = "api/auth/reset-password";
   static const String changePassword = "api/auth/change-password";
-  static const String createPassword = "api/admin/create-new-password";
+  static const String createNewPassword = "api/admin/create-new-password";
 }

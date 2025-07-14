@@ -31,3 +31,4 @@ const String cameraIcon = "assets/icon/fi_7713930.png";
 const String passIcon = "assets/icon/fi_561794.png";
 const String personDarkIcon = "assets/icon/fi_1077114.png";
 const String carFrontIcon = "assets/icon/fi_10867526.png";
+const String locationIcon = "assets/icon/locationIcon.png";

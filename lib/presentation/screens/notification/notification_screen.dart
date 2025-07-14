@@ -24,12 +24,12 @@ class _NotificationScreenViewState extends State<NotificationScreenView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
+      appBar: AppBar(
+        backgroundColor: AppColor().backgroundColor,
+        title: Text("Notification",style: MontserratStyles.montserratBoldTextStyle(size: 24,color: AppColor().darkCharcoalBlueColor),),
+      ),
       body: Column(
         children: [
-          CustomAppBar(
-            backgroundColor: AppColor().backgroundColor,
-            title: "Notification",
-          ),
           Expanded(child: _mainContainerWidget(context))
         ],
       ),
