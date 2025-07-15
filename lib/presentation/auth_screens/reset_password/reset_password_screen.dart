@@ -45,25 +45,25 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
 
       // Check if password is empty
       if (_newPasswordController.text.isEmpty) {
-        _passwordError = 'Password is required';
+        _passwordError = AppLocalizations.of(context)!.passwordRequired;
         return;
       }
 
       // Check minimum password length
-      if (_newPasswordController.text.length < 8) {
-        _passwordError = 'Password must be at least 8 characters';
+      if (_newPasswordController.text.length < 6) {
+        _passwordError = AppLocalizations.of(context)!.passwordMinLength;
         return;
       }
 
       // Check if confirm password is empty
       if (_confirmNewPasswordController.text.isEmpty) {
-        _confirmPasswordError = 'Please confirm your password';
+        _confirmPasswordError = AppLocalizations.of(context)!.pleaseConfirmPassword;
         return;
       }
 
       // Check if passwords match
       if (_newPasswordController.text != _confirmNewPasswordController.text) {
-        _confirmPasswordError = 'Passwords do not match';
+        _confirmPasswordError = AppLocalizations.of(context)!.passwordsDoNotMatch;
         return;
       }
     });
@@ -97,7 +97,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               CustomLoader.hidePopupLoader(context);
 
               if (state is ResetPasswordScreenSuccess) {
-                CherryToast.success(context, "Password reset successfully!");
+                CherryToast.success(context, AppLocalizations.of(context)!.passwordResetSuccess );
                 context.pushNamed('login');
               } else if (state is ResetPasswordScreenFailure) {
                 CherryToast.error(context, state.error);
@@ -116,14 +116,14 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         vGap(50),
                         Image.asset(lockLayer1Icon, height: 80, width: 80),
                         Text(
-                          'Reset',
+                         AppLocalizations.of(context)!.reset,
                           style: MontserratStyles.montserratBoldTextStyle(
                             size: 48,
                             color: AppColor().darkCharcoalBlueColor,
                           ),
                         ),
                         Text(
-                          'Password',
+                          AppLocalizations.of(context)!.password,
                           style: TextStyle(
                             fontSize: 48,
                             fontWeight: FontWeight.w300,
@@ -141,7 +141,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                             ),
                             children: [
                               TextSpan(
-                                text: 'We have sent code to your email\n',
+                                text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
                                 style: MontserratStyles.montserratNormalTextStyle(
                                   color: AppColor().silverShadeGrayColor,
                                   size: 16,
@@ -188,7 +188,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                               borderWidth: 2,
                               fillColor: AppColor().darkCharcoalBlueColor,
                               borderRadius: 30,
-                              hintText: "New Password",
+                              hintText: AppLocalizations.of(context)!.newPassword,
                               onChanged: (value) => _validatePasswords(),
                             ),
                             if (_passwordError != null)
@@ -217,7 +217,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                               borderWidth: 2,
                               fillColor: AppColor().darkCharcoalBlueColor,
                               borderRadius: 30,
-                              hintText: "Confirm New Password",
+                              hintText: AppLocalizations.of(context)!.confirmPassword,
                               onChanged: (value) => _validatePasswords(),
                             ),
                             if (_confirmPasswordError != null)
@@ -240,7 +240,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           borderRadius: 48,
                           backgroundColor: AppColor().yellowWarmColor,
                           onPressed: state is ResetPasswordScreenLoading ? null : _createPassword,
-                          text: state is ResetPasswordScreenLoading ? "Loading..." : "Create",
+                          text: state is ResetPasswordScreenLoading ? AppLocalizations.of(context)!.loading: AppLocalizations.of(context)!.create,
                           textStyle: MontserratStyles.montserratMediumTextStyle(
                             color: AppColor().darkCharcoalBlueColor,
                             size: 20,

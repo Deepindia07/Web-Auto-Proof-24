@@ -2,11 +2,15 @@ import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_route_string.dart';
 import 'package:auto_proof/constants/const_string.dart';
+import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
+import 'package:auto_proof/utilities/custom_container.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:auto_proof/utilities/responsive_screen_sizes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileDrawer extends StatelessWidget {
@@ -133,7 +137,7 @@ class ProfileDrawer extends StatelessWidget {
                 ),
                 _buildDrawerItem(
                   icon: Icons.lock,
-                  title: 'Change Password',
+                  title: AppLocalizations.of(context)!.changeLanguage,
                   onTap: () {
                     context.push(AppRoute.changeScreen);
                   },
@@ -141,7 +145,9 @@ class ProfileDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   icon: Icons.language,
                   title: 'Change Language',
-                  onTap: () {},
+                  onTap: () {
+                    _onLoginOutMethodCall(context);
+                    },
                 ),
 
                 vGap(20),
@@ -276,12 +282,192 @@ class ProfileDrawer extends StatelessWidget {
   }
 }
 
-void _onLoginOutMethodCall(BuildContext context){
-  final token = SharedPrefsHelper.instance.getString(localToken);
-  if (token != null){
-    SharedPrefsHelper.instance.remove(token);
-    context.pushReplacementNamed(AppRoute.loginScreen);
-  }else{
-    context.pushReplacement(AppRoute.homeScreen);
-  }
+
+Future _onLoginOutMethodCall(BuildContext context) {
+  final List<Map<String, dynamic>> languages = [
+    // {'name': 'Czech', 'flag': '🇨🇿', 'locale': const Locale('cs')},
+    // {'name': 'Dutch', 'flag': '🇳🇱', 'locale': const Locale('nl')},
+    {'name': 'English', 'flag': '🇺🇸', 'locale': const Locale('en')},
+    {'name': 'French', 'flag': '🇫🇷', 'locale': const Locale('fr')},
+    // {'name': 'German', 'flag': '🇩🇪', 'locale': const Locale('de')},
+    // {'name': 'Italian', 'flag': '🇮🇹', 'locale': const Locale('it')},
+    // {'name': 'Polish', 'flag': '🇵🇱', 'locale': const Locale('pl')},
+    // {'name': 'Portuguese', 'flag': '🇵🇹', 'locale': const Locale('pt')},
+    // {'name': 'Romanian', 'flag': '🇷🇴', 'locale': const Locale('ro')},
+    // {'name': 'Spanish', 'flag': '🇪🇸', 'locale': const Locale('es')},
+    // {'name': 'Swedish', 'flag': '🇸🇪', 'locale': const Locale('sv')},
+    // {'name': 'Turkish', 'flag': '🇹🇷', 'locale': const Locale('tr')},
+  ];
+
+  return showCupertinoModalPopup(
+    context: context,
+    builder: (context) => Material(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(25),
+        topRight: Radius.circular(25),
+      ),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.4,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // Handle bar
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+
+            // Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.changeLanguage,
+                    style: MontserratStyles.montserratSemiBoldTextStyle(
+                      color: AppColor().desaturatedBlueColor,
+                      size: 20,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        Icons.close,
+                        size: 20,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Divider
+            Container(
+              height: 1,
+              color: Colors.grey.shade200,
+            ),
+
+            // Language List
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount: languages.length,
+                itemBuilder: (context, index) {
+                  final lang = languages[index];
+                  return Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.grey.shade200,
+                        width: 1,
+                      ),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text(
+                            lang['flag'],
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        lang['name'],
+                        style: MontserratStyles.montserratMediumTextStyle(
+                          color: Colors.grey.shade800,
+                          size: 16,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: Colors.grey.shade400,
+                      ),
+                      onTap: () {
+                        // Add haptic feedback
+                        HapticFeedback.lightImpact();
+
+                        Locale selectedLocale = lang['locale'];
+                        print("Selected locale: $selectedLocale");
+
+                        // Show loading indicator briefly
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+
+                        // Simulate language change delay
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          Navigator.pop(context); // Close loading
+                          // MyApp.setLocale(context, selectedLocale); // <- Implement this
+                          Navigator.pop(context); // Close modal
+                        });
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            // Footer
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                "Select your preferred language",
+                style: MontserratStyles.montserratRegularTextStyle(
+                  color: Colors.grey.shade600,
+                  size: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

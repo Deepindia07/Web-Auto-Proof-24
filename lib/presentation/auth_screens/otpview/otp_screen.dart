@@ -56,7 +56,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
         email: widget.email!,
       ));
     } else {
-      CherryToast.warning(context, "Please field complete code");
+      CherryToast.warning(context, AppLocalizations.of(context)!.pleaseEnterCompleteCode);
     }
   }
 
@@ -82,11 +82,11 @@ class _OtpScreenViewState extends State<OtpScreenView> {
               CustomLoader.hidePopupLoader(context);
               if (state is OtpViewSuccess) {
                 context.push(AppRoute.resetPasswordScreen,extra: widget.email);
-                CherryToast.success(context, "OTP verified successfully");
+                CherryToast.success(context, AppLocalizations.of(context)!.otpVerified);
               } else if (state is OtpViewFailure) {
                 CherryToast.error(context, state.error);
               } else if (state is OtpResendSuccess) {
-                CherryToast.success(context, "OTP verified successfully");
+                CherryToast.success(context, AppLocalizations.of(context)!.otpVerified);
               } else if (state is OtpResendFailure) {
                 CherryToast.error(context, state.error);
               }
@@ -101,14 +101,14 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                     SizedBox(height: 60),
                     Image.asset(mailIcon, height: 100, width: 100),
                     Text(
-                      'Email',
+                      AppLocalizations.of(context)!.email,
                       style: MontserratStyles.montserratBoldTextStyle(
                         size: 48,
                         color: AppColor().darkCharcoalBlueColor,
                       ),
                     ),
                     Text(
-                      'Verification',
+                      AppLocalizations.of(context)!.verification,
                       style: TextStyle(
                         fontSize: 48,
                         fontWeight: FontWeight.w300,
@@ -126,14 +126,14 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                         ),
                         children: [
                           TextSpan(
-                            text: 'We have sent code to your email\n',
+                            text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
                             style: MontserratStyles.montserratNormalTextStyle(
                               color: AppColor().silverShadeGrayColor,
                               size: 16,
                             ),
                           ),
                           TextSpan(
-                            text: 'devesh***29gmail.com',
+                            text: widget.email,
                             style: MontserratStyles.montserratNormalTextStyle(
                               color: AppColor().silverShadeGrayColor,
                               size: 16,
@@ -208,7 +208,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                           borderRadius: 48,
                           backgroundColor: AppColor().yellowWarmColor,
                           onPressed: state is OtpViewLoading ? null : _verifyCode,
-                          text: state is OtpViewLoading ? "Verifying..." : "Verify",
+                          text: state is OtpViewLoading ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
                           textStyle: MontserratStyles.montserratMediumTextStyle(
                             color: AppColor().darkCharcoalBlueColor,
                             size: 20,
@@ -221,7 +221,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Don't receive code ? ",
+                          AppLocalizations.of(context)!.dontReceiveCode,
                           style: TextStyle(
                             color: Color(0xFF9CA3AF),
                             fontSize: 14,
@@ -232,7 +232,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                             return GestureDetector(
                               onTap: state is OtpViewLoading ? null : _resendCode,
                               child: Text(
-                                'Resend',
+                                AppLocalizations.of(context)!.resend,
                                 style: TextStyle(
                                   color: state is OtpViewLoading
                                       ? Color(0xFF9CA3AF)

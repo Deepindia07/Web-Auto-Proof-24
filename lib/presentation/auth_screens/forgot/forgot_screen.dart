@@ -83,7 +83,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               ),
               const SizedBox(height: 15),
               Text(
-                "Forgot",
+                AppLocalizations.of(context)!.forgot,
                 style: MontserratStyles.montserratBoldTextStyle(
                   size: 36,
                   color: AppColor().darkCharcoalBlueColor,
@@ -92,7 +92,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               ),
               const SizedBox(height: 8),
               Text(
-                "Password?",
+                "${AppLocalizations.of(context)!.password}?",
                 style: MontserratStyles.montserratRegularTextStyle(
                   color: AppColor().darkCharcoalBlueColor,
                   size: 36,
@@ -101,7 +101,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               ),
               const SizedBox(height: 10),
               Text(
-                "No worries, we'll send you\nreset instructions",
+                AppLocalizations.of(context)!.resetInstructionsMessage,
                 style: MontserratStyles.montserratNormalTextStyle(
                   color: AppColor().darkCharcoalBlueColor,
                   size: 18,
@@ -160,7 +160,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
                 size: 20,
                 color: AppColor().darkYellowColor,
               ),
-              hintText: "Enter Your Email/Phone No.",
+              hintText: AppLocalizations.of(context)!.enterEmailOrPhone,
               borderWidth: 2,
               hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
                 size: 16,
@@ -170,7 +170,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               fillColor: AppColor().darkCharcoalBlueColor,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter your email or phone number';
+                  return AppLocalizations.of(context)!.pleaseEnterEmailOrPhone;
                 }
                 return null;
               },
@@ -195,7 +195,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
                   backgroundColor: state is ForgotScreenLoading
                       ? AppColor().darkYellowColor.withOpacity(0.6)
                       : AppColor().darkYellowColor,
-                  text: state is ForgotScreenLoading ? "Sending..." : "Reset Password",
+                  text: state is ForgotScreenLoading ? AppLocalizations.of(context)!.resetPassword : AppLocalizations.of(context)!.resetPassword,
                   textStyle: MontserratStyles.montserratSemiBoldTextStyle(
                     size: 16,
                     color: AppColor().darkCharcoalBlueColor,
@@ -212,7 +212,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Back To Login",
+                  AppLocalizations.of(context)!.backToLogin,
                   style: MontserratStyles.montserratMediumTextStyle(
                     size: 16,
                     color: AppColor().darkYellowColor,

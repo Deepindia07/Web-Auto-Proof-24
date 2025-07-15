@@ -131,7 +131,7 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                                 ),
                                 vGap(screenHeight * 0.015),
                                 Text(
-                                  page.subtitle,
+                                  AppLocalizations.of(context)!.secureCheckIn,
                                   style: MontserratStyles.montserratMediumTextStyle(
                                     color: AppColor().darkCharcoalBlueColor,
                                     size: screenWidth * 0.045,
@@ -141,7 +141,7 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                                 if (page.description.isNotEmpty) ...[
                                   vGap(screenHeight * 0.003),
                                   Text(
-                                    page.description,
+                                    AppLocalizations.of(context)!.smartCheckOut,
                                     style: MontserratStyles.montserratMediumTextStyle(
                                       color: AppColor().darkCharcoalBlueColor,
                                       size: screenWidth * 0.045,
@@ -163,7 +163,7 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                                   _navigateToNextScreen();
                                 },
                                 side: BorderSide.none,
-                                text: "Get Started",
+                                text: AppLocalizations.of(context)!.getStarted,
                                 textStyle: MontserratStyles.montserratMediumTextStyle(
                                   color: AppColor().darkCharcoalBlueColor,
                                   size: 18,

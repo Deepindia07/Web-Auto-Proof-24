@@ -36,7 +36,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
   final TextEditingController _termsConditionController = TextEditingController();
   final TextEditingController _privacyPolicyController = TextEditingController();
 
-  String _selectedCountryCode = '+33';
+  String _selectedCountryCode = '';
 
   @override
   void initState() {
@@ -85,13 +85,9 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
               : _buildCompanyInformationForm(),
 
           SizedBox(height: 32),
-
-          // Radio Button Selection (moved below the form)
           _buildRadioSelection(),
 
           SizedBox(height: 32),
-
-          // Navigation Buttons
           _buildNavigationButtons(),
         ],
       ),
@@ -201,7 +197,89 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
             ),
           ],
         ),
-        _buildPhoneField(),
+        _buildTextField(
+          prefix: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: CustomContainer(
+              height: 50,
+              width: 70,
+              border: Border(
+                  right: BorderSide(
+                  width: 1,
+                  color: AppColor().silverShadeGrayColor,
+                  ),
+                  ),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12),bottomLeft: Radius.circular(12)),
+              backgroundColor: AppColor().backgroundColor,
+              padding: EdgeInsets.all(8),
+              child: CountryCodePicker(
+                onChanged: (CountryCode countryCode) {
+                  setState(() {
+                    _selectedCountryCode = countryCode.toString();
+                  });
+                  print("Selected Country: ${countryCode.name}");
+                  print("Selected Code: ${countryCode.dialCode}");
+                },
+                initialSelection: 'US', // Default country
+                favorite: ['+1', '+91', '+44'], // Favorite countries
+                showCountryOnly: true,
+                showOnlyCountryWhenClosed: false,
+                alignLeft: false,
+                textStyle: TextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  fontSize: 16,
+                ),
+                dialogTextStyle: TextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                ),
+                searchStyle: TextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                ),
+                searchDecoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 5),
+                  hintText: 'Search country',
+                  hintStyle: TextStyle(
+                    color: AppColor().darkCharcoalBlueColor.withOpacity(0.6),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
+                  ),
+                ),
+                dialogBackgroundColor: AppColor().backgroundColor,
+                barrierColor: Colors.black54,
+                dialogSize: Size(MediaQuery.of(context).size.width * 0.8,
+                    MediaQuery.of(context).size.height * 0.6),
+                builder: (countryCode) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Text(
+                      //   "${countryCode.flagUri}",
+                      //   style: TextStyle(fontSize: 20),
+                      // ),
+                      // SizedBox(width: 4),
+                      Text(
+                        countryCode!.dialCode ?? '',
+                        style: TextStyle(
+                          color: AppColor().darkCharcoalBlueColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+          label: 'Phone Number',
+          controller: _phoneController,
+        ),
         _buildTextField(
           label: 'Address',
           controller: _addressController,
@@ -210,28 +288,6 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
           label: 'Email',
           controller: _emailController,
         ),
-
-        // // Remember Setting Checkbox
-        // Row(
-        //   children: [
-        //     Checkbox(
-        //       value: _rememberSetting,
-        //       onChanged: (value) {
-        //         setState(() {
-        //           _rememberSetting = value!;
-        //         });
-        //       },
-        //       activeColor: Color(0xFF4A5568),
-        //     ),
-        //     Text(
-        //       'Remember my setting',
-        //       style: TextStyle(
-        //         fontSize: 14,
-        //         color: Colors.grey[600],
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }
@@ -267,7 +323,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'My Balance',
+                    'My Logo',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -334,14 +390,6 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
             ),
           ],
         ),
-        Text(
-          'Footer Information',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey[800],
-          ),
-        ),
         _buildTextField(
           label: 'Company Name',
           controller: _companyNameController,
@@ -355,34 +403,18 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
           label: 'VAT Number',
           controller: _vatNumberController,
         ),
-
-        SizedBox(height: 24),
-
-        // Company Registration No.
         _buildTextField(
           label: 'Company Registration No.',
           controller: _registrationNumberController,
         ),
-
-        SizedBox(height: 24),
-
-        // Share Capital
         _buildTextField(
           label: 'Share Capital',
           controller: _shareCapitalController,
         ),
-
-        SizedBox(height: 24),
-
-        // Term & Condition
         _buildTextField(
           label: 'Term & Condition',
           controller: _termsConditionController,
         ),
-
-        SizedBox(height: 24),
-
-        // Privacy Policy
         _buildTextField(
           label: 'Privacy Policy',
           controller: _privacyPolicyController,
@@ -394,6 +426,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,
+    Widget? prefix
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,6 +438,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
         SizedBox(height: 8),
         CustomTextField(
           borderRadius: 8,
+          prefixIcon: prefix,
           borderWidth: 2,
           fillColor: AppColor().backgroundColor,
           controller: controller,
@@ -419,99 +453,103 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
     );
   }
 
-  Widget _buildPhoneField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Phone Number',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[800],
-          ),
-        ),
-        SizedBox(height: 8),
-        Row(
-          children: [
-            SizedBox(
-              width: 100,
-              child: DropdownButtonFormField<String>(
-                value: _selectedCountryCode,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color(0xFF4A5568)),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                ),
-                items: [
-                  DropdownMenuItem(
-                    value: '+33',
-                    child: Row(
-                      children: [
-                        Text('🇫🇷', style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 4),
-                        Text('+33', style: TextStyle(fontSize: 12)),
-                      ],
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: '+1',
-                    child: Row(
-                      children: [
-                        Text('🇺🇸', style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 4),
-                        Text('+1', style: TextStyle(fontSize: 12)),
-                      ],
-                    ),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCountryCode = value!;
-                  });
-                },
-              ),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: TextFormField(
-                controller: _phoneController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Color(0xFF4A5568)),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                ),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  // Widget _buildPhoneField() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         'Phone Number',
+  //         style: TextStyle(
+  //           fontSize: 16,
+  //           fontWeight: FontWeight.w500,
+  //           color: Colors.grey[800],
+  //         ),
+  //       ),
+  //       SizedBox(height: 8),
+  //       Row(
+  //         children: [
+  //           SizedBox(
+  //             width: 100,
+  //             child: DropdownButtonFormField<String>(
+  //               value: _selectedCountryCode,
+  //               decoration: InputDecoration(
+  //                 border: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(8),
+  //                   borderSide: BorderSide(color: Colors.grey[300]!),
+  //                 ),
+  //                 enabledBorder: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(8),
+  //                   borderSide: BorderSide(color: Colors.grey[300]!),
+  //                 ),
+  //                 focusedBorder: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(8),
+  //                   borderSide: BorderSide(color: Color(0xFF4A5568)),
+  //                 ),
+  //                 contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+  //               ),
+  //               items: [
+  //                 DropdownMenuItem(
+  //                   value: '+33',
+  //                   child: Row(
+  //                     children: [
+  //                       Text('🇫🇷', style: TextStyle(fontSize: 16)),
+  //                       SizedBox(width: 4),
+  //                       Text('+33', style: TextStyle(fontSize: 12)),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 DropdownMenuItem(
+  //                   value: '+1',
+  //                   child: Row(
+  //                     children: [
+  //                       Text('🇺🇸', style: TextStyle(fontSize: 16)),
+  //                       SizedBox(width: 4),
+  //                       Text('+1', style: TextStyle(fontSize: 12)),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //               onChanged: (value) {
+  //                 setState(() {
+  //                   _selectedCountryCode = value!;
+  //                 });
+  //               },
+  //             ),
+  //           ),
+  //           SizedBox(width: 12),
+  //           Expanded(
+  //             child: CustomTextField(
+  //               borderRadius: 12,
+  //               controller: _phoneController,
+  //               borderColor: AppColor().darkCharcoalBlueColor,
+  //             )/*TextFormField(
+  //               controller: _phoneController,
+  //               decoration: InputDecoration(
+  //                 border: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(8),
+  //                   borderSide: BorderSide(color: Colors.grey[300]!),
+  //                 ),
+  //                 enabledBorder: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(8),
+  //                   borderSide: BorderSide(color: Colors.grey[300]!),
+  //                 ),
+  //                 focusedBorder: OutlineInputBorder(
+  //                   borderRadius: BorderRadius.circular(8),
+  //                   borderSide: BorderSide(color: Color(0xFF4A5568)),
+  //                 ),
+  //                 contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //               ),
+  //               style: TextStyle(
+  //                 fontSize: 14,
+  //                 color: Colors.grey[600],
+  //               ),
+  //             ),*/
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildNavigationButtons() {
     return Row(

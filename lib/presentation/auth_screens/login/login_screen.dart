@@ -51,11 +51,11 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     final emailOrPhone = _emailOrPhoneController.text.trim();
 
     if (emailOrPhone.isEmpty) {
-      CherryToast.error(context, 'Please enter email or phone number first');
+      CherryToast.error(context,AppLocalizations.of(context)!.pleaseEnterEmailOrPhoneFirst);
       return;
     }
     if (!_isValidEmailOrPhone(emailOrPhone)) {
-      CherryToast.error(context, 'Please enter a valid email or phone number');
+      CherryToast.error(context, AppLocalizations.of(context)!.pleaseEnterValidEmailOrPhone);
       return;
     }
 
@@ -119,7 +119,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                   ),
                   vGap(screenHeight * 0.012),
                   Text(
-                    "VEHICLE INSPECTION APPLICATION",
+                    AppLocalizations.of(context)!.appTitle,
                     style: MontserratStyles.montserratRegularTextStyle(
                       size: 14,
                       color: AppColor().darkCharcoalBlueColor,
@@ -135,10 +135,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       size: 16,
                       color: AppColor().silverShadeGrayColor,
                     ),
-                    hintText: "Email or Phone",
+                    hintText: AppLocalizations.of(context)!.emailOrPhone,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter email or phone';
+                        return AppLocalizations.of(context)!.pleaseEnterEmailOrPhoneShort;
                       }
                       return null;
                     },
@@ -149,10 +149,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                     borderWidth: 2,
                     fillColor: AppColor().backgroundColor,
                     borderRadius: 30,
-                    hintText: "Password",
+                    hintText: AppLocalizations.of(context)!.password,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter password';
+                        return AppLocalizations.of(context)!.pleaseEnterPassword;
                       }
                       return null;
                     },
@@ -164,7 +164,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       InkWell(
                         onTap: _onForgetPasswordPressed,
                         child: Text(
-                          "Forget Password ?",
+                          AppLocalizations.of(context)!.forgotPassword,
                           style: MontserratStyles.montserratSemiBoldTextStyle(
                             color: AppColor().darkCharcoalBlueColor,
                           ),
@@ -176,12 +176,12 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                   BlocConsumer<LoginScreenBloc, LoginScreenState>(
                     listener: (context, state) {
                       if (state is LoginSuccess) {
-                        CherryToast.success(context, 'Login successful!');
+                        CherryToast.success(context, AppLocalizations.of(context)!.loginSuccessful);
                         context.push(AppRoute.homeScreen);
                       } else if (state is LoginFailure) {
                         CherryToast.error(context, state.error);
                       } else if (state is EmailValidationSuccess) {
-                        CherryToast.success(context, 'Email validated successfully!');
+                        CherryToast.success(context, AppLocalizations.of(context)!.emailValidated);
                         context.push(AppRoute.forgotScreen, extra: {
                           'email': state.emailOrPhone,
                           'response': state.forgotResponse,
@@ -198,7 +198,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                         onPressed: state is LoginLoading || state is EmailValidationLoading
                             ? null
                             : _onLoginPressed,
-                        text: state is LoginLoading ? "Logging in..." : "Login",
+                        text: state is LoginLoading ? AppLocalizations.of(context)!.loggingIn : AppLocalizations.of(context)!.login,
                         textStyle: MontserratStyles.montserratMediumTextStyle(
                           color: AppColor().yellowWarmColor,
                           size: 18,
@@ -234,7 +234,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              "Validating email...",
+                              AppLocalizations.of(context)!.validatingEmail,
                               style: MontserratStyles.montserratRegularTextStyle(
                                 size: 14,
                                 color: AppColor().darkCharcoalBlueColor,
@@ -244,7 +244,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                         );
                       }
                       return Text(
-                        "or",
+                        AppLocalizations.of(context)!.or,
                         style: MontserratStyles.montserratRegularTextStyle(
                           size: 16,
                           color: AppColor().darkCharcoalBlueColor,
@@ -260,7 +260,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                     onPressed: () {
                       context.push(AppRoute.signUpScreen);
                     },
-                    text: "Create an account",
+                    text: AppLocalizations.of(context)!.createAccount,
                     textStyle: MontserratStyles.montserratMediumTextStyle(
                       color: AppColor().yellowWarmColor,
                       size: 18,

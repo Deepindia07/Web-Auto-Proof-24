@@ -16,7 +16,8 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   final _retypePasswordController = TextEditingController();
   bool _agreeToTerms = false;
-  bool _isVerified = false; // Changed from late to regular bool
+  bool _isVerified = false;
+  String selectedCountryCode = "+33";
 
   @override
   void dispose() {
@@ -33,7 +34,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
     if (_formKey.currentState!.validate() && _agreeToTerms) {
       // Extract country code and phone number
       String fullPhoneNumber = _phoneController.text;
-      String countryCode = "+91";
       String phoneNumber = fullPhoneNumber.replaceAll(RegExp(r'[^\d]'), '');
 
       // Trigger the registration event
@@ -42,7 +42,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
           firstName: _fullNameController.text.trim(),
           lastName: _lastNameController.text.trim(),
           email: _emailController.text.trim(),
-          countryCode: countryCode,
+          countryCode: selectedCountryCode,
           phoneNumber: phoneNumber,
           password: _passwordController.text,
           isEmailVerified: true,
@@ -134,7 +134,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    vGap(headerHeight + 40),
+                    vGap(headerHeight + 20),
                     Padding(
                       padding: const EdgeInsets.all(30),
                       child: Form(
@@ -149,14 +149,14 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                 Expanded(
                                   child: _buildTextField(
                                     controller: _fullNameController,
-                                    hint: 'Full Name',
+                                    hint: AppLocalizations.of(context)!.firstName,
                                     keyboardType: TextInputType.name,
                                   ),
                                 ),
                                 Expanded(
                                   child: _buildTextField(
                                     controller: _lastNameController,
-                                    hint: 'Last Name',
+                                    hint: AppLocalizations.of(context)!.lastName,
                                     keyboardType: TextInputType.name,
                                   ),
                                 ),
@@ -164,11 +164,11 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                             ),
                             _buildTextField(
                               controller: _emailController,
-                              hint: 'Email Address',
+                              hint: AppLocalizations.of(context)!.emailAddress,
                               suffix: TextButton(
                                 onPressed: _handleEmailVerification,
                                 child: Text(
-                                  _isVerified ? "Verified" : "Verify",
+                                  _isVerified ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
                                   textAlign: TextAlign.center,
                                   style: MontserratStyles
                                       .montserratMediumTextStyle(
@@ -178,18 +178,18 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                   ),
                                 ),
                               ),
-                              icon: Icons.mail_outline,
+                              icon: Icon(Icons.mail_outline),
                               keyboardType: TextInputType.emailAddress,
                             ),
                             _buildTextField(
                               controller: _phoneController,
-                              hint: 'Phone',
+                              hint: AppLocalizations.of(context)!.phone,
                               suffix: TextButton(
                                 onPressed: () {
                                   // Add phone verification logic here
                                 },
                                 child: Text(
-                                  "Verify!",
+                                  AppLocalizations.of(context)!.verify,
                                   textAlign: TextAlign.center,
                                   style: MontserratStyles
                                       .montserratMediumTextStyle(
@@ -197,15 +197,98 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                   ),
                                 ),
                               ),
-                              icon: Icons.phone_android_rounded,
+                              icon:  Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: CustomContainer(
+                                  height: 50,
+                                  width:90,
+                                  border: Border(
+                                    right: BorderSide(
+                                      width: 1,
+                                      color: AppColor().silverShadeGrayColor,
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(0),topLeft: Radius.circular(48),bottomLeft: Radius.circular(48),bottomRight: Radius.circular(0)),
+                                  backgroundColor: AppColor().backgroundColor,
+                                  padding: EdgeInsets.all(8),
+                                  child: CountryCodePicker(
+                                    onChanged: (CountryCode countryCode) {
+                                      setState(() {
+                                       selectedCountryCode = countryCode.toString();
+                                      });
+                                      print("Selected Country: ${countryCode.name}");
+                                      print("Selected Code: ${countryCode.dialCode}");
+                                    },
+                                    initialSelection: 'FR', // Default country
+                                    favorite: ["+33"],
+                                    showCountryOnly: true,
+                                    showOnlyCountryWhenClosed: false,
+                                    alignLeft: false,
+                                    textStyle: TextStyle(
+                                      color: AppColor().darkCharcoalBlueColor,
+                                      fontSize: 16,
+                                    ),
+                                    dialogTextStyle: TextStyle(
+                                      color: AppColor().darkCharcoalBlueColor,
+                                    ),
+                                    searchStyle: TextStyle(
+                                      color: AppColor().darkCharcoalBlueColor,
+                                    ),
+                                    searchDecoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 5),
+                                      hintText: 'Search country',
+                                      hintStyle: TextStyle(
+                                        color: AppColor().darkCharcoalBlueColor.withOpacity(0.6),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
+                                      ),
+                                    ),
+                                    dialogBackgroundColor: AppColor().backgroundColor,
+                                    barrierColor: Colors.black54,
+                                    dialogSize: Size(MediaQuery.of(context).size.width * 0.8,
+                                        MediaQuery.of(context).size.height * 0.6),
+                                    builder: (countryCode) {
+                                      return Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          if (countryCode != null)
+                                            Image.asset(
+                                              countryCode.flagUri!,
+                                              package: 'country_code_picker',
+                                              width: 24,
+                                              height: 18,
+                                              fit: BoxFit.fill,
+                                            ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            countryCode!.dialCode ?? '',
+                                            style: TextStyle(
+                                              color: AppColor().darkCharcoalBlueColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
                               keyboardType: TextInputType.phone,
                             ),
+
                             CustomPasswordField(
                               borderRadius: 48,
                               borderWidth: 3,
                               fillColor: AppColor().backgroundColor,
                               controller: _passwordController,
-                              hintText: "Password",
+                              hintText: AppLocalizations.of(context)!.password,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'This field is required';
@@ -222,7 +305,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                               borderWidth: 3,
                               fillColor: AppColor().backgroundColor,
                               controller: _retypePasswordController,
-                              hintText: "Retype Password",
+                              hintText: AppLocalizations.of(context)!.retypePassword,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'This field is required';
@@ -251,7 +334,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                 Expanded(
                                   child: RichText(
                                     text: TextSpan(
-                                      text: 'I agree to the ',
+                                      text: AppLocalizations.of(context)!.agreeTerms,
                                       style: MontserratStyles
                                           .montserratMediumTextStyle(
                                         size: 14,
@@ -259,7 +342,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: 'Terms & Privacy',
+                                          text: AppLocalizations.of(context)!.termsPrivacy,
                                           style: MontserratStyles
                                               .montserratMediumTextStyle(
                                             size: 14,
@@ -287,8 +370,8 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                         ? () => _handleRegistration(context)
                                         : null,
                                     text: isLoading
-                                        ? "Creating Account..."
-                                        : "Create an Account",
+                                        ? AppLocalizations.of(context)!.creatingAccount
+                                        : AppLocalizations.of(context)!.createAnAccountTitle,
                                     borderRadius: 48,
                                     textStyle: MontserratStyles
                                         .montserratMediumTextStyle(
@@ -306,7 +389,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Already have an account?  ',
+                                  AppLocalizations.of(context)!.haveAccount,
                                   style: MontserratStyles
                                       .montserratMediumTextStyle(
                                     size: 14,
@@ -318,7 +401,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    'Sign In',
+                                    AppLocalizations.of(context)!.signIn,
                                     style: MontserratStyles
                                         .montserratMediumTextStyle(
                                       size: 14,
@@ -341,38 +424,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColor().darkCharcoalBlueColor,
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(40),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            contextsIcon,
-                            height: 200,
-                            width: 200,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                child: UpperContainerWidget(height: headerHeight+50,),
               ),
             ],
           ),
@@ -385,7 +437,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String hint,
-    IconData? icon,
+    Widget? icon,
     final Widget? suffix,
     bool isPassword = false,
     bool isPasswordVisible = false,
@@ -405,9 +457,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
         color: AppColor().silverShadeGrayColor,
       ),
       borderRadius: 48,
-      prefixIcon: icon != null
-          ? Icon(icon, color: Colors.grey[500], size: 20)
-          : null,
+      prefixIcon: icon,
       borderWidth: 3,
       validator: (value) {
         if (value == null || value.isEmpty) {

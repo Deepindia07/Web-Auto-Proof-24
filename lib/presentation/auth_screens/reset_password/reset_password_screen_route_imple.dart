@@ -2,6 +2,8 @@ library reset_password_screen_route_imple.dart;
 
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:auto_proof/constants/const_route_string.dart';
+import 'package:auto_proof/l10n/app_localizations.dart';
+import 'package:auto_proof/l10n/app_localizations_en.dart';
 import 'package:auto_proof/utilities/custom_loader.dart';
 import 'package:auto_proof/utilities/custom_toast.dart';
 import 'package:flutter/material.dart';

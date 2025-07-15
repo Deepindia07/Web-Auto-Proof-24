@@ -1,3 +1,4 @@
+import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:auto_proof/utilities/custom_container.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,7 @@ class CustomLoader extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Please wait...',
+                  AppLocalizations.of(context)!.pleaseWait,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
