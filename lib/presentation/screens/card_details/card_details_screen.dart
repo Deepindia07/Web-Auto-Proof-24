@@ -529,7 +529,7 @@ class _CardDetailsScreenViewState extends State<CardDetailsScreenView> {
       height: 64,
       borderRadius: 48,
       onPressed: (){
-        context.push(AppRoute.collectInformationScreen);
+        context.push(AppRoute.homeScreen);
       },
         text: "Save Card",
         textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 16),

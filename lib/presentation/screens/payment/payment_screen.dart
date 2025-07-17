@@ -5,7 +5,10 @@ class PaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PaymentScreenView();
+    return BlocProvider(
+      create: (context) => PaymentScreenBloc()..add(LoadPaymentMethods()),
+      child: const PaymentScreenView(),
+    );
   }
 }
 
@@ -17,8 +20,6 @@ class PaymentScreenView extends StatefulWidget {
 }
 
 class _PaymentScreenViewState extends State<PaymentScreenView> {
-  String selectedPaymentMethod = 'apple_pay'; // Default selection
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,74 +30,97 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
             backgroundColor: AppColor().backgroundColor,
             title: "Payment Method",
           ),
-          Expanded(child: _paymentView(context))
+          Expanded(
+            child: BlocConsumer<PaymentScreenBloc, PaymentScreenState>(
+              listener: (context, state) {
+                if (state is PaymentScreenError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.message)),
+                  );
+                } else if (state is PaymentSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Payment successful! Amount: €${state.amount}'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else if (state is StripePaymentInitialized) {
+                  _showStripePaymentSheet(context, state.clientSecret);
+                }
+              },
+              builder: (context, state) {
+                if (state is PaymentScreenLoading || state is PaymentProcessing) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is PaymentScreenLoaded) {
+                  return _paymentView(context, state);
+                } else {
+                  return const Center(child: Text('Something went wrong'));
+                }
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _paymentView(BuildContext context) {
+  Widget _paymentView(BuildContext context, PaymentScreenLoaded state) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Balance Section
-          _buildBalanceCard(),
-
+          _buildBalanceCard(state.balance),
           const SizedBox(height: 20),
-
-          // Add Balance Button
-          _buildAddBalanceButton(),
-
+          _buildAddBalanceButton(context),
           const SizedBox(height: 30),
-
-          // Payment Method Section
           _buildPaymentMethodHeader(),
-
           const SizedBox(height: 16),
-
-          // Payment Methods List
-          _buildPaymentMethodsList(),
-
+          _buildPaymentMethodsList(context, state),
           const SizedBox(height: 25),
-
-          // Add Payment Method Button
-          _buildAddPaymentMethodButton(),
-
+          _buildAddPaymentMethodButton(context),
           const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildBalanceCard() {
+  Widget _buildBalanceCard(double balance) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColor().darkCharcoalBlueColor.withOpacity(0.5),width: 1)
+        border: Border.all(
+          color: AppColor().darkCharcoalBlueColor.withOpacity(0.5),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'My Balance',
-              style: MontserratStyles.montserratMediumTextStyle(color: AppColor().silverShadeGrayColor,size: 12)
+            style: MontserratStyles.montserratMediumTextStyle(
+              color: AppColor().silverShadeGrayColor,
+              size: 12,
+            ),
           ),
-          vGap(8),
-           Text(
-            '500.00€',
-               style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor,size: 25)
-           ),
+          const SizedBox(height: 8),
+          Text(
+            '€${balance.toStringAsFixed(2)}',
+            style: MontserratStyles.montserratMediumTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 25,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildAddBalanceButton() {
+  Widget _buildAddBalanceButton(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 56,
@@ -106,7 +130,7 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
       ),
       child: ElevatedButton(
         onPressed: () {
-          // Handle add balance
+          _showAddBalanceDialog(context);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor().darkCharcoalBlueColor,
@@ -118,9 +142,12 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-             Text(
+            Text(
               'Add Balance',
-                style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 16)
+              style: MontserratStyles.montserratMediumTextStyle(
+                color: AppColor().darkYellowColor,
+                size: 16,
+              ),
             ),
             const SizedBox(width: 8),
             Container(
@@ -130,7 +157,7 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
                 color: AppColor().darkYellowColor,
                 shape: BoxShape.circle,
               ),
-              child:  Icon(
+              child: Icon(
                 Icons.add,
                 color: AppColor().darkCharcoalBlueColor,
                 size: 16,
@@ -150,38 +177,36 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
         color: AppColor().darkYellowColor,
         borderRadius: BorderRadius.circular(16),
       ),
-      child:  Text(
+      child: Text(
         'Payment Method',
-          style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor,size: 16)
+        style: MontserratStyles.montserratMediumTextStyle(
+          color: AppColor().darkCharcoalBlueColor,
+          size: 16,
+        ),
       ),
     );
   }
 
-  Widget _buildPaymentMethodsList() {
+  Widget _buildPaymentMethodsList(BuildContext context, PaymentScreenLoaded state) {
     return Column(
-      children: [
-        _buildPaymentMethodItem(
-          'Apple Pay',
-          Icons.apple,
-          'apple_pay',
-        ),
-        const SizedBox(height: 1),
-        _buildPaymentMethodItem(
-          'Credit Card',
-          Icons.credit_card,
-          'credit_card',
-          subtitle: '**** **** **** 7445',
-        ),
-      ],
+      children: state.paymentMethods.map((method) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 1),
+          child: _buildPaymentMethodItem(
+            context,
+            method,
+            state.selectedPaymentMethod,
+          ),
+        );
+      }).toList(),
     );
   }
 
   Widget _buildPaymentMethodItem(
-      String title,
-      IconData icon,
-      String value, {
-        String? subtitle,
-      }) {
+      BuildContext context,
+      PaymentMethod method,
+      String selectedMethod,
+      ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -195,21 +220,21 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Icon(
-          icon,
+          method.type == 'apple_pay' ? Icons.apple : Icons.credit_card,
           size: 24,
-          color: title == 'Apple Pay' ? Colors.black : Colors.blue,
+          color: method.type == 'apple_pay' ? Colors.black : Colors.blue,
         ),
         title: Text(
-          title,
+          method.title,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Colors.black,
           ),
         ),
-        subtitle: subtitle != null
+        subtitle: method.subtitle != null
             ? Text(
-          subtitle,
+          method.subtitle!,
           style: TextStyle(
             fontSize: 14,
             color: Colors.grey[600],
@@ -217,25 +242,23 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
         )
             : null,
         trailing: Radio<String>(
-          value: value,
-          groupValue: selectedPaymentMethod,
+          value: method.id,
+          groupValue: selectedMethod,
           onChanged: (String? newValue) {
-            setState(() {
-              selectedPaymentMethod = newValue!;
-            });
+            if (newValue != null) {
+              context.read<PaymentScreenBloc>().add(SelectPaymentMethod(newValue));
+            }
           },
           activeColor: AppColor().darkYellowColor,
         ),
         onTap: () {
-          setState(() {
-            selectedPaymentMethod = value;
-          });
+          context.read<PaymentScreenBloc>().add(SelectPaymentMethod(method.id));
         },
       ),
     );
   }
 
-  Widget _buildAddPaymentMethodButton() {
+  Widget _buildAddPaymentMethodButton(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 56,
@@ -245,7 +268,9 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
       ),
       child: ElevatedButton(
         onPressed: () {
-          context.push(AppRoute.cardDetailsScreen);
+          context.read<PaymentScreenBloc>().add(AddPaymentMethod());
+          // Navigate to card details screen
+          // context.push(AppRoute.cardDetailsScreen);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor().darkCharcoalBlueColor,
@@ -254,7 +279,7 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child:  Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -262,10 +287,10 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color:AppColor().darkYellowColor,
+                color: AppColor().darkYellowColor,
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Icon(
               Icons.arrow_forward,
               color: AppColor().darkYellowColor,
@@ -276,5 +301,55 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
       ),
     );
   }
-}
 
+  void _showAddBalanceDialog(BuildContext context) {
+    final TextEditingController amountController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add Balance'),
+        content: TextField(
+          controller: amountController,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(
+            hintText: 'Enter amount',
+            prefixText: '€',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              final amount = double.tryParse(amountController.text);
+              if (amount != null && amount > 0) {
+                Navigator.pop(context);
+                context.read<PaymentScreenBloc>().add(AddBalance(amount));
+              }
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showStripePaymentSheet(BuildContext context, String clientSecret) async {
+    try {
+      await Stripe.instance.presentPaymentSheet();
+      // Payment successful
+      if (context.mounted) {
+        context.read<PaymentScreenBloc>().add(ConfirmStripePayment());
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Payment cancelled: ${e.toString()}')),
+        );
+      }
+    }
+  }
+}

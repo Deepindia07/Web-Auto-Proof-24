@@ -9,4 +9,6 @@ Future<void> init ()async {
   sl.registerLazySingleton<ForgotScreenBloc>(()=> ForgotScreenBloc(apiRepository: AuthenticationApiCall()));
   sl.registerLazySingleton<ResetPasswordScreenBloc>(()=> ResetPasswordScreenBloc(repository: AuthenticationApiCall()));
   sl.registerLazySingleton<OtpViewBloc>(()=> OtpViewBloc(apiService: AuthenticationApiCall()));
+  sl.registerLazySingleton<HomeScreenBloc>(()=> HomeScreenBloc(authenticationApiCall: AuthenticationApiCall()));
+  sl.registerLazySingleton<CollectInformationScreenBloc>(()=> CollectInformationScreenBloc(authenticationApiCall: AuthenticationApiCall()));
 }

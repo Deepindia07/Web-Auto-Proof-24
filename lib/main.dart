@@ -8,14 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'auth/server/observer/app_bloc_observer.dart';
+import 'l10n_controller/l10n_switcher_bloc.dart';
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   final blocObserver = AppServiceBlocObserver();
   Bloc.observer = blocObserver;
+  Stripe.publishableKey="pk_live_51RiyL0CR6VacE0UEb5KaN29OuCcgqZ56VXifcLwsS8JeAlEeCH7Ik3R6i3FbE9xolyIocGxbCqvzsppDwwMf2xKh00zimqSKSA";
   await init();
  await SharedPrefsHelper.init();
   runApp(const MyApp());
@@ -28,32 +31,45 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(
-          MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height
+          MediaQuery
+              .of(context)
+              .size
+              .width,
+          MediaQuery
+              .of(context)
+              .size
+              .height
       ),
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<SplashScreenBloc>(create: (context)=> SplashScreenBloc())
+          BlocProvider<SplashScreenBloc>(
+              create: (context) => SplashScreenBloc()),
+          BlocProvider<LocalizationsBlocController>(
+              create: (context) => LocalizationsBlocController()),
         ],
-        child: MaterialApp.router(
-          locale: Locale('en'),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate
-          ],
-          supportedLocales: [
-            Locale("en"),
-            Locale("fr")
-          ],
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
-          routerConfig: AppRouter.router,
-          // home: OnboardScreen(),
+        child: BlocBuilder<LocalizationsBlocController, LocalizationsState>(
+          builder: (context, state) {
+            return MaterialApp.router(
+              locale: state.locale/*Locale('en')*/,
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate
+              ],
+              supportedLocales: [
+                Locale("en"),
+                Locale("fr")
+              ],
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              ),
+              routerConfig: AppRouter.router,
+              // home: OnboardScreen(),
+            );
+          },
         ),
       ),
     );

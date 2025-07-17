@@ -1,19 +1,23 @@
 part of "reports_screen_route_imple.dart";
 
 class ReportsScreen extends StatelessWidget {
-  const ReportsScreen({super.key});
+  final bool? isBacked;
+  final VoidCallback? onBack;
+  const ReportsScreen({super.key, required this.isBacked, required this.onBack});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ReportsScreenBloc>(
       create: (context) => ReportsScreenBloc(),
-      child: ReportsScreenView(),
+      child: ReportsScreenView(isBacked: isBacked,onBack: onBack,),
     );
   }
 }
 
 class ReportsScreenView extends StatefulWidget {
-  const ReportsScreenView({super.key});
+  final bool? isBacked;
+  final VoidCallback? onBack;
+  const ReportsScreenView({super.key,required this.isBacked, required this.onBack});
 
   @override
   State<ReportsScreenView> createState() => _ReportsScreenViewState();
@@ -29,6 +33,8 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
       body: Column(
         children: [
           CustomAppBar(
+              onBackPressed: widget.onBack,
+              isBacked:widget.isBacked,
               backgroundColor: AppColor().backgroundColor,
               title: "My Subscription"
 

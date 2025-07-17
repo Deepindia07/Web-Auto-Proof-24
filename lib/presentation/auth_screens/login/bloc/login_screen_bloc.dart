@@ -17,7 +17,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   LoginScreenBloc({required this.authRepository}) : super(LoginScreenInitial()) {
     on<LoginSubmitted>(_onLoginSubmitted);
     on<LoginReset>(_onLoginReset);
-    on<EmailValidationCheck>(_onEmailValidationCheck); // Add this line
+    on<EmailValidationCheck>(_onEmailValidationCheck);
   }
 
   Future<void> _onLoginSubmitted(
@@ -35,6 +35,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
     final resultResponse = await authRepository.loginApiCall(dataBody: dataBody);
     if (resultResponse.isSuccess){
       SharedPrefsHelper.instance.setString(localToken, "${resultResponse.data.token}");
+      SharedPrefsHelper.instance.setString(userId, "${resultResponse.data.user!.userId}");
       SharedPrefsHelper.instance.setString(emailKey, resultResponse.data.user!.email.toString());
       SharedPrefsHelper.instance.setString(isFirstTime, "isFirstTime");
       print("token: = ${SharedPrefsHelper.instance.getString(localToken)}");

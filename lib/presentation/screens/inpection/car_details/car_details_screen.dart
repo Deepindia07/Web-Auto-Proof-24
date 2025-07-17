@@ -664,5 +664,4 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
     );
   }
 
-
 }

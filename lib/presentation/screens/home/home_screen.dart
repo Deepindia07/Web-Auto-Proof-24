@@ -5,7 +5,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomeScreenView();
+    return BlocProvider<HomeScreenBloc>(
+      create: (context) => HomeScreenBloc(authenticationApiCall: AuthenticationApiCall()),
+      child: HomeScreenView(),);
   }
 }
 
@@ -17,7 +19,7 @@ class HomeScreenView extends StatefulWidget {
 }
 
 class _HomeScreenViewState extends State<HomeScreenView> {
-  final List<ContainersData> _appSectionsInfo = AppSectionsData.getAppSections();
+  late List<ContainersData> _appSectionsInfo = [];
   int _currentIndex = 0;
 
   final List<BottomNavItem> _navItems = [
@@ -45,18 +47,45 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   ];
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _appSectionsInfo = AppSectionsData.getAppSections(context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final accessToken = SharedPrefsHelper.instance.getString(userId);
+    print("Access Token =>>> $accessToken");
+    context.read<HomeScreenBloc>().add(GetProfileEvent(userId: accessToken));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeScreenBloc>(
-      create: (context) => HomeScreenBloc(),
+    return BlocListener<HomeScreenBloc, HomeScreenState>(
+      listener: (context, state) {
+        if (state is HomeScreenError) {
+          CherryToast.error(context, state.message);
+        } else if (state is HomeScreenProfileLoaded) {
+          print('Profile loaded: ${state.userProfile.toString()}');
+        }
+      },
       child: Scaffold(
         backgroundColor: AppColor().backgroundColor,
         bottomNavigationBar: _bottomView(context),
-        body: _getBodyForIndex(_currentIndex),
+        body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
+          builder: (context, state) {
+            if (state is HomeScreenLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return _getBodyForIndex(_currentIndex, context);
+          },
+        ),
       ),
     );
   }
 
-  Widget _getBodyForIndex(int index) {
+  Widget _getBodyForIndex(int index, BuildContext context) {
     switch (index) {
       case 0:
         return _mainWidget(context);
@@ -133,19 +162,47 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
   Widget _infoViewWidget(BuildContext context) {
-    return CollectInformationScreen();
+    final id = SharedPrefsHelper.instance.getString(userId);
+    return CollectInformationScreen(
+        isBacked:true,
+      onBack: () {
+        setState(() {
+          _currentIndex = 0;
+        });
+      }, userId: id!,
+    );
   }
 
   Widget _reportsWidget(BuildContext context) {
-    return ReportsScreen();
+    return ReportsScreen(
+      isBacked:true,
+      onBack: () {
+        setState(() {
+          _currentIndex = 0;
+        });
+
+      },
+    );
   }
 
-  Widget _notificationWidget(BuildContext context) {
-    return NotificationScreen();
+  Widget _notificationWidget(BuildContext context,) {
+    return NotificationScreen(
+      onBack: () {
+        setState(() {
+          _currentIndex = 0;
+        });
+      }, isBacked: true,
+    );
   }
 
   Widget _contactUsWidget(BuildContext context) {
-    return ContactUsScreen();
+    return ContactUsScreen(
+      onBack: () {
+        setState(() {
+          _currentIndex = 0;
+        });
+      }, isBacked: true,
+    );
   }
 
   Widget _mainWidget(BuildContext context) {
@@ -188,7 +245,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("My Subscription", style: MontserratStyles
+                          Text(AppLocalizations.of(context)!.mySubscription, style: MontserratStyles
                               .montserratSemiBoldTextStyle(color: Colors.white,
                               size: 20)),
                           Text("29,99€ / month", style: MontserratStyles
@@ -197,24 +254,25 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                         ],
                       ),
                       CustomButton(
+                        height: AppLocalizations.of(context)!.renewNow=='Renew Now'?50:60,
                         onPressed: () {},
                         backgroundColor: AppColor().darkYellowColor,
-                        text: "Renew Now",
+                        text: AppLocalizations.of(context)!.renewNow,
                         textStyle: MontserratStyles.montserratSemiBoldTextStyle(
                             color: AppColor().darkCharcoalBlueColor, size: 14),
                       ),
                     ],
                   ),
                   vGap(20),
-                  Text(".  Free Account",
+                  Text(".  ${AppLocalizations.of(context)!.freeAccount}",
                       style: MontserratStyles.montserratNormalTextStyle(
                           color: AppColor().darkYellowColor, size: 14)),
                   vGap(5),
-                  Text(".  20 Check-In/ Check-Out",
+                  Text(".  ${AppLocalizations.of(context)!.checkInOutCount}",
                       style: MontserratStyles.montserratNormalTextStyle(
                           color: AppColor().darkYellowColor, size: 14)),
                   vGap(5),
-                  Text(".  Valable 31/12/2026 ",
+                  Text(".  ${AppLocalizations.of(context)!.validUntil} 31/12/2026 ",
                       style: MontserratStyles.montserratNormalTextStyle(
                           color: AppColor().darkYellowColor, size: 14))
                 ],
@@ -222,7 +280,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             ),
             // Grid of 7 Containers
             _buildContainersGrid(context),
-            _actionsButtonView(context),
+            // _actionsButtonView(context),
             _createNewInspectionButton(context)
           ],
         ),
@@ -252,18 +310,18 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     );
   }
 
-  Widget _actionsButtonView(BuildContext context) {
-    return CustomContainer(
-      padding: EdgeInsets.all(16),
-      backgroundColor: AppColor().darkYellowColor,
-      borderRadius: BorderRadius.circular(12),
-      child: Row(
-        children: [
-          Text("Action", style: MontserratStyles.montserratMediumTextStyle(size: 14, color: AppColor().darkCharcoalBlueColor)),
-        ],
-      ),
-    );
-  }
+  // Widget _actionsButtonView(BuildContext context) {
+  //   return CustomContainer(
+  //     padding: EdgeInsets.all(16),
+  //     backgroundColor: AppColor().darkYellowColor,
+  //     borderRadius: BorderRadius.circular(12),
+  //     child: Row(
+  //       children: [
+  //         Text(AppLocalizations.of(context)!.action, style: MontserratStyles.montserratMediumTextStyle(size: 14, color: AppColor().darkCharcoalBlueColor)),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _createNewInspectionButton(BuildContext context) {
     return CustomContainer(
@@ -274,7 +332,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Create a new Inspection", style: MontserratStyles.montserratMediumTextStyle(size: 14, color: AppColor().darkYellowColor)),
+          Text(AppLocalizations.of(context)!.createNewInspection, style: MontserratStyles.montserratMediumTextStyle(size: 14, color: AppColor().darkYellowColor)),
           Image.asset(arrowForwardRoundIcon, height: 22, width: 22,)
         ],
       ),
@@ -286,7 +344,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       onTap: () => _handleContainerTap(context, index, title),
       borderRadius: BorderRadius.circular(12),
       backgroundColor: AppColor().silverShadeGrayColor,
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(6),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -339,8 +397,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
   void _navigateToNewInspection(BuildContext context) {
-    Navigator.pushNamed(context, '/new-inspection');
+    context.push(AppRoute.instructionScreen);
   }
+
   void _showContainerDialog(BuildContext context, String title) {
     showDialog(
       context: context,
@@ -360,40 +419,89 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
   Widget _introSection(BuildContext context) {
-    return CustomContainer(
-      backgroundColor: AppColor().backgroundColor,
-      padding: EdgeInsets.all(8),
-      child: Row(
-        spacing: 10,
-        children: [
-          Container(
-            padding: EdgeInsets.all(1),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColor().darkCharcoalBlueColor,
-            ),
-            child: CircleAvatar(
-              radius: 28,
-              backgroundImage: NetworkImage("https://a-static.besthdwallpaper.com/beautiful-woman-smiling-wallpaper-828x1792-54438_218.jpg"),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocBuilder<HomeScreenBloc, HomeScreenState>(
+      builder: (context, state) {
+        String name = '';
+        String location = '';
+        String profileImage = '';
+
+        if (state is HomeScreenProfileLoaded) {
+          final profile = state.userProfile;
+          name = '${profile.user!.firstName} ${profile.user!.lastName}';
+          location = profile.user!.address ?? 'No Address';
+          profileImage = profile.user!.profileImage ?? '';
+        }
+
+        return CustomContainer(
+          backgroundColor: AppColor().backgroundColor,
+          padding: EdgeInsets.all(8),
+          child: Row(
+            spacing: 10,
             children: [
-              Text("Welcome Back!", style: MontserratStyles.montserratMediumTextStyle(size: 16, color: AppColor().darkYellowColor)),
-              Text("Jonathan Patterson", style: MontserratStyles.montserratMediumTextStyle(size: 20, color: AppColor().darkCharcoalBlueColor)),
-              vGap(10),
-              Row(
-                spacing: 5,
+              Container(
+                padding: EdgeInsets.all(1),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor().darkYellowColor,
+                ),
+                child: CircleAvatar(
+                  radius: 35,
+                  backgroundImage:_buildImageProviderSafe(profileImage),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(locationIcon,height: 18,width: 18,),
-                  Text("123 Anywhere Street, Any City", style: MontserratStyles.montserratSemiBoldTextStyle(size: 14, color: AppColor().darkCharcoalBlueColor)),
+                  Text(
+                    AppLocalizations.of(context)!.welcomeBack,
+                    style: MontserratStyles.montserratMediumTextStyle(
+                        size: 16, color: AppColor().darkYellowColor),
+                  ),
+                  Text(
+                    name.isNotEmpty ? name : "Guest",
+                    style: MontserratStyles.montserratMediumTextStyle(
+                        size: 20, color: AppColor().darkCharcoalBlueColor),
+                  ),
+                  vGap(10),
+                  Row(
+                    spacing: 5,
+                    children: [
+                      Image.asset(locationIcon, height: 18, width: 18),
+                      Text(
+                        location,
+                        style: MontserratStyles.montserratSemiBoldTextStyle(
+                            size: 14, color: AppColor().darkCharcoalBlueColor),
+                      ),
+                    ],
+                  )
                 ],
-              )
+              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
+  }
+
+}
+
+
+ImageProvider _buildImageProviderSafe(String imagePath) {
+  if (imagePath.isEmpty) {
+    return AssetImage('assets/image/profile.png');
+  } else if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+    return NetworkImage(imagePath);
+  } else {
+    try {
+      final file = File(imagePath);
+      if (file.existsSync()) {
+        return FileImage(file);
+      } else {
+        return AssetImage('assets/image/profile.png');
+      }
+    } catch (e) {
+      print('Error loading image from path: $imagePath, Error: $e');
+      return AssetImage('assets/image/profile.png');
+    }
   }
 }

@@ -216,4 +216,199 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get changeLanguage => 'Change Language';
+
+  @override
+  String get generalSettings => 'General Settings';
+
+  @override
+  String get mySubscription => 'My Subscription';
+
+  @override
+  String get myTeam => 'My Team';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get information => 'Information';
+
+  @override
+  String get paymentHistory => 'Payment History';
+
+  @override
+  String get aboutApp => 'About App';
+
+  @override
+  String get termsAndConditions => 'Terms & Conditions';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get shareThisApp => 'Share This App';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get selectPreferredLanguage => 'Select your preferred language';
+
+  @override
+  String get renewNow => 'Renew Now';
+
+  @override
+  String get freeAccount => 'Free Account';
+
+  @override
+  String get checkInOutCount => '20 Check-In/Check-Out';
+
+  @override
+  String get validUntil => 'Valid until';
+
+  @override
+  String get action => 'Action';
+
+  @override
+  String get createNewInspection => 'Create a new Inspection';
+
+  @override
+  String get welcomeBack => 'Welcome Back!';
+
+  @override
+  String get myProfile => 'My Profile';
+
+  @override
+  String get newInspection => 'New Inspection';
+
+  @override
+  String get checkOutList => 'Check-Out List';
+
+  @override
+  String get checkInList => 'Check-In List';
+
+  @override
+  String get myVehicles => 'My Vehicles';
+
+  @override
+  String get myPersonalInformation => 'My Personal Information';
+
+  @override
+  String get myCompanyInformation => 'My Company Information';
+
+  @override
+  String get informationType => 'Information Type';
+
+  @override
+  String get personal => 'Personal';
+
+  @override
+  String get company => 'Company';
+
+  @override
+  String get firstNameRequired => 'First name is required';
+
+  @override
+  String get lastNameRequired => 'Last name is required';
+
+  @override
+  String get phoneHint => '000-000-0000';
+
+  @override
+  String get phoneRequired => 'Phone number is required';
+
+  @override
+  String get phoneInvalid => 'Phone number must be at least 10 digits';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get addressHint => '123 Anywhere St, Any City, ST 12345';
+
+  @override
+  String get addressRequired => 'Address is required';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get emailInvalid => 'Please enter a valid email address';
+
+  @override
+  String get companyLogo => 'Company Logo *';
+
+  @override
+  String get companyLogoRequired => 'Company logo is required';
+
+  @override
+  String get selectTheFile => 'Select the file';
+
+  @override
+  String get companyName => 'Company Name';
+
+  @override
+  String get companyNameRequired => 'Company name is required';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get websiteHint => 'www.autoproof24.com';
+
+  @override
+  String get websiteRequired => 'Website is required';
+
+  @override
+  String get websiteInvalid => 'Please enter a valid website URL';
+
+  @override
+  String get vatNumber => 'VAT Number';
+
+  @override
+  String get vatRequired => 'VAT number is required';
+
+  @override
+  String get companyRegistrationNumber => 'Company Registration No.';
+
+  @override
+  String get registrationRequired => 'Company registration number is required';
+
+  @override
+  String get shareCapital => 'Share Capital';
+
+  @override
+  String get shareCapitalHint => '€100,000';
+
+  @override
+  String get shareCapitalRequired => 'Share capital is required';
+
+  @override
+  String get termsRequired => 'Terms & conditions URL is required';
+
+  @override
+  String get privacyRequired => 'Privacy policy URL is required';
+
+  @override
+  String get urlInvalid => 'Please enter a valid URL';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get finish => 'Finish';
+
+  @override
+  String get fillAllFields => 'Please fill in all required fields';
+
+  @override
+  String get selectCompanyLogo => 'Please select a company logo';
+
+  @override
+  String get selectCountryCode => 'Please select a country code';
+
+  @override
+  String get searchCountry => 'Search country';
 }

@@ -14,6 +14,7 @@ class CustomAppBar extends StatelessWidget {
   final Color titleColor;
   final Color iconColor;
   final TextStyle? textStyle;
+  final bool? isBacked;
 
   const CustomAppBar({
     Key? key,
@@ -25,7 +26,8 @@ class CustomAppBar extends StatelessWidget {
     this.circleColor = const Color(0xFF3A4B5C),
     this.titleColor = const Color(0xFF3A4B5C),
     this.iconColor = Colors.white,
-    this.textStyle
+    this.textStyle,
+    this.isBacked
   }) : super(key: key);
 
   @override
@@ -58,7 +60,7 @@ class CustomAppBar extends StatelessWidget {
               top: 30,
               left: 20,
               child: GestureDetector(
-                onTap: onBackPressed ?? () => Navigator.pop(context),
+                onTap: onBackPressed ?? () =>(isBacked)??Navigator.pop(context),
                 child: Image.asset(arrowBackIcon,height: 30,width: 30,)
               ),
             ),

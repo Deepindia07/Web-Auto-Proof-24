@@ -1,13 +1,15 @@
 import 'dart:io';
 
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_api_endpoints.dart';
+import 'package:auto_proof/constants/const_string.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'interceptor_dio_handler.dart';
 // import 'log_interceptor.dart'as LogInterceptor;
-
 
 String setContentType() {
   return "application/json";
@@ -15,7 +17,7 @@ String setContentType() {
 
 class DioClient {
   // Using singleton pattern for DioClient
-  static final DioClient _instance = DioClient._internal(); ///   Using singleton pattern for DioClient
+  static final DioClient _instance = DioClient._internal();
 
   factory DioClient() => _instance;
 
@@ -37,9 +39,8 @@ class DioClient {
       "Content-Type": setContentType(),
     };
 
-    if(kDebugMode){
+    if (kDebugMode) {
       _dio.interceptors.add(ErrorInterceptor());
-
       _dio.interceptors.add(AuthInterceptor());
     }
 
@@ -64,10 +65,33 @@ class DioClient {
     }
   }
 
+  /// Helper method to get authorization headers
+  Map<String, dynamic> _getAuthHeaders() {
+    final token = SharedPrefsHelper.instance.getString(localToken);
+    return token != null ? {'Authorization': 'Bearer $token'} : {};
+  }
+
+  /// Helper method to merge headers with auth headers
+  Options _mergeOptionsWithAuth(Options? options) {
+    final authHeaders = _getAuthHeaders();
+
+    if (options == null) {
+      return Options(headers: authHeaders);
+    }
+
+    final mergedHeaders = <String, dynamic>{
+      ...authHeaders,
+      ...?options.headers,
+    };
+
+    return options.copyWith(headers: mergedHeaders);
+  }
+
   /// [Get]
   Future<Response<dynamic>> get(
       String url, {
         Map<String, dynamic>? queryParameters,
+        dynamic data,
         Options? options,
         CancelToken? cancelToken,
         ProgressCallback? onReceiveProgress,
@@ -76,8 +100,9 @@ class DioClient {
       final response = await _dio.get(
         url,
         queryParameters: queryParameters,
+        data: data,
         cancelToken: cancelToken,
-        options: options,
+        options: _mergeOptionsWithAuth(options),
         onReceiveProgress: onReceiveProgress,
       );
       return response;
@@ -101,7 +126,7 @@ class DioClient {
         data: data,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
-        options: options,
+        options: _mergeOptionsWithAuth(options),
         onReceiveProgress: onReceiveProgress,
       );
       return response;
@@ -125,7 +150,7 @@ class DioClient {
         data: data,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
-        options: options,
+        options: _mergeOptionsWithAuth(options),
         onReceiveProgress: onReceiveProgress,
       );
       return response;
@@ -147,7 +172,7 @@ class DioClient {
         url,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
-        options: options,
+        options: _mergeOptionsWithAuth(options),
       );
       return response;
     } on DioException {
@@ -170,12 +195,28 @@ class DioClient {
         data: data,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
-        options: options,
+        options: _mergeOptionsWithAuth(options),
         onReceiveProgress: onReceiveProgress,
       );
       return response;
     } on DioException {
       rethrow;
     }
+  }
+
+  /// Method to update token (useful for refreshing tokens)
+  void updateToken(String newToken) {
+    SharedPrefsHelper.instance.setString(localToken, newToken);
+  }
+
+  /// Method to clear token (useful for logout)
+  void clearToken() {
+    SharedPrefsHelper.instance.remove(localToken);
+  }
+
+  /// Method to check if user is authenticated
+  bool get isAuthenticated {
+    final token = SharedPrefsHelper.instance.getString(localToken);
+    return token != null && token.isNotEmpty;
   }
 }

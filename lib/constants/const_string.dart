@@ -8,3 +8,4 @@ const String instructorId = "instructorId";
 const String isPassword = "isPassword";
 const String emailKey = "emailKey";
 const String phoneKey = "phoneKey";
+const String localeKey = "localeKey";

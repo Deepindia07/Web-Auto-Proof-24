@@ -1,19 +1,23 @@
 part of "contact_us_screen_route_imple.dart";
 
 class ContactUsScreen extends StatelessWidget {
-  const ContactUsScreen({super.key});
+  final bool? isBacked;
+  final VoidCallback? onBack;
+  const ContactUsScreen({super.key,required this.isBacked, required this.onBack});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ContactUsScreenBloc>(
       create: (context) => ContactUsScreenBloc(),
-      child: ContactUsScreenView(),
+      child: ContactUsScreenView(isBacked: isBacked,onBack: onBack),
     );
   }
 }
 
 class ContactUsScreenView extends StatefulWidget {
-  const ContactUsScreenView({super.key});
+  final bool? isBacked;
+  final VoidCallback? onBack;
+  const ContactUsScreenView({super.key,required this.isBacked, required this.onBack});
 
   @override
   State<ContactUsScreenView> createState() => _ContactUsScreenViewState();
@@ -37,9 +41,8 @@ class _ContactUsScreenViewState extends State<ContactUsScreenView> {
       body: Column(
         children: [
           CustomAppBar(
-            // onBackPressed: (){
-            //   context.go(AppRoute.homeScreen);
-            // },
+              onBackPressed: widget.onBack,
+              isBacked:widget.isBacked,
             backgroundColor: AppColor().backgroundColor,
               title: "Contact us"
           ),

@@ -120,7 +120,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
           onTap: () => _goToStep(index),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            width: 60,
+            width: 65,
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,

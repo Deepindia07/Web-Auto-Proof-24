@@ -218,4 +218,201 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get changeLanguage => 'Changer de langue';
+
+  @override
+  String get generalSettings => 'Paramètres généraux';
+
+  @override
+  String get mySubscription => 'Mon abonnement';
+
+  @override
+  String get myTeam => 'Mon équipe';
+
+  @override
+  String get changePassword => 'Changer le mot de passe';
+
+  @override
+  String get information => 'Informations';
+
+  @override
+  String get paymentHistory => 'Historique des paiements';
+
+  @override
+  String get aboutApp => 'À propos de l\'application';
+
+  @override
+  String get termsAndConditions => 'Conditions générales';
+
+  @override
+  String get privacyPolicy => 'Politique de confidentialité';
+
+  @override
+  String get shareThisApp => 'Partager cette application';
+
+  @override
+  String get signOut => 'Se déconnecter';
+
+  @override
+  String get selectPreferredLanguage => 'Sélectionnez votre langue préférée';
+
+  @override
+  String get renewNow => 'Renouveler\nmaintenant';
+
+  @override
+  String get freeAccount => 'Compte gratuit';
+
+  @override
+  String get checkInOutCount => '20 enregistrements/départs';
+
+  @override
+  String get validUntil => 'Valable jusqu’au';
+
+  @override
+  String get action => 'Action';
+
+  @override
+  String get createNewInspection => 'Créer une nouvelle inspection';
+
+  @override
+  String get welcomeBack => 'Bon retour !';
+
+  @override
+  String get myProfile => 'Mon profil';
+
+  @override
+  String get newInspection => 'Nouvelle inspection';
+
+  @override
+  String get checkOutList => 'Liste des départs';
+
+  @override
+  String get checkInList => 'Liste des arrivées';
+
+  @override
+  String get myVehicles => 'Mes véhicules';
+
+  @override
+  String get myPersonalInformation => 'Mes informations \npersonnelles';
+
+  @override
+  String get myCompanyInformation => 'Informations sur \nmon entreprise';
+
+  @override
+  String get informationType => 'Type d\'information';
+
+  @override
+  String get personal => 'Personnel';
+
+  @override
+  String get company => 'Entreprise';
+
+  @override
+  String get firstNameRequired => 'Le prénom est requis';
+
+  @override
+  String get lastNameRequired => 'Le nom de famille est requis';
+
+  @override
+  String get phoneHint => '000-000-0000';
+
+  @override
+  String get phoneRequired => 'Le numéro de téléphone est requis';
+
+  @override
+  String get phoneInvalid => 'Le numéro doit contenir au moins 10 chiffres';
+
+  @override
+  String get address => 'Adresse';
+
+  @override
+  String get addressHint => '123 Rue Exemple, Ville, Code postal';
+
+  @override
+  String get addressRequired => 'L\'adresse est requise';
+
+  @override
+  String get emailRequired => 'L\'e-mail est requis';
+
+  @override
+  String get emailInvalid => 'Veuillez entrer une adresse e-mail valide';
+
+  @override
+  String get companyLogo => 'Logo de l\'entreprise *';
+
+  @override
+  String get companyLogoRequired => 'Le logo de l\'entreprise est requis';
+
+  @override
+  String get selectTheFile => 'Sélectionnez le fichier';
+
+  @override
+  String get companyName => 'Nom de l\'entreprise';
+
+  @override
+  String get companyNameRequired => 'Le nom de l\'entreprise est requis';
+
+  @override
+  String get website => 'Site Web';
+
+  @override
+  String get websiteHint => 'www.autoproof24.com';
+
+  @override
+  String get websiteRequired => 'Le site Web est requis';
+
+  @override
+  String get websiteInvalid => 'Veuillez entrer une URL valide';
+
+  @override
+  String get vatNumber => 'Numéro de TVA';
+
+  @override
+  String get vatRequired => 'Le numéro de TVA est requis';
+
+  @override
+  String get companyRegistrationNumber =>
+      'N° d\'enregistrement de l\'entreprise';
+
+  @override
+  String get registrationRequired => 'Le numéro d\'enregistrement est requis';
+
+  @override
+  String get shareCapital => 'Capital social';
+
+  @override
+  String get shareCapitalHint => '€100,000';
+
+  @override
+  String get shareCapitalRequired => 'Le capital social est requis';
+
+  @override
+  String get termsRequired => 'L\'URL des conditions générales est requise';
+
+  @override
+  String get privacyRequired =>
+      'L\'URL de la politique de confidentialité est requise';
+
+  @override
+  String get urlInvalid => 'Veuillez entrer une URL valide';
+
+  @override
+  String get back => 'Retour';
+
+  @override
+  String get next => 'Suivant';
+
+  @override
+  String get finish => 'Terminer';
+
+  @override
+  String get fillAllFields => 'Veuillez remplir tous les champs requis';
+
+  @override
+  String get selectCompanyLogo => 'Veuillez sélectionner un logo d\'entreprise';
+
+  @override
+  String get selectCountryCode => 'Veuillez sélectionner un indicatif';
+
+  @override
+  String get searchCountry => 'Rechercher un pays';
 }

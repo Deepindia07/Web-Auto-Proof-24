@@ -1,19 +1,23 @@
 part of "notification_screen_route_imple.dart";
 
 class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
+  final bool? isBacked;
+  final VoidCallback? onBack;
+  const NotificationScreen({super.key,required this.isBacked, required this.onBack});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NotificationScreenBloc>(
       create: (context) => NotificationScreenBloc(),
-      child: NotificationScreenView(),
+      child: NotificationScreenView(isBacked: isBacked,onBack: onBack),
     );
   }
 }
 
 class NotificationScreenView extends StatefulWidget {
-  const NotificationScreenView({super.key});
+  final bool? isBacked;
+  final VoidCallback? onBack;
+  const NotificationScreenView({super.key,required this.isBacked, required this.onBack});
 
   @override
   State<NotificationScreenView> createState() => _NotificationScreenViewState();
@@ -24,12 +28,14 @@ class _NotificationScreenViewState extends State<NotificationScreenView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppColor().backgroundColor,
-        title: Text("Notification",style: MontserratStyles.montserratBoldTextStyle(size: 24,color: AppColor().darkCharcoalBlueColor),),
-      ),
       body: Column(
         children: [
+          CustomAppBar(
+            onBackPressed: widget.onBack,
+            isBacked:widget.isBacked,
+            backgroundColor: AppColor().backgroundColor,
+              title: "Notification",
+          ),
           Expanded(child: _mainContainerWidget(context))
         ],
       ),

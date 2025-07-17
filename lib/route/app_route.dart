@@ -101,7 +101,7 @@ class AppRouter {
         name: 'reports',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const ReportsScreen(),
+          child: ReportsScreen(isBacked: false,onBack: (){},),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -131,7 +131,7 @@ class AppRouter {
         name: 'collectInformationScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const CollectInformationScreen(),
+          child: CollectInformationScreen(isBacked: false,onBack: (){}, userId: SharedPrefsHelper.instance.getString(userId)!,),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -141,7 +141,7 @@ class AppRouter {
           name: 'notification',
           pageBuilder: (context, state) => _buildPageWithAnimation(
             state: state,
-            child: const NotificationScreen(),
+            child:  NotificationScreen(isBacked: false,onBack: (){},),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           ),

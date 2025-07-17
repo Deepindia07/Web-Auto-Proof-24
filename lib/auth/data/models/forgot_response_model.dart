@@ -18,3 +18,19 @@ class ForgotResponseModel {
   }
 
 }
+
+class ChangePasswordResponseModel {
+  ChangePasswordResponseModel({
+    required this.message,
+  });
+
+  final String? message;
+
+  factory ChangePasswordResponseModel.fromJson(Map<String, dynamic> json){
+    return ChangePasswordResponseModel(
+      message: json["message"],
+    );
+  }
+
+}
+

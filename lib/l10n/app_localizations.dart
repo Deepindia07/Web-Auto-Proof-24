@@ -505,6 +505,396 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change Language'**
   String get changeLanguage;
+
+  /// No description provided for @generalSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'General Settings'**
+  String get generalSettings;
+
+  /// No description provided for @mySubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'My Subscription'**
+  String get mySubscription;
+
+  /// No description provided for @myTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'My Team'**
+  String get myTeam;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @information.
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
+  String get information;
+
+  /// No description provided for @paymentHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment History'**
+  String get paymentHistory;
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In en, this message translates to:
+  /// **'About App'**
+  String get aboutApp;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get termsAndConditions;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @shareThisApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Share This App'**
+  String get shareThisApp;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// No description provided for @selectPreferredLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your preferred language'**
+  String get selectPreferredLanguage;
+
+  /// No description provided for @renewNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Renew Now'**
+  String get renewNow;
+
+  /// No description provided for @freeAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Account'**
+  String get freeAccount;
+
+  /// No description provided for @checkInOutCount.
+  ///
+  /// In en, this message translates to:
+  /// **'20 Check-In/Check-Out'**
+  String get checkInOutCount;
+
+  /// No description provided for @validUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid until'**
+  String get validUntil;
+
+  /// No description provided for @action.
+  ///
+  /// In en, this message translates to:
+  /// **'Action'**
+  String get action;
+
+  /// No description provided for @createNewInspection.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new Inspection'**
+  String get createNewInspection;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome Back!'**
+  String get welcomeBack;
+
+  /// No description provided for @myProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get myProfile;
+
+  /// No description provided for @newInspection.
+  ///
+  /// In en, this message translates to:
+  /// **'New Inspection'**
+  String get newInspection;
+
+  /// No description provided for @checkOutList.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-Out List'**
+  String get checkOutList;
+
+  /// No description provided for @checkInList.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-In List'**
+  String get checkInList;
+
+  /// No description provided for @myVehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'My Vehicles'**
+  String get myVehicles;
+
+  /// No description provided for @myPersonalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'My Personal Information'**
+  String get myPersonalInformation;
+
+  /// No description provided for @myCompanyInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'My Company Information'**
+  String get myCompanyInformation;
+
+  /// No description provided for @informationType.
+  ///
+  /// In en, this message translates to:
+  /// **'Information Type'**
+  String get informationType;
+
+  /// No description provided for @personal.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal'**
+  String get personal;
+
+  /// No description provided for @company.
+  ///
+  /// In en, this message translates to:
+  /// **'Company'**
+  String get company;
+
+  /// No description provided for @firstNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'First name is required'**
+  String get firstNameRequired;
+
+  /// No description provided for @lastNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Last name is required'**
+  String get lastNameRequired;
+
+  /// No description provided for @phoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'000-000-0000'**
+  String get phoneHint;
+
+  /// No description provided for @phoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneRequired;
+
+  /// No description provided for @phoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must be at least 10 digits'**
+  String get phoneInvalid;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @addressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'123 Anywhere St, Any City, ST 12345'**
+  String get addressHint;
+
+  /// No description provided for @addressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address is required'**
+  String get addressRequired;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequired;
+
+  /// No description provided for @emailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get emailInvalid;
+
+  /// No description provided for @companyLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Logo *'**
+  String get companyLogo;
+
+  /// No description provided for @companyLogoRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Company logo is required'**
+  String get companyLogoRequired;
+
+  /// No description provided for @selectTheFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the file'**
+  String get selectTheFile;
+
+  /// No description provided for @companyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Name'**
+  String get companyName;
+
+  /// No description provided for @companyNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Company name is required'**
+  String get companyNameRequired;
+
+  /// No description provided for @website.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get website;
+
+  /// No description provided for @websiteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'www.autoproof24.com'**
+  String get websiteHint;
+
+  /// No description provided for @websiteRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Website is required'**
+  String get websiteRequired;
+
+  /// No description provided for @websiteInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid website URL'**
+  String get websiteInvalid;
+
+  /// No description provided for @vatNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'VAT Number'**
+  String get vatNumber;
+
+  /// No description provided for @vatRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'VAT number is required'**
+  String get vatRequired;
+
+  /// No description provided for @companyRegistrationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Registration No.'**
+  String get companyRegistrationNumber;
+
+  /// No description provided for @registrationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Company registration number is required'**
+  String get registrationRequired;
+
+  /// No description provided for @shareCapital.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Capital'**
+  String get shareCapital;
+
+  /// No description provided for @shareCapitalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'€100,000'**
+  String get shareCapitalHint;
+
+  /// No description provided for @shareCapitalRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Share capital is required'**
+  String get shareCapitalRequired;
+
+  /// No description provided for @termsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & conditions URL is required'**
+  String get termsRequired;
+
+  /// No description provided for @privacyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy URL is required'**
+  String get privacyRequired;
+
+  /// No description provided for @urlInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid URL'**
+  String get urlInvalid;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finish;
+
+  /// No description provided for @fillAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all required fields'**
+  String get fillAllFields;
+
+  /// No description provided for @selectCompanyLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a company logo'**
+  String get selectCompanyLogo;
+
+  /// No description provided for @selectCountryCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a country code'**
+  String get selectCountryCode;
+
+  /// No description provided for @searchCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Search country'**
+  String get searchCountry;
 }
 
 class _AppLocalizationsDelegate
