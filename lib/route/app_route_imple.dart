@@ -29,6 +29,7 @@ import '../presentation/auth_screens/onboard/onboard_screen_route_imple.dart';
 import '../presentation/auth_screens/otpview/otp_screen_route_imple.dart';
 import '../presentation/auth_screens/reset_password/reset_password_screen_route_imple.dart';
 import '../presentation/auth_screens/signUp/signUp_screen_route_imple.dart';
+import '../presentation/screens/inspector_create_admin/inspection_create_admin_screen_route_imple.dart';
 import '../presentation/splash/splash_screen_route_imple.dart';
 import '../utilities/extensions/routing_animation.dart';
 

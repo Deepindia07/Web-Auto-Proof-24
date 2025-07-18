@@ -736,7 +736,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                 widget.onBack!();
               }
             },
-            text: AppLocalizations.of(context)!.back,
+            text: AppLocalizations.of(context)!.previous,
           ),
         ),
         SizedBox(width: 16),

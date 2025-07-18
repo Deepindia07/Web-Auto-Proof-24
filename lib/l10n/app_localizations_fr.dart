@@ -396,7 +396,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get urlInvalid => 'Veuillez entrer une URL valide';
 
   @override
-  String get back => 'Retour';
+  String get previous => 'précédente';
 
   @override
   String get next => 'Suivant';

@@ -266,16 +266,16 @@ class AppRouter {
           duration: const Duration(milliseconds: 500),
         ),
       ),
-      // GoRoute(
-      //   path: AppRoute.subscriptionView,
-      //   name: 'subscription',
-      //   pageBuilder: (context, state) => _buildPageWithAnimation(
-      //     state: state,
-      //     child: ReportsScreen(),
-      //     animation: AppAnimations.slideFromRightWithScale,
-      //     duration: const Duration(milliseconds: 500),
-      //   ),
-      // ),
+      GoRoute(
+        path: AppRoute.createInspectorView,
+        name: 'createInspectorView',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: InspectionCreateAdminScreen(),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
+        ),
+      ),
     ],
     errorBuilder: (context, state) => _buildErrorPage(context, state),
   );

@@ -15,6 +15,7 @@ class CustomAppBar extends StatelessWidget {
   final Color iconColor;
   final TextStyle? textStyle;
   final bool? isBacked;
+  final Widget? largeWidget;
 
   const CustomAppBar({
     Key? key,
@@ -27,7 +28,8 @@ class CustomAppBar extends StatelessWidget {
     this.titleColor = const Color(0xFF3A4B5C),
     this.iconColor = Colors.white,
     this.textStyle,
-    this.isBacked
+    this.isBacked,
+    this.largeWidget
   }) : super(key: key);
 
   @override
@@ -64,8 +66,8 @@ class CustomAppBar extends StatelessWidget {
                 child: Image.asset(arrowBackIcon,height: 30,width: 30,)
               ),
             ),
-            Positioned(
-              top: 45,
+           Positioned(
+              top: (largeWidget!=null)?30:45,
               right: 20,
               child: Column(
                 children: [
@@ -91,6 +93,13 @@ class CustomAppBar extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if(largeWidget != null)
+                    Column(
+                      children: [
+                        vGap(12),
+                        largeWidget!
+                      ],
+                    ),
                 ],
               ),
             ),

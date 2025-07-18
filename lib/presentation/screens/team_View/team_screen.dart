@@ -17,7 +17,6 @@ class TeamScreenView extends StatefulWidget {
 }
 
 class _TeamScreenViewState extends State<TeamScreenView> {
-  // Sample data - in a real app, this would come from a service/repository
   final List<TeamMember> _teamMembers = [
     TeamMember(id: '1', name: 'Rajesh Employee', role: 'Developer'),
     TeamMember(id: '2', name: 'Priya Manager', role: 'Team Lead'),
@@ -29,9 +28,10 @@ class _TeamScreenViewState extends State<TeamScreenView> {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildAppBar(),
-          _buildTeamList(),
+          Expanded(child: _buildTeamList())
         ],
       ),
     );
@@ -41,51 +41,38 @@ class _TeamScreenViewState extends State<TeamScreenView> {
     return CustomAppBar(
       backgroundColor: AppColor().backgroundColor,
       title: "My Team",
+      largeWidget: InkWell(
+        onTap: (){
+          context.push(AppRoute.createInspectorView);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 5,
+          children: [Text("Add Team",style: MontserratStyles.montserratRegularTextStyle(color: AppColor().darkCharcoalBlueColor,size: 14)), Icon(Icons.add_circle_rounded,size: 20,)],),
+      ),
     );
   }
 
+
   Widget _buildTeamList() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _SectionHeader(),
-            Expanded(
-              child: ListView.separated(
-                itemCount: _teamMembers.length,
-                separatorBuilder: (context, index) => vGap(12),
-                itemBuilder: (context, index) => _TeamMemberCard(
-                  member: _teamMembers[index],
-                  onSelect: () => _handleMemberSelection(_teamMembers[index]),
-                ),
-              ),
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: ListView.separated(
+        itemCount: _teamMembers.length,
+        separatorBuilder: (context, index) => vGap(4),
+        itemBuilder: (context, index) => _TeamMemberCard(
+          member: _teamMembers[index],
+          onSelect: () => _handleMemberSelection(_teamMembers[index]),
         ),
       ),
     );
   }
 
   void _handleMemberSelection(TeamMember member) {
-    print('Selected member: ${member.name}');}
-}
-
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      "Write us:",
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-      ),
-    );
+    print('Selected member: ${member.name}');
   }
 }
+
 
 class _TeamMemberCard extends StatelessWidget {
   final TeamMember member;
@@ -100,7 +87,7 @@ class _TeamMemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomContainer(
       backgroundColor: Colors.white,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       borderRadius: BorderRadius.circular(12),
       border: Border.all(color: Colors.black),
       child: Row(
@@ -116,7 +103,7 @@ class _TeamMemberCard extends StatelessWidget {
 
   Widget _buildAvatar() {
     return CircleAvatar(
-      radius: 24,
+      radius: 35,
       backgroundColor: Colors.grey[300],
       child: Text(
         member.name.isNotEmpty ? member.name[0].toUpperCase() : '?',
@@ -160,17 +147,4 @@ class _TeamMemberCard extends StatelessWidget {
       text: "Select",
     );
   }
-}
-
-// Data model for team members
-class TeamMember {
-  final String id;
-  final String name;
-  final String role;
-
-  const TeamMember({
-    required this.id,
-    required this.name,
-    required this.role,
-  });
 }

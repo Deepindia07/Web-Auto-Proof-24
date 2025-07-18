@@ -136,7 +136,7 @@
   "termsRequired": "L'URL des conditions générales est requise",
   "privacyRequired": "L'URL de la politique de confidentialité est requise",
   "urlInvalid": "Veuillez entrer une URL valide",
-  "back": "Retour",
+  "previous": "précédente",
   "next": "Suivant",
   "finish": "Terminer",
   "fillAllFields": "Veuillez remplir tous les champs requis",

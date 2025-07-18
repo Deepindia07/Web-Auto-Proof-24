@@ -1,3 +1,4 @@
+import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class RadioDropdownField extends StatefulWidget {
   final EdgeInsets? padding;
   final double? width;
   final double? maxHeight;
+  final Color? backGroundColor;
 
   const RadioDropdownField({
     Key? key,
@@ -39,6 +41,7 @@ class RadioDropdownField extends StatefulWidget {
     this.padding,
     this.width,
     this.maxHeight = 300,
+    this.backGroundColor
   }) : super(key: key);
 
   @override
@@ -262,16 +265,16 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
                   vertical: 12.0,
                 ),
                 decoration: BoxDecoration(
-                  color: widget.enabled ? Colors.white : Colors.grey.shade50,
+                  color: widget.enabled ? widget.backGroundColor : Colors.white,
                   border: Border.all(
                     color: widget.errorText != null
                         ? Colors.red
                         : _isOpen
                         ? Theme.of(context).primaryColor
-                        : Colors.grey.shade300,
+                        : AppColor().darkCharcoalBlueColor,
                     width: _isOpen ? 2.0 : 1.0,
                   ),
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

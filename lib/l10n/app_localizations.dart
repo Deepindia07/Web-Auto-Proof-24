@@ -854,11 +854,11 @@ abstract class AppLocalizations {
   /// **'Please enter a valid URL'**
   String get urlInvalid;
 
-  /// No description provided for @back.
+  /// No description provided for @previous.
   ///
   /// In en, this message translates to:
-  /// **'Back'**
-  String get back;
+  /// **'Previous'**
+  String get previous;
 
   /// No description provided for @next.
   ///

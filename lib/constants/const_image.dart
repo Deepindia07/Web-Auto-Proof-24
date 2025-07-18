@@ -5,7 +5,7 @@ const String car1Icon = "assets/image/Car (1).png";
 const String car2Icon = "assets/image/download__3_-removebg-preview 1.png";
 const String contextsIcon = "assets/image/Frame 13.png";
 
-// Icons
+/// Icons
 
 const String arrowForwardStyleIcon = "assets/icon/Vector.png";
 const String arrowbackRoundIcon = "assets/icon/Group.png";
@@ -41,3 +41,20 @@ const String subscriptionIcon = "assets/icon/fi_17358491.png";
 const String activityHistoryIcon = "assets/icon/Activity History 2.png";
 const String shareIcon = "assets/icon/fi_929539.png";
 const String termsIcon = 'assets/icon/fi_2258843.png';
+
+
+/// vehicles image
+
+const String frontSideView = "assets/inspection_images/Group.png";
+const String frontLeftWheelView = "assets/inspection_images/Frame.png";
+const String frontLeftSideView = "assets/inspection_images/Frame (1).png";
+const String rearLeftSideView = "assets/inspection_images/Frame (2).png";
+const String rearLeftWheelView = "assets/inspection_images/Frame (3).png";
+const String rearSideView = "assets/inspection_images/Group (1).png";
+const String backRightWheelView = "assets/inspection_images/Frame (5).png";
+const String rearRightSideView = "assets/inspection_images/Frame (5).png";
+const String frontRightSideView = "assets/inspection_images/Frame (7).png";
+const String frontRightWheelView = "assets/inspection_images/Frame (7).png";
+const String frontSeatsView = "assets/inspection_images/Group 2.png";
+const String rearSeatsView = "assets/inspection_images/Frame 118.png";
+const String oDoMeeterView = "assets/inspection_images/Frame 119.png";

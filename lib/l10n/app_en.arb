@@ -136,7 +136,7 @@
     "termsRequired": "Terms & conditions URL is required",
     "privacyRequired": "Privacy policy URL is required",
     "urlInvalid": "Please enter a valid URL",
-    "back": "Back",
+    "previous": "Previous",
     "next": "Next",
     "finish": "Finish",
     "fillAllFields": "Please fill in all required fields",

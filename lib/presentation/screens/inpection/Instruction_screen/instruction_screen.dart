@@ -83,7 +83,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
               Expanded(
                 flex: currentStep + 1,
                 child: Container(
-                  // padding: EdgeInsets.all(8),
+                  // padding: EdgeInsets.all(90),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
                     color: AppColor().darkYellowColor,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -267,6 +268,217 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
               title: 'Gallery',
               subtitle: 'Choose from gallery',
               onTap: _pickImageFromGallery,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+/// Image selection from inspection view
+class CustomCameraView extends StatefulWidget {
+  const CustomCameraView({Key? key}) : super(key: key);
+
+  @override
+  State<CustomCameraView> createState() => _CustomCameraViewState();
+}
+
+class _CustomCameraViewState extends State<CustomCameraView> {
+  CameraController? _controller;
+  List<CameraDescription>? cameras;
+  bool _isCameraInitialized = false;
+  int _selectedCameraIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCamera();
+  }
+
+  Future<void> _initializeCamera() async {
+    try {
+      cameras = await availableCameras();
+      if (cameras != null && cameras!.isNotEmpty) {
+        _controller = CameraController(
+          cameras![_selectedCameraIndex],
+          ResolutionPreset.high,
+          enableAudio: false,
+        );
+        await _controller!.initialize();
+        if (mounted) {
+          setState(() {
+            _isCameraInitialized = true;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error initializing camera: $e');
+    }
+  }
+
+  Future<void> _switchCamera() async {
+    if (cameras == null || cameras!.length <= 1) return;
+
+    setState(() {
+      _isCameraInitialized = false;
+    });
+
+    await _controller?.dispose();
+    _selectedCameraIndex = (_selectedCameraIndex + 1) % cameras!.length;
+
+    _controller = CameraController(
+      cameras![_selectedCameraIndex],
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
+
+    try {
+      await _controller!.initialize();
+      if (mounted) {
+        setState(() {
+          _isCameraInitialized = true;
+        });
+      }
+    } catch (e) {
+      print('Error switching camera: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Camera Preview
+            if (_isCameraInitialized && _controller != null)
+              SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CameraPreview(_controller!),
+                ),
+              )
+            else
+              const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+
+            // Safe Area Rectangle Overlay
+            if (_isCameraInitialized)
+              Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.greenAccent,
+                      width: 3,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.greenAccent.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                  ),
+                ),
+              ),
+
+            // Safe Area Label
+            if (_isCameraInitialized)
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.2,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      'SAFE AREA',
+                      style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+            // Camera Switch Button
+            if (cameras != null && cameras!.length > 1)
+              Positioned(
+                top: 20,
+                right: 20,
+                child: GestureDetector(
+                  onTap: _switchCamera,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: const Icon(
+                      Icons.flip_camera_ios,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              ),
+
+            // Camera Info
+            Positioned(
+              top: 20,
+              left: 20,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _isCameraInitialized ? Colors.green : Colors.red,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _isCameraInitialized ? 'LIVE' : 'CONNECTING',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

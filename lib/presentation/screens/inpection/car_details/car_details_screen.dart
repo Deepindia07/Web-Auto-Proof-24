@@ -59,7 +59,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor:AppColor().backgroundColor,
       body: SingleChildScrollView(
         // padding: EdgeInsets.all(5),
         child: Form(
@@ -429,26 +429,32 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           ],
         ),
         SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(color: Colors.grey[400]),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.blue),
-            ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          ),
-        ),
+        CustomTextField(
+          controller:controller,
+          hintText: hintText,
+          hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 14, color: AppColor().silverShadeGrayColor),
+          fillColor: AppColor().backgroundColor,
+        )
+        // TextFormField(
+        //   controller: controller,
+        //   decoration: InputDecoration(
+        //     hintText: hintText,
+        //     hintStyle: TextStyle(color: Colors.grey[400]),
+        //     border: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(8),
+        //       borderSide: BorderSide(color: Colors.grey[300]!),
+        //     ),
+        //     enabledBorder: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(8),
+        //       borderSide: BorderSide(color: Colors.grey[300]!),
+        //     ),
+        //     focusedBorder: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(8),
+        //       borderSide: BorderSide(color: Colors.blue),
+        //     ),
+        //     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        //   ),
+        // ),
       ],
     );
   }

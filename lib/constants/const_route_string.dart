@@ -23,6 +23,7 @@ class AppRoute{
   static const String teamSreenView = "/teamScreenView";
   static const String vehiclesScreenView = "/vehiclesScreenView";
   static const String historyScreenView = "/historyScreenView";
+  static const String createInspectorView = "/createInspectorView";
   static const String clientSignatureViewScreen = "/clientSignatureViewScreen";
   static const String inpectionScreenViewScreen = "/inpectionScreenViewScreen";
 }
