@@ -7,11 +7,7 @@ class RadioDropdownOption {
   final String label;
   final Widget? icon;
 
-  RadioDropdownOption({
-    required this.value,
-    required this.label,
-    this.icon,
-  });
+  RadioDropdownOption({required this.value, required this.label, this.icon});
 }
 
 class RadioDropdownField extends StatefulWidget {
@@ -41,7 +37,7 @@ class RadioDropdownField extends StatefulWidget {
     this.padding,
     this.width,
     this.maxHeight = 300,
-    this.backGroundColor
+    this.backGroundColor,
   }) : super(key: key);
 
   @override
@@ -103,9 +99,11 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
         _overlayEntry = null;
       });
     }
-    setState(() {
-      _isOpen = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isOpen = false;
+      });
+    }
   }
 
   void _selectOption(String value) {
@@ -114,7 +112,8 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
   }
 
   OverlayEntry _createOverlayEntry() {
-    RenderBox renderBox = _dropdownKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox renderBox =
+        _dropdownKey.currentContext!.findRenderObject() as RenderBox;
     Size size = renderBox.size;
     Offset offset = renderBox.localToGlobal(Offset.zero);
 
@@ -176,7 +175,9 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
                                           _selectOption(value);
                                         }
                                       },
-                                      activeColor: Theme.of(context).primaryColor,
+                                      activeColor: Theme.of(
+                                        context,
+                                      ).primaryColor,
                                     ),
                                     hGap(8),
                                     if (option.icon != null) ...[
@@ -223,7 +224,7 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
   @override
   Widget build(BuildContext context) {
     final selectedOption = widget.options.firstWhere(
-          (option) => option.value == widget.value,
+      (option) => option.value == widget.value,
       orElse: () => RadioDropdownOption(value: '', label: ''),
     );
 
@@ -322,10 +323,7 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
               padding: const EdgeInsets.only(top: 4.0),
               child: Text(
                 widget.errorText!,
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 12.0,
-                ),
+                style: const TextStyle(color: Colors.red, fontSize: 12.0),
               ),
             ),
         ],
@@ -333,4 +331,3 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
     );
   }
 }
-

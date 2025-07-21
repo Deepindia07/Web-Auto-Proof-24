@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/presentation/screens/inpection/car_im_inpection/bloc/car_im_inpection_screen_bloc.dart';
+import 'package:auto_proof/presentation/screens/inpection/car_im_inpection/datasource/models.dart';
 import 'package:auto_proof/utilities/custom_container.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:camera/camera.dart';
