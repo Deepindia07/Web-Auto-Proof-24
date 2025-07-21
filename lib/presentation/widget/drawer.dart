@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_proof/auth/data/models/user_response_model.dart';
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
@@ -9,13 +10,20 @@ import 'package:auto_proof/presentation/screens/home/bloc/home_screen_bloc.dart'
 import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_container.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
+import 'package:auto_proof/utilities/custom_toast.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:auto_proof/utilities/responsive_screen_sizes.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import "package:mime/mime.dart";
+import 'package:http_parser/http_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../l10n_controller/l10n_switcher_bloc.dart';
 import '../../utilities/cusom_image_picker.dart';
@@ -29,6 +37,7 @@ class ProfileDrawer extends StatefulWidget {
 
 class _ProfileDrawerState extends State<ProfileDrawer> {
   String? profileImagePath;
+  String? networkProfileImage;
 
   @override
   Widget build(BuildContext context) {
@@ -39,26 +48,48 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: BlocBuilder<HomeScreenBloc, HomeScreenState>(
+            child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
+              listener: (context, state) {
+                if (state is HomeScreenProfileImageUpdated) {
+                  // Update the network profile image and clear local path
+                  setState(() {
+                    networkProfileImage = state.userProfile.user?.profileImage ?? '';
+                    profileImagePath = null; // Clear local path since we now have updated network image
+                  });
+                  CherryToast.success(context, state.message);
+                } else if (state is HomeScreenProfileImageUpdateError) {
+                  // Keep the local image on error
+                  CherryToast.error(context, state.message);
+                }
+              },
               builder: (context, state) {
                 String name = '';
                 String location = '';
                 String email = '';
                 String phone = '';
                 String profileImage = '';
+                bool isImageUploading = false;
 
-                if (state is HomeScreenProfileLoaded) {
-                  final profile = state.userProfile;
+                if (state is HomeScreenProfileLoaded || state is HomeScreenProfileImageUpdated) {
+                  UserResponseModel profile;
+
+                  if (state is HomeScreenProfileLoaded) {
+                    profile = state.userProfile;
+                  } else {
+                    profile = (state as HomeScreenProfileImageUpdated).userProfile;
+                  }
+
                   name = '${profile.user!.firstName} ${profile.user!.lastName}';
                   location = profile.user!.address ?? 'No Address';
                   email = profile.user!.email ?? "";
                   phone = profile.user!.phoneNumber ?? "";
-                  profileImage = profile.user!.profileImage ?? '';
+                  profileImage = networkProfileImage ?? profile.user!.profileImage ?? '';
+                } else if (state is HomeScreenProfileImageUpdating) {
+                  isImageUploading = true;
                 }
 
                 return Column(
                   children: [
-                    // Profile Image with Edit Button
                     vGap(70),
                     Stack(
                       children: [
@@ -73,44 +104,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                             ),
                           ),
                           child: ClipOval(
-                            child: profileImagePath != null
-                                ? Image.file(
-                              File(profileImagePath!),
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: const Color(0xFFE0B663),
-                                  child: const Icon(
-                                    Icons.person,
-                                    size: 50,
-                                    color: Colors.white,
-                                  ),
-                                );
-                              },
-                            )
-                                : profileImage.isNotEmpty
-                                ? Image.network(
-                              profileImage,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: const Color(0xFFE0B663),
-                                  child: const Icon(
-                                    Icons.person,
-                                    size: 50,
-                                    color: Colors.white,
-                                  ),
-                                );
-                              },
-                            )
-                                : Container(
-                              color: const Color(0xFFE0B663),
-                              child: const Icon(
-                                Icons.person,
-                                size: 50,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: _buildProfileImage(profileImage, isImageUploading),
                           ),
                         ),
                         Positioned(
@@ -124,23 +118,17 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               shape: BoxShape.circle,
                             ),
                             child: InkWell(
-                              onTap: () async {
-                                final selectedImage = await CustomImageSelector.show(
-                                  context,
-                                  title: 'Update Profile Picture',
-                                  primaryColor: const Color(0xFF2C3E50),
-                                );
-
-                                if (selectedImage != null) {
-                                  setState(() {
-                                    profileImagePath = selectedImage.path;
-                                  });
-
-                                  // You can also save the image path to storage or upload to server
-                                  print('Selected image: ${selectedImage.path}');
-                                }
-                              },
-                              child: const Icon(
+                              onTap: isImageUploading ? null : () => _updateProfileImage(context),
+                              child: isImageUploading
+                                  ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                                  : const Icon(
                                 Icons.edit,
                                 color: Colors.white,
                                 size: 16,
@@ -250,23 +238,24 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   icon: phoneIcon,
                   title: AppLocalizations.of(context)!.aboutApp,
                   onTap: () {
-                    Navigator.pop(context);
-                    // Handle about app tap
+                    context.push(AppRoute.aboutAppView);// Handle about app tap
                   },
                 ),
                 _buildDrawerItem(
                   icon: termsIcon,
                   title: AppLocalizations.of(context)!.termsAndConditions,
                   onTap: () {
-                    Navigator.pop(context);
-                    // Handle terms tap
+                    // launchUrl(Uri.parse("https://www.autoproof24.com/terms-and-conditions/"),mode: LaunchMode.inAppWebView);
+                    redirectToWebPage("https://www.autoproof24.com/terms-and-conditions/");
+                    context.pop();
                   },
                 ),
                 _buildDrawerItem(
                   icon: privacyIcon,
                   title: AppLocalizations.of(context)!.privacyPolicy,
                   onTap: () {
-                    Navigator.pop(context);
+                    redirectToWebPage("https://www.autoproof24.com/privacy-policy/");
+                    context.pop();
                     // Handle privacy policy tap
                   },
                 ),
@@ -296,6 +285,122 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
         ],
       ),
     );
+  }
+
+  Widget _buildProfileImage(String profileImage, bool isUploading) {
+    if (isUploading) {
+      return Container(
+        color: const Color(0xFFE0B663),
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+            strokeWidth: 3,
+          ),
+        ),
+      );
+    }
+
+    // Priority: Local file -> Network image -> Default icon
+    if (profileImagePath != null && File(profileImagePath!).existsSync()) {
+      return Image.file(
+        File(profileImagePath!),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return _buildDefaultProfileIcon();
+        },
+      );
+    } else if (profileImage.isNotEmpty) {
+      return Image.network(
+        profileImage,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            color: const Color(0xFFE0B663),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return _buildDefaultProfileIcon();
+        },
+      );
+    } else {
+      return _buildDefaultProfileIcon();
+    }
+  }
+
+  Widget _buildDefaultProfileIcon() {
+    return Container(
+      color: const Color(0xFFE0B663),
+      child: const Icon(
+        Icons.person,
+        size: 50,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Future<void> _updateProfileImage(BuildContext context) async {
+    try {
+      final selectedImage = await CustomImageSelector.show(
+        context,
+        title: 'Update Profile Picture',
+        primaryColor: const Color(0xFF2C3E50),
+      );
+
+      if (selectedImage != null) {
+        // Show the selected image immediately for better UX
+        setState(() {
+          profileImagePath = selectedImage.path;
+        });
+
+        final userId = await _getCurrentUserId();
+        final mimeType = lookupMimeType(selectedImage.path);
+        final mimeParts = mimeType?.split('/');
+
+        if (mimeParts != null && mimeParts.length == 2 && userId != null) {
+          final formData = FormData.fromMap({
+            "profileImage": await MultipartFile.fromFile(
+              selectedImage.path,
+              filename: selectedImage.path.split('/').last,
+              contentType: MediaType(mimeParts[0], mimeParts[1]),
+            ),
+          });
+
+          context.read<HomeScreenBloc>().add(
+            UpdateProfileImageEvent(
+              multipartBody: formData,
+              userId: userId,
+              profileDataBody: {},
+            ),
+          );
+
+          print("Image format: $mimeType");
+        } else {
+          // Reset to previous state if validation fails
+          setState(() {
+            profileImagePath = null;
+          });
+          CherryToast.error(context, 'Invalid image format or user ID not found');
+        }
+      }
+    } catch (e) {
+      // Reset to previous state on error
+      setState(() {
+        profileImagePath = null;
+      });
+      CherryToast.error(context, 'Error selecting image: $e');
+    }
+  }
+
+  Future<String?> _getCurrentUserId() async {
+    final userid = SharedPrefsHelper.instance.getString(userId);
+    return userid;
   }
 
   Widget _buildDrawerItem({
@@ -333,25 +438,53 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   }
 
   void _showSignOutDialog(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Sign Out'),
-          content: const Text('Are you sure you want to sign out?'),
+          backgroundColor: AppColor().backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(
+            localizations.signOutTitle, // e.g., "Sign Out"
+            style: MontserratStyles.montserratBoldTextStyle(size: 20,color: AppColor().darkCharcoalBlueColor),
+          ),
+          content: SizedBox(
+            width: 250,
+            child: Text(
+              localizations.signOutConfirm,
+              style: MontserratStyles.montserratMediumTextStyle(size: 16,color: AppColor().darkCharcoalBlueColor),
+            ),
+          ),
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: [
-            TextButton(
+            CustomButton(
+              height: 45,
+              borderRadius: 12,
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              text: localizations.cancelButton,
+              backgroundColor: Colors.grey[300],
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
             ),
-            TextButton(
-              onPressed: () {
-                SharedPrefsHelper.instance.remove(localToken);
-                context.pushReplacement(AppRoute.loginScreen);
+            CustomButton(
+              height: 45,
+              borderRadius: 12,
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              text: localizations.signOutButton,
+              backgroundColor: AppColor().darkYellowColor,
+              onPressed: () async {
+                await SharedPrefsHelper.instance.remove(localToken);
+                if (context.mounted) {
+                  context.pushReplacement(AppRoute.loginScreen);
+                }
               },
-              child: const Text('Sign Out'),
             ),
           ],
         );

@@ -142,6 +142,25 @@
   "fillAllFields": "Veuillez remplir tous les champs requis",
   "selectCompanyLogo": "Veuillez sélectionner un logo d'entreprise",
   "selectCountryCode": "Veuillez sélectionner un indicatif",
-  "searchCountry": "Rechercher un pays"
+  "searchCountry": "Rechercher un pays",
+  "signOutTitle": "Déconnexion",
+  "signOutConfirm": "Êtes-vous sûr de vouloir vous déconnecter ?",
+  "signOutButton": "Se déconnecter",
+  "cancelButton": "Annuler",
+
+  "contactUsTitle": "Contactez-nous",
+  "contactUsInfo": "Nous sommes heureux de vous aider ! Si vous avez besoin d'aide avec notre application mobile ou avez des questions liées à la course, n'hésitez pas à nous contacter.",
+  "writeUs": "Écrivez-nous",
+  "subjectLabel": "Sujet",
+  "subjectHint": "Entrez le sujet",
+  "messageLabel": "Message",
+  "messageHint": "Entrez le message",
+  "submitButton": "Soumettre",
+
+  "addTeam": "Ajouter une équipe",
+  "select": "Sélectionner",
+  "roleDeveloper": "Développeur",
+  "roleTeamLead": "Chef d'équipe",
+  "roleUIDesigner": "Designer UI/UX"
 
 }

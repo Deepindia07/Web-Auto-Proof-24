@@ -18,43 +18,54 @@ class TeamScreenView extends StatefulWidget {
 
 class _TeamScreenViewState extends State<TeamScreenView> {
   final List<TeamMember> _teamMembers = [
-    TeamMember(id: '1', name: 'Rajesh Employee', role: 'Developer'),
-    TeamMember(id: '2', name: 'Priya Manager', role: 'Team Lead'),
-    TeamMember(id: '3', name: 'Amit Designer', role: 'UI/UX Designer'),
+    TeamMember(id: '1', name: 'Rajesh Employee', role: 'roleDeveloper'),
+    TeamMember(id: '2', name: 'Priya Manager', role: 'roleTeamLead'),
+    TeamMember(id: '3', name: 'Amit Designer', role: 'roleUIDesigner'),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAppBar(),
-          Expanded(child: _buildTeamList())
+          _buildAppBar(localizations),
+          Expanded(child: _buildTeamList(localizations))
         ],
       ),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(AppLocalizations localizations) {
     return CustomAppBar(
       backgroundColor: AppColor().backgroundColor,
-      title: "My Team",
+      title: localizations.myTeam,
       largeWidget: InkWell(
-        onTap: (){
+        onTap: () {
           context.push(AppRoute.createInspectorView);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           spacing: 5,
-          children: [Text("Add Team",style: MontserratStyles.montserratRegularTextStyle(color: AppColor().darkCharcoalBlueColor,size: 14)), Icon(Icons.add_circle_rounded,size: 20,)],),
+          children: [
+            Text(
+              localizations.addTeam,
+              style: MontserratStyles.montserratRegularTextStyle(
+                color: AppColor().darkCharcoalBlueColor,
+                size: 14,
+              ),
+            ),
+            const Icon(Icons.add_circle_rounded, size: 20),
+          ],
+        ),
       ),
     );
   }
 
-
-  Widget _buildTeamList() {
+  Widget _buildTeamList(AppLocalizations localizations) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: ListView.separated(
@@ -63,6 +74,7 @@ class _TeamScreenViewState extends State<TeamScreenView> {
         itemBuilder: (context, index) => _TeamMemberCard(
           member: _teamMembers[index],
           onSelect: () => _handleMemberSelection(_teamMembers[index]),
+          localizations: localizations,
         ),
       ),
     );
@@ -73,14 +85,15 @@ class _TeamScreenViewState extends State<TeamScreenView> {
   }
 }
 
-
 class _TeamMemberCard extends StatelessWidget {
   final TeamMember member;
   final VoidCallback onSelect;
+  final AppLocalizations localizations;
 
   const _TeamMemberCard({
     required this.member,
     required this.onSelect,
+    required this.localizations,
   });
 
   @override
@@ -130,7 +143,7 @@ class _TeamMemberCard extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          member.role,
+          _getLocalizedRole(member.role),
           style: TextStyle(
             fontSize: 14,
             color: Colors.grey[600],
@@ -140,11 +153,24 @@ class _TeamMemberCard extends StatelessWidget {
     );
   }
 
+  String _getLocalizedRole(String roleKey) {
+    switch (roleKey) {
+      case 'roleDeveloper':
+        return localizations.roleDeveloper;
+      case 'roleTeamLead':
+        return localizations.roleTeamLead;
+      case 'roleUIDesigner':
+        return localizations.roleUIDesigner;
+      default:
+        return roleKey;
+    }
+  }
+
   Widget _buildSelectButton() {
     return CustomButton(
       backgroundColor: AppColor().darkYellowColor,
       onPressed: onSelect,
-      text: "Select",
+      text: localizations.select,
     );
   }
 }

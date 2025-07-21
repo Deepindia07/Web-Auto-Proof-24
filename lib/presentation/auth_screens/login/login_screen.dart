@@ -213,12 +213,12 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                         borderRadius: 48,
                         height: screenHeight * 0.07,
                         width: screenWidth * 0.95,
-                        onPressed: () {
+                        /*onPressed: () {
                           context.push(AppRoute.homeScreen);
-                        },
-                        // onPressed: state is LoginLoading || state is EmailValidationLoading
-                        //     ? null
-                        //     : _onLoginPressed,
+                        },*/
+                        onPressed: state is LoginLoading || state is EmailValidationLoading
+                            ? null
+                            : _onLoginPressed,
                         text: state is LoginLoading
                             ? AppLocalizations.of(context)!.loggingIn
                             : AppLocalizations.of(context)!.login,

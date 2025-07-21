@@ -1,3 +1,4 @@
+import 'package:auto_proof/constants/const_string.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:meta/meta.dart';
@@ -6,8 +7,6 @@ part 'payment_screen_event.dart';
 part 'payment_screen_state.dart';
 
 class PaymentScreenBloc extends Bloc<PaymentScreenEvent, PaymentScreenState> {
-  static const String _stripePublishableKey = 'pk_test_your_publishable_key_here';
-  static const String _backendUrl = 'https://your-backend-url.com';
 
   PaymentScreenBloc() : super(PaymentScreenInitial()) {
     on<LoadPaymentMethods>(_onLoadPaymentMethods);
@@ -22,14 +21,13 @@ class PaymentScreenBloc extends Bloc<PaymentScreenEvent, PaymentScreenState> {
   }
 
   void _initializeStripe() {
-    Stripe.publishableKey = _stripePublishableKey;
+    Stripe.publishableKey = stripeKey;
   }
 
   void _onLoadPaymentMethods(LoadPaymentMethods event, Emitter<PaymentScreenState> emit) {
     emit(PaymentScreenLoading());
 
     try {
-      // Mock payment methods - replace with actual API call
       final paymentMethods = [
         PaymentMethod(
           id: 'apple_pay',
@@ -131,4 +129,5 @@ class PaymentScreenBloc extends Bloc<PaymentScreenEvent, PaymentScreenState> {
     // Handle navigation to add payment method screen
     // This would typically trigger navigation in the UI
   }
+
 }

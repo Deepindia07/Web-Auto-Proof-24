@@ -68,10 +68,28 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
 
   @override
   void dispose() {
-    _animationController.dispose();
-    _closeDropdown();
+    _safeCloseDropdown(); // ✅ Safe version (calls reverse + removes overlay)
+    _animationController.dispose(); // Only dispose after dropdown animation is complete
     super.dispose();
   }
+
+  void _safeCloseDropdown() {
+    if (_isOpen && _overlayEntry != null) {
+      _animationController.reverse().then((_) {
+        if (_overlayEntry?.mounted ?? false) {
+          _overlayEntry?.remove();
+          _overlayEntry = null;
+        }
+
+        if (mounted) {
+          setState(() {
+            _isOpen = false;
+          });
+        }
+      });
+    }
+  }
+
 
   void _toggleDropdown() {
     if (!widget.enabled) return;

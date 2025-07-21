@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'auth/server/observer/app_bloc_observer.dart';
 import 'l10n_controller/l10n_switcher_bloc.dart';
@@ -18,7 +19,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   final blocObserver = AppServiceBlocObserver();
   Bloc.observer = blocObserver;
-  Stripe.publishableKey="pk_live_51RiyL0CR6VacE0UEb5KaN29OuCcgqZ56VXifcLwsS8JeAlEeCH7Ik3R6i3FbE9xolyIocGxbCqvzsppDwwMf2xKh00zimqSKSA";
+  await PackageInfo.fromPlatform();
   await init();
  await SharedPrefsHelper.init();
   runApp(const MyApp());

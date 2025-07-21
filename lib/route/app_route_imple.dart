@@ -3,6 +3,7 @@ library app_route_imple.dart;
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_string.dart';
 import 'package:auto_proof/presentation/auth_screens/change_password/change_password_screen_route_imple.dart';
+import 'package:auto_proof/presentation/screens/about_app/about_app_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/card_details/card_details_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/history/history_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/home/home_screen_route_imple.dart';

@@ -279,7 +279,9 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
 
 /// Image selection from inspection view
 class CustomCameraView extends StatefulWidget {
-  const CustomCameraView({Key? key}) : super(key: key);
+  final String? carPart; // Add car part parameter
+
+  const CustomCameraView({Key? key, this.carPart}) : super(key: key);
 
   @override
   State<CustomCameraView> createState() => _CustomCameraViewState();
@@ -346,6 +348,39 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     }
   }
 
+  // Method to take picture
+  Future<void> _takePicture() async {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+
+    try {
+      final XFile image = await _controller!.takePicture();
+      // Handle the captured image here
+      // You can pass it back to the previous screen or save it
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Picture taken for ${widget.carPart ?? 'car part'}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Go back to the previous screen after taking picture
+        Navigator.pop(context, image.path); // Return the image path
+      }
+    } catch (e) {
+      print('Error taking picture: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error taking picture'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
     _controller?.dispose();
@@ -398,6 +433,32 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                 ),
               ),
 
+            // Car Part Label - Show which part is being captured
+            if (_isCameraInitialized && widget.carPart != null)
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.15,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'CAPTURING: ${widget.carPart!.toUpperCase()}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
             // Safe Area Label
             if (_isCameraInitialized)
               Positioned(
@@ -424,6 +485,27 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                 ),
               ),
 
+            // Back Button
+            Positioned(
+              top: 20,
+              left: 20,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ),
+
             // Camera Switch Button
             if (cameras != null && cameras!.length > 1)
               Positioned(
@@ -448,7 +530,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
 
             // Camera Info
             Positioned(
-              top: 20,
+              top: 80,
               left: 20,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -477,6 +559,35 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+
+            // Capture Button
+            Positioned(
+              bottom: 40,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: GestureDetector(
+                  onTap: _isCameraInitialized ? _takePicture : null,
+                  child: Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      color: _isCameraInitialized ? Colors.white : Colors.grey,
+                      borderRadius: BorderRadius.circular(35),
+                      border: Border.all(
+                        color: Colors.black26,
+                        width: 3,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: _isCameraInitialized ? Colors.black : Colors.grey[600],
+                      size: 30,
+                    ),
+                  ),
                 ),
               ),
             ),

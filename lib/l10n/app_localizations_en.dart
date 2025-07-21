@@ -290,6 +290,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myVehicles => 'My Vehicles';
 
   @override
+  String get signOutTitle => 'Sign Out';
+
+  @override
+  String get signOutConfirm => 'Are you sure you want to sign out?';
+
+  @override
+  String get signOutButton => 'Sign Out';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
   String get myPersonalInformation => 'My Personal Information';
 
   @override
@@ -411,4 +423,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchCountry => 'Search country';
+
+  @override
+  String get contactUsTitle => 'Contact us';
+
+  @override
+  String get contactUsInfo =>
+      'We\'re happy to assist! If you need help with our mobile app or have any race-related questions, don\'t hesitate to reach out.';
+
+  @override
+  String get writeUs => 'Write us';
+
+  @override
+  String get subjectLabel => 'Subject';
+
+  @override
+  String get subjectHint => 'Enter Subject';
+
+  @override
+  String get messageLabel => 'Message';
+
+  @override
+  String get messageHint => 'Enter Message';
+
+  @override
+  String get submitButton => 'Submit';
+
+  @override
+  String get addTeam => 'Add Team';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get roleDeveloper => 'Developer';
+
+  @override
+  String get roleTeamLead => 'Team Lead';
+
+  @override
+  String get roleUIDesigner => 'UI/UX Designer';
 }

@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../data/models/login_response_model.dart';
 import '../../data/models/registeration_response_model.dart';
+import '../../data/models/user_update_profile_reponse_model.dart';
 import '../dio_service/error/exception.dart';
 
 class AuthenticationApiCall implements AuthAbstraction{
@@ -142,6 +143,33 @@ class AuthenticationApiCall implements AuthAbstraction{
       return Result.failure('Unexpected error occurred: $error');
     }
   }
+
+  @override
+  Future<Result<UserProfileImageUpdateResponseModel, String>> userProfileImageApiCall({
+    required FormData multipartBody,
+  }) async {
+    try {
+      final response = await dioClient.put(
+        ApiEndPoints.profilePictureUpdate,
+        data: multipartBody,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+      );
+
+      final Map<String, dynamic> data = response.data;
+      final updateResponse = UserProfileImageUpdateResponseModel.fromJson(data);
+      return Result.success(updateResponse);
+    } on DioException catch (dioError) {
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint(error.toString());
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
 
   @override
   Future<Result<UserResponseModel, String>> userUpdateProfileApiCall({Map<String, dynamic>? dataBody, required String id}) async {

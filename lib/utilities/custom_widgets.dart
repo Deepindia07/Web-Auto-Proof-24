@@ -1,6 +1,7 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
+import "package:url_launcher/url_launcher.dart";
 
 Widget vGap(double? height){
   return SizedBox(height: height,);
@@ -20,5 +21,15 @@ class NetworkHelper {
     } catch (e) {
       return false;
     }
+  }
+}
+
+
+Future<void> redirectToWebPage(String url) async {
+  final Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    throw 'Could not launch $url';
   }
 }

@@ -67,39 +67,77 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
     );
   }
 
+  /// progress indicator
   Widget _buildProgressIndicator() {
     return Column(
       children: [
         _horizontalSelectiveButtonView(context),
-         vGap(16),
-        Container(
-          height: 10,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.grey[300],
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                flex: currentStep + 1,
-                child: Container(
-                  // padding: EdgeInsets.all(90),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: AppColor().darkYellowColor,
+        vGap(16),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double fullWidth = constraints.maxWidth;
+              double progressPercent = (currentStep + 1) / totalSteps;
+              double progressWidth = fullWidth * progressPercent;
+
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[300],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: totalSteps - currentStep - 1,
-                child: Container(),
-              ),
-            ],
+                  // Progress yellow fill
+                  Container(
+                    height: 10,
+                    width: progressWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: AppColor().darkYellowColor,
+                    ),
+                  ),
+                  Positioned(
+                    left: progressWidth - 16,
+                    top: -12,
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColor().darkYellowColor,
+                        border: Border.all(color: Colors.white, width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${currentStep + 1}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ],
     );
   }
+
+
 
   Widget _horizontalSelectiveButtonView(BuildContext context) {
     final icons = [

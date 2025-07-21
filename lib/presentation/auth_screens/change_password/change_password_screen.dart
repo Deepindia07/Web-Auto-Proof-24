@@ -113,7 +113,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'Change Password',
+          AppLocalizations.of(context)!.changePassword,
           style: MontserratStyles.montserratMediumTextStyle(
             size: 18,
             color: AppColor().darkCharcoalBlueColor,
@@ -162,12 +162,15 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                             height: 1.1,
                           ),
                         ),
-                        Text(
-                          'Update your current password to keep your account secure.',
-                          textAlign: TextAlign.center,
-                          style: MontserratStyles.montserratNormalTextStyle(
-                            color: AppColor().silverShadeGrayColor,
-                            size: 16,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0,right: 20),
+                          child: Text(
+                            'Update your current password to keep your account secure.',
+                            textAlign: TextAlign.center,
+                            style: MontserratStyles.montserratNormalTextStyle(
+                              color: AppColor().silverShadeGrayColor,
+                              size: 16,
+                            ),
                           ),
                         ),
                         vGap(20),

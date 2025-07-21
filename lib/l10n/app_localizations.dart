@@ -650,6 +650,30 @@ abstract class AppLocalizations {
   /// **'My Vehicles'**
   String get myVehicles;
 
+  /// No description provided for @signOutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOutTitle;
+
+  /// No description provided for @signOutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out?'**
+  String get signOutConfirm;
+
+  /// No description provided for @signOutButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOutButton;
+
+  /// No description provided for @cancelButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
   /// No description provided for @myPersonalInformation.
   ///
   /// In en, this message translates to:
@@ -895,6 +919,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search country'**
   String get searchCountry;
+
+  /// No description provided for @contactUsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us'**
+  String get contactUsTitle;
+
+  /// No description provided for @contactUsInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re happy to assist! If you need help with our mobile app or have any race-related questions, don\'t hesitate to reach out.'**
+  String get contactUsInfo;
+
+  /// No description provided for @writeUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Write us'**
+  String get writeUs;
+
+  /// No description provided for @subjectLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get subjectLabel;
+
+  /// No description provided for @subjectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Subject'**
+  String get subjectHint;
+
+  /// No description provided for @messageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get messageLabel;
+
+  /// No description provided for @messageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Message'**
+  String get messageHint;
+
+  /// No description provided for @submitButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submitButton;
+
+  /// No description provided for @addTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Team'**
+  String get addTeam;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @roleDeveloper.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer'**
+  String get roleDeveloper;
+
+  /// No description provided for @roleTeamLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Lead'**
+  String get roleTeamLead;
+
+  /// No description provided for @roleUIDesigner.
+  ///
+  /// In en, this message translates to:
+  /// **'UI/UX Designer'**
+  String get roleUIDesigner;
 }
 
 class _AppLocalizationsDelegate

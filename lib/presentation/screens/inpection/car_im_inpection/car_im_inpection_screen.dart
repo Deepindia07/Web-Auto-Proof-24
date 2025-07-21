@@ -22,66 +22,99 @@ class CarImageInpectionScreenView extends StatefulWidget {
 
 class _CarImageInpectionScreenViewState
     extends State<CarImageInpectionScreenView> {
-  List<CarAddingModel> items = [
-    CarAddingModel(title: 'Front Side', image: frontSideView, onTap: () {}),
+
+  // Method to open camera for specific car part
+  void _openCameraForCarPart(String title) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CustomCameraView(
+          carPart: title,
+        ),
+      ),
+    );
+  }
+
+  List<CarAddingModel> get items => [
+    CarAddingModel(
+        title: 'Front Side',
+        image: frontSideView,
+        onTap: () => _openCameraForCarPart('Front Side')
+    ),
     CarAddingModel(
       title: 'Front Left Wheel',
       image: frontLeftWheelView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Front Left Wheel'),
     ),
     CarAddingModel(
       title: 'Front Left Side',
       image: frontLeftSideView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Front Left Side'),
     ),
     CarAddingModel(
       title: 'Rear Left Side',
       image: rearLeftSideView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Rear Left Side'),
     ),
     CarAddingModel(
       title: 'Rear Left Wheel',
       image: rearLeftWheelView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Rear Left Wheel'),
     ),
-    CarAddingModel(title: 'Rear Side', image: rearSideView, onTap: () {}),
+    CarAddingModel(
+        title: 'Rear Side',
+        image: rearSideView,
+        onTap: () => _openCameraForCarPart('Rear Side')
+    ),
     CarAddingModel(
       title: 'Back Right Wheel',
       image: backRightWheelView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Back Right Wheel'),
     ),
     CarAddingModel(
       title: 'Rear Right Side',
       image: rearRightSideView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Rear Right Side'),
     ),
     CarAddingModel(
       title: 'Front Right Side',
       image: frontRightSideView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Front Right Side'),
     ),
     CarAddingModel(
       title: 'Front Right Wheel',
       image: frontRightWheelView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Front Right Wheel'),
     ),
-    CarAddingModel(title: 'Front Seats', image: frontSeatsView, onTap: () {}),
-    CarAddingModel(title: 'Rear Seats', image: rearSeatsView, onTap: () {}),
-    CarAddingModel(title: 'Odometer', image: oDoMeeterView, onTap: () {}),
+    CarAddingModel(
+        title: 'Front Seats',
+        image: frontSeatsView,
+        onTap: () => _openCameraForCarPart('Front Seats')
+    ),
+    CarAddingModel(
+        title: 'Rear Seats',
+        image: rearSeatsView,
+        onTap: () => _openCameraForCarPart('Rear Seats')
+    ),
+    CarAddingModel(
+        title: 'Odometer',
+        image: oDoMeeterView,
+        onTap: () => _openCameraForCarPart('Odometer')
+    ),
     CarAddingModel(
       title: 'Optional Image 1',
       image: oDoMeeterView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Optional Image 1'),
     ),
     CarAddingModel(
       title: 'Optional Image 2',
       image: oDoMeeterView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Optional Image 2'),
     ),
     CarAddingModel(
       title: 'Optional Image 3',
       image: oDoMeeterView,
-      onTap: () {},
+      onTap: () => _openCameraForCarPart('Optional Image 3'),
     ),
   ];
 
@@ -119,9 +152,10 @@ class _CarImageInpectionScreenViewState
                 return _buildContainerSideWiseView(
                   image: data.image,
                   title: data.title,
+                  onTap: data.onTap,
                 );
               },
-              itemCount: 16,
+              itemCount: items.length,
             ),
           ],
         ),
@@ -132,57 +166,61 @@ class _CarImageInpectionScreenViewState
   _buildContainerSideWiseView({
     required String? image,
     required String? title,
+    required VoidCallback? onTap,
   }) {
-    return Column(
-      spacing: 5,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomContainer(
-          height: 88,
-          width: 88,
-          padding: EdgeInsets.all(8),
-          backgroundColor: AppColor().backgroundColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColor().darkCharcoalBlueColor),
-          child: Center(
-            child: Image.asset(
-              image!,
-              height: 50,
-              width: 50,
-              color: AppColor().silverShadeGrayColor,
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        spacing: 5,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomContainer(
+            height: 88,
+            width: 88,
+            padding: EdgeInsets.all(8),
+            backgroundColor: AppColor().backgroundColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColor().darkCharcoalBlueColor),
+            child: Center(
+              child: Image.asset(
+                image!,
+                height: 50,
+                width: 50,
+                color: AppColor().silverShadeGrayColor,
+              ),
             ),
           ),
-        ),
-        Flexible(
-          fit: FlexFit.loose,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Text(
-                  title!,
-                  style: MontserratStyles.montserratMediumTextStyle(
-                    size: 8,
-                    color: AppColor().darkCharcoalBlueColor,
-                  ),
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-              ),
-              Flexible(
-                child: Text(
-                  "*",
-                  style: MontserratStyles.montserratMediumTextStyle(
-                    size: 12,
-                    color: Colors.red,
+          Flexible(
+            fit: FlexFit.loose,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(
+                    title!,
+                    style: MontserratStyles.montserratMediumTextStyle(
+                      size: 8,
+                      color: AppColor().darkCharcoalBlueColor,
+                    ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
                 ),
-              ),
-            ],
+                Flexible(
+                  child: Text(
+                    "*",
+                    style: MontserratStyles.montserratMediumTextStyle(
+                      size: 12,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

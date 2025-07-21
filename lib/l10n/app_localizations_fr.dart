@@ -292,6 +292,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get myVehicles => 'Mes véhicules';
 
   @override
+  String get signOutTitle => 'Déconnexion';
+
+  @override
+  String get signOutConfirm => 'Êtes-vous sûr de vouloir vous déconnecter ?';
+
+  @override
+  String get signOutButton => 'Se déconnecter';
+
+  @override
+  String get cancelButton => 'Annuler';
+
+  @override
   String get myPersonalInformation => 'Mes informations \npersonnelles';
 
   @override
@@ -415,4 +427,44 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get searchCountry => 'Rechercher un pays';
+
+  @override
+  String get contactUsTitle => 'Contactez-nous';
+
+  @override
+  String get contactUsInfo =>
+      'Nous sommes heureux de vous aider ! Si vous avez besoin d\'aide avec notre application mobile ou avez des questions liées à la course, n\'hésitez pas à nous contacter.';
+
+  @override
+  String get writeUs => 'Écrivez-nous';
+
+  @override
+  String get subjectLabel => 'Sujet';
+
+  @override
+  String get subjectHint => 'Entrez le sujet';
+
+  @override
+  String get messageLabel => 'Message';
+
+  @override
+  String get messageHint => 'Entrez le message';
+
+  @override
+  String get submitButton => 'Soumettre';
+
+  @override
+  String get addTeam => 'Ajouter une équipe';
+
+  @override
+  String get select => 'Sélectionner';
+
+  @override
+  String get roleDeveloper => 'Développeur';
+
+  @override
+  String get roleTeamLead => 'Chef d\'équipe';
+
+  @override
+  String get roleUIDesigner => 'Designer UI/UX';
 }

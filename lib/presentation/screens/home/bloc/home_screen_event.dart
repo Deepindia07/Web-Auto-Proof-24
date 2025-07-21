@@ -12,3 +12,15 @@ class GetProfileEvent extends HomeScreenEvent {
     this.dataBody,
   });
 }
+
+class UpdateProfileImageEvent extends HomeScreenEvent {
+  final FormData multipartBody;
+  final String userId;
+  final Map<String, dynamic> profileDataBody;
+
+  UpdateProfileImageEvent({
+    required this.multipartBody,
+    required this.userId,
+    required this.profileDataBody,
+  });
+}

@@ -140,7 +140,8 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                           child: CustomButton(
                             side: BorderSide.none,
                             onPressed: (){
-                              _showValidationDialog(context);
+                              // _showValidationDialog(context);
+                              context.push(AppRoute.homeScreen);
                             },
                             text: "Validation",
                             textStyle: MontserratStyles.montserratMediumTextStyle(size: 16,color: AppColor().darkYellowColor),

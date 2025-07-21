@@ -276,6 +276,16 @@ class AppRouter {
           duration: const Duration(milliseconds: 500),
         ),
       ),
+      GoRoute(
+        path: AppRoute.aboutAppView,
+        name: 'aboutAppView',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: AboutAppScreen(),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
+        ),
+      ),
     ],
     errorBuilder: (context, state) => _buildErrorPage(context, state),
   );
