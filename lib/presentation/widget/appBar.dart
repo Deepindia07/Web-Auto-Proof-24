@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget {
     this.iconColor = Colors.white,
     this.textStyle,
     this.isBacked,
-    this.largeWidget
+    this.largeWidget,
   }) : super(key: key);
 
   @override
@@ -62,44 +62,50 @@ class CustomAppBar extends StatelessWidget {
               top: 30,
               left: 20,
               child: GestureDetector(
-                onTap: onBackPressed ?? () =>(isBacked)??Navigator.pop(context),
-                child: Image.asset(arrowBackIcon,height: 30,width: 30,)
+                onTap:
+                    onBackPressed ?? () => (isBacked) ?? Navigator.pop(context),
+                child: Image.asset(arrowBackIcon, height: 30, width: 30),
               ),
             ),
-           Positioned(
-              top: (largeWidget!=null)?30:45,
+            Positioned(
+              top: (largeWidget != null) ? 30 : 40,
               right: 20,
               child: Column(
                 children: [
                   Text(
                     title,
-                    style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor,size: 20)??TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: titleColor,
-                    ),
-                  ),
-                  if(subTitle !=null)
-                  Column(
-                    children: [
-                      vGap(5),
-                      Text(
-                        subTitle!,
-                        style: MontserratStyles.montserratRegularTextStyle(color: AppColor().darkCharcoalBlueColor,size: 10)??TextStyle(
-                          fontSize: 8,
+                    style:
+                        MontserratStyles.montserratMediumTextStyle(
+                          color: AppColor().darkCharcoalBlueColor,
+                          size: 20,
+                        ) ??
+                        TextStyle(
+                          fontSize: 24,
                           fontWeight: FontWeight.w600,
                           color: titleColor,
                         ),
-                      ),
-                    ],
                   ),
-                  if(largeWidget != null)
+                  if (subTitle != null)
                     Column(
                       children: [
-                        vGap(12),
-                        largeWidget!
+                        vGap(5),
+                        Text(
+                          subTitle!,
+                          style:
+                              MontserratStyles.montserratRegularTextStyle(
+                                color: AppColor().darkCharcoalBlueColor,
+                                size: 10,
+                              ) ??
+                              TextStyle(
+                                fontSize: 8,
+                                fontWeight: FontWeight.w600,
+                                color: titleColor,
+                              ),
+                        ),
                       ],
                     ),
+                  if (largeWidget != null)
+                    Column(children: [vGap(12), largeWidget!]),
                 ],
               ),
             ),
