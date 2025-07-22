@@ -9,7 +9,9 @@ import 'package:auto_proof/constants/const_api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../data/models/get_all_inpection_list_response_model.dart';
 import '../../data/models/login_response_model.dart';
+import '../../data/models/post_inspector_role_response_model.dart';
 import '../../data/models/registeration_response_model.dart';
 import '../../data/models/user_update_profile_reponse_model.dart';
 import '../dio_service/error/exception.dart';
@@ -187,5 +189,44 @@ class AuthenticationApiCall implements AuthAbstraction{
       return Result.failure('Unexpected error occurred: $error');
     }
   }
+
+  @override
+  Future<Result<PostInspectorRoleResponseModel, String>> postInspectorRoleApiCall({Map<String, dynamic>? dataBody, required String adminId}) async {
+    try {
+      final response = await dioClient.post("${ApiEndPoints.teamApiEnd}/$adminId/create-inspector-member", data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      debugPrint("API Response Data: ${response.data}");
+      final otpResponse = PostInspectorRoleResponseModel.fromJson(data);
+      return Result.success(otpResponse);
+    } on DioException catch (dioError) {
+      debugPrint("error generated: => ${dioError.toString()}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint("error generated: => ${error.toString()}");
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+  @override
+  Future<Result<List<Datum>, String>> getAllInspectionListApiCall({Map<String, dynamic>? dataBody}) async {
+    try {
+      final response = await dioClient.get(ApiEndPoints.GetinspectionApiEnd, data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      debugPrint("API Response Data: ${response.data}");
+      final List<dynamic> inspectionsList = data['inspections'] ?? data['data'] ?? [];
+      final List<Datum> inspections = inspectionsList
+          .map((json) => Datum.fromJson(json))
+          .toList();
+
+      return Result.success(inspections);
+    } on DioException catch (dioError) {
+      debugPrint("error generated: => ${dioError.toString()}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint("error generated: => ${error.toString()}");
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
 
 }

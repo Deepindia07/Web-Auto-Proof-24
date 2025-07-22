@@ -1,4 +1,5 @@
 import 'package:auto_proof/auth/data/models/user_update_profile_reponse_model.dart';
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../auth/data/models/user_response_model.dart';
+import '../../../../constants/const_string.dart';
 
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';
@@ -29,6 +31,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
       if (result.isSuccess) {
         final userProfile = result.data;
+        SharedPrefsHelper.instance.setString(companyId, userProfile.user!.companyId.toString());
         emit(HomeScreenProfileLoaded(userProfile: userProfile));
       } else {
         emit(HomeScreenError(message: result.error ?? 'Failed to load profile'));

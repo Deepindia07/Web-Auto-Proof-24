@@ -11,4 +11,7 @@ Future<void> init ()async {
   sl.registerLazySingleton<OtpViewBloc>(()=> OtpViewBloc(apiService: AuthenticationApiCall()));
   sl.registerLazySingleton<HomeScreenBloc>(()=> HomeScreenBloc(authenticationApiCall: AuthenticationApiCall()));
   sl.registerLazySingleton<CollectInformationScreenBloc>(()=> CollectInformationScreenBloc(authenticationApiCall: AuthenticationApiCall()));
+  sl.registerLazySingleton<ShareBloc>(()=> ShareBloc(/*authenticationApiCall: AuthenticationApiCall()*/));
+  sl.registerLazySingleton<TeamScreenBloc>(()=> TeamScreenBloc(apiRepository: AuthenticationApiCall(),));
+  sl.registerLazySingleton<InspectorCreateAdminBloc>(()=> InspectorCreateAdminBloc(apiRepository: AuthenticationApiCall(),));
 }

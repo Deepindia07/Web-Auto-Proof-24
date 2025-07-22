@@ -35,6 +35,8 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: true,
+      bottom: false,
       child: SizedBox(
         height: height,
         width: double.infinity,

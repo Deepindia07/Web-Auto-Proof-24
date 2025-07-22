@@ -1,4 +1,12 @@
 part of 'team_screen_bloc.dart';
 
 @immutable
-sealed class TeamScreenEvent {}
+abstract class TeamScreenEvent {}
+
+class LoadTeamMembers extends TeamScreenEvent {
+  final bool isRefresh;
+
+  LoadTeamMembers({this.isRefresh = false});
+}
+
+class LoadMoreTeamMembers extends TeamScreenEvent {}

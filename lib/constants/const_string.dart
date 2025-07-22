@@ -9,6 +9,7 @@ const String isPassword = "isPassword";
 const String emailKey = "emailKey";
 const String phoneKey = "phoneKey";
 const String localeKey = "localeKey";
+const String companyId = "companyId";
 
 
 const String stripeKey = "pk_live_51RiyL0CR6VacE0UEb5KaN29OuCcgqZ56VXifcLwsS8JeAlEeCH7Ik3R6i3FbE9xolyIocGxbCqvzsppDwwMf2xKh00zimqSKSA";

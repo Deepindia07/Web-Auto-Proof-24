@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static const String baseUrl = "http://192.168.1.12:3002/";
+  static const String baseUrl = "http://192.168.1.3:3002/";
   static const String login = "api/auth/login";
   static const String register = "api/auth/signUp";
   static const String verifyOtpEmail = "api/auth/verifyOtpForEmail";
@@ -10,5 +10,7 @@ class ApiEndPoints {
   static const String createNewPassword = "api/admin/create-new-password";
   static const String profileApiEnd = "api/profile/";
   static const String profilePictureUpdate = "api/profile/update-profile-image";
+  static const String teamApiEnd = "api/admin/team/";
+  static const String GetinspectionApiEnd = "api/admin/team/getAllInspectorMembersList/";
   static const String updateProfileApiEnd = "api/admin/profile/update-profile/";
 }

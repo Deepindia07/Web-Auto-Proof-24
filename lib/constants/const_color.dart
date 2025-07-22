@@ -9,4 +9,5 @@ class AppColor {
   final Color lightSilverGrayColor = HexColor("#D9D9D9");
   final Color darkYellowColor = HexColor("#FEC72E");
   final Color desaturatedBlueColor = HexColor("28334A");
+  final Color figmaColor = HexColor("D9D9D9");
 }

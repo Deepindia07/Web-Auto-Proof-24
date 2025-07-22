@@ -343,7 +343,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     return CustomContainer(
       onTap: () => _handleContainerTap(context, index, title),
       borderRadius: BorderRadius.circular(12),
-      backgroundColor: AppColor().silverShadeGrayColor,
+      backgroundColor: AppColor().figmaColor,
       padding: EdgeInsets.all(6),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

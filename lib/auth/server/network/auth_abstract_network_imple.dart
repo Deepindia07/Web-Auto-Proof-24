@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 
 import '../../data/models/forgot_response_model.dart';
+import '../../data/models/get_all_inpection_list_response_model.dart';
 import '../../data/models/login_response_model.dart';
 import '../../data/models/otp_response_model.dart';
 import '../../data/models/password_setup_response_model.dart';
+import '../../data/models/post_inspector_role_response_model.dart';
 import '../../data/models/registeration_response_model.dart';
 import '../../data/models/user_response_model.dart';
 import '../../data/models/user_update_profile_reponse_model.dart';
@@ -23,4 +25,6 @@ abstract class AuthAbstraction{
   Future<Result<UserProfileImageUpdateResponseModel, String>> userProfileImageApiCall({
     required FormData multipartBody,
   });
+  Future<Result<PostInspectorRoleResponseModel, String>> postInspectorRoleApiCall({Map<String, dynamic>? dataBody, required String adminId});
+  Future<Result<List<Datum>, String>> getAllInspectionListApiCall({Map<String, dynamic>? dataBody});
 }
