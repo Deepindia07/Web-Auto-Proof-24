@@ -13,8 +13,8 @@ class LocalizationsBlocController extends Bloc<LocalizationsEvent, Localizations
 
   // Supported locales by user end
   static const List<Locale> supportedLocales = [
-    Locale('en'),
     Locale('fr'),
+    Locale('en'),
   ];
 
   LocalizationsBlocController() : super(const LocalizationsInitial(Locale('en'))) {
@@ -67,7 +67,7 @@ class LocalizationsBlocController extends Bloc<LocalizationsEvent, Localizations
       emit(LocalizationsError(state.locale, 'Failed to change language: $e'));
     }
   }
-  Locale get currentLocale => state.locale;
+  Locale get currentLocale => state.locale!;
 
   // Helper method to check if a locale is supported
   bool isLocaleSupported(Locale locale) => supportedLocales.contains(locale);

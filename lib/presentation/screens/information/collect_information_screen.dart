@@ -67,6 +67,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
 
   String _selectedCountryCode = '+33';
   bool _isCompanyLogoSelected = false;
+  String _selectedGenderType = "Male";
   final FocusNode _phoneNumberFocusNode = FocusNode();
   bool _isPhoneNumberFocused = false;
 
@@ -404,6 +405,22 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                 }
                 return null;
               },
+            ),
+            _buildDropdownField(
+              label: 'Select Gender',
+              value: _selectedGenderType,
+              items: [
+                RadioDropdownOption(value: "Male", label: "Male"),
+                RadioDropdownOption(value: "Female", label: "Female"),
+              ],
+              onChanged: (String? value) {
+                if (value != null && mounted) {
+                  setState(() {
+                    _selectedGenderType = value;
+                  });
+                }
+              },
+              isRequired: true,
             ),
             _buildTextField(
               label: AppLocalizations.of(context)!.address,
@@ -788,8 +805,41 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
         ),
       ],
     );
-  }
 
+  }
+  Widget _buildDropdownField({
+    required String label,
+    required String value,
+    required List<RadioDropdownOption> items,
+    required ValueChanged<String?> onChanged,
+    bool isRequired = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: MontserratStyles.montserratMediumTextStyle(
+                  color: AppColor().darkCharcoalBlueColor, size: 16),
+            ),
+            if (isRequired)
+              const Text(
+                ' *',
+                style: TextStyle(color: Colors.red),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        RadioDropdownField(
+          value: value,
+          options: items,
+          onChanged: onChanged,
+        )
+      ],
+    );
+  }
 
   void _processPersonalInformation() {
     context.read<CollectInformationScreenBloc>().updatePersonalInformation(

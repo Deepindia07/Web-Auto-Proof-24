@@ -195,12 +195,16 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
       children: [
         // Guide buttons
         GestureDetector(
-          onTap: () => _handleGuideButtonTap("Departure Guide"),
+          onTap: (){
+            redirectToWebPage("https://www.autoproof24.com/departure-guide/");
+          },
           child: _buildGuideButton("Departure Guide", arrowForwardRoundIcon),
         ),
         vGap(16),
         GestureDetector(
-          onTap: () => _handleGuideButtonTap("Return Guide"),
+          onTap: () {
+            redirectToWebPage("https://www.autoproof24.com/return-guide/");
+          },
           child: _buildGuideButton("Return Guide", arrowForwardRoundIcon),
         ),
         vGap(32),
@@ -299,11 +303,10 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
     });
   }
 
-  void _handleGuideButtonTap(String guideType) {
-    // Handle guide button tap
-    print("Tapped on $guideType");
-
-  }
+  // void _handleGuideButtonTap(String guideType) {
+  //
+  //
+  // }
 
   Widget _buildStepContent(int currentStep) {
     switch (currentStep) {

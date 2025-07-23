@@ -20,15 +20,16 @@ class CarDetailsScreenView extends StatefulWidget {
 }
 
 class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
+  String? profileImagePath;
   final _formKey = GlobalKey<FormState>();
-  final _numberPlateController = TextEditingController(text: 'HR6699');
-  final _tyreConditionsController = TextEditingController(text: 'Good');
-  final _brandController = TextEditingController(text: 'i10');
-  final _modelController = TextEditingController(text: '2022');
-  final _mileageController = TextEditingController(text: '00-000-00');
-  final _kmDayController = TextEditingController(text: '00');
+  final _numberPlateController = TextEditingController();
+  final _tyreConditionsController = TextEditingController();
+  final _brandController = TextEditingController();
+  final _modelController = TextEditingController();
+  final _mileageController = TextEditingController();
+  final _kmDayController = TextEditingController();
   final _extraKmController = TextEditingController();
-  final _priceTotalController = TextEditingController(text: '56€');
+  final _priceTotalController = TextEditingController();
   final _commentController = TextEditingController();
 
   String selectedGasType = 'Diesel';
@@ -41,6 +42,57 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
   bool gpsYes = true;
   bool chargingPortYes = true;
   bool carPapersYes = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Add listeners to text controllers
+    _addControllerListeners();
+  }
+
+  void _addControllerListeners() {
+    _numberPlateController.addListener(_updateCarDetails);
+    _brandController.addListener(_updateCarDetails);
+    _modelController.addListener(_updateCarDetails);
+    _mileageController.addListener(_updateCarDetails);
+    _tyreConditionsController.addListener(_updateCarDetails);
+    _kmDayController.addListener(_updateCarDetails);
+    _extraKmController.addListener(_updateCarDetails);
+    _priceTotalController.addListener(_updateCarDetails);
+    _commentController.addListener(_updateCarDetails);
+  }
+
+  void _updateCarDetails() {
+    final carDetails = _createCarDetailsModel();
+    context.read<CarDetailsScreenBloc>().add(UpdateCarDetailsEvent(carDetails: carDetails));
+  }
+
+  CarDetailsModel _createCarDetailsModel() {
+    return CarDetailsModel(
+      numberPlate: _numberPlateController.text,
+      brand: _brandController.text,
+      model: _modelController.text,
+      mileage: _mileageController.text,
+      gasType: selectedGasType,
+      gasLevel: selectedGasLevel,
+      tyreCondition: _tyreConditionsController.text,
+      kmDay: _kmDayController.text,
+      extraKm: _extraKmController.text,
+      priceTotal: _priceTotalController.text,
+      comment: _commentController.text,
+      softPack: softPackYes,
+      spareWheel: spareWheelYes,
+      phoneOlder: phoneOlderYes,
+      gps: gpsYes,
+      chargingPort: chargingPortYes,
+      carPapers: carPapersYes,
+    );
+  }
+
+  // void _saveAndNavigateToNext() {
+  //   final carDetails = _createCarDetailsModel();
+  //   context.read<CarDetailsScreenBloc>().add(ValidateFormEvent(carDetails: carDetails));
+  // }
 
   @override
   void dispose() {
@@ -59,23 +111,36 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:AppColor().backgroundColor,
-      body: SingleChildScrollView(
-        // padding: EdgeInsets.all(5),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInformationSection(),
-              SizedBox(height: 24),
-              _buildChecklistSection(),
-              SizedBox(height: 24),
-              _buildCommentSection(),
-              SizedBox(height: 24),
-            ],
-          ),
-        ),
+      backgroundColor: AppColor().backgroundColor,
+      body: BlocConsumer<CarDetailsScreenBloc, CarDetailsScreenState>(
+        listener: (context, state) {
+          if (state is CarDetailsScreenValidationError) {
+            _showValidationErrors(state.errors);
+          } else if (state is CarDetailsScreenSuccess) {
+            // _navigateToNextScreen(state.carDetails);
+          } else if (state is CarDetailsScreenError) {
+            CherryToast.error(context, state.message);
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInformationSection(),
+                  SizedBox(height: 24),
+                  _buildChecklistSection(),
+                  SizedBox(height: 24),
+                  _buildCommentSection(),
+                  SizedBox(height: 24),
+                  // _buildActionButtons(state),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -102,20 +167,6 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 text: "Import Information",
               textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 14),
             ),
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            //   decoration: BoxDecoration(
-            //     color: Color(0xFF2C3E50),
-            //     borderRadius: BorderRadius.circular(20),
-            //   ),
-            //   child: Text(
-            //     'Import Information',
-            //     style: TextStyle(
-            //       color: Colors.orange,
-            //       fontWeight: FontWeight.w500,
-            //     ),
-            //   ),
-            // ),
           ],
         ),
         SizedBox(height: 16),
@@ -126,6 +177,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
+                hintText: "LL-DDD-LL",
                 label: 'Number Plate',
                 controller: _numberPlateController,
                 isRequired: true,
@@ -136,6 +188,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               flex: 1,
               child: _buildTextField(
                 label: 'Brand',
+                hintText: "FERRARI",
                 controller: _brandController,
                 isRequired: true,
               ),
@@ -145,6 +198,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               flex: 1,
               child: _buildTextField(
                 label: 'Model',
+                hintText: "SF90 Stradale",
                 controller: _modelController,
                 isRequired: true,
               ),
@@ -160,7 +214,9 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
+                keyboardType: TextInputType.number,
                 label: 'Mileage',
+                hintText: "7.7 kmpl",
                 controller: _mileageController,
                 isRequired: true,
               ),
@@ -172,15 +228,22 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 label: 'Gas Type',
                 value: selectedGasType,
                 items: [
-                  RadioDropdownOption(value: 'ds', label: 'Diesel'),
-                  RadioDropdownOption(value: 'pl', label: 'Petrol'),
-                  RadioDropdownOption(value: 'ec', label: 'Electric'),
-                  RadioDropdownOption(value: 'hd', label: 'Hybrid'),
+                  RadioDropdownOption(value: 'Diesel', label: 'Diesel'),  // Fixed: value should match label
+                  RadioDropdownOption(value: 'Petrol', label: 'Petrol'),
+                  RadioDropdownOption(value: 'Electric', label: 'Electric'),
+                  RadioDropdownOption(value: 'Hybrid', label: 'Hybrid'),
                 ],
-                onChanged: (value) => setState(() => selectedGasType = value!),
-                isRequired: true, dropValue: 'Diesel',
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedGasType = newValue!;
+                  });
+                  _updateCarDetails();
+                },
+                isRequired: true,
+                dropValue: 'Diesel',
               ),
             ),
+
             SizedBox(width: 8),
             Expanded(
               flex: 1,
@@ -188,18 +251,24 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 label: 'Gas Level',
                 value: selectedGasLevel,
                 items: [
-                  RadioDropdownOption(value: 'emp', label: 'Empty'),
-                  RadioDropdownOption(value: 'pl', label: '1/8'),
-                  RadioDropdownOption(value: 'ec', label: '2/8'),
-                  RadioDropdownOption(value: 'h1d', label: '3/8'),
-                  RadioDropdownOption(value: '2', label: 'Half'),
-                  RadioDropdownOption(value: 'h2d', label: '5/8'),
-                  RadioDropdownOption(value: 'h3d', label: '6/8'),
-                  RadioDropdownOption(value: 'h4d', label: '7/8'),
-                  RadioDropdownOption(value: 'h5d', label: 'Full'),
+                  RadioDropdownOption(value: 'Empty', label: 'Empty'),
+                  RadioDropdownOption(value: '1/8', label: '1/8'),
+                  RadioDropdownOption(value: '2/8', label: '2/8'),
+                  RadioDropdownOption(value: '3/8', label: '3/8'),
+                  RadioDropdownOption(value: 'Half', label: 'Half'),
+                  RadioDropdownOption(value: '5/8', label: '5/8'),
+                  RadioDropdownOption(value: '6/8', label: '6/8'),
+                  RadioDropdownOption(value: '7/8', label: '7/8'),
+                  RadioDropdownOption(value: 'Full', label: 'Full'),
                 ],
-                onChanged: (value) => setState(() => selectedGasLevel = value!),
-                isRequired: true, dropValue: '1/8',
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedGasLevel = newValue!;
+                  });
+                  _updateCarDetails();
+                },
+                isRequired: true,
+                dropValue: '1/8',
               ),
             ),
           ],
@@ -213,6 +282,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               flex: 1,
               child: _buildTextField(
                 label: 'Tyre Condition',
+                hintText: "Good",
                 controller: _tyreConditionsController,
                 isRequired: true,
               ),
@@ -221,6 +291,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
+                keyboardType: TextInputType.number,
                 label: 'Km/day',
                 controller: _kmDayController,
                 isRequired: true,
@@ -230,6 +301,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
+                keyboardType: TextInputType.number,
                 label: 'Extra KM (€)',
                 controller: _extraKmController,
                 hintText: '€',
@@ -246,6 +318,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
+                keyboardType: TextInputType.number,
                 label: 'Price Total (€)',
                 controller: _priceTotalController,
                 isRequired: true,
@@ -257,11 +330,11 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               child: _buildFileUploadField(
                 label: 'Up.insurance',
                 onTap: () {
-                  // Handle file upload
+                  _updateProfileImage(context);
                 },
               ),
             ),
-            SizedBox(width: 8),
+            // SizedBox(width: 8),
             Expanded(
               flex: 1,
               child: _buildImageField(
@@ -297,9 +370,10 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         ),
         SizedBox(height: 16),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 2,
+              flex:1,
               child: _buildSwitchField(
                 label: 'Softy Pack',
                 value: softPackYes,
@@ -309,7 +383,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             ),
             SizedBox(width: 8),
             Expanded(
-              flex: 2,
+              flex: 1,
               child: _buildSwitchField(
                 label: 'Spare Wheel',
                 value: spareWheelYes,
@@ -319,7 +393,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             ),
             SizedBox(width: 8),
             Expanded(
-              flex: 2,
+              flex: 1,
               child: _buildSwitchField(
                 label: 'Phone older',
                 value: phoneOlderYes,
@@ -405,6 +479,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,
+    TextInputType?keyboardType,
     String? hintText,
     bool isRequired = false,
   }) {
@@ -432,29 +507,10 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         CustomTextField(
           controller:controller,
           hintText: hintText,
+          keyboardType: keyboardType,
           hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 14, color: AppColor().silverShadeGrayColor),
           fillColor: AppColor().backgroundColor,
         )
-        // TextFormField(
-        //   controller: controller,
-        //   decoration: InputDecoration(
-        //     hintText: hintText,
-        //     hintStyle: TextStyle(color: Colors.grey[400]),
-        //     border: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(8),
-        //       borderSide: BorderSide(color: Colors.grey[300]!),
-        //     ),
-        //     enabledBorder: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(8),
-        //       borderSide: BorderSide(color: Colors.grey[300]!),
-        //     ),
-        //     focusedBorder: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(8),
-        //       borderSide: BorderSide(color: Colors.blue),
-        //     ),
-        //     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        //   ),
-        // ),
       ],
     );
   }
@@ -491,40 +547,12 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         RadioDropdownField(
           value: value,
           options: items,
-          onChanged: (value){
-            setState(() {
-              value = value;
-            });
-          },
+          onChanged: onChanged, // Pass the callback directly
         )
-        // DropdownButtonFormField<String>(
-        //   value: value,
-        //   onChanged: onChanged,
-        //   items: items.map((String item) {
-        //     return DropdownMenuItem<String>(
-        //       value: item,
-        //       child: Text(item),
-        //     );
-        //   }).toList(),
-        //   decoration: InputDecoration(
-        //     border: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(8),
-        //       borderSide: BorderSide(color: Colors.grey[300]!),
-        //     ),
-        //     enabledBorder: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(8),
-        //       borderSide: BorderSide(color: Colors.grey[300]!),
-        //     ),
-        //     focusedBorder: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(8),
-        //       borderSide: BorderSide(color: Colors.blue),
-        //     ),
-        //     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        //   ),
-        // ),
       ],
     );
   }
+
 
   Widget _buildSwitchField({
     required String label,
@@ -559,11 +587,15 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           height: 40,
           inactiveColor: Colors.red,
           activeColor: Colors.green,
-          onChanged: onChanged,
+          onChanged: (newValue) {
+            onChanged(newValue);
+            _updateCarDetails(); // Trigger BLoC update
+          },
         )
       ],
     );
   }
+
 
   Widget _buildFileUploadField({
     required String label,
@@ -585,7 +617,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           backgroundColor: AppColor().backgroundColor,
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
-          padding: EdgeInsets.symmetric(horizontal: 24,vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 18,vertical: 5),
           border: Border.all(color: AppColor().darkCharcoalBlueColor.withOpacity(0.2)),
           child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -595,7 +627,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               size: 32,
               color: Colors.grey[400],
             ),
-            SizedBox(height: 8),
+
             Text(
               'Drop the file',
               style: TextStyle(
@@ -606,68 +638,262 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           ],
         ),
         )
-        // GestureDetector(
-        //   onTap: onTap,
-        //   child: Container(
-        //     height: 100,
-        //     decoration: BoxDecoration(
-        //       border: Border.all(color: Colors.grey[300]!),
-        //       borderRadius: BorderRadius.circular(8),
-        //     ),
-        //     child: Column(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         Icon(
-        //           Icons.cloud_upload_outlined,
-        //           size: 32,
-        //           color: Colors.grey[400],
-        //         ),
-        //         SizedBox(height: 8),
-        //         Text(
-        //           'Drop the file',
-        //           style: TextStyle(
-        //             color: Colors.grey[400],
-        //             fontSize: 12,
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
 
   Widget _buildImageField({required String label}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[700],
-          ),
-        ),
-        SizedBox(height: 8),
-        Container(
-          height: 100,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]!),
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.grey[50],
-          ),
-          child: Center(
-            child: Icon(
-              Icons.image_outlined,
-              size: 32,
-              color: Colors.grey[400],
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          barrierColor: Colors.black87,
+          builder: (context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              // insetPadding: EdgeInsets.all(16),
+              child: Hero(
+                tag: "unique_hero_tag",
+                child: Material(
+                  color: Colors.transparent,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      height: 250,
+                      child: Stack(
+                        children: [
+                          profileImagePath != null
+                              ? Image.file(
+                            File(profileImagePath!),
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.error_outline,
+                                      size: 48,
+                                      color: Colors.red[400],
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'Error loading image',
+                                      style: TextStyle(
+                                        color: Colors.red[400],
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                              : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.image_outlined,
+                                  size: 48,
+                                  color: Colors.grey[400],
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'No image selected',
+                                  style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.black54,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
-        ),
-      ],
+          SizedBox(height: 8),
+          Hero(
+            tag: "unique_hero_tag",
+            child: Container(
+              height: 100,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.grey[50],
+              ),
+              child: profileImagePath != null
+                  ? ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.file(
+                  File(profileImagePath!),
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 32,
+                            color: Colors.red[400],
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Error loading image',
+                            style: TextStyle(
+                              color: Colors.red[400],
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              )
+                  : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.image_outlined,
+                      size: 32,
+                      color: Colors.grey[400],
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'No image selected',
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
+  void _showValidationErrors(List<String> errors) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Validation Errors'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: errors.map((error) => Text('• $error')).toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Future<void> _updateProfileImage(BuildContext context) async {
+    try {
+      final selectedImage = await CustomImageSelector.show(
+        context,
+        title: 'Update Profile Picture',
+        primaryColor: AppColor().darkYellowColor,
+      );
+
+      if (selectedImage != null) {
+        // Show the selected image immediately for better UX
+        setState(() {
+          profileImagePath = selectedImage.path;
+        });
+
+        final userId = await _getCurrentUserId();
+        final mimeType = lookupMimeType(selectedImage.path);
+        final mimeParts = mimeType?.split('/');
+
+        if (mimeParts != null && mimeParts.length == 2 && userId != null) {
+          final formData = FormData.fromMap({
+            "profileImage": await MultipartFile.fromFile(
+              selectedImage.path,
+              filename: selectedImage.path.split('/').last,
+              // contentType: MediaType(mimeParts[0], mimeParts[1]),
+            ),
+          });
+
+          // context.read<HomeScreenBloc>().add(
+          //   UpdateProfileImageEvent(
+          //     multipartBody: formData,
+          //     userId: userId,
+          //     profileDataBody: {},
+          //   ),
+          // );
+
+          print("Image format: $mimeType");
+        } else {
+          // Reset to previous state if validation fails
+          setState(() {
+            profileImagePath = null;
+          });
+          CherryToast.error(context, 'Invalid image format or user ID not found');
+        }
+      }
+    } catch (e) {
+      // Reset to previous state on error
+      setState(() {
+        profileImagePath = null;
+      });
+      CherryToast.error(context, 'Error selecting image: $e');
+    }
+  }
+
+  Future<String?> _getCurrentUserId() async {
+    final userid = SharedPrefsHelper.instance.getString(userId);
+    return userid;
+  }
 }

@@ -42,17 +42,17 @@ class UpperContainerWidget extends StatelessWidget {
             ),
             text: TextSpan(
               children: [
-                TextSpan(
-                  text: AppLocalizations.of(context)!.lets,
-                  style:
-                  MontserratStyles.montserratSemiBoldTextStyle(
-                    color: AppColor().yellowWarmColor,
-                    size: 45,
-                  ).copyWith(
-                    height: 1.0,
-                    letterSpacing: -1.3,
-                  ),
-                ),
+                // TextSpan(
+                //   text: AppLocalizations.of(context)!.lets,
+                //   style:
+                //   MontserratStyles.montserratSemiBoldTextStyle(
+                //     color: AppColor().yellowWarmColor,
+                //     size: 45,
+                //   ).copyWith(
+                //     height: 1.0,
+                //     letterSpacing: -1.3,
+                //   ),
+                // ),
                 TextSpan(
                   text: AppLocalizations.of(context)!.createYourAccount,
                   style:

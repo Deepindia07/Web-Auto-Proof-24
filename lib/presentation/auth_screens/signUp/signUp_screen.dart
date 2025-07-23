@@ -142,7 +142,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                         child: Column(
                           spacing: 15,
                           children: [
-                            const SizedBox(height: 10),
+                            // const SizedBox(height: 10),
                             Row(
                               spacing: 2,
                               children: [
@@ -424,7 +424,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: UpperContainerWidget(height: headerHeight+50,),
+                child: UpperContainerWidget(height: headerHeight+20,),
               ),
             ],
           ),

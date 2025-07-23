@@ -2,7 +2,7 @@ part of 'l10n_switcher_bloc.dart';
 
 @immutable
 abstract class LocalizationsState {
-  final Locale locale;
+  final Locale? locale;
 
   const LocalizationsState(this.locale);
 }

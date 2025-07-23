@@ -8,11 +8,9 @@ import 'package:auto_proof/constants/const_string.dart';
 import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:auto_proof/presentation/screens/home/bloc/home_screen_bloc.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
-import 'package:auto_proof/utilities/custom_container.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:auto_proof/utilities/custom_toast.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
-import 'package:auto_proof/utilities/responsive_screen_sizes.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +21,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import "package:mime/mime.dart";
 import 'package:http_parser/http_parser.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../l10n_controller/l10n_switcher_bloc.dart';
 import '../../utilities/cusom_image_picker.dart';
@@ -300,7 +297,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
       );
     }
 
-    // Priority: Local file -> Network image -> Default icon
     if (profileImagePath != null && File(profileImagePath!).existsSync()) {
       return Image.file(
         File(profileImagePath!),
@@ -350,7 +346,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
       final selectedImage = await CustomImageSelector.show(
         context,
         title: 'Update Profile Picture',
-        primaryColor: const Color(0xFF2C3E50),
+        primaryColor: AppColor().darkYellowColor,
       );
 
       if (selectedImage != null) {

@@ -9,7 +9,7 @@ class ReportsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ReportsScreenBloc>(
       create: (context) => ReportsScreenBloc(),
-      child: ReportsScreenView(isBacked: isBacked,onBack: onBack,),
+      child: ReportsScreenView(isBacked: isBacked, onBack: onBack),
     );
   }
 }
@@ -17,14 +17,20 @@ class ReportsScreen extends StatelessWidget {
 class ReportsScreenView extends StatefulWidget {
   final bool? isBacked;
   final VoidCallback? onBack;
-  const ReportsScreenView({super.key,required this.isBacked, required this.onBack});
+  const ReportsScreenView({super.key, required this.isBacked, required this.onBack});
 
   @override
   State<ReportsScreenView> createState() => _ReportsScreenViewState();
 }
 
 class _ReportsScreenViewState extends State<ReportsScreenView> {
-  int perUnitQuantity = 2;
+  int perUnitQuantity = 1;
+
+  String getFlexiblePackPrice() {
+    double unitPrice = 1.99;
+    double total = perUnitQuantity * unitPrice;
+    return "${total.toStringAsFixed(2)} € / Unit";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +39,10 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
       body: Column(
         children: [
           CustomAppBar(
-              onBackPressed: widget.onBack,
-              isBacked:widget.isBacked,
-              backgroundColor: AppColor().backgroundColor,
-              title: "My Subscription"
-
+            onBackPressed: widget.onBack,
+            isBacked: widget.isBacked,
+            backgroundColor: AppColor().backgroundColor,
+            title: "My Subscription",
           ),
           Expanded(child: _subscriptionView(context))
         ],
@@ -56,24 +61,21 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Auto Proof Membership Header
             Row(
               children: [
-                Icon(
-                  Icons.verified,
-                  color: Colors.orange,
-                  size: 24,
-                ),
+                Icon(Icons.verified, color: Colors.orange, size: 24),
                 SizedBox(width: 8),
                 Text(
                   "Auto Proof Membership",
-                  style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor,size: 18)
+                  style: MontserratStyles.montserratMediumTextStyle(
+                    color: AppColor().darkCharcoalBlueColor,
+                    size: 18,
+                  ),
                 ),
               ],
             ),
             SizedBox(height: 20),
 
-            // Per Unit Plan
             _buildSubscriptionCard(
               title: "Starter Pack",
               price: "0€",
@@ -85,69 +87,88 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
                 "Free Account",
                 "1 Check-In/ Check-Out",
                 "No Commitment",
-                " Try Before You Buy",
+                "Try Before You Buy",
                 "1 Year History Saving"
               ],
               buttonTitle: "Get Started Free",
-              onTap: () {  },
-              // isPerUnit: true,
+              onTap: () {},
             ),
             SizedBox(height: 16),
 
-            // Monthly Plan
             _buildSubscriptionCard(
-              title: "Monthly",
-              price: "26,99€ / month",
+              title: "Flexible Pack",
+              price: getFlexiblePackPrice(),
               highlightFeature: [
-                "3 Inspection Units Free for\nNew Accounts",
+                "Buy As Needed",
                 "Units Expire in 1 Year"
               ],
               features: [
                 "Free Account",
-                "3 Team Members",
-                "20 Check-In/ Check-Out",
+                "Scalable On Demand",
+                "Pay Only for What You Use",
+                "1 Year History Saving",
               ],
               isPerUnit: true,
               buttonTitle: "Start Now",
-              onTap: () {  },
+              onTap: () {},
             ),
             SizedBox(height: 16),
 
-            // Yearly Plan
             _buildSubscriptionCard(
-              title: "Yearly",
-              price: "290,99€ / month",
+              title: "Growth Pack ",
+              price: "338.30 € Total",
               highlightFeature: [
-                "3 Inspection Units Free for\nNew Accounts",
+                "15% Off Regular Price",
                 "Units Expire in 1 Year"
               ],
               features: [
                 "Free Account",
-                "3 Team Members",
-                "20 Check-In/ Check-Out",
+                "Prepaid 200 Units",
+                "Great for Small Teams",
+                "1 Year History Saving"
               ],
-              buttonTitle: "Start Now",
-              onTap: () {  },
+              buttonTitle: "Buy 200 Units",
+              onTap: () {},
               hasDiscount: true,
-              // discountText: "10% OFF",
             ),
             SizedBox(height: 16),
 
-            // Enterprise Pack
             _buildSubscriptionCard(
-              title: "Enterprise Pack",
-              price: "290,99€ / month",
+              title: "Pro Pack ",
+              price: "746.25 € Total",
               highlightFeature: [
-                "3 Inspection Units Free for\nNew Accounts",
+                "25% Off Regular Price",
                 "Units Expire in 1 Year"
               ],
               features: [
                 "Free Account",
-                "5 Team Members",
-                "Unlimited Check-In/ Check-Out",
+                "Prepaid 500 Units",
+                "Best Price per Unit",
+                "1 Year History Saving"
               ],
-              buttonTitle: "Start Now",
-              onTap: () {  },
+              buttonTitle: "Buy 500 Units",
+              onTap: () {},
+            ),
+            SizedBox(height: 16),
+
+            _buildCustomSubscriptionCard(
+              title: "On-Demand",
+              highlightFeature: [
+                "Get flexible, high-volume usage billed dynamically based on real-time demand or integration usage.",
+              ],
+              customPlanTitle: "Custom Plan",
+              customPlanFeatures: [
+                "Tailored to usage & volume – perfect for APIs, automation, and enterprise integrations.",
+                "Valid for 1 Year",
+              ],
+              features: [
+                "Real-time unit allocation",
+                "Custom SLAs & volume pricing",
+                "API-first design",
+                "No limits – scale as needed",
+              ],
+              buttonTitle: "Contact Sales",
+              onTap: () {},
             ),
           ],
         ),
@@ -158,7 +179,7 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
   Widget _buildSubscriptionCard({
     required String title,
     required String price,
-    required List<String>highlightFeature,
+    required List<String> highlightFeature,
     required List<String> features,
     required String buttonTitle,
     required VoidCallback onTap,
@@ -172,99 +193,169 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
       padding: EdgeInsets.all(22),
       borderRadius: BorderRadius.circular(24),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: MontserratStyles.montserratMediumTextStyle(color: Colors.white,size: 24)
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 24),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      price,
+                      style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkYellowColor, size: 20),
+                    ),
+                    vGap(25),
+                    ...highlightFeature.map((f) => Padding(
+                      padding: EdgeInsets.only(bottom: 4),
+                      child: Row(
+                        children: [
+                          Icon(Icons.fiber_manual_record, size: 8, color: Colors.white),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(f, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 18)),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 4),
+                    )),
+                    vGap(10),
+                    ...features.map((feature) => Padding(
+                      padding: EdgeInsets.only(bottom: 4),
+                      child: Row(
+                        children: [
+                          Icon(Icons.fiber_manual_record, size: 6, color: AppColor().darkYellowColor),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(feature, style: MontserratStyles.montserratNormalTextStyle(color: AppColor().darkYellowColor, size: 14)),
+                          ),
+                        ],
+                      ),
+                    )),
+                  ],
+                ),
+              ),
+              if (isPerUnit || (hasDiscount && discountText != null)) ...[
+                Column(
+                  children: [
+                    if (isPerUnit) vGap(8),
+                    if (isPerUnit) _buildQuantitySelector(),
+                    if (hasDiscount && discountText != null) ...[
+                      vGap(8),
                       Text(
-                        price,
-                        style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkYellowColor,size: 20)
+                        discountText!,
+                        style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkYellowColor, size: 12),
                       ),
                     ],
-                  ),
-                  vGap(25),
-                  ...highlightFeature.map((f) => Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.fiber_manual_record,
-                          size: 8,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          f,
-                          style: MontserratStyles.montserratMediumTextStyle(color: Colors.white,size: 18),
-                        ),
-                      ],
-                    ),
-                  )).toList(),
-                  vGap(10),
-                  ...features.map((feature) => Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.fiber_manual_record,
-                          size: 6,
-                          color: AppColor().darkYellowColor,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          feature,
-                          style: MontserratStyles.montserratNormalTextStyle(color: AppColor().darkYellowColor,size: 14),
-                        ),
-                      ],
-                    ),
-                  )).toList()
-                ],
-              ),
-              Column(
-                children: [
-                  if (isPerUnit) ...[
-                    vGap(8),
-                    _buildQuantitySelector(),
                   ],
-                  if (hasDiscount && discountText != null) ...[
-                    vGap(8),
-                    Text(
-                      discountText,
-                      style:MontserratStyles.montserratSemiBoldTextStyle(
-                          color: AppColor().darkYellowColor,size: 12
-                      ),
-                    ),
-                    // SizedBox(width: 8),
-                  ],
-                ],
-              ),
+                ),
+              ],
             ],
           ),
           vGap(20),
           CustomButton(
             height: 70,
-            onPressed: onTap,/*(){
-              context.push(AppRoute.paymentScreen);
-            },*/
+            width: double.infinity,
+            onPressed: onTap,
             text: buttonTitle,
             borderRadius: 18,
-            textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor,size: 20),
+            textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 20),
             backgroundColor: AppColor().darkYellowColor,
             textColor: Colors.white,
-            // fontSize: 14,
             padding: EdgeInsets.symmetric(horizontal: 80, vertical: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCustomSubscriptionCard({
+    required String title,
+    required List<String> highlightFeature,
+    required List<String> features,
+    required String buttonTitle,
+    required VoidCallback onTap,
+    bool isPerUnit = false,
+    bool hasDiscount = false,
+    String? discountText,
+    String? customPlanTitle,
+    List<String>? customPlanFeatures,
+  }) {
+    return CustomContainer(
+      width: double.infinity,
+      backgroundColor: AppColor().darkCharcoalBlueColor,
+      padding: EdgeInsets.all(22),
+      borderRadius: BorderRadius.circular(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 24)),
+          vGap(20),
+          ...highlightFeature.map((feature) => Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 8),
+                  child: Icon(Icons.fiber_manual_record, size: 6, color: Colors.white),
+                ),
+                SizedBox(width: 12),
+                Expanded(child: Text(feature, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 16))),
+              ],
+            ),
+          )),
+          vGap(10),
+          if (customPlanTitle != null) ...[
+            Text(customPlanTitle, style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkYellowColor, size: 20)),
+            vGap(15),
+            if (customPlanFeatures != null)
+              ...customPlanFeatures.map((feature) => Padding(
+                padding: EdgeInsets.only(bottom: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 6),
+                      child: Icon(Icons.fiber_manual_record, size: 4, color: AppColor().darkYellowColor),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(child: Text(feature, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 14))),
+                  ],
+                ),
+              )),
+          ],
+          ...features.map((feature) => Padding(
+            padding: EdgeInsets.only(bottom: 6),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 6),
+                  child: Icon(Icons.fiber_manual_record, size: 4, color: AppColor().darkYellowColor),
+                ),
+                SizedBox(width: 12),
+                Expanded(child: Text(feature, style: MontserratStyles.montserratNormalTextStyle(color: AppColor().darkYellowColor, size: 14))),
+              ],
+            ),
+          )),
+          vGap(25),
+          CustomButton(
+            height: 70,
+            width: double.infinity,
+            onPressed: onTap,
+            text: buttonTitle,
+            borderRadius: 18,
+            textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 18),
+            backgroundColor: AppColor().darkYellowColor,
+            textColor: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
           ),
         ],
       ),
@@ -273,11 +364,11 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
 
   Widget _buildQuantitySelector() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2,vertical: 2),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: AppColor().darkYellowColor,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.white,width: 3)
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white, width: 3),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -291,27 +382,20 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
               }
             },
             child: Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.remove,
-                color: AppColor().darkCharcoalBlueColor,
-                size: 16,
-              ),
+              width: 25,
+              height: 25,
+              decoration: BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+              child: Icon(Icons.remove, color: AppColor().darkYellowColor, size: 20),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text(
               perUnitQuantity.toString(),
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color:AppColor().darkCharcoalBlueColor,
+                color: AppColor().darkCharcoalBlueColor,
               ),
             ),
           ),
@@ -322,17 +406,10 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
               });
             },
             child: Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.add,
-                color: AppColor().darkCharcoalBlueColor,
-                size: 16,
-              ),
+              width: 25,
+              height: 25,
+              decoration: BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+              child: Icon(Icons.add, color: AppColor().darkYellowColor, size: 20),
             ),
           ),
         ],

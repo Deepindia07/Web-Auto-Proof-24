@@ -23,12 +23,49 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
+  final _isDrivingLicense = false;
+  final _isDriverId = false;
+
+  @override
+  void initState(){
+    super.initState();
+    _addListenerOwnerDetailsListener();
+  }
+
+  void _addListenerOwnerDetailsListener(){
+    _firstNameController.addListener(_updateOwnerDetails);
+    _lastNameController.addListener(_updateOwnerDetails);
+    _addressController.addListener(_updateOwnerDetails);
+    _mobileController.addListener(_updateOwnerDetails);
+    _emailController.addListener(_updateOwnerDetails);
+  }
+
+  void _updateOwnerDetails(){
+    final createOwnerDetails = _createOwnerDetails();
+
+  }
+
+  OwnerDetailsModel _createOwnerDetails(){
+    return OwnerDetailsModel(
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        mobileNo: _addressController.text,
+        email: _emailController.text,
+        address: _addressController.text,
+        isDriverLicense: _isDrivingLicense,
+        isDriverId: _isDriverId
+    );
+  }
   @override
   void dispose(){
     _firstNameController.dispose();
     _lastNameController.dispose();
     _addressController.dispose();
+    _mobileController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -101,7 +138,7 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
               child: _buildTextField(
                 label: 'Mobile No.',
                 hintText: "1234567890",
-                controller: _firstNameController,
+                controller: _mobileController,
                 isRequired: true,
               ),
             ),
@@ -109,9 +146,9 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Last name',
-                hintText: 'Last name',
-                controller: _lastNameController,
+                label: 'Email',
+                hintText: 'Email',
+                controller: _emailController,
                 isRequired: true,
               ),
             ),
@@ -125,7 +162,7 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
               child: _buildTextField(
                 label: 'Address.',
                 hintText: "123 Anywhere St, Any City, ST 12345",
-                controller: _firstNameController,
+                controller: _addressController,
                 isRequired: true,
               ),
             ),
