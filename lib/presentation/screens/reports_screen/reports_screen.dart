@@ -3,7 +3,11 @@ part of "reports_screen_route_imple.dart";
 class ReportsScreen extends StatelessWidget {
   final bool? isBacked;
   final VoidCallback? onBack;
-  const ReportsScreen({super.key, required this.isBacked, required this.onBack});
+  const ReportsScreen({
+    super.key,
+    required this.isBacked,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,11 @@ class ReportsScreen extends StatelessWidget {
 class ReportsScreenView extends StatefulWidget {
   final bool? isBacked;
   final VoidCallback? onBack;
-  const ReportsScreenView({super.key, required this.isBacked, required this.onBack});
+  const ReportsScreenView({
+    super.key,
+    required this.isBacked,
+    required this.onBack,
+  });
 
   @override
   State<ReportsScreenView> createState() => _ReportsScreenViewState();
@@ -44,7 +52,7 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
             backgroundColor: AppColor().backgroundColor,
             title: "My Subscription",
           ),
-          Expanded(child: _subscriptionView(context))
+          Expanded(child: _subscriptionView(context)),
         ],
       ),
     );
@@ -81,14 +89,14 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
               price: "0€",
               highlightFeature: [
                 "3 Inspection Units Free for\nNew Accounts",
-                "Units Expire in 1 Year"
+                "Units Expire in 1 Year",
               ],
               features: [
                 "Free Account",
                 "1 Check-In/ Check-Out",
                 "No Commitment",
                 "Try Before You Buy",
-                "1 Year History Saving"
+                "1 Year History Saving",
               ],
               buttonTitle: "Get Started Free",
               onTap: () {},
@@ -98,10 +106,7 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
             _buildSubscriptionCard(
               title: "Flexible Pack",
               price: getFlexiblePackPrice(),
-              highlightFeature: [
-                "Buy As Needed",
-                "Units Expire in 1 Year"
-              ],
+              highlightFeature: ["Buy As Needed", "Units Expire in 1 Year"],
               features: [
                 "Free Account",
                 "Scalable On Demand",
@@ -119,13 +124,13 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
               price: "338.30 € Total",
               highlightFeature: [
                 "15% Off Regular Price",
-                "Units Expire in 1 Year"
+                "Units Expire in 1 Year",
               ],
               features: [
                 "Free Account",
                 "Prepaid 200 Units",
                 "Great for Small Teams",
-                "1 Year History Saving"
+                "1 Year History Saving",
               ],
               buttonTitle: "Buy 200 Units",
               onTap: () {},
@@ -138,13 +143,13 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
               price: "746.25 € Total",
               highlightFeature: [
                 "25% Off Regular Price",
-                "Units Expire in 1 Year"
+                "Units Expire in 1 Year",
               ],
               features: [
                 "Free Account",
                 "Prepaid 500 Units",
                 "Best Price per Unit",
-                "1 Year History Saving"
+                "1 Year History Saving",
               ],
               buttonTitle: "Buy 500 Units",
               onTap: () {},
@@ -205,39 +210,71 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
                   children: [
                     Text(
                       title,
-                      style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 24),
+                      style: MontserratStyles.montserratMediumTextStyle(
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
                     SizedBox(height: 4),
                     Text(
                       price,
-                      style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkYellowColor, size: 20),
+                      style: MontserratStyles.montserratSemiBoldTextStyle(
+                        color: AppColor().darkYellowColor,
+                        size: 20,
+                      ),
                     ),
                     vGap(25),
-                    ...highlightFeature.map((f) => Padding(
-                      padding: EdgeInsets.only(bottom: 4),
-                      child: Row(
-                        children: [
-                          Icon(Icons.fiber_manual_record, size: 8, color: Colors.white),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(f, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 18)),
-                          ),
-                        ],
+                    ...highlightFeature.map(
+                      (f) => Padding(
+                        padding: EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.fiber_manual_record,
+                              size: 8,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                f,
+                                style:
+                                    MontserratStyles.montserratMediumTextStyle(
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
+                    ),
                     vGap(10),
-                    ...features.map((feature) => Padding(
-                      padding: EdgeInsets.only(bottom: 4),
-                      child: Row(
-                        children: [
-                          Icon(Icons.fiber_manual_record, size: 6, color: AppColor().darkYellowColor),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(feature, style: MontserratStyles.montserratNormalTextStyle(color: AppColor().darkYellowColor, size: 14)),
-                          ),
-                        ],
+                    ...features.map(
+                      (feature) => Padding(
+                        padding: EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.fiber_manual_record,
+                              size: 6,
+                              color: AppColor().darkYellowColor,
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                feature,
+                                style:
+                                    MontserratStyles.montserratNormalTextStyle(
+                                      color: AppColor().darkYellowColor,
+                                      size: 14,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
+                    ),
                   ],
                 ),
               ),
@@ -250,7 +287,10 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
                       vGap(8),
                       Text(
                         discountText!,
-                        style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkYellowColor, size: 12),
+                        style: MontserratStyles.montserratSemiBoldTextStyle(
+                          color: AppColor().darkYellowColor,
+                          size: 12,
+                        ),
                       ),
                     ],
                   ],
@@ -265,7 +305,10 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
             onPressed: onTap,
             text: buttonTitle,
             borderRadius: 18,
-            textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 20),
+            textStyle: MontserratStyles.montserratMediumTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 18,
+            ),
             backgroundColor: AppColor().darkYellowColor,
             textColor: Colors.white,
             padding: EdgeInsets.symmetric(horizontal: 80, vertical: 12),
@@ -295,56 +338,110 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 24)),
-          vGap(20),
-          ...highlightFeature.map((feature) => Padding(
-            padding: EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 8),
-                  child: Icon(Icons.fiber_manual_record, size: 6, color: Colors.white),
-                ),
-                SizedBox(width: 12),
-                Expanded(child: Text(feature, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 16))),
-              ],
+          Text(
+            title,
+            style: MontserratStyles.montserratMediumTextStyle(
+              color: Colors.white,
+              size: 24,
             ),
-          )),
+          ),
+          vGap(20),
+          ...highlightFeature.map(
+            (feature) => Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 8),
+                    child: Icon(
+                      Icons.fiber_manual_record,
+                      size: 6,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      feature,
+                      style: MontserratStyles.montserratMediumTextStyle(
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           vGap(10),
           if (customPlanTitle != null) ...[
-            Text(customPlanTitle, style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkYellowColor, size: 20)),
+            Text(
+              customPlanTitle,
+              style: MontserratStyles.montserratSemiBoldTextStyle(
+                color: AppColor().darkYellowColor,
+                size: 20,
+              ),
+            ),
             vGap(15),
             if (customPlanFeatures != null)
-              ...customPlanFeatures.map((feature) => Padding(
-                padding: EdgeInsets.only(bottom: 6),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 6),
-                      child: Icon(Icons.fiber_manual_record, size: 4, color: AppColor().darkYellowColor),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(child: Text(feature, style: MontserratStyles.montserratMediumTextStyle(color: Colors.white, size: 14))),
-                  ],
+              ...customPlanFeatures.map(
+                (feature) => Padding(
+                  padding: EdgeInsets.only(bottom: 6),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 6),
+                        child: Icon(
+                          Icons.fiber_manual_record,
+                          size: 4,
+                          color: AppColor().darkYellowColor,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          feature,
+                          style: MontserratStyles.montserratMediumTextStyle(
+                            color: Colors.white,
+                            size: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              )),
+              ),
           ],
-          ...features.map((feature) => Padding(
-            padding: EdgeInsets.only(bottom: 6),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 6),
-                  child: Icon(Icons.fiber_manual_record, size: 4, color: AppColor().darkYellowColor),
-                ),
-                SizedBox(width: 12),
-                Expanded(child: Text(feature, style: MontserratStyles.montserratNormalTextStyle(color: AppColor().darkYellowColor, size: 14))),
-              ],
+          ...features.map(
+            (feature) => Padding(
+              padding: EdgeInsets.only(bottom: 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 6),
+                    child: Icon(
+                      Icons.fiber_manual_record,
+                      size: 4,
+                      color: AppColor().darkYellowColor,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      feature,
+                      style: MontserratStyles.montserratNormalTextStyle(
+                        color: AppColor().darkYellowColor,
+                        size: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
           vGap(25),
           CustomButton(
             height: 70,
@@ -352,7 +449,10 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
             onPressed: onTap,
             text: buttonTitle,
             borderRadius: 18,
-            textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 18),
+            textStyle: MontserratStyles.montserratMediumTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 18,
+            ),
             backgroundColor: AppColor().darkYellowColor,
             textColor: Colors.white,
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
@@ -384,8 +484,15 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
             child: Container(
               width: 25,
               height: 25,
-              decoration: BoxDecoration(color: Colors.black, shape: BoxShape.circle),
-              child: Icon(Icons.remove, color: AppColor().darkYellowColor, size: 20),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.remove,
+                color: AppColor().darkYellowColor,
+                size: 20,
+              ),
             ),
           ),
           Padding(
@@ -408,8 +515,15 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
             child: Container(
               width: 25,
               height: 25,
-              decoration: BoxDecoration(color: Colors.black, shape: BoxShape.circle),
-              child: Icon(Icons.add, color: AppColor().darkYellowColor, size: 20),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.add,
+                color: AppColor().darkYellowColor,
+                size: 20,
+              ),
             ),
           ),
         ],
