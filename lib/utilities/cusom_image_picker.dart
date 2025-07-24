@@ -6,11 +6,11 @@ import 'package:permission_handler/permission_handler.dart';
 
 class CustomImageSelector {
   static Future<File?> show(
-      BuildContext context, {
-        String? title,
-        Color? primaryColor,
-        Color? backgroundColor,
-      }) async {
+    BuildContext context, {
+    String? title,
+    Color? primaryColor,
+    Color? backgroundColor,
+  }) async {
     return await showDialog<File?>(
       context: context,
       barrierDismissible: true,
@@ -54,13 +54,9 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
     _animationController.forward();
   }
 
@@ -92,7 +88,9 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (widget.primaryColor ?? Colors.blue[800])!.withOpacity(0.1),
+                color: (widget.primaryColor ?? Colors.blue[800])!.withOpacity(
+                  0.1,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -117,19 +115,12 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey[400],
-              size: 16,
-            ),
+            Icon(Icons.arrow_forward_ios, color: Colors.grey[400], size: 16),
           ],
         ),
       ),
@@ -195,7 +186,9 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Permission Required'),
-        content: Text('$permissionType permission is required to select images.'),
+        content: Text(
+          '$permissionType permission is required to select images.',
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -229,9 +222,7 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
         ),
         backgroundColor: Colors.red,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -242,9 +233,7 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
       scale: _scaleAnimation,
       child: AlertDialog(
         backgroundColor: widget.backgroundColor ?? Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           widget.title ?? 'Select Image Source',
           style: TextStyle(
@@ -276,10 +265,9 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
   }
 }
 
-
 /// Image selection from inspection view
 class CustomCameraView extends StatefulWidget {
-  final String? carPart; // Add car part parameter
+  final String? carPart;
 
   const CustomCameraView({Key? key, this.carPart}) : super(key: key);
 
@@ -406,9 +394,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
               )
             else
               const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
+                child: CircularProgressIndicator(color: Colors.white),
               ),
 
             // Safe Area Rectangle Overlay
@@ -418,10 +404,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                   width: MediaQuery.of(context).size.width * 0.7,
                   height: MediaQuery.of(context).size.height * 0.5,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.greenAccent,
-                      width: 3,
-                    ),
+                    border: Border.all(color: Colors.greenAccent, width: 3),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Container(
@@ -441,7 +424,10 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                 right: 0,
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black87,
                       borderRadius: BorderRadius.circular(20),
@@ -467,7 +453,10 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                 right: 0,
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(20),
@@ -533,7 +522,10 @@ class _CustomCameraViewState extends State<CustomCameraView> {
               top: 80,
               left: 20,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(20),
@@ -577,14 +569,13 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                     decoration: BoxDecoration(
                       color: _isCameraInitialized ? Colors.white : Colors.grey,
                       borderRadius: BorderRadius.circular(35),
-                      border: Border.all(
-                        color: Colors.black26,
-                        width: 3,
-                      ),
+                      border: Border.all(color: Colors.black26, width: 3),
                     ),
                     child: Icon(
                       Icons.camera_alt,
-                      color: _isCameraInitialized ? Colors.black : Colors.grey[600],
+                      color: _isCameraInitialized
+                          ? Colors.black
+                          : Colors.grey[600],
                       size: 30,
                     ),
                   ),
