@@ -48,14 +48,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
               listener: (context, state) {
                 if (state is HomeScreenProfileImageUpdated) {
-                  // Update the network profile image and clear local path
                   setState(() {
                     networkProfileImage = state.userProfile.user?.profileImage ?? '';
-                    profileImagePath = null; // Clear local path since we now have updated network image
+                    profileImagePath = null;
                   });
                   CherryToast.success(context, state.message);
                 } else if (state is HomeScreenProfileImageUpdateError) {
-                  // Keep the local image on error
                   CherryToast.error(context, state.message);
                 }
               },

@@ -1,8 +1,10 @@
 library onboard_screen_route_imple.dart;
 
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/constants/const_route_string.dart';
+import 'package:auto_proof/constants/const_string.dart';
 import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:auto_proof/l10n/app_localizations_fr.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';

@@ -25,14 +25,28 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: AppRoute.loginScreen,
-        name: 'login',
+        path: AppRoute.roleBaseSelectionView,
+        name: 'roleBaseSelectionView',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const LoginScreen(),
-          animation: AppAnimations.slideFromBottom,
-          duration: const Duration(milliseconds: 500),
+          child: const RoleSelectionView(),
+          animation: AppAnimations.slideFromRight,
+          duration: const Duration(milliseconds: 600),
         ),
+      ),
+      GoRoute(
+        path: AppRoute.loginScreen,
+        name: 'login',
+        pageBuilder: (context, state) {
+          final role = SharedPrefsHelper.instance.getString(roleKey);
+          print("user role: = $role");
+          return _buildPageWithAnimation(
+            state: state,
+            child: LoginScreen(userRole: role!,),
+            animation: AppAnimations.slideFromBottom,
+            duration: const Duration(milliseconds: 500),
+          );
+        }
       ),
       GoRoute(
         path: AppRoute.signUpScreen,
@@ -88,18 +102,21 @@ class AppRouter {
       GoRoute(
         path: AppRoute.homeScreen,
         name: 'home',
-        pageBuilder: (context, state) => _buildPageWithAnimation(
-          state: state,
-          child: const HomeScreen(),
-          animation: AppAnimations.slideFromRightWithScale,
-          duration: const Duration(milliseconds: 500),
-        ),
+        pageBuilder: (context, state) {
+          final role = SharedPrefsHelper.instance.getString(roleKey);
+          return _buildPageWithAnimation(
+            state: state,
+            child: HomeScreen(userRole: role!,),
+            animation: AppAnimations.slideFromRightWithScale,
+            duration: const Duration(milliseconds: 500),
+          );
+        }
       ),
 
       GoRoute(
         path: AppRoute.reportsScreen,
         name: 'reports',
-        pageBuilder: (context, state) => _buildPageWithAnimation(
+        pageBuilder: (context, state) => _buildPageWithAnimation( /*deep07developer1@gmail.com*/
           state: state,
           child: ReportsScreen(isBacked: false,onBack: (){},),
           animation: AppAnimations.slideFromRightWithScale,

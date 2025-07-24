@@ -176,7 +176,7 @@ class AuthenticationApiCall implements AuthAbstraction{
   @override
   Future<Result<UserResponseModel, String>> userUpdateProfileApiCall({Map<String, dynamic>? dataBody, required String id}) async {
     try {
-      final response = await dioClient.put("${ApiEndPoints.updateProfileApiEnd}/$id", data: dataBody);
+      final response = await dioClient.put("${ApiEndPoints.updateProfileApiEnd}", data: dataBody);
       final Map<String, dynamic> data = response.data;
       debugPrint("API Response Data: ${response.data}");
       final otpResponse = UserResponseModel.fromJson(data);

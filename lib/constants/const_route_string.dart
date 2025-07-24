@@ -25,6 +25,7 @@ class AppRoute{
   static const String historyScreenView = "/historyScreenView";
   static const String createInspectorView = "/createInspectorView";
   static const String aboutAppView = "/aboutAppView";
+  static const String roleBaseSelectionView = "/roleBaseSelectionView";
   static const String clientSignatureViewScreen = "/clientSignatureViewScreen";
   static const String inpectionScreenViewScreen = "/inpectionScreenViewScreen";
 }

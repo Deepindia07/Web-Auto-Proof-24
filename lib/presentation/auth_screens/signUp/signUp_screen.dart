@@ -16,7 +16,8 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   final _retypePasswordController = TextEditingController();
   bool _agreeToTerms = false;
-  bool _isVerified = false;
+  bool _isEmailVerified = false;
+  bool _isPhoneVerified = false;
   String selectedCountryCode = "+33";
 
   @override
@@ -32,6 +33,27 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
 
   void _handleRegistration(BuildContext context) {
     if (_formKey.currentState!.validate() && _agreeToTerms) {
+      // Check if email and phone are verified
+      if (!_isEmailVerified) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please verify your email address first'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      if (!_isPhoneVerified) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please verify your phone number first'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       // Extract country code and phone number
       String fullPhoneNumber = _phoneController.text;
       String phoneNumber = fullPhoneNumber.replaceAll(RegExp(r'[^\d]'), '');
@@ -45,7 +67,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
           countryCode: selectedCountryCode,
           phoneNumber: phoneNumber,
           password: _passwordController.text,
-          isEmailVerified: true,
+          isEmailVerified: _isEmailVerified,
           termsAndConditions: _agreeToTerms,
         ),
       );
@@ -59,7 +81,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
     }
   }
 
-  void _handleEmailVerification() {
+  void _handleEmailVerification() async {
     // Check if email is entered
     if (_emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -71,7 +93,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    // Check if email is valid
     if (!_emailController.text.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -82,25 +103,152 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    // Toggle verification state
-    setState(() {
-      _isVerified = !_isVerified;
-    });
+    try {
+      // Show loading
+      CustomLoader.showPopupLoader(context);
 
-    // Show success message when verified
-    if (_isVerified) {
+      // Call API to send OTP to email
+      // await _sendEmailOTP(_emailController.text.trim());
+
+      CustomLoader.hidePopupLoader(context);
+
+      // Navigate to OTP screen
+      // final result = await Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => OTPVerificationScreen(
+      //       verificationType: 'email',
+      //       contactInfo: _emailController.text.trim(),
+      //       onVerificationSuccess: () {
+      //         setState(() {
+      //           _isEmailVerified = true;
+      //         });
+      //       },
+      //     ),
+      //   ),
+      // );
+
+      // Show success message if verification was successful
+      // if (result == true && _isEmailVerified) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text('Email verified successfully!'),
+      //       backgroundColor: Colors.green,
+      //     ),
+      //   );
+      // }
+    } catch (e) {
+      CustomLoader.hidePopupLoader(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Email verified successfully!'),
-          backgroundColor: Colors.green,
+        SnackBar(
+          content: Text('Failed to send verification code: ${e.toString()}'),
+          backgroundColor: Colors.red,
         ),
       );
     }
-
-    // Here you can add actual email verification logic
-    // For example, navigate to OTP screen or send verification email
-    // context.push(AppRoute.otpScreen);
   }
+
+  // void _handlePhoneVerification() async {
+  //   // Check if phone is entered
+  //   if (_phoneController.text.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Please enter your phone number first'),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //     return;
+  //   }
+  //
+  //   try {
+  //     // Show loading
+  //     CustomLoader.showPopupLoader(context);
+  //
+  //     // Get full phone number with country code
+  //     String fullPhoneNumber = selectedCountryCode + _phoneController.text.trim();
+  //
+  //     // Call API to send OTP to phone
+  //     await _sendPhoneOTP(fullPhoneNumber);
+  //
+  //     CustomLoader.hidePopupLoader(context);
+  //
+  //     // Navigate to OTP screen
+  //     final result = await Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => OTPVerificationScreen(
+  //           verificationType: 'phone',
+  //           contactInfo: fullPhoneNumber,
+  //           onVerificationSuccess: () {
+  //             setState(() {
+  //               _isPhoneVerified = true;
+  //             });
+  //           },
+  //         ),
+  //       ),
+  //     );
+  //
+  //     // Show success message if verification was successful
+  //     if (result == true && _isPhoneVerified) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Phone number verified successfully!'),
+  //           backgroundColor: Colors.green,
+  //         ),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     CustomLoader.hidePopupLoader(context);
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Failed to send verification code: ${e.toString()}'),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // // API call to send email OTP
+  // Future<void> _sendEmailOTP(String email) async {
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('YOUR_API_BASE_URL/send-email-otp'), // Replace with your API endpoint
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: json.encode({
+  //         'email': email,
+  //       }),
+  //     );
+  //
+  //     if (response.statusCode != 200) {
+  //       throw Exception('Failed to send OTP');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Network error: ${e.toString()}');
+  //   }
+  // }
+
+  // // API call to send phone OTP
+  // Future<void> _sendPhoneOTP(String phoneNumber) async {
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('YOUR_API_BASE_URL/send-phone-otp'), // Replace with your API endpoint
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: json.encode({
+  //         'phoneNumber': phoneNumber,
+  //       }),
+  //     );
+  //
+  //     if (response.statusCode != 200) {
+  //       throw Exception('Failed to send OTP');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Network error: ${e.toString()}');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +290,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                         child: Column(
                           spacing: 15,
                           children: [
-                            // const SizedBox(height: 10),
                             Row(
                               spacing: 2,
                               children: [
@@ -166,60 +313,70 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                               controller: _emailController,
                               hint: AppLocalizations.of(context)!.emailAddress,
                               suffix: TextButton(
-                                onPressed: _handleEmailVerification,
+                                onPressed: _isEmailVerified ? null : _handleEmailVerification,
                                 child: Text(
-                                  _isVerified ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
+                                  _isEmailVerified ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
                                   textAlign: TextAlign.center,
                                   style: MontserratStyles
                                       .montserratMediumTextStyle(
-                                    color: _isVerified
+                                    color: _isEmailVerified
                                         ? Colors.green
                                         : AppColor().darkYellowColor,
                                   ),
                                 ),
                               ),
-                              icon: Icon(Icons.mail_outline),
+                              icon: Icon(
+                                _isEmailVerified ? Icons.verified : Icons.mail_outline,
+                                color: _isEmailVerified ? Colors.green : null,
+                              ),
                               keyboardType: TextInputType.emailAddress,
                             ),
                             _buildTextField(
                               controller: _phoneController,
                               hint: AppLocalizations.of(context)!.phone,
                               suffix: TextButton(
-                                onPressed: () {
-                                  // Add phone verification logic here
-                                },
+                                onPressed: (){}/*isPhoneVerified ? null : _handlePhoneVerification*/,
                                 child: Text(
-                                  AppLocalizations.of(context)!.verify,
+                                  _isPhoneVerified ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
                                   textAlign: TextAlign.center,
                                   style: MontserratStyles
                                       .montserratMediumTextStyle(
-                                    color: AppColor().darkYellowColor,
+                                    color: _isPhoneVerified
+                                        ? Colors.green
+                                        : AppColor().darkYellowColor,
                                   ),
                                 ),
                               ),
-                              icon:  Padding(
+                              icon: Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: CustomContainer(
                                   height: 50,
-                                  width:90,
+                                  width: 90,
                                   border: Border(
                                     right: BorderSide(
                                       width: 1,
                                       color: AppColor().silverShadeGrayColor,
                                     ),
                                   ),
-                                  borderRadius: BorderRadius.only(topRight: Radius.circular(0),topLeft: Radius.circular(48),bottomLeft: Radius.circular(48),bottomRight: Radius.circular(0)),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(0),
+                                      topLeft: Radius.circular(48),
+                                      bottomLeft: Radius.circular(48),
+                                      bottomRight: Radius.circular(0)
+                                  ),
                                   backgroundColor: AppColor().backgroundColor,
                                   padding: EdgeInsets.all(8),
                                   child: CountryCodePicker(
                                     onChanged: (CountryCode countryCode) {
                                       setState(() {
-                                       selectedCountryCode = countryCode.toString();
+                                        selectedCountryCode = countryCode.toString();
+                                        // Reset phone verification when country code changes
+                                        _isPhoneVerified = false;
                                       });
                                       print("Selected Country: ${countryCode.name}");
                                       print("Selected Code: ${countryCode.dialCode}");
                                     },
-                                    initialSelection: 'FR', // Default country
+                                    initialSelection: 'FR',
                                     favorite: ["+33"],
                                     showCountryOnly: true,
                                     showOnlyCountryWhenClosed: false,
@@ -419,7 +576,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                   ],
                 ),
               ),
-              // Header section (same as before)
+              // Header section
               Positioned(
                 top: 0,
                 left: 0,
@@ -433,7 +590,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
     );
   }
 
-  // Keep your existing _buildTextField method
+  // Updated _buildTextField method
   Widget _buildTextField({
     required TextEditingController controller,
     required String hint,

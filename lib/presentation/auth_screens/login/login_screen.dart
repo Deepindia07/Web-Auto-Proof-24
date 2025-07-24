@@ -1,20 +1,26 @@
 part of 'login_screen_route_imple.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final String userRole;
+
+  const LoginScreen({
+    super.key,
+   required this.userRole,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginScreenBloc>(
       create: (context) =>
           LoginScreenBloc(authRepository: AuthenticationApiCall()),
-      child: LoginViewScreen(),
+      child: LoginViewScreen(userRole: userRole,),
     );
   }
 }
 
 class LoginViewScreen extends StatefulWidget {
-  const LoginViewScreen({super.key});
+  final String userRole;
+  const LoginViewScreen({super.key,required this.userRole});
 
   @override
   State<LoginViewScreen> createState() => _LoginViewScreenState();
@@ -22,6 +28,7 @@ class LoginViewScreen extends StatefulWidget {
 
 class _LoginViewScreenState extends State<LoginViewScreen> {
   final TextEditingController _emailOrPhoneController = TextEditingController();
+  final TextEditingController _instructorRefrenceNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -29,6 +36,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
   void dispose() {
     _emailOrPhoneController.dispose();
     _passwordController.dispose();
+    _instructorRefrenceNumberController.dispose();
     super.dispose();
   }
 
@@ -98,6 +106,8 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  if(widget.userRole!="owner")
+                  vGap(screenHeight*0.1),
                   SizedBox(
                     height: screenHeight * 0.24,
                     child: Column(
@@ -115,7 +125,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           "Auto Proof 24",
                           style: MontserratStyles.montserratBoldTextStyle(
                             color: AppColor().darkCharcoalBlueColor,
-                            size: screenWidth * 0.10,
+                            size: screenWidth * 0.11,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -126,11 +136,35 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                   Text(
                     AppLocalizations.of(context)!.appTitle,
                     style: MontserratStyles.montserratRegularTextStyle(
-                      size: 14,
+                      size: 16,
                       color: AppColor().darkCharcoalBlueColor,
                     ),
                   ),
-                  vGap(screenHeight * 0.018),
+                  if(widget.userRole!="owner")
+                    vGap(screenHeight * 0.030),
+                  if(widget.userRole!="owner")
+                    CustomTextField(
+                      controller: _instructorRefrenceNumberController,
+                      fillColor: AppColor().backgroundColor,
+                      borderWidth: 2,
+                      borderRadius: 30,
+                      hintStyle: MontserratStyles.montserratRegularTextStyle(
+                        size: 16,
+                        color: AppColor().silverShadeGrayColor,
+                      ),
+                      hintText: "Enter Registration Number"/*AppLocalizations.of(context)!.emailOrPhone*/,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppLocalizations.of(
+                            context,
+                          )!.pleaseEnterEmailOrPhoneShort;
+                        }
+                        return null;
+                      },
+                    ),
+                  if(widget.userRole!="instructor")
+                    vGap(screenHeight * 0.018),
+                  if(widget.userRole!="instructor")
                   CustomTextField(
                     controller: _emailOrPhoneController,
                     fillColor: AppColor().backgroundColor,
@@ -150,8 +184,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       return null;
                     },
                   ),
-                  vGap(screenHeight * 0.018),
-                  CustomPasswordField(
+                  if(widget.userRole!="instructor")
+                    vGap(screenHeight * 0.018),
+                  if(widget.userRole!="instructor")
+                    CustomPasswordField(
                     controller: _passwordController,
                     borderWidth: 2,
                     fillColor: AppColor().backgroundColor,
@@ -166,8 +202,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       return null;
                     },
                   ),
-                  vGap(screenHeight * 0.018),
-                  Row(
+                  if(widget.userRole!="instructor")
+                    vGap(screenHeight * 0.018),
+                  if(widget.userRole!="instructor")
+                    Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
@@ -189,7 +227,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           context,
                           AppLocalizations.of(context)!.loginSuccessful,
                         );
-                        context.push(AppRoute.homeScreen);
+                        context.pushReplacement(AppRoute.homeScreen);
                       } else if (state is LoginFailure) {
                         CherryToast.error(context, state.error);
                       } else if (state is EmailValidationSuccess) {
@@ -240,8 +278,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       );
                     },
                   ),
-                  vGap(screenHeight * 0.018),
-                  BlocBuilder<LoginScreenBloc, LoginScreenState>(
+                  if(widget.userRole!="instructor")
+                    vGap(screenHeight * 0.018),
+                  if(widget.userRole!="instructor")
+                    BlocBuilder<LoginScreenBloc, LoginScreenState>(
                     builder: (context, state) {
                       if (state is EmailValidationLoading) {
                         return Row(
@@ -276,8 +316,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       );
                     },
                   ),
-                  vGap(screenHeight * 0.018),
-                  CustomButton(
+                  if(widget.userRole!="instructor")
+                    vGap(screenHeight * 0.018),
+                  if(widget.userRole!="instructor")
+                    CustomButton(
                     borderRadius: 48,
                     height: screenHeight * 0.07,
                     width: screenWidth * 0.95,

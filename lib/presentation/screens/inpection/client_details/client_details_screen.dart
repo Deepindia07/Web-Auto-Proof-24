@@ -290,29 +290,6 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
           },
         ),
         vGap(20),
-
-        // Add buttons for actions
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: _resetFields,
-              child: Text('Reset'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[300],
-                foregroundColor: Colors.black,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _addClientDetails,
-              child: Text('Save Client Details'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColor().darkYellowColor,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -322,7 +299,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
     String? title,
     bool? value,
     bool isRequired = false,
-    required Function(bool) onChanged, // Added callback parameter
+    required Function(bool) onChanged,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

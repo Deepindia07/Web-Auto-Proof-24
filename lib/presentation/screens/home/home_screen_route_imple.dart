@@ -19,9 +19,12 @@ import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:auto_proof/utilities/custom_toast.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../auth/data/models/user_response_model.dart';
 import '../../widget/drawer.dart';
 import '../information/collect_information_screen_route_implement.dart';
 import 'data/container_data.dart';

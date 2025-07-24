@@ -21,18 +21,6 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
   PageController pageController = PageController();
 
   final List<OnboardingData> onboardingPages = [
-    // OnboardingData(
-    //   title: "WELCOME !",
-    //   subtitle: "Manage Your Fleet",
-    //   description: "with Ease",
-    //   imagePath: car1Icon,
-    // ),
-    // OnboardingData(
-    //   title: "WELCOME !",
-    //   subtitle: "Real-Time Car",
-    //   description: "Availability",
-    //   imagePath: car2Icon,
-    // ),
     OnboardingData(
       title: "WELCOME !",
       subtitle: "Smart Check-out.",
@@ -122,7 +110,7 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                               children: [
                                 vGap(screenHeight * 0.01),
                                 Text(
-                                 "${AppLocalizations.of(context)!.welcome}!",
+                                  "${AppLocalizations.of(context)!.welcome}!",
                                   style: MontserratStyles.montserratBoldTextStyle(
                                     color: AppColor().darkCharcoalBlueColor,
                                     size: screenWidth * 0.08,
@@ -149,7 +137,7 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
-                                Spacer(),
+                                const Spacer(),
                               ],
                             ),
                           ),
@@ -182,65 +170,6 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                 ),
               ),
               vGap(screenHeight * 0.08),
-              // Container(
-              //   height: screenHeight * 0.12,
-              //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: List.generate(
-              //           onboardingPages.length,
-              //               (index) => Container(
-              //             margin: EdgeInsets.symmetric(horizontal: 4),
-              //             width: 12,
-              //             height: 12,
-              //             decoration: BoxDecoration(
-              //               shape: BoxShape.circle,
-              //               color: currentPage == index
-              //                   ? AppColor().darkCharcoalBlueColor
-              //                   : Colors.grey.shade400,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //
-              //       vGap(screenHeight * 0.02),
-              //
-              //       TextButton(
-              //         onPressed: () {
-              //           if (currentPage < onboardingPages.length - 1) {
-              //             pageController.animateToPage(
-              //               onboardingPages.length - 1,
-              //               duration: Duration(milliseconds: 300),
-              //               curve: Curves.easeInOut,
-              //             );
-              //           } else {
-              //           }
-              //         },
-              //         child: Row(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             Text(
-              //               "Skip Now",
-              //               style: MontserratStyles.montserratMediumTextStyle(
-              //                 color: AppColor().darkCharcoalBlueColor,
-              //                 size: screenWidth * 0.04,
-              //               ),
-              //             ),
-              //             hGap(8),
-              //             Image.asset(
-              //               arrowForwardStyleIcon,
-              //               height: screenHeight * 0.025,
-              //               width: screenWidth * 0.05,
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -254,8 +183,139 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
     super.dispose();
   }
 
-  void _navigateToNextScreen(){
-    context.push(AppRoute.loginScreen);
+  void _navigateToNextScreen() async {
+    try {
+      final isFirstTimeUser = SharedPrefsHelper.instance.getString(isFirstTime);
+
+      if (isFirstTimeUser != null && isFirstTimeUser.isEmpty) {
+        await SharedPrefsHelper.instance.setString(isFirstTime, "false");
+        if (mounted) {
+          context.push(AppRoute.loginScreen);
+        }
+      } else {
+        if (mounted) {
+          context.push(AppRoute.roleBaseSelectionView);
+        }
+      }
+    } catch (e) {
+      print("Error checking first time user: $e");
+      if (mounted) {
+        context.push(AppRoute.roleBaseSelectionView);
+      }
+    }
   }
 }
 
+/// Role base Access View
+class RoleSelectionView extends StatefulWidget {
+  const RoleSelectionView({super.key});
+
+  @override
+  State<RoleSelectionView> createState() => _RoleSelectionViewState();
+}
+
+class _RoleSelectionViewState extends State<RoleSelectionView> {
+  String selectedRole = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final statusBarHeight = MediaQuery.of(context).padding.top * 4;
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+
+    return Scaffold(
+      backgroundColor: AppColor().backgroundColor,
+      body: Column(
+        children: [
+          vGap(statusBarHeight + 10),
+          SizedBox(
+            height: screenHeight * 0.24,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  appLogo,
+                  height: screenHeight * 0.16,
+                  width: screenHeight * 0.16,
+                  fit: BoxFit.contain,
+                ),
+                vGap(screenHeight * 0.015),
+                Text(
+                  "Auto Proof 24",
+                  style: MontserratStyles.montserratBoldTextStyle(
+                    color: AppColor().darkCharcoalBlueColor,
+                    size: screenWidth * 0.10,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+
+          // Role selection title
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Text(
+              "Select Your Role",
+              style: MontserratStyles.montserratSemiBoldTextStyle(
+                color: AppColor().darkCharcoalBlueColor,
+                size: screenWidth * 0.06,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+
+          vGap(screenHeight * 0.03),
+
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+              child: Column(
+                children: [
+                  // Owner Button
+                  CustomRoleSelectionButton(
+                    title: 'Are you Owner',
+                    isSelected: selectedRole == 'owner',
+                    onTap: () {
+                      setState(() {
+                        selectedRole = 'owner';
+                      });
+                      _navigateScreenState("owner");
+                    },
+                  ),
+
+                  vGap(screenHeight * 0.02),
+
+                  // Inspector Button
+                  CustomRoleSelectionButton(
+                    title: 'Are you Inspector',
+                    isSelected: selectedRole == 'instructor',
+                    onTap: () {
+                      setState(() {
+                        selectedRole = 'instructor';
+                      });
+                      _navigateScreenState("instructor");
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateScreenState(String role) {
+    if (role == "instructor") {
+      SharedPrefsHelper.instance.setString(roleKey,role);
+      print("role: $role");
+      context.push(AppRoute.loginScreen);
+    } else if (role == "owner") {
+      SharedPrefsHelper.instance.setString(roleKey,role);
+      context.push(AppRoute.loginScreen, extra: role);
+    }
+  }
+}
