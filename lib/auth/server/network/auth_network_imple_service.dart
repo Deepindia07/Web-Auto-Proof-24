@@ -72,6 +72,22 @@ class AuthenticationApiCall implements AuthAbstraction{
   }
 
   @override
+  Future<Result<OtpForEmailResponseModel, String>> getOtpforEmailVerificationApiCall({Map<String, dynamic>? dataBody}) async {
+    try {
+      final response = await dioClient.post(ApiEndPoints.sendOtpEmail, data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      final otpResponse = OtpForEmailResponseModel.fromJson(data);
+      print("Otp Data: ${otpResponse.generatedOtp}");
+      return Result.success(otpResponse);
+    } on DioException catch (dioError) {
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint(error.toString());
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+  @override
   Future<Result<VerifyOtpResponseModel, String>> verifyOtpForResetPasswordApiCall({Map<String, dynamic>? dataBody}) async {
     try {
       final response = await dioClient.post(ApiEndPoints.verifyOtpEmail, data: dataBody);

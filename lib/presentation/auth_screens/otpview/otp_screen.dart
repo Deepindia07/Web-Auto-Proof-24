@@ -2,20 +2,22 @@ part of 'otp_screen_route_imple.dart';
 
 class OtpScreen extends StatelessWidget {
   final String? email;
-  const OtpScreen({required this.email, super.key});
+  final bool isEmailFromSignUp;
+  const OtpScreen({required this.email, required this.isEmailFromSignUp,super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<OtpViewBloc>(
       create: (context) => OtpViewBloc(apiService: AuthenticationApiCall()),
-      child: OtpScreenView(email: email!,),
+      child: OtpScreenView(email: email!,isEmailFromSignUp: isEmailFromSignUp),
     );
   }
 }
 
 class OtpScreenView extends StatefulWidget {
   final String? email;
-  const OtpScreenView({required this.email, super.key});
+  final bool isEmailFromSignUp;
+  const OtpScreenView({required this.email,required this.isEmailFromSignUp,  super.key});
 
   @override
   State<OtpScreenView> createState() => _OtpScreenViewState();
@@ -70,7 +72,6 @@ class _OtpScreenViewState extends State<OtpScreenView> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: SafeArea(
@@ -81,7 +82,11 @@ class _OtpScreenViewState extends State<OtpScreenView> {
             } else {
               CustomLoader.hidePopupLoader(context);
               if (state is OtpViewSuccess) {
-                context.push(AppRoute.resetPasswordScreen,extra: widget.email);
+                if(widget.isEmailFromSignUp != false){
+                  context.pop();
+                }else{
+                  context.push(AppRoute.resetPasswordScreen,extra: widget.email);
+                }
                 CherryToast.success(context, AppLocalizations.of(context)!.otpVerified);
               } else if (state is OtpViewFailure) {
                 CherryToast.error(context, state.error);

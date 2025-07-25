@@ -24,3 +24,13 @@ class RegisterUser extends SignUpScreenEvent {
     required this.termsAndConditions,
   });
 }
+
+class SendOtpEmailEvent extends SignUpScreenEvent {
+  final String email;
+
+  SendOtpEmailEvent({
+    required this.email,
+  });
+}
+
+class ResetToInitialState extends SignUpScreenEvent {}

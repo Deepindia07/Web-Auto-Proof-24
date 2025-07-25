@@ -17,3 +17,25 @@ class OtpResponseModel {
     );
   }
 }
+
+
+
+/// Send otp on email
+///
+class OtpForEmailResponseModel {
+  OtpForEmailResponseModel({
+    required this.message,
+    required this.generatedOtp,
+  });
+
+  final String? message;
+  final int? generatedOtp;
+
+  factory OtpForEmailResponseModel.fromJson(Map<String, dynamic> json){
+    return OtpForEmailResponseModel(
+      message: json["message"],
+      generatedOtp: json["generatedOtp"],
+    );
+  }
+
+}

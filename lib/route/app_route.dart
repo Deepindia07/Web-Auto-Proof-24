@@ -77,9 +77,10 @@ class AppRouter {
         name: 'otp',
         pageBuilder: (context, state) {
           final email = state.extra.toString();
+          final isEmailFromRegister = SharedPrefsHelper.instance.getBool(isEmailFromSignUp);
           return _buildPageWithAnimation(
             state: state,
-            child: OtpScreen(email: email,),
+            child: OtpScreen(email: email,isEmailFromSignUp: isEmailFromRegister!,),
             animation: AppAnimations.slideFromBottom,
             duration: const Duration(milliseconds: 500),
           );

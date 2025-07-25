@@ -18,3 +18,17 @@ class SignUpScreenError extends SignUpScreenState {
 
   SignUpScreenError(this.message);
 }
+
+class SendOtpScreenLoading extends SignUpScreenState {}
+
+class SendOtpOnEmailSuccess extends SignUpScreenState {
+  final OtpForEmailResponseModel response;
+
+  SendOtpOnEmailSuccess(this.response);
+}
+
+class SendOtpOnEmailError extends SignUpScreenState {
+  final String message;
+
+  SendOtpOnEmailError(this.message);
+}

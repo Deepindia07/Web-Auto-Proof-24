@@ -24,12 +24,13 @@ class _CarImageInpectionScreenViewState
     extends State<CarImageInpectionScreenView> {
 
   // Method to open camera for specific car part
-  void _openCameraForCarPart(String title) {
+  void _openCameraForCarPart(String title, imagePath) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CustomCameraView(
           carPart: title,
+          referenceImagePath:imagePath ,
         ),
       ),
     );
@@ -39,82 +40,82 @@ class _CarImageInpectionScreenViewState
     CarAddingModel(
         title: 'Front Side',
         image: frontSideView,
-        onTap: () => _openCameraForCarPart('Front Side')
+        onTap: () => _openCameraForCarPart('Front Side', front_view)
     ),
     CarAddingModel(
       title: 'Front Left Wheel',
       image: frontLeftWheelView,
-      onTap: () => _openCameraForCarPart('Front Left Wheel'),
+      onTap: () => _openCameraForCarPart('Front Left Wheel',""),
     ),
     CarAddingModel(
       title: 'Front Left Side',
       image: frontLeftSideView,
-      onTap: () => _openCameraForCarPart('Front Left Side'),
+      onTap: () => _openCameraForCarPart('Front Left Side',""),
     ),
     CarAddingModel(
       title: 'Rear Left Side',
       image: rearLeftSideView,
-      onTap: () => _openCameraForCarPart('Rear Left Side'),
+      onTap: () => _openCameraForCarPart('Rear Left Side',""),
     ),
     CarAddingModel(
       title: 'Rear Left Wheel',
       image: rearLeftWheelView,
-      onTap: () => _openCameraForCarPart('Rear Left Wheel'),
+      onTap: () => _openCameraForCarPart('Rear Left Wheel',""),
     ),
     CarAddingModel(
         title: 'Rear Side',
         image: rearSideView,
-        onTap: () => _openCameraForCarPart('Rear Side')
+        onTap: () => _openCameraForCarPart('Rear Side',"")
     ),
     CarAddingModel(
       title: 'Back Right Wheel',
       image: backRightWheelView,
-      onTap: () => _openCameraForCarPart('Back Right Wheel'),
+      onTap: () => _openCameraForCarPart('Back Right Wheel',""),
     ),
     CarAddingModel(
       title: 'Rear Right Side',
       image: rearRightSideView,
-      onTap: () => _openCameraForCarPart('Rear Right Side'),
+      onTap: () => _openCameraForCarPart('Rear Right Side',""),
     ),
     CarAddingModel(
       title: 'Front Right Side',
       image: frontRightSideView,
-      onTap: () => _openCameraForCarPart('Front Right Side'),
+      onTap: () => _openCameraForCarPart('Front Right Side',""),
     ),
     CarAddingModel(
       title: 'Front Right Wheel',
       image: frontRightWheelView,
-      onTap: () => _openCameraForCarPart('Front Right Wheel'),
+      onTap: () => _openCameraForCarPart('Front Right Wheel',""),
     ),
     CarAddingModel(
         title: 'Front Seats',
         image: frontSeatsView,
-        onTap: () => _openCameraForCarPart('Front Seats')
+        onTap: () => _openCameraForCarPart('Front Seats',"")
     ),
     CarAddingModel(
         title: 'Rear Seats',
         image: rearSeatsView,
-        onTap: () => _openCameraForCarPart('Rear Seats')
+        onTap: () => _openCameraForCarPart('Rear Seats',"")
     ),
     CarAddingModel(
         title: 'Odometer',
         image: oDoMeeterView,
-        onTap: () => _openCameraForCarPart('Odometer')
+        onTap: () => _openCameraForCarPart('Odometer',"")
     ),
     CarAddingModel(
       title: 'Optional Image 1',
       image: oDoMeeterView,
-      onTap: () => _openCameraForCarPart('Optional Image 1'),
+      onTap: () => _openCameraForCarPart('Optional Image 1',""),
     ),
     CarAddingModel(
       title: 'Optional Image 2',
       image: oDoMeeterView,
-      onTap: () => _openCameraForCarPart('Optional Image 2'),
+      onTap: () => _openCameraForCarPart('Optional Image 2',""),
     ),
     CarAddingModel(
       title: 'Optional Image 3',
       image: oDoMeeterView,
-      onTap: () => _openCameraForCarPart('Optional Image 3'),
+      onTap: () => _openCameraForCarPart('Optional Image 3',""),
     ),
   ];
 

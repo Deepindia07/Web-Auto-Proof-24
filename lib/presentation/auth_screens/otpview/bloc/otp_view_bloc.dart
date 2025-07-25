@@ -1,4 +1,7 @@
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
+import 'package:auto_proof/auth/server/logger/app_logger.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
+import 'package:auto_proof/constants/const_string.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -27,6 +30,9 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
       final result = await apiService.verifyOtpForResetPasswordApiCall(dataBody: dataBody);
 
       if (result.isSuccess) {
+        SharedPrefsHelper.instance.setBool(isVerifiedEmail, result.data.isEmailVerified??false);
+        final emailverified = SharedPrefsHelper.instance.getBool(isVerifiedEmail);
+        appLogger.w("is email is verified:= ${emailverified}");
         emit(OtpViewSuccess(response: result.data!));
       } else {
         emit(OtpViewFailure(error: result.error ?? 'Verification failed'));

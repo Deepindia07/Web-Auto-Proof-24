@@ -5,7 +5,8 @@ class VehiclesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const VehiclesScreenView();
+    return BlocProvider<VehiclesScreenBloc>(create: (BuildContext context) =>VehiclesScreenBloc(),
+    child: const VehiclesScreenView());
   }
 }
 
@@ -17,7 +18,6 @@ class VehiclesScreenView extends StatefulWidget {
 }
 
 class _VehiclesScreenViewState extends State<VehiclesScreenView> {
-  // Sample data - in a real app, this would come from a service/repository
   final List<Vehicle> _vehicles = [
     Vehicle(
       id: '1',
@@ -72,12 +72,10 @@ class _VehiclesScreenViewState extends State<VehiclesScreenView> {
   Widget _buildVehiclesList() {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.only(left: 12.0,right: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _SectionHeader(),
-            const SizedBox(height: 16),
             Expanded(
               child: ListView.separated(
                 itemCount: _vehicles.length,
@@ -101,20 +99,6 @@ class _VehiclesScreenViewState extends State<VehiclesScreenView> {
   }
 }
 
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      "Select a vehicle:",
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-}
 
 class _VehicleCard extends StatelessWidget {
   final Vehicle vehicle;
@@ -129,8 +113,8 @@ class _VehicleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomContainer(
       backgroundColor: Colors.white,
-      padding: const EdgeInsets.all(16),
-      borderRadius: BorderRadius.circular(12),
+      padding: const EdgeInsets.all(14),
+      borderRadius: BorderRadius.circular(16),
       border: Border.all(color: Colors.black),
       child: Row(
         children: [
@@ -145,11 +129,12 @@ class _VehicleCard extends StatelessWidget {
 
   Widget _buildVehicleIcon() {
     return Container(
-      width: 48,
-      height: 48,
+      width: 100,
+      height: 80,
       decoration: BoxDecoration(
-        color: _getVehicleColor().withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
+        // color: _getVehicleColor().withOpacity(0.1),
+        borderRadius: BorderRadius.circular(35),
+        border: Border.all(color: AppColor().darkCharcoalBlueColor.withOpacity(0.09))
       ),
       child: Icon(
         _getVehicleIcon(),
@@ -166,27 +151,12 @@ class _VehicleCard extends StatelessWidget {
       children: [
         Text(
           vehicle.name,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: MontserratStyles.montserratMediumTextStyle(size: 18,color: AppColor().darkCharcoalBlueColor)
         ),
         const SizedBox(height: 4),
         Text(
-          '${vehicle.model} • ${vehicle.plateNumber}',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          _getVehicleTypeText(),
-          style: TextStyle(
-            fontSize: 12,
-            color: _getVehicleColor(),
-            fontWeight: FontWeight.w500,
-          ),
+          'Number Plate: \n${vehicle.plateNumber}',
+          style: MontserratStyles.montserratSemiBoldTextStyle(size: 16,color: AppColor().darkCharcoalBlueColor.withOpacity(0.8))
         ),
       ],
     );
@@ -194,9 +164,13 @@ class _VehicleCard extends StatelessWidget {
 
   Widget _buildSelectButton() {
     return CustomButton(
+      elevation: 0,
+      side: BorderSide.none,
+      borderRadius: 14,
       backgroundColor: AppColor().darkYellowColor,
       onPressed: onSelect,
       text: "Select",
+      textStyle: MontserratStyles.montserratRegularTextStyle(size: 16,color: AppColor().darkCharcoalBlueColor),
     );
   }
 

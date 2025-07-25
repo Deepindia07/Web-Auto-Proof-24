@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:image/image.dart' as img;
 
 class CustomImageSelector {
   static Future<File?> show(
@@ -129,26 +131,50 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
 
   Future<void> _pickImageFromCamera() async {
     try {
-      // Check camera permission
-      var cameraStatus = await Permission.camera.request();
-      if (cameraStatus.isDenied) {
-        _showPermissionDialog('Camera');
+      // For iOS, check if camera is available first
+      if (!await _picker.supportsImageSource(ImageSource.camera)) {
+        _showErrorMessage('Camera is not available on this device');
+        Navigator.of(context).pop();
         return;
       }
 
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 85,
-        maxWidth: 1920,
-        maxHeight: 1080,
-      );
+      // Different permission handling for iOS vs Android
+      if (Platform.isIOS) {
+        // On iOS, image_picker handles permissions automatically
+        final XFile? image = await _picker.pickImage(
+          source: ImageSource.camera,
+          imageQuality: 85,
+          maxWidth: 1920,
+          maxHeight: 1080,
+        );
 
-      if (image != null) {
-        Navigator.of(context).pop(File(image.path));
+        if (image != null) {
+          Navigator.of(context).pop(File(image.path));
+        } else {
+          Navigator.of(context).pop();
+        }
       } else {
-        Navigator.of(context).pop();
+        var cameraStatus = await Permission.camera.request();
+        if (cameraStatus.isDenied) {
+          _showPermissionDialog('Camera');
+          return;
+        }
+
+        final XFile? image = await _picker.pickImage(
+          source: ImageSource.camera,
+          imageQuality: 85,
+          maxWidth: 1920,
+          maxHeight: 1080,
+        );
+
+        if (image != null) {
+          Navigator.of(context).pop(File(image.path));
+        } else {
+          Navigator.of(context).pop();
+        }
       }
     } catch (e) {
+      print('Camera error: $e');
       _showErrorMessage('Error capturing image: $e');
       Navigator.of(context).pop();
     }
@@ -156,26 +182,42 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
 
   Future<void> _pickImageFromGallery() async {
     try {
-      // Check gallery permission
-      var storageStatus = await Permission.storage.request();
-      if (storageStatus.isDenied) {
-        _showPermissionDialog('Storage');
-        return;
-      }
+      if (Platform.isIOS) {
+        final XFile? image = await _picker.pickImage(
+          source: ImageSource.gallery,
+          imageQuality: 85,
+          maxWidth: 1920,
+          maxHeight: 1080,
+        );
 
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 85,
-        maxWidth: 1920,
-        maxHeight: 1080,
-      );
-
-      if (image != null) {
-        Navigator.of(context).pop(File(image.path));
+        if (image != null) {
+          Navigator.of(context).pop(File(image.path));
+        } else {
+          Navigator.of(context).pop();
+        }
       } else {
-        Navigator.of(context).pop();
+        // Android permission handling
+        var storageStatus = await Permission.storage.request();
+        if (storageStatus.isDenied) {
+          _showPermissionDialog('Storage');
+          return;
+        }
+
+        final XFile? image = await _picker.pickImage(
+          source: ImageSource.gallery,
+          imageQuality: 85,
+          maxWidth: 1920,
+          maxHeight: 1080,
+        );
+
+        if (image != null) {
+          Navigator.of(context).pop(File(image.path));
+        } else {
+          Navigator.of(context).pop();
+        }
       }
     } catch (e) {
+      print('Gallery error: $e'); // Add logging
       _showErrorMessage('Error selecting image: $e');
       Navigator.of(context).pop();
     }
@@ -268,8 +310,13 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
 /// Image selection from inspection view
 class CustomCameraView extends StatefulWidget {
   final String? carPart;
+  final String? referenceImagePath;
 
-  const CustomCameraView({Key? key, this.carPart}) : super(key: key);
+  const CustomCameraView({
+    Key? key,
+    this.carPart,
+    this.referenceImagePath,
+  }) : super(key: key);
 
   @override
   State<CustomCameraView> createState() => _CustomCameraViewState();
@@ -279,12 +326,24 @@ class _CustomCameraViewState extends State<CustomCameraView> {
   CameraController? _controller;
   List<CameraDescription>? cameras;
   bool _isCameraInitialized = false;
+  bool _isTorchOn = false;
   int _selectedCameraIndex = 0;
+
+  // Key to get the container's position and size
+  final GlobalKey _containerKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+    _setLandscapeOrientation();
     _initializeCamera();
+  }
+
+  Future<void> _setLandscapeOrientation() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
 
   Future<void> _initializeCamera() async {
@@ -308,53 +367,132 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     }
   }
 
-  Future<void> _switchCamera() async {
-    if (cameras == null || cameras!.length <= 1) return;
-
-    setState(() {
-      _isCameraInitialized = false;
-    });
-
-    await _controller?.dispose();
-    _selectedCameraIndex = (_selectedCameraIndex + 1) % cameras!.length;
-
-    _controller = CameraController(
-      cameras![_selectedCameraIndex],
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
+  Future<void> _toggleTorch() async {
+    if (_controller == null || !_controller!.value.isInitialized) return;
 
     try {
-      await _controller!.initialize();
-      if (mounted) {
-        setState(() {
-          _isCameraInitialized = true;
-        });
-      }
+      await _controller!.setFlashMode(
+        _isTorchOn ? FlashMode.off : FlashMode.torch,
+      );
+      setState(() {
+        _isTorchOn = !_isTorchOn;
+      });
     } catch (e) {
-      print('Error switching camera: $e');
+      print('Error toggling torch: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error toggling flash'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
-  // Method to take picture
+  // Get the crop rectangle based on container position
+  Rect _getCropRect() {
+    final RenderBox? containerBox = _containerKey.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? cameraBox = context.findRenderObject() as RenderBox?;
+
+    if (containerBox == null || cameraBox == null) {
+      // Fallback to center crop if we can't get positions
+      final screenSize = MediaQuery.of(context).size;
+      final containerWidth = screenSize.width * 0.6;
+      final containerHeight = screenSize.height * 0.9;
+      final left = (screenSize.width - containerWidth) / 2;
+      final top = (screenSize.height - containerHeight) / 2;
+
+      return Rect.fromLTWH(left, top, containerWidth, containerHeight);
+    }
+
+    final containerPosition = containerBox.localToGlobal(Offset.zero, ancestor: cameraBox);
+    final containerSize = containerBox.size;
+
+    return Rect.fromLTWH(
+      containerPosition.dx,
+      containerPosition.dy,
+      containerSize.width,
+      containerSize.height,
+    );
+  }
+
+  // Crop the image to the container area
+  Future<File> _cropImage(String imagePath) async {
+    try {
+      // Read the original image
+      final bytes = await File(imagePath).readAsBytes();
+      final originalImage = img.decodeImage(bytes);
+
+      if (originalImage == null) {
+        throw Exception('Could not decode image');
+      }
+
+      // Get screen dimensions and camera preview dimensions
+      final screenSize = MediaQuery.of(context).size;
+      final cropRect = _getCropRect();
+
+      // Calculate the scaling factors
+      final scaleX = originalImage.width / screenSize.width;
+      final scaleY = originalImage.height / screenSize.height;
+
+      // Calculate crop coordinates in image space
+      final cropX = (cropRect.left * scaleX).round();
+      final cropY = (cropRect.top * scaleY).round();
+      final cropWidth = (cropRect.width * scaleX).round();
+      final cropHeight = (cropRect.height * scaleY).round();
+
+      // Ensure crop coordinates are within image bounds
+      final actualCropX = cropX.clamp(0, originalImage.width - 1);
+      final actualCropY = cropY.clamp(0, originalImage.height - 1);
+      final actualCropWidth = (cropWidth).clamp(1, originalImage.width - actualCropX);
+      final actualCropHeight = (cropHeight).clamp(1, originalImage.height - actualCropY);
+
+      // Crop the image
+      final croppedImage = img.copyCrop(
+        originalImage,
+        x: actualCropX,
+        y: actualCropY,
+        width: actualCropWidth,
+        height: actualCropHeight,
+      );
+
+      // Save the cropped image
+      final croppedImagePath = imagePath.replaceAll('.jpg', '_cropped.jpg');
+      final croppedFile = File(croppedImagePath);
+      await croppedFile.writeAsBytes(img.encodeJpg(croppedImage));
+
+      // Delete the original uncropped image
+      await File(imagePath).delete();
+
+      return croppedFile;
+    } catch (e) {
+      print('Error cropping image: $e');
+      // Return original file if cropping fails
+      return File(imagePath);
+    }
+  }
+
+  // Modified take picture method with cropping
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) return;
 
     try {
       final XFile image = await _controller!.takePicture();
-      // Handle the captured image here
-      // You can pass it back to the previous screen or save it
+
+      // Crop the image to the container area
+      final croppedFile = await _cropImage(image.path);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Picture taken for ${widget.carPart ?? 'car part'}'),
+            content: Text('Picture taken and cropped for ${widget.carPart ?? 'car part'}'),
             backgroundColor: Colors.green,
           ),
         );
 
-        // Go back to the previous screen after taking picture
-        Navigator.pop(context, image.path); // Return the image path
+        // Return the cropped image path
+        Navigator.pop(context, croppedFile.path);
       }
     } catch (e) {
       print('Error taking picture: $e');
@@ -369,8 +507,86 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     }
   }
 
+  Widget _buildReferenceImage() {
+    if (widget.referenceImagePath == null || widget.referenceImagePath!.isEmpty) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.greenAccent.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(9),
+        ),
+      );
+    }
+
+    if (widget.referenceImagePath!.startsWith('assets/')) {
+      return Container(
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.0),
+          borderRadius: BorderRadius.circular(9),
+        ),
+        child: Center(
+          child: Image.asset(
+            widget.referenceImagePath!,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              print('Error loading asset image: $error');
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.greenAccent.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.white54,
+                    size: 40,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(9),
+        ),
+        child: Center(
+          child: Image.file(
+            File(widget.referenceImagePath!),
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              print('Error loading file image: $error');
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.greenAccent.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.white54,
+                    size: 40,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     _controller?.dispose();
     super.dispose();
   }
@@ -397,84 +613,79 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                 child: CircularProgressIndicator(color: Colors.white),
               ),
 
-            // Safe Area Rectangle Overlay
+            // Container with GlobalKey for position tracking
             if (_isCameraInitialized)
               Center(
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  key: _containerKey, // Add the key here
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.9,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.greenAccent, width: 3),
+                    border: Border.all(color: Colors.greenAccent, width: 2), // Made border visible
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.greenAccent.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(9),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(9),
+                    child: widget.referenceImagePath != null
+                        ? Stack(
+                      children: [
+                        _buildReferenceImage(),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.0),
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                        ),
+                      ],
+                    )
+                        : Container(
+                      decoration: BoxDecoration(
+                        color: Colors.greenAccent.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'ALIGN CAR PART\nWITHIN THIS FRAME',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
 
-            // Car Part Label - Show which part is being captured
+            // Car part label
             if (_isCameraInitialized && widget.carPart != null)
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.15,
                 left: 0,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black87,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      'CAPTURING: ${widget.carPart!.toUpperCase()}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
+                bottom: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(12)),
+                  ),
+                  child: Text(
+                    'CAPTURING: ${widget.carPart!.toUpperCase()}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ),
               ),
 
-            // Safe Area Label
-            if (_isCameraInitialized)
-              Positioned(
-                top: MediaQuery.of(context).size.height * 0.2,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      'SAFE AREA',
-                      style: TextStyle(
-                        color: Colors.greenAccent,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-            // Back Button
+            // Back button
             Positioned(
               top: 20,
               left: 20,
@@ -495,29 +706,28 @@ class _CustomCameraViewState extends State<CustomCameraView> {
               ),
             ),
 
-            // Camera Switch Button
-            if (cameras != null && cameras!.length > 1)
-              Positioned(
-                top: 20,
-                right: 20,
-                child: GestureDetector(
-                  onTap: _switchCamera,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: const Icon(
-                      Icons.flip_camera_ios,
-                      color: Colors.white,
-                      size: 24,
-                    ),
+            // Flash toggle
+            Positioned(
+              top: 20,
+              right: 20,
+              child: GestureDetector(
+                onTap: _toggleTorch,
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: _isTorchOn ? Colors.yellow.withOpacity(0.8) : Colors.black54,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Icon(
+                    _isTorchOn ? Icons.flash_on : Icons.flash_off,
+                    color: Colors.white,
+                    size: 24,
                   ),
                 ),
               ),
+            ),
 
-            // Camera Info
+            // Camera status indicator
             Positioned(
               top: 80,
               left: 20,
@@ -550,16 +760,24 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    if (_isTorchOn) ...[
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.flash_on,
+                        color: Colors.yellow,
+                        size: 12,
+                      ),
+                    ],
                   ],
                 ),
               ),
             ),
 
-            // Capture Button
+            // Capture button
             Positioned(
-              bottom: 40,
-              left: 0,
-              right: 0,
+              right: 40,
+              top: 0,
+              bottom: 0,
               child: Center(
                 child: GestureDetector(
                   onTap: _isCameraInitialized ? _takePicture : null,
