@@ -463,4 +463,364 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roleUIDesigner => 'UI/UX Designer';
+
+  @override
+  String get instruction => 'Instruction';
+
+  @override
+  String get carDetails => 'Car Details';
+
+  @override
+  String get ownerDetails => 'Owner Details';
+
+  @override
+  String get clientDetails => 'Client Details';
+
+  @override
+  String get step => 'Step';
+
+  @override
+  String stepOfTotal(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get departureGuide => 'Departure Guide';
+
+  @override
+  String get returnGuide => 'Return Guide';
+
+  @override
+  String get inspectionNumber => 'Inspection Number';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get welcomeVehicleInspection => 'Welcome to Vehicle Inspection';
+
+  @override
+  String get followInstructions =>
+      'Please follow the instructions carefully to complete your vehicle inspection process.';
+
+  @override
+  String get importInformation => 'Import Information';
+
+  @override
+  String get numberPlate => 'Number Plate';
+
+  @override
+  String get numberPlateHint => 'LL-DDD-LL';
+
+  @override
+  String get brand => 'Brand';
+
+  @override
+  String get brandHint => 'FERRARI';
+
+  @override
+  String get model => 'Model';
+
+  @override
+  String get modelHint => 'SF90 Stradale';
+
+  @override
+  String get mileage => 'Mileage';
+
+  @override
+  String get mileageHint => '7.7 kmpl';
+
+  @override
+  String get gasType => 'Gas Type';
+
+  @override
+  String get diesel => 'Diesel';
+
+  @override
+  String get petrol => 'Petrol';
+
+  @override
+  String get electric => 'Electric';
+
+  @override
+  String get hybrid => 'Hybrid';
+
+  @override
+  String get gasLevel => 'Gas Level';
+
+  @override
+  String get empty => 'Empty';
+
+  @override
+  String get oneEighth => '1/8';
+
+  @override
+  String get twoEighths => '2/8';
+
+  @override
+  String get threeEighths => '3/8';
+
+  @override
+  String get half => 'Half';
+
+  @override
+  String get fiveEighths => '5/8';
+
+  @override
+  String get sixEighths => '6/8';
+
+  @override
+  String get sevenEighths => '7/8';
+
+  @override
+  String get full => 'Full';
+
+  @override
+  String get tyreCondition => 'Tyre Condition';
+
+  @override
+  String get tyreConditionHint => 'Good';
+
+  @override
+  String get kmDay => 'Km/day';
+
+  @override
+  String get extraKm => 'Extra KM (€)';
+
+  @override
+  String get euroSymbol => '€';
+
+  @override
+  String get priceTotal => 'Price Total (€)';
+
+  @override
+  String get uploadInsurance => 'Up.insurance';
+
+  @override
+  String get insuranceFile => 'Insrance.jpg';
+
+  @override
+  String get checklist => 'Checklist';
+
+  @override
+  String get softyPack => 'Softy Pack';
+
+  @override
+  String get spareWheel => 'Spare Wheel';
+
+  @override
+  String get phoneOlder => 'Phone older';
+
+  @override
+  String get gps => 'GPS';
+
+  @override
+  String get chargingPort => 'Charging Port';
+
+  @override
+  String get carPapers => 'Car Papers';
+
+  @override
+  String get comment => 'Comment';
+
+  @override
+  String get enterComments => 'Enter Comments';
+
+  @override
+  String get dropTheFile => 'Drop the file';
+
+  @override
+  String get errorLoadingImage => 'Error loading image';
+
+  @override
+  String get noImageSelected => 'No image selected';
+
+  @override
+  String get validationErrors => 'Validation Errors';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get updateProfilePicture => 'Update Profile Picture';
+
+  @override
+  String get invalidImageFormat => 'Invalid image format or user ID not found';
+
+  @override
+  String errorSelectingImage(String error) {
+    return 'Error selecting image: $error';
+  }
+
+  @override
+  String get licenseInstruction =>
+      'I checked and took picture of the original driver\'s license. (Copy not accepted)';
+
+  @override
+  String get licenseInstructionId =>
+      'I checked and took picture of the original driver\'s ID. (Copy not accepted)';
+
+  @override
+  String get birthDate => 'Birth Date';
+
+  @override
+  String get drivingLicense => 'Driving License';
+
+  @override
+  String get dateOfIssue => 'Date of Issue';
+
+  @override
+  String get rentalDuration => 'Rental Duration';
+
+  @override
+  String get leaseEndDateTime => 'Lease end date & time';
+
+  @override
+  String get mandatoryPicture => 'Mandatory Picture';
+
+  @override
+  String get frontSide => 'Front Side';
+
+  @override
+  String get frontLeftWheel => 'Front Left Wheel';
+
+  @override
+  String get frontLeftSide => 'Front Left Side';
+
+  @override
+  String get rearLeftSide => 'Rear Left Side';
+
+  @override
+  String get rearLeftWheel => 'Rear Left Wheel';
+
+  @override
+  String get rearSide => 'Rear Side';
+
+  @override
+  String get backRightWheel => 'Back Right Wheel';
+
+  @override
+  String get rearRightSide => 'Rear Right Side';
+
+  @override
+  String get frontRightSide => 'Front Right Side';
+
+  @override
+  String get frontRightWheel => 'Front Right Wheel';
+
+  @override
+  String get frontSeats => 'Front Seats';
+
+  @override
+  String get rearSeats => 'Rear Seats';
+
+  @override
+  String get odometer => 'Odometer';
+
+  @override
+  String get optionalImage1 => 'Optional Image 1';
+
+  @override
+  String get optionalImage2 => 'Optional Image 2';
+
+  @override
+  String get optionalImage3 => 'Optional Image 3';
+
+  @override
+  String get ownerSignature => 'Owner Signature';
+
+  @override
+  String get signHere => 'Sign Here';
+
+  @override
+  String get directlyWithFinger => 'Directly with your finger';
+
+  @override
+  String get seeReport => 'See Report';
+
+  @override
+  String get validation => 'Validation';
+
+  @override
+  String get byPressingValidate => 'By Pressing \"Validate\" :';
+
+  @override
+  String get acceptTerms => 'I accept the terms and conditions of Auto Proof.';
+
+  @override
+  String get acceptPolicy => 'I accept the data protection policy.';
+
+  @override
+  String get confirmLegalSignature =>
+      'I confirm that the signature is legally valid and has the same value as a handwritten signature.';
+
+  @override
+  String get allowSignatureUsage =>
+      'This signature may be used by me (or my authorized representative) on the vehicle inspection report.';
+
+  @override
+  String get validateSignature => 'Validate Signature';
+
+  @override
+  String get validateSignatureQuestion =>
+      'Are you sure you want to validate this signature?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get validate => 'Validate';
+
+  @override
+  String get provideSignatureError =>
+      'Please provide a signature before validating';
+
+  @override
+  String get signatureValidated => 'Signature validated successfully';
+
+  @override
+  String get clientSignature => 'Client Signature';
+
+  @override
+  String get autoProofTitle => 'Auto Proof 24';
+
+  @override
+  String get aboutTheAppTitle => 'About the App';
+
+  @override
+  String get aboutTheAppDescription =>
+      'Auto Proof 24 is a simple, easy-to-use digital car inspection app designed to make vehicle check-ins and check-outs faster, clearer, and more reliable. Whether you’re running a car rental service, managing a dealership, or just want to keep a personal record of your vehicle’s condition, this app is built for you.';
+
+  @override
+  String get ourGoalTitle => 'Our Goal';
+
+  @override
+  String get ourGoalDescription =>
+      'Our goal is to take the stress out of car inspections by making the process digital, efficient, and completely paper-free.';
+
+  @override
+  String get whatYouCanDoTitle => 'What You Can Do';
+
+  @override
+  String get whatYouCanDoDescription =>
+      'Create an account, carry out detailed inspections, and receive a professional report instantly by email. The app walks you through each step — take photos, add notes, log mileage, fuel levels, tire conditions, and any existing damage.';
+
+  @override
+  String get digitalReportsTitle => 'Digital Reports';
+
+  @override
+  String get digitalReportsDescription =>
+      'Every inspection generates a time-stamped digital report that’s automatically shared with both the vehicle owner and the customer, creating a clear and trustworthy record.';
+
+  @override
+  String get whoItsForTitle => 'Who It’s For';
+
+  @override
+  String get whoItsForDescription =>
+      'Whether you’re handling a fleet or just one vehicle, Auto Proof 24 gives you a smart and reliable way to document your car’s condition — anytime, anywhere.';
+
+  @override
+  String appVersion(Object version) {
+    return 'App Version: $version';
+  }
 }

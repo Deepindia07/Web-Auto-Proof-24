@@ -114,7 +114,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
         Row(
           children: [
             Text(
-              'Information',
+              AppLocalizations.of(context)!.information,
               style: MontserratStyles.montserratMediumTextStyle(
                 color: AppColor().darkCharcoalBlueColor,
                 size: 18,
@@ -126,7 +126,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
               side: BorderSide.none,
               onPressed: () {},
               borderRadius: 12,
-              text: "Import Information",
+              text: AppLocalizations.of(context)!.importInformation,
               textStyle: MontserratStyles.montserratMediumTextStyle(
                 color: AppColor().darkYellowColor,
                 size: 14,
@@ -140,8 +140,8 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'First name',
-                hintText: "First name",
+                label: AppLocalizations.of(context)!.firstName,
+                hintText: AppLocalizations.of(context)!.firstName,
                 controller:
                     _firstNameController, // Fixed: was using wrong controller
                 isRequired: true,
@@ -151,8 +151,8 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Last name',
-                hintText: 'Last name',
+                label: AppLocalizations.of(context)!.lastName,
+                hintText: AppLocalizations.of(context)!.lastName,
                 controller: _lastNameController, // Already correct
                 isRequired: true,
               ),
@@ -161,10 +161,10 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Birth Date',
+                label:  AppLocalizations.of(context)!.birthDate,
                 hintText: '02/12/1982',
                 controller:
-                    _birthDayController, // Fixed: was using _lastNameController
+                    _birthDayController,
                 isRequired: true,
               ),
             ),
@@ -176,7 +176,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Mobile No.',
+                label: AppLocalizations.of(context)!.phone ,
                 hintText: "1234567890",
                 controller:
                     _mobileController, // Fixed: was using _firstNameController
@@ -187,7 +187,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Email',
+                label: AppLocalizations.of(context)!.email,
                 hintText: 'abcd@gmail.com',
                 controller:
                     _emailController, // Fixed: was using _lastNameController
@@ -202,7 +202,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Address.',
+                label: AppLocalizations.of(context)!.address,
                 hintText: "123 Anywhere St, Any City, ST 12345",
                 controller: _addressController, // Already correct
                 isRequired: true,
@@ -216,7 +216,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Driving License',
+                label: AppLocalizations.of(context)!.drivingLicense,
                 hintText: "00-000-00",
                 controller:
                     _drivingLicenseController, // Fixed: was using _firstNameController
@@ -227,7 +227,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Date of Issue',
+                label: AppLocalizations.of(context)!.dateOfIssue,
                 hintText: '7.7.25',
                 controller:
                     _dateOfIssueController, // Fixed: was using _lastNameController
@@ -242,7 +242,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Rental Duration',
+                label: AppLocalizations.of(context)!.rentalDuration,
                 hintText: "2",
                 controller:
                     _rentalDurationController, // Fixed: was using _firstNameController
@@ -253,7 +253,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Lease end date & time',
+                label: AppLocalizations.of(context)!.leaseEndDateTime,
                 hintText: '2025/12/18 at 9:00 AM',
                 controller:
                     _leaseEndDateTimeController, // Fixed: was using _lastNameController
@@ -265,9 +265,9 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
 
         Divider(color: AppColor().lightSilverGrayColor),
         _checkLists(
-          label: "Checklists",
+          label: AppLocalizations.of(context)!.checklist,
           title:
-              "I checked and took picture of the original driver's license. ( Copy not accepted )",
+          AppLocalizations.of(context)!.licenseInstruction,
           isRequired: true,
           value: _driverLicenseChecked,
           onChanged: (value) {
@@ -278,9 +278,9 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
         ),
         Divider(color: AppColor().lightSilverGrayColor),
         _checkLists(
-          label: "Checklists",
+          label: AppLocalizations.of(context)!.checklist,
           title:
-              "I checked and took picture of the original driver's ID. ( Copy not accepted )",
+          AppLocalizations.of(context)!.licenseInstructionId,
           isRequired: true,
           value: _driverIdChecked,
           onChanged: (value) {

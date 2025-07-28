@@ -12,4 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signature/signature.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 part 'owner_signature_screen.dart';

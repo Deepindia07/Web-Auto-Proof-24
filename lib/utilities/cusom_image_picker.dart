@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:auto_proof/constants/const_color.dart';
+import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -222,7 +224,6 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
       Navigator.of(context).pop();
     }
   }
-
   void _showPermissionDialog(String permissionType) {
     showDialog(
       context: context,
@@ -390,34 +391,81 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     }
   }
 
-  // Get the crop rectangle based on container position
-  Rect _getCropRect() {
-    final RenderBox? containerBox = _containerKey.currentContext?.findRenderObject() as RenderBox?;
-    final RenderBox? cameraBox = context.findRenderObject() as RenderBox?;
+  // Responsive dimensions calculator
+  Map<String, double> _getResponsiveDimensions(Size screenSize) {
+    final isSmallScreen = screenSize.width < 600;
+    final isMediumScreen = screenSize.width >= 600 && screenSize.width < 900;
+    final isLargeScreen = screenSize.width >= 900;
 
-    if (containerBox == null || cameraBox == null) {
-      // Fallback to center crop if we can't get positions
-      final screenSize = MediaQuery.of(context).size;
-      final containerWidth = screenSize.width * 0.6;
-      final containerHeight = screenSize.height * 0.9;
-      final left = (screenSize.width - containerWidth) / 2;
-      final top = (screenSize.height - containerHeight) / 2;
+    // Responsive capture area percentage
+    double captureWidthPercentage;
+    double captureHeightPercentage;
 
-      return Rect.fromLTWH(left, top, containerWidth, containerHeight);
+    if (isSmallScreen) {
+      captureWidthPercentage = 0.6; // 60% for small screens
+      captureHeightPercentage = 0.75;
+    } else if (isMediumScreen) {
+      captureWidthPercentage = 0.55; // 55% for medium screens
+      captureHeightPercentage = 0.8;
+    } else {
+      captureWidthPercentage = 0.5; // 50% for large screens
+      captureHeightPercentage = 0.85;
     }
 
-    final containerPosition = containerBox.localToGlobal(Offset.zero, ancestor: cameraBox);
-    final containerSize = containerBox.size;
+    final captureWidth = screenSize.width * captureWidthPercentage;
+    final captureHeight = screenSize.height * captureHeightPercentage;
+    final sideWidth = (screenSize.width - captureWidth) / 2;
 
-    return Rect.fromLTWH(
-      containerPosition.dx,
-      containerPosition.dy,
-      containerSize.width,
-      containerSize.height,
-    );
+    // Responsive button sizes
+    double buttonSize;
+    double smallButtonSize;
+    double fontSize;
+    double smallFontSize;
+
+    if (isSmallScreen) {
+      buttonSize = 60;
+      smallButtonSize = 40;
+      fontSize = 10;
+      smallFontSize = 8;
+    } else if (isMediumScreen) {
+      buttonSize = 70;
+      smallButtonSize = 50;
+      fontSize = 12;
+      smallFontSize = 10;
+    } else {
+      buttonSize = 80;
+      smallButtonSize = 55;
+      fontSize = 14;
+      smallFontSize = 12;
+    }
+
+    return {
+      'captureWidth': captureWidth,
+      'captureHeight': captureHeight,
+      'sideWidth': sideWidth,
+      'buttonSize': buttonSize,
+      'smallButtonSize': smallButtonSize,
+      'fontSize': fontSize,
+      'smallFontSize': smallFontSize,
+      'padding': isSmallScreen ? 8.0 : (isMediumScreen ? 12.0 : 16.0),
+      'borderRadius': isSmallScreen ? 8.0 : (isMediumScreen ? 10.0 : 12.0),
+    };
   }
 
-  // Crop the image to the container area
+  // Get the crop rectangle based on container position (center area only)
+  Rect _getCropRect() {
+    final screenSize = MediaQuery.of(context).size;
+    final dimensions = _getResponsiveDimensions(screenSize);
+
+    final captureWidth = dimensions['captureWidth']!;
+    final captureHeight = dimensions['captureHeight']!;
+    final left = (screenSize.width - captureWidth) / 2;
+    final top = (screenSize.height - captureHeight) / 2;
+
+    return Rect.fromLTWH(left, top, captureWidth, captureHeight);
+  }
+
+  // Crop the image to the center area only
   Future<File> _cropImage(String imagePath) async {
     try {
       // Read the original image
@@ -436,7 +484,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
       final scaleX = originalImage.width / screenSize.width;
       final scaleY = originalImage.height / screenSize.height;
 
-      // Calculate crop coordinates in image space
+      // Calculate crop coordinates in image space (center area only)
       final cropX = (cropRect.left * scaleX).round();
       final cropY = (cropRect.top * scaleY).round();
       final cropWidth = (cropRect.width * scaleX).round();
@@ -448,7 +496,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
       final actualCropWidth = (cropWidth).clamp(1, originalImage.width - actualCropX);
       final actualCropHeight = (cropHeight).clamp(1, originalImage.height - actualCropY);
 
-      // Crop the image
+      // Crop the image to center area only
       final croppedImage = img.copyCrop(
         originalImage,
         x: actualCropX,
@@ -458,7 +506,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
       );
 
       // Save the cropped image
-      final croppedImagePath = imagePath.replaceAll('.jpg', '_cropped.jpg');
+      final croppedImagePath = imagePath.replaceAll('.jpg', '_center_cropped.jpg');
       final croppedFile = File(croppedImagePath);
       await croppedFile.writeAsBytes(img.encodeJpg(croppedImage));
 
@@ -473,20 +521,19 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     }
   }
 
-  // Modified take picture method with cropping
+  // Modified take picture method with center cropping
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) return;
 
     try {
       final XFile image = await _controller!.takePicture();
 
-      // Crop the image to the container area
       final croppedFile = await _cropImage(image.path);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Picture taken and cropped for ${widget.carPart ?? 'car part'}'),
+            content: Text('Vehicle image captured from center area for ${widget.carPart ?? 'car part'}'),
             backgroundColor: Colors.green,
           ),
         );
@@ -507,12 +554,12 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     }
   }
 
-  Widget _buildReferenceImage() {
+  Widget _buildReferenceImage(double borderRadius) {
     if (widget.referenceImagePath == null || widget.referenceImagePath!.isEmpty) {
       return Container(
         decoration: BoxDecoration(
           color: Colors.greenAccent.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(9),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
       );
     }
@@ -522,18 +569,19 @@ class _CustomCameraViewState extends State<CustomCameraView> {
         padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.0),
-          borderRadius: BorderRadius.circular(9),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Center(
           child: Image.asset(
             widget.referenceImagePath!,
             fit: BoxFit.contain,
+            color: AppColor().darkCharcoalBlueColor,
             errorBuilder: (context, error, stackTrace) {
               print('Error loading asset image: $error');
               return Container(
                 decoration: BoxDecoration(
                   color: Colors.greenAccent.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(borderRadius),
                 ),
                 child: const Center(
                   child: Icon(
@@ -551,7 +599,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
       return Container(
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(9),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Center(
           child: Image.file(
@@ -562,7 +610,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
               return Container(
                 decoration: BoxDecoration(
                   color: Colors.greenAccent.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(borderRadius),
                 ),
                 child: const Center(
                   child: Icon(
@@ -593,47 +641,182 @@ class _CustomCameraViewState extends State<CustomCameraView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final dimensions = _getResponsiveDimensions(screenSize);
+
+    final captureWidth = dimensions['captureWidth']!;
+    final captureHeight = dimensions['captureHeight']!;
+    final sideWidth = dimensions['sideWidth']!;
+    final buttonSize = dimensions['buttonSize']!;
+    final smallButtonSize = dimensions['smallButtonSize']!;
+    final fontSize = dimensions['fontSize']!;
+    final smallFontSize = dimensions['smallFontSize']!;
+    final padding = dimensions['padding']!;
+    final borderRadius = dimensions['borderRadius']!;
+
+    // Responsive spacing
+    final verticalSpacing = screenSize.height * 0.02;
+    final horizontalSpacing = sideWidth * 0.1;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(
           children: [
-            // Camera Preview
+            // Full Camera Preview (background)
             if (_isCameraInitialized && _controller != null)
               SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: CameraPreview(_controller!),
-                ),
+                child: CameraPreview(_controller!),
               )
             else
               const Center(
                 child: CircularProgressIndicator(color: Colors.white),
               ),
 
-            // Container with GlobalKey for position tracking
+            // Black overlay for left and right sides
+            if (_isCameraInitialized)
+              Row(
+                children: [
+                  Expanded(
+                    flex: (sideWidth / screenSize.width * 100).round(),
+                    child: Container(
+                      height: double.infinity,
+                      color: Colors.black,
+                      constraints: BoxConstraints(
+                        minWidth: buttonSize + padding * 2, // Ensure minimum width for buttons
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0,right: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Back button
+                            GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: Container(
+                                width: (buttonSize * 0.8).clamp(40.0, double.infinity),
+                                height: (buttonSize * 0.8).clamp(40.0, double.infinity),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular((buttonSize * 0.4).clamp(20.0, double.infinity)),
+                                  border: Border.all(color: Colors.white24, width: 2),
+                                ),
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                  size: (buttonSize * 0.4).clamp(16.0, 32.0),
+                                ),
+                              ),
+                            ),
+                            // Flash toggle
+                            GestureDetector(
+                              onTap: _toggleTorch,
+                              child: Container(
+                                width: smallButtonSize.clamp(30.0, double.infinity),
+                                height: smallButtonSize.clamp(30.0, double.infinity),
+                                decoration: BoxDecoration(
+                                  color: _isTorchOn ? Colors.yellow.withOpacity(0.3) : Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular((smallButtonSize / 2).clamp(15.0, double.infinity)),
+                                  border: Border.all(
+                                      color: _isTorchOn ? Colors.yellow : Colors.white24,
+                                      width: 2
+                                  ),
+                                ),
+                                child: Icon(
+                                  _isTorchOn ? Icons.flash_on : Icons.flash_off,
+                                  color: _isTorchOn ? Colors.yellow : Colors.white70,
+                                  size: (smallButtonSize * 0.5).clamp(12.0, 24.0),
+                                ),
+                              ),
+                            ),
+
+                            // vGap(10)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    flex: (captureWidth / screenSize.width * 200).round(),
+                    child: Container(
+                      height: double.infinity,
+                      // Transparent to show camera preview
+                    ),
+                  ),
+
+                  Expanded(
+                    flex: (sideWidth / screenSize.width * 100).round(),
+                    child: Container(
+                      height: double.infinity,
+                      color: Colors.black,
+                      constraints: BoxConstraints(
+                        minWidth: buttonSize + padding * 2, // Ensure minimum width for buttons
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Camera capture button
+                          GestureDetector(
+                            onTap: _isCameraInitialized ? _takePicture : null,
+                            child: Container(
+                              width: buttonSize.clamp(50.0, double.infinity),
+                              height: buttonSize.clamp(50.0, double.infinity),
+                              decoration: BoxDecoration(
+                                color: _isCameraInitialized ? Colors.white : Colors.grey,
+                                borderRadius: BorderRadius.circular((buttonSize / 2).clamp(25.0, double.infinity)),
+                                border: Border.all(
+                                    color: Colors.black26,
+                                    width: screenSize.width < 600 ? 3 : 4
+                                ),
+                                boxShadow: [
+                                  if (_isCameraInitialized)
+                                    BoxShadow(
+                                      color: Colors.white.withOpacity(0.3),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                    ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: _isCameraInitialized
+                                    ? Colors.black
+                                    : Colors.grey[600],
+                                size: (buttonSize * 0.45).clamp(20.0, 36.0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+            // Center capture frame with reference image
             if (_isCameraInitialized)
               Center(
                 child: Container(
-                  key: _containerKey, // Add the key here
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  height: MediaQuery.of(context).size.height * 0.9,
+                  key: _containerKey,
+                  width: captureWidth,
+                  height: captureHeight,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.greenAccent, width: 2), // Made border visible
-                    borderRadius: BorderRadius.circular(12),
+                    // border: Border.all(color: Colors.greenAccent, width: 3),
+                    borderRadius: BorderRadius.circular(borderRadius),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(9),
+                    borderRadius: BorderRadius.circular(borderRadius - 3),
                     child: widget.referenceImagePath != null
                         ? Stack(
                       children: [
-                        _buildReferenceImage(),
+                        _buildReferenceImage(borderRadius - 3),
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.0),
-                            borderRadius: BorderRadius.circular(9),
+                            borderRadius: BorderRadius.circular(borderRadius - 3),
                           ),
                         ),
                       ],
@@ -641,15 +824,15 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                         : Container(
                       decoration: BoxDecoration(
                         color: Colors.greenAccent.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(9),
+                        borderRadius: BorderRadius.circular(borderRadius - 3),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'ALIGN CAR PART\nWITHIN THIS FRAME',
+                          'ALIGN VEHICLE\nIN CENTER FRAME\n\nONLY THIS AREA\nWILL BE CAPTURED',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 16,
+                            color: Colors.white,
+                            fontSize: fontSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -662,144 +845,113 @@ class _CustomCameraViewState extends State<CustomCameraView> {
             // Car part label
             if (_isCameraInitialized && widget.carPart != null)
               Positioned(
+                bottom:0 ,
                 left: 0,
-                bottom: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(12)),
-                  ),
-                  child: Text(
-                    'CAPTURING: ${widget.carPart!.toUpperCase()}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: padding+20,
+                      vertical: padding * 0.6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+                    ),
+                    child: Text(
+                      '${widget.carPart!.toUpperCase()}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: smallFontSize,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
                     ),
                   ),
                 ),
               ),
-
-            // Back button
-            Positioned(
-              top: 20,
-              left: 20,
-              child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ),
-            ),
-
-            // Flash toggle
-            Positioned(
-              top: 20,
-              right: 20,
-              child: GestureDetector(
-                onTap: _toggleTorch,
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: _isTorchOn ? Colors.yellow.withOpacity(0.8) : Colors.black54,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Icon(
-                    _isTorchOn ? Icons.flash_on : Icons.flash_off,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ),
-            ),
 
             // Camera status indicator
             Positioned(
-              top: 80,
-              left: 20,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: _isCameraInitialized ? Colors.green : Colors.red,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      _isCameraInitialized ? 'LIVE' : 'CONNECTING',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (_isTorchOn) ...[
-                      const SizedBox(width: 8),
-                      const Icon(
-                        Icons.flash_on,
-                        color: Colors.yellow,
-                        size: 12,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-
-            // Capture button
-            Positioned(
-              right: 40,
-              top: 0,
-              bottom: 0,
+              top: padding * 1,
+              left: 0,
+              right: 0,
               child: Center(
-                child: GestureDetector(
-                  onTap: _isCameraInitialized ? _takePicture : null,
-                  child: Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: _isCameraInitialized ? Colors.white : Colors.grey,
-                      borderRadius: BorderRadius.circular(35),
-                      border: Border.all(color: Colors.black26, width: 3),
-                    ),
-                    child: Icon(
-                      Icons.camera_alt,
-                      color: _isCameraInitialized
-                          ? Colors.black
-                          : Colors.grey[600],
-                      size: 30,
-                    ),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: padding * 0.8,
+                    vertical: padding * 0.5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: _isCameraInitialized ? Colors.green : Colors.red,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      SizedBox(width: padding * 0.5),
+                      Text(
+                        _isCameraInitialized ? 'LIVE' : 'CONNECTING',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: smallFontSize,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (_isTorchOn) ...[
+                        SizedBox(width: padding * 0.5),
+                        Icon(
+                          Icons.flash_on,
+                          color: Colors.yellow,
+                          size: smallFontSize,
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ),
             ),
+
+            // Center capture indicator
+            // Positioned(
+            //   bottom: padding,
+            //   left: padding,
+            //   right: padding,
+            //   child: Center(
+            //     child: Container(
+            //       constraints: BoxConstraints(
+            //         maxWidth: screenSize.width - (padding * 2),
+            //       ),
+            //       padding: EdgeInsets.symmetric(
+            //         horizontal: padding * 1.2,
+            //         vertical: padding * 0.6,
+            //       ),
+            //       decoration: BoxDecoration(
+            //         color: Colors.green.withOpacity(0.8),
+            //         borderRadius: BorderRadius.circular(25),
+            //       ),
+            //       child: Text(
+            //         'CENTER AREA ONLY - ${(captureWidth/screenSize.width*100).toInt()}% WIDTH CAPTURED',
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontSize: smallFontSize.clamp(8.0, 12.0),
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //         textAlign: TextAlign.center,
+            //         overflow: TextOverflow.ellipsis,
+            //         maxLines: 1,
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

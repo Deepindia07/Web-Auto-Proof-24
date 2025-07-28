@@ -89,11 +89,6 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
     );
   }
 
-  // void _saveAndNavigateToNext() {
-  //   final carDetails = _createCarDetailsModel();
-  //   context.read<CarDetailsScreenBloc>().add(ValidateFormEvent(carDetails: carDetails));
-  // }
-
   @override
   void dispose() {
     _numberPlateController.dispose();
@@ -110,6 +105,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    print(_createCarDetailsModel().toJson());
+
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: BlocConsumer<CarDetailsScreenBloc, CarDetailsScreenState>(
@@ -152,7 +149,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         Row(
           children: [
             Text(
-              'Information',
+              AppLocalizations.of(context)!.information,
               style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 18),
             ),
             Text(
@@ -164,7 +161,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               side: BorderSide.none,
               onPressed: (){},
               borderRadius: 12,
-                text: "Import Information",
+              text: AppLocalizations.of(context)!.importInformation,
               textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 14),
             ),
           ],
@@ -177,8 +174,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                hintText: "LL-DDD-LL",
-                label: 'Number Plate',
+                hintText: AppLocalizations.of(context)!.numberPlateHint,
+                label: AppLocalizations.of(context)!.numberPlate,
                 controller: _numberPlateController,
                 isRequired: true,
               ),
@@ -187,8 +184,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Brand',
-                hintText: "FERRARI",
+                label: AppLocalizations.of(context)!.brand,
+                hintText: AppLocalizations.of(context)!.brandHint,
                 controller: _brandController,
                 isRequired: true,
               ),
@@ -197,8 +194,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Model',
-                hintText: "SF90 Stradale",
+                label: AppLocalizations.of(context)!.model,
+                hintText: AppLocalizations.of(context)!.modelHint,
                 controller: _modelController,
                 isRequired: true,
               ),
@@ -215,8 +212,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               flex: 1,
               child: _buildTextField(
                 keyboardType: TextInputType.number,
-                label: 'Mileage',
-                hintText: "7.7 kmpl",
+                label: AppLocalizations.of(context)!.mileage,
+                hintText: AppLocalizations.of(context)!.mileageHint,
                 controller: _mileageController,
                 isRequired: true,
               ),
@@ -225,13 +222,13 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildDropdownField(
-                label: 'Gas Type',
+                label: AppLocalizations.of(context)!.gasType,
                 value: selectedGasType,
                 items: [
-                  RadioDropdownOption(value: 'Diesel', label: 'Diesel'),  // Fixed: value should match label
-                  RadioDropdownOption(value: 'Petrol', label: 'Petrol'),
-                  RadioDropdownOption(value: 'Electric', label: 'Electric'),
-                  RadioDropdownOption(value: 'Hybrid', label: 'Hybrid'),
+                  RadioDropdownOption(value: 'Diesel', label: AppLocalizations.of(context)!.diesel),
+                  RadioDropdownOption(value: 'Petrol', label: AppLocalizations.of(context)!.petrol),
+                  RadioDropdownOption(value: 'Electric', label: AppLocalizations.of(context)!.electric),
+                  RadioDropdownOption(value: 'Hybrid', label: AppLocalizations.of(context)!.hybrid),
                 ],
                 onChanged: (newValue) {
                   setState(() {
@@ -243,23 +240,22 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 dropValue: 'Diesel',
               ),
             ),
-
             SizedBox(width: 8),
             Expanded(
               flex: 1,
               child: _buildDropdownField(
-                label: 'Gas Level',
+                label: AppLocalizations.of(context)!.gasLevel,
                 value: selectedGasLevel,
                 items: [
-                  RadioDropdownOption(value: 'Empty', label: 'Empty'),
-                  RadioDropdownOption(value: '1/8', label: '1/8'),
-                  RadioDropdownOption(value: '2/8', label: '2/8'),
-                  RadioDropdownOption(value: '3/8', label: '3/8'),
-                  RadioDropdownOption(value: 'Half', label: 'Half'),
-                  RadioDropdownOption(value: '5/8', label: '5/8'),
-                  RadioDropdownOption(value: '6/8', label: '6/8'),
-                  RadioDropdownOption(value: '7/8', label: '7/8'),
-                  RadioDropdownOption(value: 'Full', label: 'Full'),
+                  RadioDropdownOption(value: 'Empty', label: AppLocalizations.of(context)!.empty),
+                  RadioDropdownOption(value: '1/8', label: AppLocalizations.of(context)!.oneEighth),
+                  RadioDropdownOption(value: '2/8', label: AppLocalizations.of(context)!.twoEighths),
+                  RadioDropdownOption(value: '3/8', label: AppLocalizations.of(context)!.threeEighths),
+                  RadioDropdownOption(value: 'Half', label: AppLocalizations.of(context)!.half),
+                  RadioDropdownOption(value: '5/8', label: AppLocalizations.of(context)!.fiveEighths),
+                  RadioDropdownOption(value: '6/8', label: AppLocalizations.of(context)!.sixEighths),
+                  RadioDropdownOption(value: '7/8', label: AppLocalizations.of(context)!.sevenEighths),
+                  RadioDropdownOption(value: 'Full', label: AppLocalizations.of(context)!.full),
                 ],
                 onChanged: (newValue) {
                   setState(() {
@@ -281,8 +277,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Tyre Condition',
-                hintText: "Good",
+                label: AppLocalizations.of(context)!.tyreCondition,
+                hintText: AppLocalizations.of(context)!.tyreConditionHint,
                 controller: _tyreConditionsController,
                 isRequired: true,
               ),
@@ -292,7 +288,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               flex: 1,
               child: _buildTextField(
                 keyboardType: TextInputType.number,
-                label: 'Km/day',
+                label: AppLocalizations.of(context)!.kmDay,
                 controller: _kmDayController,
                 isRequired: true,
               ),
@@ -302,9 +298,9 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               flex: 1,
               child: _buildTextField(
                 keyboardType: TextInputType.number,
-                label: 'Extra KM (€)',
+                label: AppLocalizations.of(context)!.extraKm,
                 controller: _extraKmController,
-                hintText: '€',
+                hintText: AppLocalizations.of(context)!.euroSymbol,
                 isRequired: true,
               ),
             ),
@@ -319,7 +315,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               flex: 1,
               child: _buildTextField(
                 keyboardType: TextInputType.number,
-                label: 'Price Total (€)',
+                label: AppLocalizations.of(context)!.priceTotal,
                 controller: _priceTotalController,
                 isRequired: true,
               ),
@@ -328,7 +324,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildFileUploadField(
-                label: 'Up.insurance',
+                label: AppLocalizations.of(context)!.uploadInsurance,
                 onTap: () {
                   _updateProfileImage(context);
                 },
@@ -338,7 +334,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildImageField(
-                label: 'Insrance.jpg',
+                label: AppLocalizations.of(context)!.insuranceFile,
               ),
             ),
           ],
@@ -355,7 +351,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         Row(
           children: [
             Text(
-              'Checklist',
+              AppLocalizations.of(context)!.checklist,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -375,7 +371,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex:1,
               child: _buildSwitchField(
-                label: 'Softy Pack',
+                label: AppLocalizations.of(context)!.softyPack,
                 value: softPackYes,
                 onChanged: (value) => setState(() => softPackYes = value),
                 isRequired: true,
@@ -385,7 +381,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildSwitchField(
-                label: 'Spare Wheel',
+                label: AppLocalizations.of(context)!.spareWheel,
                 value: spareWheelYes,
                 onChanged: (value) => setState(() => spareWheelYes = value),
                 isRequired: true,
@@ -395,7 +391,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildSwitchField(
-                label: 'Phone older',
+                label: AppLocalizations.of(context)!.phoneOlder,
                 value: phoneOlderYes,
                 onChanged: (value) => setState(() => phoneOlderYes = value),
                 isRequired: true,
@@ -410,17 +406,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildSwitchField(
-                label: 'GPS',
-                value: gpsYes,
-                onChanged: (value) => setState(() => gpsYes = value),
-                isRequired: true,
-              ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              flex: 1,
-              child: _buildSwitchField(
-                label: 'Charging Port',
+                label: AppLocalizations.of(context)!.chargingPort,
                 value: chargingPortYes,
                 onChanged: (value) => setState(() => chargingPortYes = value),
                 isRequired: true,
@@ -430,7 +416,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildSwitchField(
-                label: 'Car Papers',
+                label: AppLocalizations.of(context)!.carPapers,
                 value: carPapersYes,
                 onChanged: (value) => setState(() => carPapersYes = value),
                 isRequired: true,
@@ -449,7 +435,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         Row(
           children: [
             Text(
-              'Comment',
+              AppLocalizations.of(context)!.comment,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -467,11 +453,9 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           controller: _commentController,
           maxLines: 3,
           fillColor: Colors.white,
-          hintText: "Enter Comments",
+          hintText: AppLocalizations.of(context)!.enterComments,
           hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 14, color: AppColor().silverShadeGrayColor),
-
         )
-
       ],
     );
   }
@@ -553,7 +537,6 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
     );
   }
 
-
   Widget _buildSwitchField({
     required String label,
     required bool value,
@@ -596,7 +579,6 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
     );
   }
 
-
   Widget _buildFileUploadField({
     required String label,
     required VoidCallback onTap,
@@ -620,23 +602,22 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           padding: EdgeInsets.symmetric(horizontal: 18,vertical: 5),
           border: Border.all(color: AppColor().darkCharcoalBlueColor.withOpacity(0.2)),
           child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.cloud_upload_outlined,
-              size: 32,
-              color: Colors.grey[400],
-            ),
-
-            Text(
-              'Drop the file',
-              style: TextStyle(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.cloud_upload_outlined,
+                size: 32,
                 color: Colors.grey[400],
-                fontSize: 12,
               ),
-            ),
-          ],
-        ),
+              Text(
+                AppLocalizations.of(context)!.dropTheFile,
+                style: TextStyle(
+                  color: Colors.grey[400],
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
         )
       ],
     );
@@ -679,7 +660,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      'Error loading image',
+                                      AppLocalizations.of(context)!.errorLoadingImage,
                                       style: TextStyle(
                                         color: Colors.red[400],
                                         fontSize: 16,
@@ -701,7 +682,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'No image selected',
+                                  AppLocalizations.of(context)!.noImageSelected,
                                   style: TextStyle(
                                     color: Colors.grey[400],
                                     fontSize: 16,
@@ -779,7 +760,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'Error loading image',
+                            AppLocalizations.of(context)!.errorLoadingImage,
                             style: TextStyle(
                               color: Colors.red[400],
                               fontSize: 12,
@@ -802,7 +783,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'No image selected',
+                      AppLocalizations.of(context)!.noImageSelected,
                       style: TextStyle(
                         color: Colors.grey[400],
                         fontSize: 12,
@@ -822,7 +803,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Validation Errors'),
+        title: Text(AppLocalizations.of(context)!.validationErrors),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -831,19 +812,18 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
+            child: Text(AppLocalizations.of(context)!.ok),
           ),
         ],
       ),
     );
   }
 
-
   Future<void> _updateProfileImage(BuildContext context) async {
     try {
       final selectedImage = await CustomImageSelector.show(
         context,
-        title: 'Update Profile Picture',
+        title: AppLocalizations.of(context)!.updateProfilePicture,
         primaryColor: AppColor().darkYellowColor,
       );
 
@@ -880,7 +860,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           setState(() {
             profileImagePath = null;
           });
-          CherryToast.error(context, 'Invalid image format or user ID not found');
+          CherryToast.error(context, AppLocalizations.of(context)!.invalidImageFormat);
         }
       }
     } catch (e) {
@@ -888,7 +868,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
       setState(() {
         profileImagePath = null;
       });
-      CherryToast.error(context, 'Error selecting image: $e');
+      CherryToast.error(context, AppLocalizations.of(context)!.errorSelectingImage(e.toString()));
     }
   }
 

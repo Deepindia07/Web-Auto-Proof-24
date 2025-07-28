@@ -161,6 +161,343 @@
   "select": "Sélectionner",
   "roleDeveloper": "Développeur",
   "roleTeamLead": "Chef d'équipe",
-  "roleUIDesigner": "Designer UI/UX"
+  "roleUIDesigner": "Designer UI/UX",
+
+  "instruction": "Instruction",
+  "carDetails": "Détails de la voiture",
+  "ownerDetails": "Détails du propriétaire",
+  "clientDetails": "Détails du client",
+  "step": "Étape",
+  "stepOfTotal": "Étape {current} sur {total}",
+  "@stepOfTotal": {
+    "description": "Indique l'étape actuelle sur le nombre total d'étapes.",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "description": "Numéro de l'étape actuelle"
+      },
+      "total": {
+        "type": "int",
+        "description": "Nombre total d'étapes"
+      }
+    }
+  },
+  "departureGuide": "Guide de départ",
+  "returnGuide": "Guide de retour",
+  "inspectionNumber": "Numéro d'inspection",
+  "back": "Retour",
+  "welcomeVehicleInspection": "Bienvenue à l'inspection du véhicule",
+  "followInstructions": "Veuillez suivre attentivement les instructions pour compléter votre processus d'inspection du véhicule.",
+  "@information": {
+    "description": "Label pour la section d'informations"
+  },
+
+  "importInformation": "Importer les informations",
+  "@importInformation": {
+    "description": "Texte du bouton pour importer les informations de la voiture"
+  },
+
+  "numberPlate": "Plaque d'immatriculation",
+  "@numberPlate": {
+    "description": "Label pour le champ plaque d'immatriculation"
+  },
+
+  "numberPlateHint": "LL-DDD-LL",
+  "@numberPlateHint": {
+    "description": "Texte d'aide pour le format de plaque d'immatriculation"
+  },
+
+  "brand": "Marque",
+  "@brand": {
+    "description": "Label pour le champ marque de voiture"
+  },
+
+  "brandHint": "FERRARI",
+  "@brandHint": {
+    "description": "Texte d'aide pour la marque de voiture"
+  },
+
+  "model": "Modèle",
+  "@model": {
+    "description": "Label pour le champ modèle de voiture"
+  },
+
+  "modelHint": "SF90 Stradale",
+  "@modelHint": {
+    "description": "Texte d'aide pour le modèle de voiture"
+  },
+
+  "mileage": "Kilométrage",
+  "@mileage": {
+    "description": "Label pour le champ kilométrage de voiture"
+  },
+
+  "mileageHint": "7,7 km/l",
+  "@mileageHint": {
+    "description": "Texte d'aide pour le kilométrage de voiture"
+  },
+
+  "gasType": "Type de carburant",
+  "@gasType": {
+    "description": "Label pour le menu déroulant type de carburant"
+  },
+
+  "diesel": "Diesel",
+  "@diesel": {
+    "description": "Option de type de carburant diesel"
+  },
+
+  "petrol": "Essence",
+  "@petrol": {
+    "description": "Option de type de carburant essence"
+  },
+
+  "electric": "Électrique",
+  "@electric": {
+    "description": "Option de type de carburant électrique"
+  },
+
+  "hybrid": "Hybride",
+  "@hybrid": {
+    "description": "Option de type de carburant hybride"
+  },
+
+  "gasLevel": "Niveau de carburant",
+  "@gasLevel": {
+    "description": "Label pour le menu déroulant niveau de carburant"
+  },
+
+  "empty": "Vide",
+  "@empty": {
+    "description": "Option de niveau de carburant vide"
+  },
+
+  "oneEighth": "1/8",
+  "@oneEighth": {
+    "description": "Un huitième de niveau de carburant"
+  },
+
+  "twoEighths": "2/8",
+  "@twoEighths": {
+    "description": "Deux huitièmes de niveau de carburant"
+  },
+
+  "threeEighths": "3/8",
+  "@threeEighths": {
+    "description": "Trois huitièmes de niveau de carburant"
+  },
+
+  "half": "Demi",
+  "@half": {
+    "description": "Demi niveau de carburant"
+  },
+
+  "fiveEighths": "5/8",
+  "@fiveEighths": {
+    "description": "Cinq huitièmes de niveau de carburant"
+  },
+
+  "sixEighths": "6/8",
+  "@sixEighths": {
+    "description": "Six huitièmes de niveau de carburant"
+  },
+
+  "sevenEighths": "7/8",
+  "@sevenEighths": {
+    "description": "Sept huitièmes de niveau de carburant"
+  },
+
+  "full": "Plein",
+  "@full": {
+    "description": "Niveau de carburant plein"
+  },
+
+  "tyreCondition": "État des pneus",
+  "@tyreCondition": {
+    "description": "Label pour le champ état des pneus"
+  },
+
+  "tyreConditionHint": "Bon",
+  "@tyreConditionHint": {
+    "description": "Texte d'aide pour l'état des pneus"
+  },
+
+  "kmDay": "Km/jour",
+  "@kmDay": {
+    "description": "Label pour le champ kilomètres par jour"
+  },
+
+  "extraKm": "KM supplémentaire (€)",
+  "@extraKm": {
+    "description": "Label pour le champ coût kilomètres supplémentaires"
+  },
+
+  "euroSymbol": "€",
+  "@euroSymbol": {
+    "description": "Symbole de la monnaie euro"
+  },
+
+  "priceTotal": "Prix total (€)",
+  "@priceTotal": {
+    "description": "Label pour le champ prix total"
+  },
+
+  "uploadInsurance": "Téléch.assurance",
+  "@uploadInsurance": {
+    "description": "Label pour le bouton de téléchargement d'assurance"
+  },
+
+  "insuranceFile": "Assurance.jpg",
+  "@insuranceFile": {
+    "description": "Affichage du nom de fichier d'assurance"
+  },
+
+  "checklist": "Liste de vérification",
+  "@checklist": {
+    "description": "Label pour la section liste de vérification"
+  },
+
+  "softyPack": "Pack souple",
+  "@softyPack": {
+    "description": "Label pour l'élément pack souple de la liste de vérification"
+  },
+
+  "spareWheel": "Roue de secours",
+  "@spareWheel": {
+    "description": "Label pour l'élément roue de secours de la liste de vérification"
+  },
+
+  "phoneOlder": "Téléphone ancien",
+  "@phoneOlder": {
+    "description": "Label pour l'élément téléphone ancien de la liste de vérification"
+  },
+
+  "gps": "GPS",
+  "@gps": {
+    "description": "Label pour l'élément GPS de la liste de vérification"
+  },
+
+  "chargingPort": "Port de charge",
+  "@chargingPort": {
+    "description": "Label pour l'élément port de charge de la liste de vérification"
+  },
+
+  "carPapers": "Papiers de voiture",
+  "@carPapers": {
+    "description": "Label pour l'élément papiers de voiture de la liste de vérification"
+  },
+
+  "comment": "Commentaire",
+  "@comment": {
+    "description": "Label pour la section commentaire"
+  },
+
+  "enterComments": "Entrez vos commentaires",
+  "@enterComments": {
+    "description": "Texte d'aide pour le champ commentaire"
+  },
+
+  "dropTheFile": "Déposez le fichier",
+  "@dropTheFile": {
+    "description": "Texte affiché dans la zone de téléchargement de fichier"
+  },
+
+  "errorLoadingImage": "Erreur de chargement de l'image",
+  "@errorLoadingImage": {
+    "description": "Message d'erreur lorsque l'image ne se charge pas"
+  },
+
+  "noImageSelected": "Aucune image sélectionnée",
+  "@noImageSelected": {
+    "description": "Message lorsqu'aucune image n'est sélectionnée"
+  },
+
+  "validationErrors": "Erreurs de validation",
+  "@validationErrors": {
+    "description": "Titre pour la boîte de dialogue d'erreur de validation"
+  },
+
+  "ok": "OK",
+  "@ok": {
+    "description": "Texte du bouton OK"
+  },
+
+  "updateProfilePicture": "Mettre à jour la photo de profil",
+  "@updateProfilePicture": {
+    "description": "Titre pour la boîte de dialogue de mise à jour de photo de profil"
+  },
+
+  "invalidImageFormat": "Format d'image invalide ou ID utilisateur introuvable",
+  "@invalidImageFormat": {
+    "description": "Message d'erreur pour format d'image invalide"
+  },
+
+  "errorSelectingImage": "Erreur lors de la sélection de l'image : {error}",
+  "@errorSelectingImage": {
+    "description": "Message d'erreur lorsque la sélection d'image échoue",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Le message d'erreur"
+      }
+    }
+  },
+
+  "licenseInstruction": "J'ai vérifié et pris une photo du permis de conduire original. (Copie non acceptée)",
+  "licenseInstructionId": "J'ai vérifié et pris une photo du permis de conduire original. (Copie non acceptée)",
+  "birthDate": "Date de\nnaissance",
+  "drivingLicense": "Permis de conduire",
+  "dateOfIssue": "Date de délivrance",
+  "rentalDuration": "Durée de location",
+  "leaseEndDateTime": "Date et heure de\nfin de bail",
+  "mandatoryPicture": "Photo obligatoire",
+  "frontSide": "Côté avant",
+  "frontLeftWheel": "Roue avant gauche",
+  "frontLeftSide": "Côté avant gauche",
+  "rearLeftSide": "Côté arrière gauche",
+  "rearLeftWheel": "Roue arrière gauche",
+  "rearSide": "Côté arrière",
+  "backRightWheel": "Roue arrière droite",
+  "rearRightSide": "Côté arrière droit",
+  "frontRightSide": "Côté avant droit",
+  "frontRightWheel": "Roue avant droite",
+  "frontSeats": "Sièges avant",
+  "rearSeats": "Sièges arrière",
+  "odometer": "Compteur kilométrique",
+  "optionalImage1": "Image optionnelle 1",
+  "optionalImage2": "Image optionnelle 2",
+  "optionalImage3": "Image optionnelle 3",
+
+  "ownerSignature": "Signature du propriétaire",
+  "signHere": "Signez ici",
+  "directlyWithFinger": "Directement avec votre doigt",
+  "seeReport": "Voir le rapport",
+  "validation": "Validation",
+  "byPressingValidate": "En appuyant sur \"Valider\" :",
+  "acceptTerms": "J'accepte les termes et conditions d'Auto Proof.",
+  "acceptPolicy": "J'accepte la politique de protection des données.",
+  "confirmLegalSignature": "Je confirme que la signature est légalement valide et a la même valeur qu'une signature manuscrite.",
+  "allowSignatureUsage": "Cette signature peut être utilisée par moi (ou mon représentant autorisé) sur le rapport d'inspection du véhicule.",
+  "validateSignature": "Valider la signature",
+  "validateSignatureQuestion": "Êtes-vous sûr de vouloir valider cette signature ?",
+  "cancel": "Annuler",
+  "validate": "Valider",
+  "provideSignatureError": "Veuillez fournir une signature avant de valider",
+  "signatureValidated": "Signature validée avec succès",
+
+  "clientSignature": "Signature du client",
+  "autoProofTitle": "Auto Proof 24",
+  "aboutTheAppTitle": "À propos de l'application",
+  "aboutTheAppDescription": "Auto Proof 24 est une application simple et intuitive pour l’inspection numérique des voitures, conçue pour rendre les enregistrements et sorties de véhicules plus rapides, clairs et fiables. Que vous gériez un service de location, un concessionnaire ou que vous souhaitiez simplement garder un suivi de l’état de votre voiture, cette application est faite pour vous.",
+  "ourGoalTitle": "Notre objectif",
+  "ourGoalDescription": "Notre objectif est de simplifier les inspections de véhicules en les rendant numériques, efficaces et totalement sans papier.",
+  "whatYouCanDoTitle": "Ce que vous pouvez faire",
+  "whatYouCanDoDescription": "Créez un compte, réalisez des inspections détaillées et recevez instantanément un rapport professionnel par e-mail. L'application vous guide étape par étape — prenez des photos, ajoutez des notes, enregistrez le kilométrage, le niveau de carburant, l'état des pneus et les dommages existants.",
+  "digitalReportsTitle": "Rapports numériques",
+  "digitalReportsDescription": "Chaque inspection génère un rapport numérique horodaté automatiquement partagé avec le propriétaire du véhicule et le client, créant un enregistrement clair et fiable.",
+  "whoItsForTitle": "Pour qui c'est",
+  "whoItsForDescription": "Que vous gériez une flotte ou un seul véhicule, Auto Proof 24 vous offre un moyen intelligent et fiable de documenter l'état de votre voiture — à tout moment, n'importe où.",
+  "appVersion": "Version de l'application : {version}"
+
 
 }

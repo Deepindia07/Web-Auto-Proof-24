@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:signature/signature.dart';
 
 import '../../../../constants/const_route_string.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../utilities/custom_button.dart';
 import '../../../../utilities/custom_textstyle.dart';
 import '../../../../utilities/custom_widgets.dart';

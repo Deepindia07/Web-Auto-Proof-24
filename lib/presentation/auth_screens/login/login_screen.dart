@@ -136,7 +136,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                   Text(
                     AppLocalizations.of(context)!.appTitle,
                     style: MontserratStyles.montserratRegularTextStyle(
-                      size: 16,
+                      size: 14,
                       color: AppColor().darkCharcoalBlueColor,
                     ),
                   ),

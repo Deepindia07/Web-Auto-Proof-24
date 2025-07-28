@@ -229,7 +229,7 @@ class AppRouter {
         name: 'clientSignatureViewScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const ClientSignatureScreen(),
+          child: const ClientSignatureScreenView(),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),

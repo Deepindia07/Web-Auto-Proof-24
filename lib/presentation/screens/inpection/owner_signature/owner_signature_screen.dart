@@ -1,26 +1,14 @@
 part of 'owner_signature_screen_route_imple.dart';
 
-class OwnerSignatureScreen extends StatelessWidget {
+class OwnerSignatureScreen extends StatefulWidget {
   const OwnerSignatureScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<OwnerSignatureScreenBloc>(
-      create: (context) => OwnerSignatureScreenBloc(),
-      child: OwnerSignatureScreenView(),
-    );
-  }
+  State<OwnerSignatureScreen> createState() =>
+      _OwnerSignatureScreenState();
 }
 
-class OwnerSignatureScreenView extends StatefulWidget {
-  const OwnerSignatureScreenView({super.key});
-
-  @override
-  State<OwnerSignatureScreenView> createState() =>
-      _OwnerSignatureScreenViewState();
-}
-
-class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
+class _OwnerSignatureScreenState extends State<OwnerSignatureScreen> {
   final SignatureController _signatureController = SignatureController(
     penStrokeWidth: 2,
     penColor: Colors.black,
@@ -29,6 +17,8 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: Column(
@@ -36,8 +26,8 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
         children: [
           CustomAppBar(
             backgroundColor: AppColor().backgroundColor,
-            title: "Owner Signature",
-            subTitle: "01 January 2025 - 9:00PM",
+            title: local.ownerSignature,
+            subTitle: "01 January 2025 - 9:00PM", // Date can be formatted dynamically if required
           ),
 
           vGap(20),
@@ -46,7 +36,6 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Signature Canvas
                   Expanded(
                     child: Container(
                       width: double.infinity,
@@ -60,7 +49,6 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
                       ),
                       child: Stack(
                         children: [
-                          // Signature pad
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Signature(
@@ -68,14 +56,11 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
                               backgroundColor: Colors.white,
                             ),
                           ),
-                          // Delete icon - positioned at top right corner
                           Positioned(
                             bottom: 8,
                             right: 8,
                             child: GestureDetector(
-                              onTap: () {
-                                _clearSignature();
-                              },
+                              onTap: _clearSignature,
                               child: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
@@ -94,14 +79,13 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
                               ),
                             ),
                           ),
-                          // Placeholder text when empty
                           if (_signatureController.isEmpty)
                             Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Sign Here',
+                                    local.signHere,
                                     style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w500,
@@ -110,7 +94,7 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    'Directly with your finger',
+                                    local.directlyWithFinger,
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.grey.shade400,
@@ -123,37 +107,35 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
-                  /// Action buttons
                   Row(
                     children: [
                       Expanded(
                         child: CustomButton(
                           side: BorderSide.none,
-                          onPressed: (){},
-                          text: "See Report",
-                          textStyle: MontserratStyles.montserratMediumTextStyle(size: 16,color: AppColor().darkYellowColor),
+                          onPressed: () {},
+                          text: local.seeReport,
+                          textStyle: MontserratStyles.montserratMediumTextStyle(
+                            size: 16,
+                            color: AppColor().darkYellowColor,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                          child: CustomButton(
-                            side: BorderSide.none,
-                            onPressed: (){
-                              _showValidationDialog(context);
-                            },
-                            text: "Validation",
-                            textStyle: MontserratStyles.montserratMediumTextStyle(size: 16,color: AppColor().darkYellowColor),
-                          )
+                        child: CustomButton(
+                          side: BorderSide.none,
+                          onPressed: () => _showValidationDialog(context),
+                          text: local.validation,
+                          textStyle: MontserratStyles.montserratMediumTextStyle(
+                            size: 16,
+                            color: AppColor().darkYellowColor,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 24),
-
-                  // Terms and conditions
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -164,18 +146,20 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'By Pressing "Validate" :',
-                          style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor,size: 16),
+                          local.byPressingValidate,
+                          style: MontserratStyles.montserratMediumTextStyle(
+                            color: AppColor().darkCharcoalBlueColor,
+                            size: 16,
+                          ),
                         ),
                         const SizedBox(height: 12),
-                        _buildBulletPoint('I accept the terms and conditions of Auto Proof.'),
-                        _buildBulletPoint('I accept the data protection policy.'),
-                        _buildBulletPoint('I confirm that the signature is legally valid and has the same value as a handwritten signature.'),
-                        _buildBulletPoint('This signature may be used by me (or my authorized representative) on the vehicle inspection report.'),
+                        _buildBulletPoint(local.acceptTerms),
+                        _buildBulletPoint(local.acceptPolicy),
+                        _buildBulletPoint(local.confirmLegalSignature),
+                        _buildBulletPoint(local.allowSignatureUsage),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 16),
                 ],
               ),
@@ -186,58 +170,56 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
     );
   }
 
-  Widget _buildBulletPoint(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 4,
-            height: 4,
-            margin: const EdgeInsets.only(top: 8, right: 8),
-            decoration: const BoxDecoration(
-              color: Colors.black87,
-              shape: BoxShape.circle,
+  Widget _buildBulletPoint(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 4,
+          height: 4,
+          margin: const EdgeInsets.only(top: 8, right: 8),
+          decoration: const BoxDecoration(
+            color: Colors.black87,
+            shape: BoxShape.circle,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            text,
+            style: MontserratStyles.montserratRegularTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 14,
             ),
           ),
-          Expanded(
-            child: Text(
-              text,
-              style: MontserratStyles.montserratRegularTextStyle(color: AppColor().darkCharcoalBlueColor,size: 14),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 
   void _clearSignature() {
-    setState(() {
-      _signatureController.clear();
-    });
+    setState(() => _signatureController.clear());
   }
 
   void _showValidationDialog(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Validate Signature'),
-          content: const Text('Are you sure you want to validate this signature?'),
+          title: Text(local.validateSignature),
+          content: Text(local.validateSignatureQuestion),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(local.cancel),
             ),
             ElevatedButton(
               onPressed: () {
                 context.push(AppRoute.clientSignatureViewScreen);
-                // Navigator.of(context).pop();
-                // // Handle signature validation
-                // // _validateSignature();
               },
-              child: const Text('Validate'),
+              child: Text(local.validate),
             ),
           ],
         );
@@ -246,20 +228,19 @@ class _OwnerSignatureScreenViewState extends State<OwnerSignatureScreenView> {
   }
 
   void _validateSignature() {
+    final local = AppLocalizations.of(context)!;
     if (_signatureController.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please provide a signature before validating'),
+        SnackBar(
+          content: Text(local.provideSignatureError),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
-
-    // Add your signature validation logic here
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Signature validated successfully'),
+      SnackBar(
+        content: Text(local.signatureValidated),
         backgroundColor: Colors.green,
       ),
     );

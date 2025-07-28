@@ -7,7 +7,7 @@ class InstructionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<InstructionScreenBloc>(
       create: (context) => InstructionScreenBloc(),
-      child: InstructionScreenView(),
+      child: const InstructionScreenView(),
     );
   }
 }
@@ -23,41 +23,40 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
   int currentStep = 0;
   final int totalSteps = 5;
 
-  List<String> stepTitles = [
-    "Instruction",
-    "Car Details",
-    "Owner Details",
-    "Client Details",
-    "Client Details"
-  ];
-
   @override
   Widget build(BuildContext context) {
-    String currentTitle = (currentStep < stepTitles.length)
-        ? stepTitles[currentStep]
-        : "Step";
+    final l10n = AppLocalizations.of(context)!;
+
+    List<String> stepTitles = [
+      l10n.instruction,
+      l10n.carDetails,
+      l10n.ownerDetails,
+      l10n.clientDetails,
+      l10n.clientDetails,
+    ];
+
+    String currentTitle =
+    (currentStep < stepTitles.length) ? stepTitles[currentStep] : l10n.step;
+
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: Column(
         children: [
           CustomAppBar(
             backgroundColor: AppColor().backgroundColor,
-            title: "$currentTitle",
-            subTitle: "Step ${currentStep + 1} of $totalSteps",
+            title: currentTitle,
+              subTitle: "${AppLocalizations.of(context)!.step} ${currentStep+1} of $totalSteps"
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Progress indicator
                   _buildProgressIndicator(),
                   const SizedBox(height: 20),
                   vGap(24),
-                  Expanded(
-                    child: _buildStepContent(currentStep),
-                  ),
-                  _buildNavigationButtons(),
+                  Expanded(child: _buildStepContent(currentStep)),
+                  _buildNavigationButtons(l10n),
                 ],
               ),
             ),
@@ -67,14 +66,14 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
     );
   }
 
-  /// progress indicator
+  /// Progress indicator
   Widget _buildProgressIndicator() {
     return Column(
       children: [
         _horizontalSelectiveButtonView(context),
         vGap(16),
         Padding(
-          padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: LayoutBuilder(
             builder: (context, constraints) {
               double fullWidth = constraints.maxWidth;
@@ -91,7 +90,6 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
                       color: Colors.grey[300],
                     ),
                   ),
-                  // Progress yellow fill
                   Container(
                     height: 10,
                     width: progressWidth,
@@ -114,14 +112,14 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
                           BoxShadow(
                             color: Colors.black.withOpacity(0.15),
                             blurRadius: 4,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           )
                         ],
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         '${currentStep + 1}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -137,16 +135,8 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
     );
   }
 
-
-
   Widget _horizontalSelectiveButtonView(BuildContext context) {
-    final icons = [
-      alertIcon,
-      carFrontIcon,
-      passIcon,
-      personDarkIcon,
-      cameraIcon
-    ];
+    final icons = [alertIcon, carFrontIcon, passIcon, personDarkIcon, cameraIcon];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -163,24 +153,26 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isActive
-                  ?  AppColor().darkCharcoalBlueColor
-                  : (isCompleted
-                  ?  AppColor().darkYellowColor
-                  : AppColor().darkYellowColor),
-              boxShadow: isActive ? [
+                  ? AppColor().darkCharcoalBlueColor
+                  : AppColor().darkYellowColor,
+              boxShadow: isActive
+                  ? [
                 BoxShadow(
-                  color:  AppColor().darkCharcoalBlueColor.withOpacity(0.3),
+                  color: AppColor().darkCharcoalBlueColor.withOpacity(0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
-              ] : null,
+              ]
+                  : null,
             ),
             child: Center(
               child: Image.asset(
                 icons[index],
-                width: 32, // Was 12
-                height: 32, // Was 12
-                color: isActive ? AppColor().darkYellowColor : AppColor().darkCharcoalBlueColor,
+                width: 32,
+                height: 32,
+                color: isActive
+                    ? AppColor().darkYellowColor
+                    : AppColor().darkCharcoalBlueColor,
                 fit: BoxFit.contain,
               ),
             ),
@@ -191,21 +183,21 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
   }
 
   Widget _buildContentArea() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        // Guide buttons
         GestureDetector(
-          onTap: (){
+          onTap: () {
             redirectToWebPage("https://www.autoproof24.com/departure-guide/");
           },
-          child: _buildGuideButton("Departure Guide", arrowForwardRoundIcon),
+          child: _buildGuideButton(l10n.departureGuide, arrowForwardRoundIcon),
         ),
         vGap(16),
         GestureDetector(
           onTap: () {
             redirectToWebPage("https://www.autoproof24.com/return-guide/");
           },
-          child: _buildGuideButton("Return Guide", arrowForwardRoundIcon),
+          child: _buildGuideButton(l10n.returnGuide, arrowForwardRoundIcon),
         ),
         vGap(32),
         CustomContainer(
@@ -217,12 +209,15 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                  "AP100001",
-                  style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 30)
+                "AP100001",
+                style: MontserratStyles.montserratMediumTextStyle(
+                  color: AppColor().darkYellowColor,
+                  size: 30,
+                ),
               ),
               vGap(8),
               Text(
-                "Inspection Number",
+                l10n.inspectionNumber,
                 style: TextStyle(
                   fontSize: 16,
                   color: AppColor().darkYellowColor,
@@ -248,35 +243,44 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
         children: [
           Text(
             title,
-            style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkCharcoalBlueColor,size: 18)
+            style: MontserratStyles.montserratSemiBoldTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 18,
+            ),
           ),
-          Image.asset(icon, height: 35,width: 35,color: AppColor().darkCharcoalBlueColor,),
+          Image.asset(
+            icon,
+            height: 35,
+            width: 35,
+            color: AppColor().darkCharcoalBlueColor,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildNavigationButtons() {
+  Widget _buildNavigationButtons(AppLocalizations l10n) {
     return Row(
       children: [
-        Expanded(child: CustomButton(
-          onPressed: currentStep > 0 ? _previousStep : null,
-          text: "Back",
-          side: BorderSide.none,
-        )),
-
-         hGap(16),
         Expanded(
           child: CustomButton(
-              onPressed: currentStep < totalSteps - 1 ? _nextStep : (){
-                context.push(AppRoute.ownerSignatureViewScreen);
-              },
-              text: "Next",
+            onPressed: currentStep > 0 ? _previousStep : null,
+            text: l10n.back,
             side: BorderSide.none,
-
+          ),
+        ),
+        hGap(16),
+        Expanded(
+          child: CustomButton(
+            onPressed: currentStep < totalSteps - 1
+                ? _nextStep
+                : () {
+              context.push(AppRoute.ownerSignatureViewScreen);
+            },
+            text: l10n.next,
+            side: BorderSide.none,
           ),
         )
-
       ],
     );
   }
@@ -303,23 +307,18 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
     });
   }
 
-  // void _handleGuideButtonTap(String guideType) {
-  //
-  //
-  // }
-
   Widget _buildStepContent(int currentStep) {
     switch (currentStep) {
       case 0:
         return _buildStep0();
       case 1:
-        return _buildStep1();
+        return CarDetailsScreen();
       case 2:
-        return _buildStep2();
+        return OwnerDetailsScreen();
       case 3:
-        return _buildStep3();
+        return ClientDetailsScreen();
       case 4:
-        return _buildStep4();
+        return CarImInpectionScreen();
       default:
         return _buildStep0();
     }
@@ -330,41 +329,9 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text(
-          //   "Welcome to Vehicle Inspection",
-          //   style: MontserratStyles.montserratBoldTextStyle(
-          //     color: AppColor().darkCharcoalBlueColor,
-          //     size: 24,
-          //   ),
-          // ),
-          // vGap(16),
-          // Text(
-          //   "Please follow the instructions carefully to complete your vehicle inspection process.",
-          //   style: MontserratStyles.montserratRegularTextStyle(
-          //     color: AppColor().darkCharcoalBlueColor,
-          //     size: 16,
-          //   ),
-          // ),
-          // vGap(24),
           _buildContentArea(),
         ],
       ),
     );
-  }
-
-  Widget _buildStep1() {
-    return CarDetailsScreen();
-  }
-
-  Widget _buildStep2() {
-    return OwnerDetailsScreen();
-  }
-
-  Widget _buildStep3() {
-    return ClientDetailsScreen();
-  }
-
-  Widget _buildStep4() {
-    return CarImInpectionScreen();
   }
 }

@@ -156,7 +156,7 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
             ),
             SizedBox(height: 16),
 
-            _buildCustomSubscriptionCard(
+          /*  _buildCustomSubscriptionCard(
               title: "On-Demand",
               highlightFeature: [
                 "Get flexible, high-volume usage billed dynamically based on real-time demand or integration usage.",
@@ -174,7 +174,7 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
               ],
               buttonTitle: "Contact Sales",
               onTap: () {},
-            ),
+            ),*/
           ],
         ),
       ),

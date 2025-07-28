@@ -26,16 +26,19 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
   final TextEditingController _mobileController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  final _isDrivingLicense = false;
-  final _isDriverId = false;
+  bool _isDrivingLicense = false;
+  bool _isDriverId = false;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _addListenerOwnerDetailsListener();
+    // context.read<OwnerDetailsScreenBloc>().add(
+    //     UpdateOwnerDetailsEvent(ownerDetails: OwnerDetailsModel())
+    // );
   }
 
-  void _addListenerOwnerDetailsListener(){
+  void _addListenerOwnerDetailsListener() {
     _firstNameController.addListener(_updateOwnerDetails);
     _lastNameController.addListener(_updateOwnerDetails);
     _addressController.addListener(_updateOwnerDetails);
@@ -43,24 +46,45 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
     _emailController.addListener(_updateOwnerDetails);
   }
 
-  void _updateOwnerDetails(){
-    final createOwnerDetails = _createOwnerDetails();
-
-  }
-
-  OwnerDetailsModel _createOwnerDetails(){
-    return OwnerDetailsModel(
-        firstName: _firstNameController.text,
-        lastName: _lastNameController.text,
-        mobileNo: _addressController.text,
-        email: _emailController.text,
-        address: _addressController.text,
-        isDriverLicense: _isDrivingLicense,
-        isDriverId: _isDriverId
+  void _updateOwnerDetails() {
+    final ownerDetails = _createOwnerDetails();
+    context.read<OwnerDetailsScreenBloc>().add(
+        UpdateOwnerDetailsEvent(ownerDetails: ownerDetails)
     );
   }
+
+  OwnerDetailsModel _createOwnerDetails() {
+    return OwnerDetailsModel(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      mobileNo: _mobileController.text, // Fixed: was using _addressController
+      email: _emailController.text,
+      address: _addressController.text,
+      isDriverLicense: _isDrivingLicense,
+      isDriverId: _isDriverId,
+    );
+  }
+
+  void _updateDriverLicense(bool value) {
+    setState(() {
+      _isDrivingLicense = value;
+    });
+    context.read<OwnerDetailsScreenBloc>().add(
+        UpdateDriverLicenseEvent(isDriverLicense: value)
+    );
+  }
+
+  void _updateDriverId(bool value) {
+    setState(() {
+      _isDriverId = value;
+    });
+    context.read<OwnerDetailsScreenBloc>().add(
+        UpdateDriverIdEvent(isDriverId: value)
+    );
+  }
+
   @override
-  void dispose(){
+  void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _addressController.dispose();
@@ -73,11 +97,15 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
-      body: SingleChildScrollView(
-        child: Form(
-          child: _buildInformationSection(),
-        ),
-      )
+      body: BlocBuilder<OwnerDetailsScreenBloc, OwnerDetailsScreenState>(
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Form(
+              child: _buildInformationSection(),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -89,8 +117,11 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
         Row(
           children: [
             Text(
-              'Information',
-              style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 18),
+             AppLocalizations.of(context)!.information,
+              style: MontserratStyles.montserratMediumTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 18
+              ),
             ),
             Text(
               ' *',
@@ -99,21 +130,24 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
             Spacer(),
             CustomButton(
               side: BorderSide.none,
-              onPressed: (){},
+              onPressed: _importInformation,
               borderRadius: 12,
-              text: "Import Information",
-              textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 14),
+              text: AppLocalizations.of(context)!.importInformation,
+              textStyle: MontserratStyles.montserratMediumTextStyle(
+                  color: AppColor().darkYellowColor,
+                  size: 14
+              ),
             )
           ],
         ),
-        Divider(color: AppColor().lightSilverGrayColor,),
+        Divider(color: AppColor().lightSilverGrayColor),
         Row(
           children: [
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'First name',
-                hintText: "First name",
+                label: AppLocalizations.of(context)!.firstName,
+                hintText:AppLocalizations.of(context)!.firstName,
                 controller: _firstNameController,
                 isRequired: true,
               ),
@@ -122,21 +156,21 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Last name',
-                hintText: 'Last name',
+                label: AppLocalizations.of(context)!.lastName,
+                hintText: AppLocalizations.of(context)!.lastName,
                 controller: _lastNameController,
                 isRequired: true,
               ),
             ),
           ],
         ),
-        Divider(color: AppColor().lightSilverGrayColor,),
+        Divider(color: AppColor().lightSilverGrayColor),
         Row(
           children: [
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Mobile No.',
+                label: AppLocalizations.of(context)!.phoneNumber,
                 hintText: "1234567890",
                 controller: _mobileController,
                 isRequired: true,
@@ -146,21 +180,21 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Email',
-                hintText: 'Email',
+                label: AppLocalizations.of(context)!.email,
+                hintText: AppLocalizations.of(context)!.email,
                 controller: _emailController,
                 isRequired: true,
               ),
             ),
           ],
         ),
-        Divider(color: AppColor().lightSilverGrayColor,),
+        Divider(color: AppColor().lightSilverGrayColor),
         Row(
           children: [
             Expanded(
               flex: 1,
               child: _buildTextField(
-                label: 'Address.',
+                label: AppLocalizations.of(context)!.address,
                 hintText: "123 Anywhere St, Any City, ST 12345",
                 controller: _addressController,
                 isRequired: true,
@@ -168,118 +202,147 @@ class _OwnerDetailsScreenViewState extends State<OwnerDetailsScreenView> {
             ),
           ],
         ),
-        Divider(color: AppColor().lightSilverGrayColor,),
+        Divider(color: AppColor().lightSilverGrayColor),
         _checkLists(
-          label: "Checklists",
-          title: "I checked and took picture of the original driver’s license. ( Copy not accepted )",
+          label:AppLocalizations.of(context)!.checklist,
+          title: AppLocalizations.of(context)!.licenseInstruction,
           isRequired: true,
-          value: true
+          value: _isDrivingLicense,
+          onChanged: _updateDriverLicense,
         ),
-        Divider(color: AppColor().lightSilverGrayColor,),
+        Divider(color: AppColor().lightSilverGrayColor),
         _checkLists(
-            label: "Checklists",
-            title: "I checked and took picture of the original driver’s ID. ( Copy not accepted )",
-            isRequired: true,
-            value: true
+          label: AppLocalizations.of(context)!.checklist,
+          title: AppLocalizations.of(context)!.licenseInstructionId,
+          isRequired: true,
+          value: _isDriverId,
+          onChanged: _updateDriverId,
         ),
-        vGap(20)
+        vGap(20),
+
+        // Debug section (remove in production)
+        BlocBuilder<OwnerDetailsScreenBloc, OwnerDetailsScreenState>(
+          builder: (context, state) {
+            if (state is OwnerDetailsScreenLoaded) {
+              return Container(
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Current Data in BLoC:',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(height: 8),
+                    Text('Name: ${state.ownerDetails.firstName} ${state.ownerDetails.lastName}'),
+                    Text('Mobile: ${state.ownerDetails.mobileNo}'),
+                    Text('Email: ${state.ownerDetails.email}'),
+                    Text('Address: ${state.ownerDetails.address}'),
+                    Text('Driver License: ${state.ownerDetails.isDriverLicense}'),
+                    Text('Driver ID: ${state.ownerDetails.isDriverId}'),
+                  ],
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
       ],
     );
   }
-}
 
-Widget _checkLists({
-  String?label,
-  String?title,
-  bool? value,
-  bool isRequired = false
-}
-){
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    spacing: 10,
-    children: [
-      Row(
-        children: [
-          Text(
-            label!,
-            style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor,size: 18),
-          ),
-          if (isRequired)
+  void _importInformation() {
+    // Implementation for importing information
+    // You can populate the controllers and update BLoC here
+  }
+
+  Widget _checkLists({
+    required String label,
+    required String title,
+    required bool value,
+    required Function(bool) onChanged,
+    bool isRequired = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
+      children: [
+        Row(
+          children: [
             Text(
-              ' *',
-              style: TextStyle(color: Colors.red,fontSize: 18),
+              label,
+              style: MontserratStyles.montserratMediumTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 18
+              ),
             ),
-        ],
-      ),
-      Text(
-        title!,
-        style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkCharcoalBlueColor,size: 14),
-      ),
-      CustomRectangularSwitch(
+            if (isRequired)
+              Text(
+                ' *',
+                style: TextStyle(color: Colors.red, fontSize: 18),
+              ),
+          ],
+        ),
+        Text(
+          title,
+          style: MontserratStyles.montserratSemiBoldTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 14
+          ),
+        ),
+        CustomRectangularSwitch(
           width: 80,
           height: 40,
           inactiveColor: Colors.red,
           activeColor: Colors.green,
-          value: value!,
-          onChanged: (ttp){
+          value: value,
+          onChanged: onChanged,
+        )
+      ],
+    );
+  }
 
-      } )
-  ],
-  );
-}
-
-Widget _buildTextField({
-  required String label,
-  required TextEditingController controller,
-  String? hintText,
-  bool isRequired = false,
-}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        children: [
-          Text(
-            label,
-            style: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().darkCharcoalBlueColor,size: 14),
-          ),
-          if (isRequired)
+  Widget _buildTextField({
+    required String label,
+    required TextEditingController controller,
+    String? hintText,
+    bool isRequired = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
             Text(
-              ' *',
-              style: TextStyle(color: Colors.red,fontSize: 18),
+              label,
+              style: MontserratStyles.montserratSemiBoldTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 14
+              ),
             ),
-        ],
-      ),
-      SizedBox(height: 8),
-      CustomTextField(
-        fillColor: AppColor().backgroundColor,
-        controller: controller,
-        hintText: hintText,
-        hintStyle: MontserratStyles.montserratSemiBoldTextStyle(color: AppColor().silverShadeGrayColor.withOpacity(0.5),size: 14),
-        borderRadius: 8,
-        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)
-      )
-      // TextFormField(
-      //   controller: controller,
-      //   decoration: InputDecoration(
-      //     hintText: hintText,
-      //     hintStyle: TextStyle(color: Colors.grey[400]),
-      //     border: OutlineInputBorder(
-      //       borderRadius: BorderRadius.circular(8),
-      //       borderSide: BorderSide(color: Colors.grey[300]!),
-      //     ),
-      //     enabledBorder: OutlineInputBorder(
-      //       borderRadius: BorderRadius.circular(8),
-      //       borderSide: BorderSide(color: Colors.grey[300]!),
-      //     ),
-      //     focusedBorder: OutlineInputBorder(
-      //       borderRadius: BorderRadius.circular(8),
-      //       borderSide: BorderSide(color: Colors.blue),
-      //     ),
-      //     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      //   ),
-      // ),
-    ],
-  );
+            if (isRequired)
+              Text(
+                ' *',
+                style: TextStyle(color: Colors.red, fontSize: 18),
+              ),
+          ],
+        ),
+        SizedBox(height: 8),
+        CustomTextField(
+          fillColor: AppColor().backgroundColor,
+          controller: controller,
+          hintText: hintText,
+          hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
+              color: AppColor().silverShadeGrayColor.withOpacity(0.5),
+              size: 14
+          ),
+          borderRadius: 8,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        ),
+      ],
+    );
+  }
 }

@@ -5,16 +5,21 @@ class AboutAppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return BlocProvider(
       create: (_) => AboutAppBloc()..add(LoadAppInfo()),
       child: Scaffold(
         backgroundColor: AppColor().backgroundColor,
         appBar: AppBar(
           backgroundColor: AppColor().backgroundColor,
-          title:  Text('About App',style: MontserratStyles.montserratMediumTextStyle(
-            size: 20,
-            color: AppColor().darkCharcoalBlueColor,
-          ),),
+          title: Text(
+            local.aboutApp,
+            style: MontserratStyles.montserratMediumTextStyle(
+              size: 20,
+              color: AppColor().darkCharcoalBlueColor,
+            ),
+          ),
           centerTitle: true,
           elevation: 1,
         ),
@@ -33,7 +38,7 @@ class AboutAppScreen extends StatelessWidget {
                     // App title
                     Center(
                       child: Text(
-                        'Auto Proof 24',
+                        local.autoProofTitle,
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColor().darkCharcoalBlueColor,
@@ -42,13 +47,12 @@ class AboutAppScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // Card Section for App Description
+                    // About App Section
                     _buildInfoCard(
                       context,
                       icon: Icons.info_outline,
-                      title: 'About the App',
-                      content:
-                      'Auto Proof 24 is a simple, easy-to-use digital car inspection app designed to make vehicle check-ins and check-outs faster, clearer, and more reliable. Whether you’re running a car rental service, managing a dealership, or just want to keep a personal record of your vehicle’s condition, this app is built for you.',
+                      title: local.aboutTheAppTitle,
+                      content: local.aboutTheAppDescription,
                     ),
 
                     const SizedBox(height: 16),
@@ -56,9 +60,8 @@ class AboutAppScreen extends StatelessWidget {
                     _buildInfoCard(
                       context,
                       icon: Icons.flag_outlined,
-                      title: 'Our Goal',
-                      content:
-                      'Our goal is to take the stress out of car inspections by making the process digital, efficient, and completely paper-free.',
+                      title: local.ourGoalTitle,
+                      content: local.ourGoalDescription,
                     ),
 
                     const SizedBox(height: 16),
@@ -66,9 +69,8 @@ class AboutAppScreen extends StatelessWidget {
                     _buildInfoCard(
                       context,
                       icon: Icons.check_circle_outline,
-                      title: 'What You Can Do',
-                      content:
-                      'Create an account, carry out detailed inspections, and receive a professional report instantly by email. The app walks you through each step — take photos, add notes, log mileage, fuel levels, tire conditions, and any existing damage.',
+                      title: local.whatYouCanDoTitle,
+                      content: local.whatYouCanDoDescription,
                     ),
 
                     const SizedBox(height: 16),
@@ -76,9 +78,8 @@ class AboutAppScreen extends StatelessWidget {
                     _buildInfoCard(
                       context,
                       icon: Icons.document_scanner_outlined,
-                      title: 'Digital Reports',
-                      content:
-                      'Every inspection generates a time-stamped digital report that’s automatically shared with both the vehicle owner and the customer, creating a clear and trustworthy record.',
+                      title: local.digitalReportsTitle,
+                      content: local.digitalReportsDescription,
                     ),
 
                     const SizedBox(height: 16),
@@ -86,9 +87,8 @@ class AboutAppScreen extends StatelessWidget {
                     _buildInfoCard(
                       context,
                       icon: Icons.directions_car_filled_outlined,
-                      title: 'Who It’s For',
-                      content:
-                      'Whether you’re handling a fleet or just one vehicle, Auto Proof 24 gives you a smart and reliable way to document your car’s condition — anytime, anywhere.',
+                      title: local.whoItsForTitle,
+                      content: local.whoItsForDescription,
                     ),
 
                     const SizedBox(height: 24),
@@ -96,8 +96,11 @@ class AboutAppScreen extends StatelessWidget {
                     // App Version
                     Center(
                       child: Text(
-                        'App Version: ${state.version}',
-                        style: MontserratStyles.montserratMediumTextStyle(size: 14,color: AppColor().silverShadeGrayColor)
+                        local.appVersion(state.version),
+                        style: MontserratStyles.montserratMediumTextStyle(
+                          size: 14,
+                          color: AppColor().silverShadeGrayColor,
+                        ),
                       ),
                     ),
                   ],
@@ -111,7 +114,6 @@ class AboutAppScreen extends StatelessWidget {
     );
   }
 
-  // Helper widget to style content into nice sections
   Widget _buildInfoCard(BuildContext context,
       {required IconData icon, required String title, required String content}) {
     return Card(
@@ -124,10 +126,11 @@ class AboutAppScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomContainer(
-              padding: EdgeInsets.all(8),
-                borderRadius: BorderRadius.circular(8),
-                backgroundColor: AppColor().darkYellowColor.withOpacity(0.1),
-                child: Icon(icon, color: AppColor().darkYellowColor)),
+              padding: const EdgeInsets.all(8),
+              borderRadius: BorderRadius.circular(8),
+              backgroundColor: AppColor().darkYellowColor.withOpacity(0.1),
+              child: Icon(icon, color: AppColor().darkYellowColor),
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(

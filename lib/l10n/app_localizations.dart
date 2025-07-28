@@ -530,7 +530,7 @@ abstract class AppLocalizations {
   /// **'Change Password'**
   String get changePassword;
 
-  /// No description provided for @information.
+  /// Label for the information section
   ///
   /// In en, this message translates to:
   /// **'Information'**
@@ -997,6 +997,690 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'UI/UX Designer'**
   String get roleUIDesigner;
+
+  /// No description provided for @instruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Instruction'**
+  String get instruction;
+
+  /// No description provided for @carDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Car Details'**
+  String get carDetails;
+
+  /// No description provided for @ownerDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner Details'**
+  String get ownerDetails;
+
+  /// No description provided for @clientDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Client Details'**
+  String get clientDetails;
+
+  /// No description provided for @step.
+  ///
+  /// In en, this message translates to:
+  /// **'Step'**
+  String get step;
+
+  /// Indicates the current step out of the total steps.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String stepOfTotal(int current, int total);
+
+  /// No description provided for @departureGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Departure Guide'**
+  String get departureGuide;
+
+  /// No description provided for @returnGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Return Guide'**
+  String get returnGuide;
+
+  /// No description provided for @inspectionNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspection Number'**
+  String get inspectionNumber;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @welcomeVehicleInspection.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Vehicle Inspection'**
+  String get welcomeVehicleInspection;
+
+  /// No description provided for @followInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Please follow the instructions carefully to complete your vehicle inspection process.'**
+  String get followInstructions;
+
+  /// Button text to import car information
+  ///
+  /// In en, this message translates to:
+  /// **'Import Information'**
+  String get importInformation;
+
+  /// Label for number plate field
+  ///
+  /// In en, this message translates to:
+  /// **'Number Plate'**
+  String get numberPlate;
+
+  /// Hint text for number plate format
+  ///
+  /// In en, this message translates to:
+  /// **'LL-DDD-LL'**
+  String get numberPlateHint;
+
+  /// Label for car brand field
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get brand;
+
+  /// Hint text for car brand
+  ///
+  /// In en, this message translates to:
+  /// **'FERRARI'**
+  String get brandHint;
+
+  /// Label for car model field
+  ///
+  /// In en, this message translates to:
+  /// **'Model'**
+  String get model;
+
+  /// Hint text for car model
+  ///
+  /// In en, this message translates to:
+  /// **'SF90 Stradale'**
+  String get modelHint;
+
+  /// Label for car mileage field
+  ///
+  /// In en, this message translates to:
+  /// **'Mileage'**
+  String get mileage;
+
+  /// Hint text for car mileage
+  ///
+  /// In en, this message translates to:
+  /// **'7.7 kmpl'**
+  String get mileageHint;
+
+  /// Label for gas type dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'Gas Type'**
+  String get gasType;
+
+  /// Diesel fuel type option
+  ///
+  /// In en, this message translates to:
+  /// **'Diesel'**
+  String get diesel;
+
+  /// Petrol fuel type option
+  ///
+  /// In en, this message translates to:
+  /// **'Petrol'**
+  String get petrol;
+
+  /// Electric fuel type option
+  ///
+  /// In en, this message translates to:
+  /// **'Electric'**
+  String get electric;
+
+  /// Hybrid fuel type option
+  ///
+  /// In en, this message translates to:
+  /// **'Hybrid'**
+  String get hybrid;
+
+  /// Label for gas level dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'Gas Level'**
+  String get gasLevel;
+
+  /// Empty gas level option
+  ///
+  /// In en, this message translates to:
+  /// **'Empty'**
+  String get empty;
+
+  /// One eighth gas level
+  ///
+  /// In en, this message translates to:
+  /// **'1/8'**
+  String get oneEighth;
+
+  /// Two eighths gas level
+  ///
+  /// In en, this message translates to:
+  /// **'2/8'**
+  String get twoEighths;
+
+  /// Three eighths gas level
+  ///
+  /// In en, this message translates to:
+  /// **'3/8'**
+  String get threeEighths;
+
+  /// Half gas level
+  ///
+  /// In en, this message translates to:
+  /// **'Half'**
+  String get half;
+
+  /// Five eighths gas level
+  ///
+  /// In en, this message translates to:
+  /// **'5/8'**
+  String get fiveEighths;
+
+  /// Six eighths gas level
+  ///
+  /// In en, this message translates to:
+  /// **'6/8'**
+  String get sixEighths;
+
+  /// Seven eighths gas level
+  ///
+  /// In en, this message translates to:
+  /// **'7/8'**
+  String get sevenEighths;
+
+  /// Full gas level
+  ///
+  /// In en, this message translates to:
+  /// **'Full'**
+  String get full;
+
+  /// Label for tyre condition field
+  ///
+  /// In en, this message translates to:
+  /// **'Tyre Condition'**
+  String get tyreCondition;
+
+  /// Hint text for tyre condition
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get tyreConditionHint;
+
+  /// Label for kilometers per day field
+  ///
+  /// In en, this message translates to:
+  /// **'Km/day'**
+  String get kmDay;
+
+  /// Label for extra kilometers cost field
+  ///
+  /// In en, this message translates to:
+  /// **'Extra KM (€)'**
+  String get extraKm;
+
+  /// Euro currency symbol
+  ///
+  /// In en, this message translates to:
+  /// **'€'**
+  String get euroSymbol;
+
+  /// Label for total price field
+  ///
+  /// In en, this message translates to:
+  /// **'Price Total (€)'**
+  String get priceTotal;
+
+  /// Label for upload insurance button
+  ///
+  /// In en, this message translates to:
+  /// **'Up.insurance'**
+  String get uploadInsurance;
+
+  /// Insurance file name display
+  ///
+  /// In en, this message translates to:
+  /// **'Insrance.jpg'**
+  String get insuranceFile;
+
+  /// Label for the checklist section
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist'**
+  String get checklist;
+
+  /// Label for softy pack checklist item
+  ///
+  /// In en, this message translates to:
+  /// **'Softy Pack'**
+  String get softyPack;
+
+  /// Label for spare wheel checklist item
+  ///
+  /// In en, this message translates to:
+  /// **'Spare Wheel'**
+  String get spareWheel;
+
+  /// Label for phone older checklist item
+  ///
+  /// In en, this message translates to:
+  /// **'Phone older'**
+  String get phoneOlder;
+
+  /// Label for GPS checklist item
+  ///
+  /// In en, this message translates to:
+  /// **'GPS'**
+  String get gps;
+
+  /// Label for charging port checklist item
+  ///
+  /// In en, this message translates to:
+  /// **'Charging Port'**
+  String get chargingPort;
+
+  /// Label for car papers checklist item
+  ///
+  /// In en, this message translates to:
+  /// **'Car Papers'**
+  String get carPapers;
+
+  /// Label for comment section
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get comment;
+
+  /// Hint text for comment field
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Comments'**
+  String get enterComments;
+
+  /// Text shown in file upload area
+  ///
+  /// In en, this message translates to:
+  /// **'Drop the file'**
+  String get dropTheFile;
+
+  /// Error message when image fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading image'**
+  String get errorLoadingImage;
+
+  /// Message when no image is selected
+  ///
+  /// In en, this message translates to:
+  /// **'No image selected'**
+  String get noImageSelected;
+
+  /// Title for validation error dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Validation Errors'**
+  String get validationErrors;
+
+  /// OK button text
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// Title for update profile picture dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Update Profile Picture'**
+  String get updateProfilePicture;
+
+  /// Error message for invalid image format
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid image format or user ID not found'**
+  String get invalidImageFormat;
+
+  /// Error message when image selection fails
+  ///
+  /// In en, this message translates to:
+  /// **'Error selecting image: {error}'**
+  String errorSelectingImage(String error);
+
+  /// No description provided for @licenseInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'I checked and took picture of the original driver\'s license. (Copy not accepted)'**
+  String get licenseInstruction;
+
+  /// No description provided for @licenseInstructionId.
+  ///
+  /// In en, this message translates to:
+  /// **'I checked and took picture of the original driver\'s ID. (Copy not accepted)'**
+  String get licenseInstructionId;
+
+  /// No description provided for @birthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth Date'**
+  String get birthDate;
+
+  /// No description provided for @drivingLicense.
+  ///
+  /// In en, this message translates to:
+  /// **'Driving License'**
+  String get drivingLicense;
+
+  /// No description provided for @dateOfIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of Issue'**
+  String get dateOfIssue;
+
+  /// No description provided for @rentalDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Rental Duration'**
+  String get rentalDuration;
+
+  /// No description provided for @leaseEndDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lease end date & time'**
+  String get leaseEndDateTime;
+
+  /// No description provided for @mandatoryPicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Mandatory Picture'**
+  String get mandatoryPicture;
+
+  /// No description provided for @frontSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Front Side'**
+  String get frontSide;
+
+  /// No description provided for @frontLeftWheel.
+  ///
+  /// In en, this message translates to:
+  /// **'Front Left Wheel'**
+  String get frontLeftWheel;
+
+  /// No description provided for @frontLeftSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Front Left Side'**
+  String get frontLeftSide;
+
+  /// No description provided for @rearLeftSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Rear Left Side'**
+  String get rearLeftSide;
+
+  /// No description provided for @rearLeftWheel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rear Left Wheel'**
+  String get rearLeftWheel;
+
+  /// No description provided for @rearSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Rear Side'**
+  String get rearSide;
+
+  /// No description provided for @backRightWheel.
+  ///
+  /// In en, this message translates to:
+  /// **'Back Right Wheel'**
+  String get backRightWheel;
+
+  /// No description provided for @rearRightSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Rear Right Side'**
+  String get rearRightSide;
+
+  /// No description provided for @frontRightSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Front Right Side'**
+  String get frontRightSide;
+
+  /// No description provided for @frontRightWheel.
+  ///
+  /// In en, this message translates to:
+  /// **'Front Right Wheel'**
+  String get frontRightWheel;
+
+  /// No description provided for @frontSeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Front Seats'**
+  String get frontSeats;
+
+  /// No description provided for @rearSeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Rear Seats'**
+  String get rearSeats;
+
+  /// No description provided for @odometer.
+  ///
+  /// In en, this message translates to:
+  /// **'Odometer'**
+  String get odometer;
+
+  /// No description provided for @optionalImage1.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Image 1'**
+  String get optionalImage1;
+
+  /// No description provided for @optionalImage2.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Image 2'**
+  String get optionalImage2;
+
+  /// No description provided for @optionalImage3.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Image 3'**
+  String get optionalImage3;
+
+  /// No description provided for @ownerSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner Signature'**
+  String get ownerSignature;
+
+  /// No description provided for @signHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Here'**
+  String get signHere;
+
+  /// No description provided for @directlyWithFinger.
+  ///
+  /// In en, this message translates to:
+  /// **'Directly with your finger'**
+  String get directlyWithFinger;
+
+  /// No description provided for @seeReport.
+  ///
+  /// In en, this message translates to:
+  /// **'See Report'**
+  String get seeReport;
+
+  /// No description provided for @validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Validation'**
+  String get validation;
+
+  /// No description provided for @byPressingValidate.
+  ///
+  /// In en, this message translates to:
+  /// **'By Pressing \"Validate\" :'**
+  String get byPressingValidate;
+
+  /// No description provided for @acceptTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'I accept the terms and conditions of Auto Proof.'**
+  String get acceptTerms;
+
+  /// No description provided for @acceptPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'I accept the data protection policy.'**
+  String get acceptPolicy;
+
+  /// No description provided for @confirmLegalSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'I confirm that the signature is legally valid and has the same value as a handwritten signature.'**
+  String get confirmLegalSignature;
+
+  /// No description provided for @allowSignatureUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'This signature may be used by me (or my authorized representative) on the vehicle inspection report.'**
+  String get allowSignatureUsage;
+
+  /// No description provided for @validateSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Validate Signature'**
+  String get validateSignature;
+
+  /// No description provided for @validateSignatureQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to validate this signature?'**
+  String get validateSignatureQuestion;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @validate.
+  ///
+  /// In en, this message translates to:
+  /// **'Validate'**
+  String get validate;
+
+  /// No description provided for @provideSignatureError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a signature before validating'**
+  String get provideSignatureError;
+
+  /// No description provided for @signatureValidated.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature validated successfully'**
+  String get signatureValidated;
+
+  /// No description provided for @clientSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Client Signature'**
+  String get clientSignature;
+
+  /// No description provided for @autoProofTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Proof 24'**
+  String get autoProofTitle;
+
+  /// No description provided for @aboutTheAppTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About the App'**
+  String get aboutTheAppTitle;
+
+  /// No description provided for @aboutTheAppDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Proof 24 is a simple, easy-to-use digital car inspection app designed to make vehicle check-ins and check-outs faster, clearer, and more reliable. Whether you’re running a car rental service, managing a dealership, or just want to keep a personal record of your vehicle’s condition, this app is built for you.'**
+  String get aboutTheAppDescription;
+
+  /// No description provided for @ourGoalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Goal'**
+  String get ourGoalTitle;
+
+  /// No description provided for @ourGoalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Our goal is to take the stress out of car inspections by making the process digital, efficient, and completely paper-free.'**
+  String get ourGoalDescription;
+
+  /// No description provided for @whatYouCanDoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What You Can Do'**
+  String get whatYouCanDoTitle;
+
+  /// No description provided for @whatYouCanDoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account, carry out detailed inspections, and receive a professional report instantly by email. The app walks you through each step — take photos, add notes, log mileage, fuel levels, tire conditions, and any existing damage.'**
+  String get whatYouCanDoDescription;
+
+  /// No description provided for @digitalReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital Reports'**
+  String get digitalReportsTitle;
+
+  /// No description provided for @digitalReportsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Every inspection generates a time-stamped digital report that’s automatically shared with both the vehicle owner and the customer, creating a clear and trustworthy record.'**
+  String get digitalReportsDescription;
+
+  /// No description provided for @whoItsForTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who It’s For'**
+  String get whoItsForTitle;
+
+  /// No description provided for @whoItsForDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Whether you’re handling a fleet or just one vehicle, Auto Proof 24 gives you a smart and reliable way to document your car’s condition — anytime, anywhere.'**
+  String get whoItsForDescription;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'App Version: {version}'**
+  String appVersion(Object version);
 }
 
 class _AppLocalizationsDelegate

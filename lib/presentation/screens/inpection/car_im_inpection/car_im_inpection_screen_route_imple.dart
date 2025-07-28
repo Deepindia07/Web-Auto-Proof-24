@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../utilities/cusom_image_picker.dart';
 
 part 'car_im_inpection_screen.dart';

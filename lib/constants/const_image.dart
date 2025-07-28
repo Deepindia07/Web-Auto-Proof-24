@@ -58,7 +58,20 @@ const String frontRightWheelView = "assets/inspection_images/Frame (7).png";
 const String frontSeatsView = "assets/inspection_images/Group 2.png";
 const String rearSeatsView = "assets/inspection_images/Frame 118.png";
 const String oDoMeeterView = "assets/inspection_images/Frame 119.png";
+const String addIconView = "assets/inspection_images/add_icon.png";
 
 /// Camera Images
 
 const String front_view = "assets/camera_images/front_view.png";
+const String front_left_wheel = "assets/camera_images/front_left_wheel.png";
+const String left_side_wheel = "assets/camera_images/left_side_wheel.png";
+const String rear_left_side = "assets/camera_images/rear_left_side.png";
+const String rear_left_wheel = "assets/camera_images/rear_left_wheel.png";
+const String rear_side = "assets/camera_images/rear_side.png";
+const String back_right_wheel = "assets/camera_images/back_right_wheel.png";
+const String rear_right_side = "assets/camera_images/rear_right_side.png";
+const String front_right_side = "assets/camera_images/front_right_side.png";
+const String front_right_wheel = "assets/camera_images/front_right_wheel.png";
+const String front_seats = "";
+const String rear_seats = "";
+const String odometer = "";

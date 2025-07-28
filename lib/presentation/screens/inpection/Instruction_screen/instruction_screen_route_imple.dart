@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../constants/const_image.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../utilities/custom_widgets.dart';
 import '../car_im_inpection/car_im_inpection_screen_route_imple.dart';
 

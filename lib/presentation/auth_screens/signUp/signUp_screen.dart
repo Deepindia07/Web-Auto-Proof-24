@@ -7,7 +7,7 @@ class RegistrationScreen extends StatefulWidget {
   State<RegistrationScreen> createState() => _RegistrationScreenScreenState();
 }
 
-class _RegistrationScreenScreenState extends State<RegistrationScreen> {
+class _RegistrationScreenScreenState extends State<RegistrationScreen> with WidgetsBindingObserver {
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -19,29 +19,61 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   bool _isEmailVerified = false;
   bool _isPhoneVerified = false;
   bool _isSendingOtp = false;
+  bool _isCheckingVerification = false;
   String selectedCountryCode = "+33";
-
-  // Create the bloc instance
   late final SignUpScreenBloc _signUpBloc;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _signUpBloc = SignUpScreenBloc(apiRepository: AuthenticationApiCall());
     _loadEmailVerificationStatus();
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _fullNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _retypePasswordController.dispose();
+    _signUpBloc.close();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // Reload verification status when app comes back to foreground
+      _loadEmailVerificationStatus();
+    }
+  }
+
   void _loadEmailVerificationStatus() async {
+    setState(() {
+      _isCheckingVerification = true;
+    });
+
     try {
       final isVerified = await SharedPrefsHelper.instance.getBool(isVerifiedEmail);
-      setState(() {
-        _isEmailVerified = isVerified ?? false;
-      });
+      if (mounted) {
+        setState(() {
+          _isEmailVerified = isVerified ?? false;
+          _isCheckingVerification = false;
+        });
+      }
     } catch (e) {
       print('Error loading email verification status: $e');
-      setState(() {
-        _isEmailVerified = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isEmailVerified = false;
+          _isCheckingVerification = false;
+        });
+      }
     }
   }
 
@@ -51,18 +83,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
     } catch (e) {
       print('Error saving email verification status: $e');
     }
-  }
-
-  @override
-  void dispose() {
-    _fullNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _passwordController.dispose();
-    _retypePasswordController.dispose();
-    _signUpBloc.close();
-    super.dispose();
   }
 
   void _handleRegistration(BuildContext context) {
@@ -77,15 +97,15 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
         return;
       }
 
-      if (!_isPhoneVerified) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please verify your phone number first'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
+      // if (!_isPhoneVerified) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text('Please verify your phone number first'),
+      //       backgroundColor: Colors.red,
+      //     ),
+      //   );
+      //   return;
+      // }
 
       String fullPhoneNumber = _phoneController.text;
       String phoneNumber = fullPhoneNumber.replaceAll(RegExp(r'[^\d]'), '');
@@ -123,7 +143,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    // Validate email format
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(_emailController.text.trim())) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -139,7 +158,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
       _isSendingOtp = true;
     });
 
-    // Send OTP request
     _signUpBloc.add(
         SendOtpEmailEvent(email: _emailController.text.trim())
     );
@@ -148,14 +166,10 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   void _navigateToOtpScreen() async {
     final result = await context.push(AppRoute.otpScreen, extra: _emailController.text);
 
+    // Check verification status after returning from OTP screen
+    _loadEmailVerificationStatus();
+
     if (result == true) {
-      setState(() {
-        _isEmailVerified = true;
-      });
-
-      // Save the verification status to SharedPreferences
-      _saveEmailVerificationStatus(true);
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -167,12 +181,51 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
     }
   }
 
-  // Method to reset email verification (useful when email is changed)
   void _resetEmailVerification() {
     setState(() {
       _isEmailVerified = false;
     });
     _saveEmailVerificationStatus(false);
+  }
+
+  Widget _buildEmailVerificationButton() {
+    if (_isCheckingVerification) {
+      return SizedBox(
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(
+              AppColor().darkYellowColor
+          ),
+        ),
+      );
+    }
+
+    if (_isSendingOtp) {
+      return SizedBox(
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(
+              AppColor().darkYellowColor
+          ),
+        ),
+      );
+    }
+
+    return Text(
+      _isEmailVerified
+          ? AppLocalizations.of(context)!.verified
+          : AppLocalizations.of(context)!.verify,
+      textAlign: TextAlign.center,
+      style: MontserratStyles.montserratMediumTextStyle(
+        color: _isEmailVerified
+            ? Colors.green
+            : AppColor().darkYellowColor,
+      ),
+    );
   }
 
   @override
@@ -257,7 +310,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                               ],
                             ),
                             _buildTextField(
-                              readonly: _isEmailVerified??false,
+                              readonly: _isEmailVerified,
                               controller: _emailController,
                               hint: AppLocalizations.of(context)!.emailAddress,
                               onChanged: (value) {
@@ -267,31 +320,10 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                 }
                               },
                               suffix: TextButton(
-                                onPressed: _isEmailVerified || _isSendingOtp
+                                onPressed: (_isEmailVerified || _isSendingOtp || _isCheckingVerification)
                                     ? null
                                     : _handleEmailVerification,
-                                child: _isSendingOtp
-                                    ? SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        AppColor().darkYellowColor
-                                    ),
-                                  ),
-                                )
-                                    : Text(
-                                  _isEmailVerified
-                                      ? AppLocalizations.of(context)!.verified
-                                      : AppLocalizations.of(context)!.verify,
-                                  textAlign: TextAlign.center,
-                                  style: MontserratStyles.montserratMediumTextStyle(
-                                    color: _isEmailVerified
-                                        ? Colors.green
-                                        : AppColor().darkYellowColor,
-                                  ),
-                                ),
+                                child: _buildEmailVerificationButton(),
                               ),
                               icon: Icon(
                                 _isEmailVerified ? Icons.verified : Icons.mail_outline,
@@ -339,10 +371,10 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
                                   padding: const EdgeInsets.all(8),
                                   child: CountryCodePicker(
                                     onChanged: (CountryCode countryCode) {
-                                      setState(() {
-                                        selectedCountryCode = countryCode.toString();
-                                        _isPhoneVerified = false;
-                                      });
+                                      // setState(() {
+                                      //   selectedCountryCode = countryCode.toString();
+                                      //   _isPhoneVerified = false;
+                                      // });
                                       print("Selected Country: ${countryCode.name}");
                                       print("Selected Code: ${countryCode.dialCode}");
                                     },
@@ -557,7 +589,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String hint,
-     bool? readonly,
+    bool readonly = false,
     Widget? icon,
     final Widget? suffix,
     bool isPassword = false,
@@ -568,7 +600,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> {
   }) {
     return CustomTextField(
       controller: controller,
-      // readOnly: readonly,z
+      readOnly: readonly,
       obscureText: isPassword && !isPasswordVisible,
       keyboardType: keyboardType,
       fillColor: AppColor().backgroundColor,

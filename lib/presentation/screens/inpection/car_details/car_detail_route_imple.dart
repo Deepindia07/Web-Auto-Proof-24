@@ -18,6 +18,7 @@ import "package:mime/mime.dart";
 
 import '../../../../auth/server/default_db/sharedprefs_method.dart';
 import '../../../../constants/const_string.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../utilities/custom_switch_button.dart';
 import 'model/car_details_model.dart';
 
