@@ -47,22 +47,22 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: screenHeight * 0.24,
+                height: screenHeight * 0.216, // Reduced from 0.24
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       appLogo,
-                      height: screenHeight * 0.16,
-                      width: screenHeight * 0.16,
+                      height: screenHeight * 0.126, // Reduced from 0.14
+                      width: screenHeight * 0.126, // Reduced from 0.14
                       fit: BoxFit.contain,
                     ),
-                    SizedBox(height: screenHeight * 0.015),
+                    SizedBox(height: screenHeight * 0.0117), // Reduced from 0.013
                     Text(
                       "Auto Proof 24",
                       style: MontserratStyles.montserratBoldTextStyle(
                         color: AppColor().darkCharcoalBlueColor,
-                        size: screenWidth * 0.10,
+                        size: screenWidth * 0.09, // Reduced from 0.10
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -82,70 +82,59 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                     final page = onboardingPages[index];
                     return Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.05,
+                        horizontal: screenWidth * 0.045, // Reduced from 0.05
                       ),
                       child: Column(
                         children: [
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: screenHeight * 0.01,
-                              ),
-                              child: Center(
-                                child: Image.asset(
-                                  page.imagePath,
-                                  width: screenWidth * 0.85,
-                                  height: screenHeight * 0.28,
-                                  fit: BoxFit.contain,
-                                  color: AppColor().darkCharcoalBlueColor,
-                                ),
-                              ),
+                          Center(
+                            child: Image.asset(
+                              page.imagePath,
+                              width: screenWidth * 0.675, // Reduced from 0.75
+                              height: screenHeight * 0.252, // Reduced from 0.28
+                              fit: BoxFit.contain,
+                              color: AppColor().darkCharcoalBlueColor,
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                vGap(screenHeight * 0.01),
-                                Text(
-                                  "${AppLocalizations.of(context)!.welcome}!",
-                                  style: MontserratStyles.montserratBoldTextStyle(
-                                    color: AppColor().darkCharcoalBlueColor,
-                                    size: screenWidth * 0.08,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                vGap(screenHeight * 0.015),
-                                Text(
-                                  AppLocalizations.of(context)!.secureCheckIn,
-                                  style: MontserratStyles.montserratMediumTextStyle(
-                                    color: AppColor().darkCharcoalBlueColor,
-                                    size: screenWidth * 0.045,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                if (page.description.isNotEmpty) ...[
-                                  vGap(screenHeight * 0.003),
-                                  Text(
-                                    AppLocalizations.of(context)!.smartCheckOut,
-                                    style: MontserratStyles.montserratMediumTextStyle(
-                                      color: AppColor().darkCharcoalBlueColor,
-                                      size: screenWidth * 0.045,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                                const Spacer(),
-                              ],
+
+                          // Text content section
+                          // vGap(screenHeight *screenHeight 0.02),
+                          Text(
+                            "${AppLocalizations.of(context)!.welcome}!",
+                            style: MontserratStyles.montserratBoldTextStyle(
+                              color: AppColor().darkCharcoalBlueColor,
+                              size: screenWidth * 0.072, // Reduced from 0.08
                             ),
+                            textAlign: TextAlign.center,
                           ),
+                          vGap(screenHeight * 0.0135), // Reduced from 0.015
+                          Text(
+                            AppLocalizations.of(context)!.secureCheckIn,
+                            style: MontserratStyles.montserratMediumTextStyle(
+                              color: AppColor().darkCharcoalBlueColor,
+                              size: screenWidth * 0.036, // Reduced from 0.040
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          if (page.description.isNotEmpty) ...[
+                            vGap(screenHeight * 0.0135), // Reduced from 0.015
+                            Text(
+                              AppLocalizations.of(context)!.smartCheckOut,
+                              style: MontserratStyles.montserratMediumTextStyle(
+                                color: AppColor().darkCharcoalBlueColor,
+                                size: screenWidth * 0.036, // Reduced from 0.040
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+
+                          // Reduced spacer
+                          vGap(screenHeight * 0.027), // Reduced from 0.03
+
+                          // Button section
                           if (page.showGetStarted)
                             Container(
-                              height: screenHeight * 0.06,
-                              width: screenWidth * 0.5,
-                              margin: EdgeInsets.only(bottom: screenHeight * 0.02),
+                              height: screenHeight * 0.054, // Reduced from 0.06
+                              width: screenWidth * 0.45, // Reduced from 0.5
                               child: CustomButton(
                                 onPressed: () {
                                   _navigateToNextScreen();
@@ -154,22 +143,25 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
                                 text: AppLocalizations.of(context)!.getStarted,
                                 textStyle: MontserratStyles.montserratMediumTextStyle(
                                   color: AppColor().darkCharcoalBlueColor,
-                                  size: 18,
+                                  size: 16.2, // Reduced from 18
                                 ),
-                                borderRadius: 30,
+                                borderRadius: 27, // Reduced from 30
                                 backgroundColor: AppColor().darkYellowColor,
                                 elevation: 0,
                               ),
                             )
                           else
-                            vGap(screenHeight * 0.02),
+                            vGap(screenHeight * 0.018), // Reduced from 0.02
+
+                          // Flexible spacer to fill remaining space
+                          Expanded(child: Container()),
                         ],
                       ),
                     );
                   },
                 ),
               ),
-              vGap(screenHeight * 0.08),
+              vGap(screenHeight * 0.045), // Reduced from 0.05
             ],
           ),
         ),
@@ -219,7 +211,7 @@ class _RoleSelectionViewState extends State<RoleSelectionView> {
 
   @override
   Widget build(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).padding.top * 4;
+    final statusBarHeight = MediaQuery.of(context).padding.top * 3.6; // Reduced from 4
     final screenSize = MediaQuery.of(context).size;
     final screenHeight = screenSize.height;
     final screenWidth = screenSize.width;
@@ -228,54 +220,55 @@ class _RoleSelectionViewState extends State<RoleSelectionView> {
       backgroundColor: AppColor().backgroundColor,
       body: Column(
         children: [
-          vGap(statusBarHeight + 10),
+          vGap(statusBarHeight + 9), // Reduced from 10
           SizedBox(
-            height: screenHeight * 0.24,
+            height: screenHeight * 0.216, // Reduced from 0.24
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
                   appLogo,
-                  height: screenHeight * 0.16,
-                  width: screenHeight * 0.16,
+                  height: screenHeight * 0.126, // Reduced from 0.14
+                  width: screenHeight * 0.126, // Reduced from 0.14
                   fit: BoxFit.contain,
                 ),
-                vGap(screenHeight * 0.015),
+                vGap(screenHeight * 0.0135), // Reduced from 0.015
                 Text(
                   "Auto Proof 24",
                   style: MontserratStyles.montserratBoldTextStyle(
                     color: AppColor().darkCharcoalBlueColor,
-                    size: screenWidth * 0.10,
+                    size: screenWidth * 0.09, // Reduced from 0.10
                   ),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
-
+          vGap(9), // Reduced from 10
           // Role selection title
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.045), // Reduced from 0.05
             child: Text(
               "Select Your Role",
               style: MontserratStyles.montserratSemiBoldTextStyle(
                 color: AppColor().darkCharcoalBlueColor,
-                size: screenWidth * 0.06,
+                size: screenWidth * 0.045, // Reduced from 0.05
               ),
               textAlign: TextAlign.center,
             ),
           ),
 
-          vGap(screenHeight * 0.03),
+          vGap(screenHeight * 0.027), // Reduced from 0.03
 
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.045), // Reduced from 0.05
               child: Column(
                 children: [
                   // Owner Button
                   CustomRoleSelectionButton(
+                    height: screenHeight * 0.0558,
                     title: 'Are you Owner',
                     isSelected: selectedRole == 'owner',
                     onTap: () {
@@ -286,10 +279,11 @@ class _RoleSelectionViewState extends State<RoleSelectionView> {
                     },
                   ),
 
-                  vGap(screenHeight * 0.02),
+                  vGap(screenHeight * 0.018), // Reduced from 0.02
 
                   // Inspector Button
                   CustomRoleSelectionButton(
+                    height: screenHeight * 0.0558,
                     title: 'Are you Inspector',
                     isSelected: selectedRole == 'instructor',
                     onTap: () {

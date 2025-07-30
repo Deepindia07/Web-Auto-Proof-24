@@ -2,6 +2,7 @@ library collect_information_screen_route_implement.dart;
 
 import 'dart:io';
 
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/l10n/app_localizations.dart';

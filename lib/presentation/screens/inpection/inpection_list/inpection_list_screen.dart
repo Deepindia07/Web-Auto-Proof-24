@@ -34,32 +34,36 @@ class _InspectionListScreenViewState extends State<InspectionListScreenView> {
             backgroundColor: AppColor().backgroundColor,
             title: "My Inspections List",
           ),
-          vGap(30),
-          // Toggle Header
           Container(
-            margin: const EdgeInsets.all(16),
+            margin: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: const Color(0xFF2C3E50),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColor().darkCharcoalBlueColor,
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               children: [
                 Expanded(
                   child: GestureDetector(
                     onTap: () => setState(() => isCompleted = true),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: isCompleted ? const Color(0xFFF1C40F) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Completed',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: isCompleted ? Colors.black : Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        decoration: BoxDecoration(
+                          color: isCompleted ? AppColor().darkYellowColor : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          'Completed',
+                          textAlign: TextAlign.center,
+                          style: MontserratStyles.montserratLitleBoldTextStyle(
+                              color: isCompleted ? AppColor().darkCharcoalBlueColor :AppColor().darkYellowColor,
+                            size: 14
+                          )/*TextStyle(
+                            color: isCompleted ? Colors.black : Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),*/
                         ),
                       ),
                     ),
@@ -68,19 +72,21 @@ class _InspectionListScreenViewState extends State<InspectionListScreenView> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () => setState(() => isCompleted = false),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: !isCompleted ? const Color(0xFFF1C40F) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Make Comparison',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: !isCompleted ? Colors.black : Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        decoration: BoxDecoration(
+                          color: !isCompleted ? const Color(0xFFF1C40F) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          'Make Comparison',
+                          textAlign: TextAlign.center,
+                            style: MontserratStyles.montserratLitleBoldTextStyle(
+                                color: !isCompleted ? AppColor().darkCharcoalBlueColor :AppColor().darkYellowColor,
+                                size: 14
+                            )
                         ),
                       ),
                     ),
@@ -191,14 +197,7 @@ class CompletedInspectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -217,8 +216,7 @@ class CompletedInspectionCard extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/images/yellow_car.png',
+                    child: Image.asset(carCopy,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
@@ -240,14 +238,14 @@ class CompletedInspectionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildDetailRow('Identification', inspection.id),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 5),
                       _buildDetailRow('Number Plate', inspection.plate),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 5),
                       _buildDetailRow('Date', inspection.date),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 5),
                       _buildDetailRow('Name', inspection.name),
-                      const SizedBox(height: 8),
-                      _buildStatusRow(),
+                      const SizedBox(height: 5),
+                      // _buildStatusRow(),
                     ],
                   ),
                 ),
@@ -289,7 +287,7 @@ class CompletedInspectionCard extends StatelessWidget {
                       _downloadReport(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2C3E50),
+                      backgroundColor: AppColor().darkCharcoalBlueColor,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
@@ -297,9 +295,10 @@ class CompletedInspectionCard extends StatelessWidget {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
+                    child:  Text(
                       'Download Report',
                       style: TextStyle(
+                        color: AppColor().darkYellowColor,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),
@@ -320,57 +319,51 @@ class CompletedInspectionCard extends StatelessWidget {
       children: [
         Text(
           '$label : ',
-          style: const TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
+          style: MontserratStyles.montserratLitleBoldTextStyle(
+            size: 16,color: AppColor().darkCharcoalBlueColor
+          )
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-            ),
+              style: MontserratStyles.montserratSemiBoldTextStyle(
+                  size: 14,color: AppColor().darkCharcoalBlueColor
+              )
           ),
         ),
       ],
     );
   }
 
-  Widget _buildStatusRow() {
-    return Row(
-      children: [
-        const Text(
-          'Status : ',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.green.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: const Text(
-            'Completed',
-            style: TextStyle(
-              color: Colors.green,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildStatusRow() {
+  //   return Row(
+  //     children: [
+  //        Text(
+  //         'Status : ',
+  //           style: MontserratStyles.montserratLitleBoldTextStyle(
+  //               size: 14,color: AppColor().darkCharcoalBlueColor
+  //           )
+  //       ),
+  //       Container(
+  //         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //         decoration: BoxDecoration(
+  //           color: Colors.green.withOpacity(0.2),
+  //           borderRadius: BorderRadius.circular(4),
+  //         ),
+  //         child: const Text(
+  //           'Completed',
+  //           style: TextStyle(
+  //             color: Colors.green,
+  //             fontSize: 12,
+  //             fontWeight: FontWeight.w600,
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   void _showInspectionReport(BuildContext context) {
-    // Navigate to report screen or show dialog
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Viewing report for ${inspection.id}')),
     );
@@ -397,14 +390,15 @@ class ComparisonInspectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 1),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.1),
+        //     spreadRadius: 1,
+        //     blurRadius: 4,
+        //     offset: const Offset(0, 2),
+        //   ),
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -470,7 +464,7 @@ class ComparisonInspectionCard extends StatelessWidget {
                       _handleCheckIn(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFF1C40F),
+                      backgroundColor: AppColor().darkYellowColor,
                       foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
@@ -495,7 +489,7 @@ class ComparisonInspectionCard extends StatelessWidget {
                       _handleCheckOut(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2C3E50),
+                      backgroundColor: AppColor().darkCharcoalBlueColor,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
@@ -503,9 +497,10 @@ class ComparisonInspectionCard extends StatelessWidget {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
+                    child:  Text(
                       'Check-out Detailed',
                       style: TextStyle(
+                        color: AppColor().darkYellowColor,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),

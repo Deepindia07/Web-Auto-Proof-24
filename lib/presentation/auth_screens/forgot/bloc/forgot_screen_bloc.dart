@@ -4,6 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../auth/data/models/otp_response_model.dart';
+import '../../../../auth/server/default_db/sharedprefs_method.dart';
+import '../../../../constants/const_string.dart';
 
 part 'forgot_screen_event.dart';
 part 'forgot_screen_state.dart';
@@ -31,6 +33,7 @@ class ForgotScreenBloc extends Bloc<ForgotScreenEvent, ForgotScreenState> {
 
       final result = await apiRepository.getOtpforResetPasswordApiCall(dataBody: dataBody);
       if(result.isSuccess){
+        SharedPrefsHelper.instance.setBool(isEmailFromSignUp, false);
         emit(ForgotScreenSuccess(message: 'OTP sent successfully to your email', email: event.email, otpResponse: result.data));
       }else{
         emit(ForgotScreenError(error: result.error));

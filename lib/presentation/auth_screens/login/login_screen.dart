@@ -5,14 +5,14 @@ class LoginScreen extends StatelessWidget {
 
   const LoginScreen({
     super.key,
-   required this.userRole,
+    required this.userRole,
   });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginScreenBloc>(
       create: (context) =>
-          LoginScreenBloc(authRepository: AuthenticationApiCall()),
+          LoginScreenBloc(authRepository: AuthenticationApiCall(),userRole: userRole),
       child: LoginViewScreen(userRole: userRole,),
     );
   }
@@ -47,8 +47,9 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
       CustomLoader.hidePopupLoader(context);
       context.read<LoginScreenBloc>().add(
         LoginSubmitted(
-          emailOrPhone: _emailOrPhoneController.text.trim(),
-          password: _passwordController.text.trim(),
+            emailOrPhone: _emailOrPhoneController.text.trim(),
+            password: _passwordController.text.trim(),
+            refNo: _instructorRefrenceNumberController.text.trim()
         ),
       );
     }
@@ -107,41 +108,41 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if(widget.userRole!="owner")
-                  vGap(screenHeight*0.1),
+                    vGap(screenHeight*0.09), // Reduced from 0.1
                   SizedBox(
-                    height: screenHeight * 0.24,
+                    height: screenHeight * 0.216, // Reduced from 0.24
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.asset(
                           appLogo,
-                          height: screenHeight * 0.16,
-                          width: screenHeight * 0.16,
+                          height: screenHeight * 0.126, // Reduced from 0.14
+                          width: screenHeight * 0.126, // Reduced from 0.14
                           fit: BoxFit.contain,
                         ),
-                        vGap(screenHeight * 0.015),
+                        vGap(screenHeight * 0.0117), // Reduced from 0.013
                         Text(
                           "Auto Proof 24",
                           style: MontserratStyles.montserratBoldTextStyle(
                             color: AppColor().darkCharcoalBlueColor,
-                            size: screenWidth * 0.11,
+                            size: screenWidth * 0.09, // Reduced from 0.10
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ),
-                  vGap(screenHeight * 0.012),
+                  vGap(screenHeight * 0.0009),
                   Text(
                     AppLocalizations.of(context)!.appTitle,
-                    style: MontserratStyles.montserratRegularTextStyle(
-                      size: 14,
+                    style: MontserratStyles.montserratSemiBoldTextStyle(
+                      size: 12, // Reduced from 13
                       color: AppColor().darkCharcoalBlueColor,
                     ),
                   ),
                   if(widget.userRole!="owner")
-                    vGap(screenHeight * 0.030),
+                    vGap(screenHeight * 0.0315), // Reduced from 0.035
                   if(widget.userRole!="owner")
                     CustomTextField(
                       controller: _instructorRefrenceNumberController,
@@ -149,7 +150,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       borderWidth: 2,
                       borderRadius: 30,
                       hintStyle: MontserratStyles.montserratRegularTextStyle(
-                        size: 16,
+                        size: 14, // Reduced from 16
                         color: AppColor().silverShadeGrayColor,
                       ),
                       hintText: "Enter Registration Number"/*AppLocalizations.of(context)!.emailOrPhone*/,
@@ -163,63 +164,63 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       },
                     ),
                   if(widget.userRole!="instructor")
-                    vGap(screenHeight * 0.018),
+                    vGap(screenHeight * 0.0162), // Reduced from 0.018
                   if(widget.userRole!="instructor")
-                  CustomTextField(
-                    controller: _emailOrPhoneController,
-                    fillColor: AppColor().backgroundColor,
-                    borderWidth: 2,
-                    borderRadius: 30,
-                    hintStyle: MontserratStyles.montserratRegularTextStyle(
-                      size: 16,
-                      color: AppColor().silverShadeGrayColor,
+                    CustomTextField(
+                      controller: _emailOrPhoneController,
+                      fillColor: AppColor().backgroundColor,
+                      borderWidth: 2,
+                      borderRadius: 30,
+                      hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
+                        size: 13, // Reduced from 14
+                        color: AppColor().silverShadeGrayColor,
+                      ),
+                      hintText: AppLocalizations.of(context)!.emailOrPhone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppLocalizations.of(
+                            context,
+                          )!.pleaseEnterEmailOrPhoneShort;
+                        }
+                        return null;
+                      },
                     ),
-                    hintText: AppLocalizations.of(context)!.emailOrPhone,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(
-                          context,
-                        )!.pleaseEnterEmailOrPhoneShort;
-                      }
-                      return null;
-                    },
-                  ),
                   if(widget.userRole!="instructor")
-                    vGap(screenHeight * 0.018),
+                    vGap(screenHeight * 0.0162), // Reduced from 0.018
                   if(widget.userRole!="instructor")
                     CustomPasswordField(
-                    controller: _passwordController,
-                    borderWidth: 2,
-                    fillColor: AppColor().backgroundColor,
-                    borderRadius: 30,
-                    hintText: AppLocalizations.of(context)!.password,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(
-                          context,
-                        )!.pleaseEnterPassword;
-                      }
-                      return null;
-                    },
-                  ),
+                      controller: _passwordController,
+                      borderWidth: 2,
+                      fillColor: AppColor().backgroundColor,
+                      borderRadius: 30,
+                      hintText: AppLocalizations.of(context)!.password,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppLocalizations.of(
+                            context,
+                          )!.pleaseEnterPassword;
+                        }
+                        return null;
+                      },
+                    ),
                   if(widget.userRole!="instructor")
-                    vGap(screenHeight * 0.018),
+                    vGap(screenHeight * 0.0162), // Reduced from 0.018
                   if(widget.userRole!="instructor")
                     Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: _onForgetPasswordPressed,
-                        child: Text(
-                          AppLocalizations.of(context)!.forgotPassword,
-                          style: MontserratStyles.montserratSemiBoldTextStyle(
-                            color: AppColor().darkCharcoalBlueColor,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: _onForgetPasswordPressed,
+                          child: Text(
+                            AppLocalizations.of(context)!.forgotPassword,
+                            style: MontserratStyles.montserratSemiBoldTextStyle(
+                              color: AppColor().darkCharcoalBlueColor,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  vGap(screenHeight * 0.018),
+                      ],
+                    ),
+                  vGap(screenHeight * 0.0162), // Reduced from 0.018
                   BlocConsumer<LoginScreenBloc, LoginScreenState>(
                     listener: (context, state) {
                       if (state is LoginSuccess) {
@@ -227,6 +228,14 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           context,
                           AppLocalizations.of(context)!.loginSuccessful,
                         );
+                        print("Regular user login successful");
+                        context.pushReplacement(AppRoute.homeScreen);
+                      } else if (state is EmployeeLoginSuccess) {
+                        CherryToast.success(
+                          context,
+                          AppLocalizations.of(context)!.loginSuccessful,
+                        );
+                        print("Employee/Instructor login successful");
                         context.pushReplacement(AppRoute.homeScreen);
                       } else if (state is LoginFailure) {
                         CherryToast.error(context, state.error);
@@ -249,11 +258,8 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                     builder: (context, state) {
                       return CustomButton(
                         borderRadius: 48,
-                        height: screenHeight * 0.07,
-                        width: screenWidth * 0.95,
-                        /*onPressed: () {
-                          context.push(AppRoute.homeScreen);
-                        },*/
+                        height: screenHeight * 0.0558,
+                        width: screenWidth * 0.855,
                         onPressed: state is LoginLoading || state is EmailValidationLoading
                             ? null
                             : _onLoginPressed,
@@ -262,77 +268,78 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                             : AppLocalizations.of(context)!.login,
                         textStyle: MontserratStyles.montserratMediumTextStyle(
                           color: AppColor().yellowWarmColor,
-                          size: 18,
+                          size: 16,
                         ),
                         elevation: 5,
                         child: state is LoginLoading
                             ? SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: AppColor().yellowWarmColor,
-                                ),
-                              )
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColor().yellowWarmColor,
+                          ),
+                        )
                             : null,
                       );
                     },
                   ),
                   if(widget.userRole!="instructor")
-                    vGap(screenHeight * 0.018),
+                    vGap(screenHeight * 0.0162), // Reduced from 0.018
                   if(widget.userRole!="instructor")
                     BlocBuilder<LoginScreenBloc, LoginScreenState>(
-                    builder: (context, state) {
-                      if (state is EmailValidationLoading) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 16,
-                              width: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppColor().darkCharcoalBlueColor,
+                      builder: (context, state) {
+                        if (state is EmailValidationLoading) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 14, // Reduced from 16
+                                width: 14, // Reduced from 16
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColor().darkCharcoalBlueColor,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              AppLocalizations.of(context)!.validatingEmail,
-                              style:
-                                  MontserratStyles.montserratRegularTextStyle(
-                                    size: 14,
-                                    color: AppColor().darkCharcoalBlueColor,
-                                  ),
-                            ),
-                          ],
+                              SizedBox(width: 8),
+                              Text(
+                                AppLocalizations.of(context)!.validatingEmail,
+                                style:
+                                MontserratStyles.montserratRegularTextStyle(
+                                  size: 13, // Reduced from 14
+                                  color: AppColor().darkCharcoalBlueColor,
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                        return Text(
+                          AppLocalizations.of(context)!.or,
+                          style: MontserratStyles.montserratRegularTextStyle(
+                            size: 14, // Reduced from 16
+                            color: AppColor().darkCharcoalBlueColor,
+                          ),
                         );
-                      }
-                      return Text(
-                        AppLocalizations.of(context)!.or,
-                        style: MontserratStyles.montserratRegularTextStyle(
-                          size: 16,
-                          color: AppColor().darkCharcoalBlueColor,
-                        ),
-                      );
-                    },
-                  ),
+                      },
+                    ),
                   if(widget.userRole!="instructor")
-                    vGap(screenHeight * 0.018),
+                    vGap(screenHeight * 0.0162), // Reduced from 0.018
                   if(widget.userRole!="instructor")
                     CustomButton(
-                    borderRadius: 48,
-                    height: screenHeight * 0.07,
-                    width: screenWidth * 0.95,
-                    onPressed: () {
-                      context.push(AppRoute.signUpScreen);
-                    },
-                    text: AppLocalizations.of(context)!.createAccount,
-                    textStyle: MontserratStyles.montserratMediumTextStyle(
-                      color: AppColor().yellowWarmColor,
-                      size: 18,
+                      borderRadius: 48,
+                      height: screenHeight * 0.0567, // Reduced from 0.063
+                      width: screenWidth * 0.855, // Reduced from 0.95
+                      onPressed: () {
+                        SharedPrefsHelper.instance.setBool(isVerifiedEmail, false);
+                        context.push(AppRoute.signUpScreen);
+                      },
+                      text: AppLocalizations.of(context)!.createAccount,
+                      textStyle: MontserratStyles.montserratMediumTextStyle(
+                        color: AppColor().yellowWarmColor,
+                        size: 15, // Reduced from 17
+                      ),
+                      elevation: 5,
                     ),
-                    elevation: 5,
-                  ),
                 ],
               ),
             ),

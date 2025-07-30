@@ -49,65 +49,68 @@ class CustomAppBar extends StatelessWidget {
             ),
             Positioned(
               left: -50,
-              top: -40,
+              top: -60,
               bottom: 0,
-              child: Container(
-                width: 130,
-                height: 130,
-                decoration: BoxDecoration(
-                  color: circleColor,
-                  shape: BoxShape.circle,
+              child: GestureDetector(
+                onTap: onBackPressed ?? () {
+                  if (isBacked != false) {
+                    Navigator.pop(context);
+                  }
+                },
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: circleColor,
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
             ),
             Positioned(
-              top: 30,
+              top: 25,
               left: 20,
-              child: GestureDetector(
-                onTap:
-                    onBackPressed ?? () => (isBacked) ?? Navigator.pop(context),
-                child: Image.asset(arrowBackIcon, height: 30, width: 30),
-              ),
+              child: Image.asset(arrowBackIcon, height: 20, width: 20),
             ),
             Positioned(
-              top: (largeWidget != null) ? 30 : 40,
+              top: (largeWidget != null) ? 20 : 20,
               right: 20,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end, // This ensures right alignment
                 children: [
                   Text(
                     title,
-                    style:
-                        MontserratStyles.montserratMediumTextStyle(
-                          color: AppColor().darkCharcoalBlueColor,
-                          size: 20,
-                        ) ??
+                    textAlign: TextAlign.end, // Added for extra right alignment
+                    style: MontserratStyles.montserratMediumTextStyle(
+                      color: AppColor().darkCharcoalBlueColor,
+                      size: 20,
+                    ) ??
                         TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
                           color: titleColor,
                         ),
                   ),
-                  if (subTitle != null)
-                    Column(
-                      children: [
-                        vGap(5),
-                        Text(
-                          subTitle!,
-                          style:
-                              MontserratStyles.montserratRegularTextStyle(
-                                color: AppColor().darkCharcoalBlueColor,
-                                size: 10,
-                              ) ??
-                              TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.w600,
-                                color: titleColor,
-                              ),
-                        ),
-                      ],
+                  if (subTitle != null) ...[
+                    vGap(5),
+                    Text(
+                      subTitle!,
+                      textAlign: TextAlign.end, // Added for extra right alignment
+                      style: MontserratStyles.montserratRegularTextStyle(
+                        color: AppColor().darkCharcoalBlueColor,
+                        size: 10,
+                      ) ??
+                          TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.w600,
+                            color: titleColor,
+                          ),
                     ),
-                  if (largeWidget != null)
-                    Column(children: [vGap(12), largeWidget!]),
+                  ],
+                  if (largeWidget != null) ...[
+                    vGap(12),
+                    largeWidget!
+                  ],
                 ],
               ),
             ),

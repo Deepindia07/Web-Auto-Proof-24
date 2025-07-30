@@ -1,4 +1,4 @@
-package com.example.auto_proof
+package com.autoproof.app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

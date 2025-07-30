@@ -29,10 +29,10 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
             subTitle: "01 January 2025 - 9:00PM",
           ),
 
-          vGap(20),
+          vGap(12), // Reduced from 20 to 12
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
                   Expanded(
@@ -40,7 +40,7 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10), // Reduced from 12 to 10
                         border: Border.all(
                           color: Colors.grey.shade300,
                           width: 1,
@@ -49,19 +49,19 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                       child: Stack(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(10), // Reduced from 12 to 10
                             child: Signature(
                               controller: _signatureController,
                               backgroundColor: Colors.white,
                             ),
                           ),
                           Positioned(
-                            bottom: 8,
-                            right: 8,
+                            bottom: 6, // Reduced from 8 to 6
+                            right: 6, // Reduced from 8 to 6
                             child: GestureDetector(
                               onTap: _clearSignature,
                               child: Container(
-                                padding: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(6), // Reduced from 8 to 6
                                 decoration: BoxDecoration(
                                   color: Colors.red.shade100,
                                   shape: BoxShape.circle,
@@ -73,7 +73,7 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                                 child: Icon(
                                   Icons.delete_outline,
                                   color: Colors.red.shade700,
-                                  size: 20,
+                                  size: 18, // Reduced from 20 to 18
                                 ),
                               ),
                             ),
@@ -86,16 +86,16 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                                   Text(
                                     local.signHere,
                                     style: TextStyle(
-                                      fontSize: 24,
+                                      fontSize: 20, // Reduced from 24 to 20
                                       fontWeight: FontWeight.w500,
                                       color: Colors.grey.shade400,
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
+                                  const SizedBox(height: 6), // Reduced from 8 to 6
                                   Text(
                                     local.directlyWithFinger,
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14, // Reduced from 16 to 14
                                       color: Colors.grey.shade400,
                                     ),
                                   ),
@@ -106,7 +106,7 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16), // Reduced from 24 to 16
                   Row(
                     children: [
                       Expanded(
@@ -115,31 +115,31 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                           onPressed: () {},
                           text: local.seeReport,
                           textStyle: MontserratStyles.montserratMediumTextStyle(
-                            size: 16,
+                            size: 14, // Reduced from 16 to 14
                             color: AppColor().darkYellowColor,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12), // Reduced from 16 to 12
                       Expanded(
                         child: CustomButton(
                           side: BorderSide.none,
                           onPressed: () => context.push(AppRoute.homeScreen),
                           text: local.validation,
                           textStyle: MontserratStyles.montserratMediumTextStyle(
-                            size: 16,
+                            size: 14, // Reduced from 16 to 14
                             color: AppColor().darkYellowColor,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16), // Reduced from 24 to 16
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(12), // Reduced from 16 to 12
                     decoration: BoxDecoration(
                       color: Colors.grey.shade50,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(6), // Reduced from 8 to 6
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,10 +148,10 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                           local.byPressingValidate,
                           style: MontserratStyles.montserratMediumTextStyle(
                             color: AppColor().darkCharcoalBlueColor,
-                            size: 16,
+                            size: 14, // Reduced from 16 to 14
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 8), // Reduced from 12 to 8
                         _buildBulletPoint(local.acceptTerms),
                         _buildBulletPoint(local.acceptPolicy),
                         _buildBulletPoint(local.confirmLegalSignature),
@@ -159,7 +159,7 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12), // Reduced from 16 to 12
                 ],
               ),
             ),
@@ -170,14 +170,14 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
   }
 
   Widget _buildBulletPoint(String text) => Padding(
-    padding: const EdgeInsets.only(bottom: 8),
+    padding: const EdgeInsets.only(bottom: 6), // Reduced from 8 to 6
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 4,
           height: 4,
-          margin: const EdgeInsets.only(top: 8, right: 8),
+          margin: const EdgeInsets.only(top: 6, right: 6), // Reduced top margin from 8 to 6
           decoration: const BoxDecoration(
             color: Colors.black87,
             shape: BoxShape.circle,
@@ -188,7 +188,7 @@ class _ClientSignatureScreenViewState extends State<ClientSignatureScreenView> {
             text,
             style: MontserratStyles.montserratRegularTextStyle(
               color: AppColor().darkCharcoalBlueColor,
-              size: 14,
+              size: 13, // Reduced from 14 to 13
             ),
           ),
         ),

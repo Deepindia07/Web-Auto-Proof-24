@@ -62,7 +62,8 @@ class _OtpScreenViewState extends State<OtpScreenView> {
     }
   }
 
-  void _resendCode() {for (var controller in controllers) {
+  void _resendCode() {
+    for (var controller in controllers) {
       controller.clear();
     }
     focusNodes[0].requestFocus();
@@ -72,8 +73,11 @@ class _OtpScreenViewState extends State<OtpScreenView> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
+      resizeToAvoidBottomInset: true, // Important: Allow screen to resize when keyboard appears
       body: SafeArea(
         child: BlocListener<OtpViewBloc, OtpViewState>(
           listener: (context, state) {
@@ -97,165 +101,183 @@ class _OtpScreenViewState extends State<OtpScreenView> {
               }
             }
           },
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 60),
-                    Image.asset(mailIcon, height: 100, width: 100),
-                    Text(
-                      AppLocalizations.of(context)!.email,
-                      style: MontserratStyles.montserratBoldTextStyle(
-                        size: 48,
-                        color: AppColor().darkCharcoalBlueColor,
-                      ),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.verification,
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w300,
-                        color: Color(0xFF4A5568),
-                        height: 1.1,
-                      ),
-                    ),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF9CA3AF),
-                          height: 1.4,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
-                            style: MontserratStyles.montserratNormalTextStyle(
-                              color: AppColor().silverShadeGrayColor,
-                              size: 16,
-                            ),
-                          ),
-                          TextSpan(
-                            text: widget.email,
-                            style: MontserratStyles.montserratNormalTextStyle(
-                              color: AppColor().silverShadeGrayColor,
-                              size: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    vGap(20),
-                  ],
-                ),
-              ),
-              Container(
-                height: 450,
-                padding: EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: AppColor().darkCharcoalBlueColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(48),
-                    topRight: Radius.circular(48),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
                   ),
-                ),
-                child: Column(
-                  children: [
-                    vGap(70),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(4, (index) {
-                        return Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color(0xFF718096),
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextField(
-                            controller: controllers[index],
-                            focusNode: focusNodes[index],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(1),
-                            ],
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: index == 0 ? '1' : '*',
-                              hintStyle: TextStyle(
-                                color: Color(0xFF9CA3AF),
-                                fontSize: 24,
-                              ),
-                            ),
-                            onChanged: (value) => _onCodeChanged(value, index),
-                          ),
-                        );
-                      }),
-                    ),
-                    vGap(32),
-                    BlocBuilder<OtpViewBloc, OtpViewState>(
-                      builder: (context, state) {
-                        return CustomButton(
-                          height: screenSize.height * 0.06,
-                          width: screenSize.width * 0.95,
-                          borderRadius: 48,
-                          backgroundColor: AppColor().yellowWarmColor,
-                          onPressed: state is OtpViewLoading ? null : _verifyCode,
-                          text: state is OtpViewLoading ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
-                          textStyle: MontserratStyles.montserratMediumTextStyle(
-                            color: AppColor().darkCharcoalBlueColor,
-                            size: 20,
-                          ),
-                        );
-                      },
-                    ),
-                    vGap(24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  child: IntrinsicHeight(
+                    child: Column(
                       children: [
-                        Text(
-                          AppLocalizations.of(context)!.dontReceiveCode,
-                          style: TextStyle(
-                            color: Color(0xFF9CA3AF),
-                            fontSize: 14,
+                        // Top content - flexible space
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(height: keyboardHeight > 0 ? 20 : 54), // Reduce spacing when keyboard is open
+                                Image.asset(mailIcon, height: keyboardHeight > 0 ? 60 : 72, width: keyboardHeight > 0 ? 60 : 72),
+                                Text(
+                                  AppLocalizations.of(context)!.email,
+                                  style: MontserratStyles.montserratLitleBoldTextStyle(
+                                    size: keyboardHeight > 0 ? 32 : 43, // Smaller text when keyboard is open
+                                    color: AppColor().darkCharcoalBlueColor,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.verification,
+                                  style: MontserratStyles.montserratSemiBoldTextStyle(
+                                      size: keyboardHeight > 0 ? 32 : 43,
+                                      color: AppColor().darkCharcoalBlueColor
+                                  ),
+                                ),
+                                vGap(keyboardHeight > 0 ? 5 : 9),
+                                RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: keyboardHeight > 0 ? 12 : 14,
+                                      color: Color(0xFF9CA3AF),
+                                      height: 1.4,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
+                                        style: MontserratStyles.montserratRegularTextStyle(
+                                          color: AppColor().silverShadeGrayColor,
+                                          size: keyboardHeight > 0 ? 11 : 13,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: maskEmail(widget.email!),
+                                        style: MontserratStyles.montserratNormalTextStyle(
+                                          color: AppColor().darkCharcoalBlueColor,
+                                          size: keyboardHeight > 0 ? 11 : 13,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                vGap(keyboardHeight > 0 ? 10 : 18),
+                              ],
+                            ),
                           ),
                         ),
-                        BlocBuilder<OtpViewBloc, OtpViewState>(
-                          builder: (context, state) {
-                            return GestureDetector(
-                              onTap: state is OtpViewLoading ? null : _resendCode,
-                              child: Text(
-                                AppLocalizations.of(context)!.resend,
-                                style: TextStyle(
-                                  color: state is OtpViewLoading
-                                      ? Color(0xFF9CA3AF)
-                                      : Color(0xFFECC94B),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        // Bottom container - fixed size but responsive
+                        Container(
+                          height: keyboardHeight > 0 ? 280 : 360, // Reduce height when keyboard is open
+                          padding: EdgeInsets.all(keyboardHeight > 0 ? 20 : 29),
+                          decoration: BoxDecoration(
+                            color: AppColor().darkCharcoalBlueColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(43),
+                              topRight: Radius.circular(43),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              vGap(keyboardHeight > 0 ? 20 : 45),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: List.generate(4, (index) {
+                                  return Container(
+                                    width: 45,
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.white.withOpacity(0.6),
+                                      ),
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    child: TextField(
+                                      controller: controllers[index],
+                                      focusNode: focusNodes[index],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        LengthLimitingTextInputFormatter(1),
+                                      ],
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "*",
+                                        hintStyle: TextStyle(
+                                          color: Color(0xFF9CA3AF),
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      onChanged: (value) => _onCodeChanged(value, index),
+                                    ),
+                                  );
+                                }),
                               ),
-                            );
-                          },
+                              vGap(keyboardHeight > 0 ? 20 : 29),
+                              BlocBuilder<OtpViewBloc, OtpViewState>(
+                                builder: (context, state) {
+                                  return CustomButton(
+                                    height: screenSize.height * 0.054,
+                                    width: screenSize.width * 0.855,
+                                    borderRadius: 43,
+                                    backgroundColor: AppColor().yellowWarmColor,
+                                    onPressed: state is OtpViewLoading ? null : _verifyCode,
+                                    text: state is OtpViewLoading ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
+                                    textStyle: MontserratStyles.montserratMediumTextStyle(
+                                      color: AppColor().darkCharcoalBlueColor,
+                                      size: 18,
+                                    ),
+                                  );
+                                },
+                              ),
+                              vGap(keyboardHeight > 0 ? 15 : 22),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.dontReceiveCode,
+                                    style: MontserratStyles.montserratSemiBoldTextStyle(
+                                        size: 13,
+                                        color: AppColor().silverShadeGrayColor
+                                    ),
+                                  ),
+                                  hGap(5),
+                                  BlocBuilder<OtpViewBloc, OtpViewState>(
+                                    builder: (context, state) {
+                                      return GestureDetector(
+                                        onTap: state is OtpViewLoading ? null : _resendCode,
+                                        child: Text(
+                                          AppLocalizations.of(context)!.resend,
+                                          style: TextStyle(
+                                            color: state is OtpViewLoading
+                                                ? Color(0xFF9CA3AF)
+                                                : Color(0xFFECC94B),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                              if (keyboardHeight == 0) SizedBox(height: 14), // Only add spacing when keyboard is closed
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),

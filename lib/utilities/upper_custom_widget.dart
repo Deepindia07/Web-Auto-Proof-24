@@ -29,12 +29,11 @@ class UpperContainerWidget extends StatelessWidget {
           const Text(
             '...',
             style: TextStyle(
-              fontSize: 50,
+              fontSize: 42,
               color: Color(0xFFF9C529), // Yellow color
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 10),
           RichText(
             textHeightBehavior: const TextHeightBehavior(
               applyHeightToFirstAscent: false,
@@ -56,9 +55,9 @@ class UpperContainerWidget extends StatelessWidget {
                 TextSpan(
                   text: AppLocalizations.of(context)!.createYourAccount,
                   style:
-                  MontserratStyles.montserratBoldTextStyle(
+                  MontserratStyles.montserratLitleBoldTextStyle(
                     color: AppColor().yellowWarmColor,
-                    size: 48,
+                    size: 35,
                   ).copyWith(
                     height: 1.0,
                     letterSpacing: -1.0,

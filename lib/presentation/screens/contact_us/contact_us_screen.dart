@@ -57,30 +57,32 @@ class _ContactUsScreenViewState extends State<ContactUsScreenView> {
 
   Widget _mainScreenView(BuildContext context, AppLocalizations localizations) {
     return Padding(
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.all(12.0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 20,
+          spacing: 5,
           children: [
             CustomContainer(
               backgroundColor: AppColor().backgroundColor,
-              padding: const EdgeInsets.all(16),
               child: Text(
                 localizations.contactUsInfo,
-                style: MontserratStyles.montserratMediumTextStyle(
-                  size: 18,
+                style: MontserratStyles.montserratLitleBoldTextStyle(
+                  size: 16,
                   color: AppColor().darkCharcoalBlueColor,
                 ),
               ),
             ),
+            vGap(10),
+
             Text(
               localizations.writeUs,
               style: MontserratStyles.montserratBoldTextStyle(
-                size: 28,
+                size: 20,
                 color: AppColor().darkCharcoalBlueColor,
               ),
             ),
+            vGap(5),
             _buildCustomTextWidgetView(
               context,
               localizations.subjectLabel,
@@ -88,13 +90,15 @@ class _ContactUsScreenViewState extends State<ContactUsScreenView> {
               _subjectController,
               1,
             ),
+            vGap(10),
             _buildCustomTextWidgetView(
               context,
               localizations.messageLabel,
               localizations.messageHint,
               _messageController,
-              10,
+              5,
             ),
+            vGap(20),
             CustomButton(
               side: BorderSide.none,
               onPressed: () {
@@ -127,7 +131,7 @@ class _ContactUsScreenViewState extends State<ContactUsScreenView> {
         Text(
           title!,
           style: MontserratStyles.montserratMediumTextStyle(
-            size: 18,
+            size: 14,
             color: AppColor().darkCharcoalBlueColor,
           ),
         ),

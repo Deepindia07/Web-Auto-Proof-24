@@ -129,41 +129,49 @@ class _CarImageInpectionScreenViewState
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  local.mandatoryPicture,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  ' *',
-                  style: TextStyle(color: Colors.red, fontSize: 18),
-                ),
-              ],
-            ),
-            const Divider(),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 8,
-                childAspectRatio: 0.7,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    local.mandatoryPicture,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    ' *',
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  ),
+                ],
               ),
-              itemBuilder: (context, index) {
-                final data = items[index];
-                return _buildContainerSideWiseView(
-                  image: data.image,
-                  title: data.title,
-                  onTap: data.onTap,
-                );
-              },
-              itemCount: items.length,
-            ),
-          ],
+              const SizedBox(height: 6),
+              Container(
+                height: 1,
+                color: Colors.grey.withOpacity(0.3),
+              ),
+              const SizedBox(height: 8),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 6,
+                  mainAxisSpacing: 6,
+                  childAspectRatio: 0.75,
+                ),
+                itemBuilder: (context, index) {
+                  final data = items[index];
+                  return _buildContainerSideWiseView(
+                    image: data.image,
+                    title: data.title,
+                    onTap: data.onTap,
+                  );
+                },
+                itemCount: items.length,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -177,21 +185,21 @@ class _CarImageInpectionScreenViewState
     return GestureDetector(
       onTap: onTap,
       child: Column(
-        spacing: 5,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 4,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CustomContainer(
-            height: 88,
-            width: 88,
-            padding: const EdgeInsets.all(8),
+            height: 75,
+            width: 75,
+            padding: const EdgeInsets.all(6),
             backgroundColor: AppColor().backgroundColor,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(color: AppColor().darkCharcoalBlueColor),
             child: Center(
               child: Image.asset(
                 image!,
-                height: 50,
-                width: 50,
+                height: 42,
+                width: 42,
                 color: AppColor().silverShadeGrayColor,
               ),
             ),
@@ -205,7 +213,7 @@ class _CarImageInpectionScreenViewState
                   child: Text(
                     title!,
                     style: MontserratStyles.montserratMediumTextStyle(
-                      size: 8,
+                      size: 7,
                       color: AppColor().darkCharcoalBlueColor,
                     ),
                     textAlign: TextAlign.center,
@@ -213,13 +221,11 @@ class _CarImageInpectionScreenViewState
                     maxLines: 2,
                   ),
                 ),
-                Flexible(
-                  child: Text(
-                    "*",
-                    style: MontserratStyles.montserratMediumTextStyle(
-                      size: 12,
-                      color: Colors.red,
-                    ),
+                Text(
+                  "*",
+                  style: MontserratStyles.montserratMediumTextStyle(
+                    size: 10,
+                    color: Colors.red,
                   ),
                 ),
               ],

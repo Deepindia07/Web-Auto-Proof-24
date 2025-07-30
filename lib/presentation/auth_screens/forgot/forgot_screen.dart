@@ -71,44 +71,44 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
     return SafeArea(
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
+          padding: const EdgeInsets.symmetric(horizontal: 36.0), // Reduced from 40.0
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 lockLayer1Icon,
-                height: 120,
-                width: 120,
+                height: 72, // Reduced from 80
+                width: 72, // Reduced from 80
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 14), // Reduced from 15
               Text(
                 AppLocalizations.of(context)!.forgot,
                 style: MontserratStyles.montserratBoldTextStyle(
-                  size: 36,
+                  size: 43, // Reduced from 48
                   color: AppColor().darkCharcoalBlueColor,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              // const SizedBox(height: ),
               Text(
                 "${AppLocalizations.of(context)!.password}?",
-                style: MontserratStyles.montserratRegularTextStyle(
+                style: MontserratStyles.montserratSemiBoldTextStyle(
                   color: AppColor().darkCharcoalBlueColor,
-                  size: 36,
+                  size: 43, // Reduced from 48
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 9), // Reduced from 10
               Text(
                 AppLocalizations.of(context)!.resetInstructionsMessage,
                 style: MontserratStyles.montserratNormalTextStyle(
                   color: AppColor().darkCharcoalBlueColor,
-                  size: 18,
+                  size: 16, // Reduced from 18
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 300),
+              const SizedBox(height: 270), // Reduced from 300
             ],
           ),
         ),
@@ -122,14 +122,14 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
       onClosing: () {},
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.45,
+          height: MediaQuery.of(context).size.height * 0.405, // Reduced from 0.45
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 36), // Reduced from 30, 40
           decoration: BoxDecoration(
             color: AppColor().darkCharcoalBlueColor,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50),
-              topRight: Radius.circular(50),
+              topLeft: Radius.circular(45), // Reduced from 50
+              topRight: Radius.circular(45), // Reduced from 50
             ),
           ),
           child: _buildFormContent(context),
@@ -145,25 +145,25 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 18), // Reduced from 20
           SizedBox(
             width: double.infinity,
             child: CustomTextField(
               textStyle: MontserratStyles.montserratSemiBoldTextStyle(
-                size: 16,
+                size: 14, // Reduced from 16
                 color: AppColor().darkYellowColor,
               ),
               controller: _emailOrPhoneController,
-              borderRadius: 48,
+              borderRadius: 43, // Reduced from 48
               prefixIcon: Icon(
                 Icons.mail_outline,
-                size: 20,
+                size: 18, // Reduced from 20
                 color: AppColor().darkYellowColor,
               ),
               hintText: AppLocalizations.of(context)!.enterEmailOrPhone,
               borderWidth: 2,
               hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
-                size: 16,
+                size: 14, // Reduced from 16
                 color: AppColor().darkYellowColor,
               ),
               borderColor: AppColor().darkYellowColor,
@@ -181,30 +181,30 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               },
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 27), // Reduced from 30
           BlocBuilder<ForgotScreenBloc, ForgotScreenState>(
             builder: (context, state) {
               return SizedBox(
-                height: 55,
+                height: 45, // Reduced from 50
                 width: double.infinity,
                 child: CustomButton(
-                  height: 55,
+                  height: 45, // Reduced from 50
                   width: double.infinity,
-                  borderRadius: 48,
+                  borderRadius: 43, // Reduced from 48
                   onPressed: state is ForgotScreenLoading ? null : _handleResetPassword,
                   backgroundColor: state is ForgotScreenLoading
                       ? AppColor().darkYellowColor.withOpacity(0.6)
                       : AppColor().darkYellowColor,
                   text: state is ForgotScreenLoading ? AppLocalizations.of(context)!.resetPassword : AppLocalizations.of(context)!.resetPassword,
                   textStyle: MontserratStyles.montserratSemiBoldTextStyle(
-                    size: 16,
+                    size: 14, // Reduced from 16
                     color: AppColor().darkCharcoalBlueColor,
                   ),
                 ),
               );
             },
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 36), // Reduced from 40
           GestureDetector(
             onTap: () => context.pop(),
             child: Column(
@@ -214,15 +214,15 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
                 Text(
                   AppLocalizations.of(context)!.backToLogin,
                   style: MontserratStyles.montserratMediumTextStyle(
-                    size: 16,
+                    size: 14, // Reduced from 16
                     color: AppColor().darkYellowColor,
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 14), // Reduced from 15
                 Image.asset(
                   arrowbackRoundIcon,
-                  height: 35,
-                  width: 35,
+                  height: 32, // Reduced from 35
+                  width: 32, // Reduced from 35
                 ),
               ],
             ),

@@ -124,12 +124,10 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         ),
                         Text(
                           AppLocalizations.of(context)!.password,
-                          style: TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.w300,
-                            color: Color(0xFF4A5568),
-                            height: 1.1,
-                          ),
+                          style: MontserratStyles.montserratSemiBoldTextStyle(
+                            size: 48,
+                            color: AppColor().darkCharcoalBlueColor
+                          )
                         ),
                         RichText(
                           textAlign: TextAlign.center,
@@ -148,7 +146,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                                 ),
                               ),
                               TextSpan(
-                                text: '${widget.email}',
+                                text: maskEmail('${widget.email}'),
                                 style: MontserratStyles.montserratNormalTextStyle(
                                   color: AppColor().silverShadeGrayColor,
                                   size: 16,
@@ -162,7 +160,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                     ),
                   ),
                   Container(
-                    height: screenSize.height * 0.48,
+                    height: screenSize.height * 0.45,
                     padding: EdgeInsets.all(32),
                     decoration: BoxDecoration(
                       color: AppColor().darkCharcoalBlueColor,
@@ -172,9 +170,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       ),
                     ),
                     child: Column(
-                      spacing: 20,
                       children: [
-                        vGap(30),
+                        vGap(20),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -204,6 +201,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                               ),
                           ],
                         ),
+                        vGap(20),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -233,9 +231,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                               ),
                           ],
                         ),
-                        vGap(1),
+                        vGap(25),
                         CustomButton(
-                          height: screenSize.height * 0.06,
+                          height: screenSize.height * 0.055,
                           width: screenSize.width * 0.95,
                           borderRadius: 48,
                           backgroundColor: AppColor().yellowWarmColor,

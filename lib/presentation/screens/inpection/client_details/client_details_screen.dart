@@ -27,15 +27,11 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
   final TextEditingController _birthDayController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _drivingLicenseController =
-      TextEditingController();
+  final TextEditingController _drivingLicenseController = TextEditingController();
   final TextEditingController _dateOfIssueController = TextEditingController();
-  final TextEditingController _rentalDurationController =
-      TextEditingController();
-  final TextEditingController _leaseEndDateTimeController =
-      TextEditingController();
+  final TextEditingController _rentalDurationController = TextEditingController();
+  final TextEditingController _leaseEndDateTimeController = TextEditingController();
 
-  // State variables for checkboxes
   bool _driverLicenseChecked = false;
   bool _driverIdChecked = false;
 
@@ -59,8 +55,6 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
       rentalDuration: _rentalDurationController.text,
       leaseEndDateTime: _leaseEndDateTimeController.text,
     );
-
-    // _bloc.add(AddClientDetailsEvent(clientDetails));
   }
 
   void _resetFields() {
@@ -101,6 +95,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Added padding
         child: Form(child: _buildInformationSection()),
       ),
     );
@@ -109,166 +104,151 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
   Widget _buildInformationSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 12,
       children: [
+        // Header section - compact
         Row(
           children: [
             Text(
               AppLocalizations.of(context)!.information,
               style: MontserratStyles.montserratMediumTextStyle(
                 color: AppColor().darkCharcoalBlueColor,
-                size: 18,
+                size: 16, // Reduced from 18
               ),
             ),
-            Text(' *', style: TextStyle(color: Colors.red)),
+            Text(' *', style: TextStyle(color: Colors.red, fontSize: 16)),
             Spacer(),
             CustomButton(
               side: BorderSide.none,
               onPressed: () {},
-              borderRadius: 12,
+              borderRadius: 8, // Reduced from 12
               text: AppLocalizations.of(context)!.importInformation,
               textStyle: MontserratStyles.montserratMediumTextStyle(
                 color: AppColor().darkYellowColor,
-                size: 14,
+                size: 12, // Reduced from 14
               ),
             ),
           ],
         ),
-        Divider(color: AppColor().lightSilverGrayColor),
+        SizedBox(height: 8), // Replaced Divider
+
+        // Personal info row - 3 fields in one row (more compact)
         Row(
           children: [
             Expanded(
-              flex: 1,
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.firstName,
                 hintText: AppLocalizations.of(context)!.firstName,
-                controller:
-                    _firstNameController, // Fixed: was using wrong controller
+                controller: _firstNameController,
                 isRequired: true,
               ),
             ),
-            SizedBox(width: 16),
+            SizedBox(width: 8), // Reduced spacing
             Expanded(
-              flex: 1,
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.lastName,
                 hintText: AppLocalizations.of(context)!.lastName,
-                controller: _lastNameController, // Already correct
-                isRequired: true,
-              ),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              flex: 1,
-              child: _buildTextField(
-                label:  AppLocalizations.of(context)!.birthDate,
-                hintText: '02/12/1982',
-                controller:
-                    _birthDayController,
-                isRequired: true,
-              ),
-            ),
-          ],
-        ),
-        Divider(color: AppColor().lightSilverGrayColor),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: _buildTextField(
-                label: AppLocalizations.of(context)!.phone ,
-                hintText: "1234567890",
-                controller:
-                    _mobileController, // Fixed: was using _firstNameController
+                controller: _lastNameController,
                 isRequired: true,
               ),
             ),
             SizedBox(width: 8),
             Expanded(
-              flex: 1,
+              child: _buildTextField(
+                label: AppLocalizations.of(context)!.birthDate,
+                hintText: '02/12/1982',
+                controller: _birthDayController,
+                isRequired: true,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10), // Reduced spacing
+
+        // Contact info row
+        Row(
+          children: [
+            Expanded(
+              child: _buildTextField(
+                label: AppLocalizations.of(context)!.phone,
+                hintText: "1234567890",
+                controller: _mobileController,
+                isRequired: true,
+              ),
+            ),
+            SizedBox(width: 8),
+            Expanded(
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.email,
                 hintText: 'abcd@gmail.com',
-                controller:
-                    _emailController, // Fixed: was using _lastNameController
+                controller: _emailController,
                 isRequired: true,
               ),
             ),
           ],
         ),
-        Divider(color: AppColor().lightSilverGrayColor),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: _buildTextField(
-                label: AppLocalizations.of(context)!.address,
-                hintText: "123 Anywhere St, Any City, ST 12345",
-                controller: _addressController, // Already correct
-                isRequired: true,
-              ),
-            ),
-          ],
+        SizedBox(height: 10),
+
+        // Address field
+        _buildTextField(
+          label: AppLocalizations.of(context)!.address,
+          hintText: "123 Anywhere St, Any City, ST 12345",
+          controller: _addressController,
+          isRequired: true,
         ),
-        Divider(color: AppColor().lightSilverGrayColor),
+        SizedBox(height: 10),
+
+        // License info row
         Row(
           children: [
             Expanded(
-              flex: 1,
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.drivingLicense,
                 hintText: "00-000-00",
-                controller:
-                    _drivingLicenseController, // Fixed: was using _firstNameController
+                controller: _drivingLicenseController,
                 isRequired: true,
               ),
             ),
             SizedBox(width: 8),
             Expanded(
-              flex: 1,
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.dateOfIssue,
                 hintText: '7.7.25',
-                controller:
-                    _dateOfIssueController, // Fixed: was using _lastNameController
+                controller: _dateOfIssueController,
                 isRequired: true,
               ),
             ),
           ],
         ),
-        Divider(color: AppColor().lightSilverGrayColor),
+        SizedBox(height: 10),
+
+        // Rental info row
         Row(
           children: [
             Expanded(
-              flex: 1,
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.rentalDuration,
                 hintText: "2",
-                controller:
-                    _rentalDurationController, // Fixed: was using _firstNameController
+                controller: _rentalDurationController,
                 isRequired: true,
               ),
             ),
             SizedBox(width: 8),
             Expanded(
-              flex: 1,
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.leaseEndDateTime,
                 hintText: '2025/12/18 at 9:00 AM',
-                controller:
-                    _leaseEndDateTimeController, // Fixed: was using _lastNameController
+                controller: _leaseEndDateTimeController,
                 isRequired: true,
               ),
             ),
           ],
         ),
+        SizedBox(height: 12),
 
-        Divider(color: AppColor().lightSilverGrayColor),
-        _checkLists(
+        // Compact checklist items
+        _buildCompactCheckList(
           label: AppLocalizations.of(context)!.checklist,
-          title:
-          AppLocalizations.of(context)!.licenseInstruction,
-          isRequired: true,
+          title: AppLocalizations.of(context)!.licenseInstruction,
           value: _driverLicenseChecked,
           onChanged: (value) {
             setState(() {
@@ -276,12 +256,11 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             });
           },
         ),
-        Divider(color: AppColor().lightSilverGrayColor),
-        _checkLists(
+        SizedBox(height: 8),
+
+        _buildCompactCheckList(
           label: AppLocalizations.of(context)!.checklist,
-          title:
-          AppLocalizations.of(context)!.licenseInstructionId,
-          isRequired: true,
+          title: AppLocalizations.of(context)!.licenseInstructionId,
           value: _driverIdChecked,
           onChanged: (value) {
             setState(() {
@@ -289,49 +268,49 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             });
           },
         ),
-        vGap(20),
+        SizedBox(height: 16), // Reduced from vGap(20)
       ],
     );
   }
 
-  Widget _checkLists({
-    String? label,
-    String? title,
-    bool? value,
-    bool isRequired = false,
+  // New compact checklist widget (horizontal layout)
+  Widget _buildCompactCheckList({
+    required String label,
+    required String title,
+    required bool value,
     required Function(bool) onChanged,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 10,
+    return Row(
       children: [
-        Row(
-          children: [
-            Text(
-              label!,
-              style: MontserratStyles.montserratMediumTextStyle(
-                color: AppColor().darkCharcoalBlueColor,
-                size: 18,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$label *',
+                style: MontserratStyles.montserratMediumTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 14, // Reduced from 18
+                ),
               ),
-            ),
-            if (isRequired)
-              Text(' *', style: TextStyle(color: Colors.red, fontSize: 18)),
-          ],
-        ),
-        Text(
-          title!,
-          style: MontserratStyles.montserratSemiBoldTextStyle(
-            color: AppColor().darkCharcoalBlueColor,
-            size: 14,
+              SizedBox(height: 4), // Reduced spacing
+              Text(
+                title,
+                style: MontserratStyles.montserratSemiBoldTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 12, // Reduced from 14
+                ),
+              ),
+            ],
           ),
         ),
         CustomRectangularSwitch(
-          width: 80,
-          height: 40,
+          width: 60, // Reduced from 80
+          height: 30, // Reduced from 40
           inactiveColor: Colors.red,
           activeColor: Colors.green,
-          value: value!,
-          onChanged: onChanged, // Fixed: now properly handles state changes
+          value: value,
+          onChanged: onChanged,
         ),
       ],
     );
@@ -348,28 +327,31 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
       children: [
         Row(
           children: [
-            Text(
-              label,
-              style: MontserratStyles.montserratSemiBoldTextStyle(
-                color: AppColor().darkCharcoalBlueColor,
-                size: 14,
+            Flexible( // Added Flexible to prevent overflow
+              child: Text(
+                label,
+                style: MontserratStyles.montserratSemiBoldTextStyle(
+                  color: AppColor().darkCharcoalBlueColor,
+                  size: 12, // Reduced from 14
+                ),
+                overflow: TextOverflow.ellipsis, // Handle long labels
               ),
             ),
             if (isRequired)
-              Text(' *', style: TextStyle(color: Colors.red, fontSize: 18)),
+              Text(' *', style: TextStyle(color: Colors.red, fontSize: 12)),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 6), // Reduced from 8
         CustomTextField(
           fillColor: AppColor().backgroundColor,
           controller: controller,
           hintText: hintText,
           hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
             color: AppColor().silverShadeGrayColor.withOpacity(0.5),
-            size: 14,
+            size: 11, // Reduced from 14
           ),
-          borderRadius: 8,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          borderRadius: 6, // Reduced from 8
+          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), // Reduced padding
         ),
       ],
     );

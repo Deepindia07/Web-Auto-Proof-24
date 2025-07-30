@@ -9,6 +9,7 @@ import 'package:auto_proof/constants/const_api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../data/models/employee_login_response_model.dart';
 import '../../data/models/get_all_inpection_list_response_model.dart';
 import '../../data/models/login_response_model.dart';
 import '../../data/models/post_inspector_role_response_model.dart';
@@ -29,6 +30,22 @@ class AuthenticationApiCall implements AuthAbstraction{
       final response = await dioClient.post(ApiEndPoints.login, data: dataBody);
       final Map<String, dynamic> data = response.data;
       final loginResponse = LoginResponseModel.fromJson(data);
+      print("Login Data: ${loginResponse}");
+      return Result.success(loginResponse);
+    } on DioException catch (dioError) {
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint(error.toString());
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+  @override
+  Future<Result<EmployeeLoginResponseModel, String>> loginEmployeeApiCall({Map<String, dynamic>? dataBody}) async {
+    try {
+      final response = await dioClient.post(ApiEndPoints.inspectionLoginEnd, data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      final loginResponse = EmployeeLoginResponseModel.fromJson(data);
       print("Login Data: ${loginResponse}");
       return Result.success(loginResponse);
     } on DioException catch (dioError) {
@@ -149,7 +166,7 @@ class AuthenticationApiCall implements AuthAbstraction{
   @override
   Future<Result<UserResponseModel, String>> userProfileApiCall({Map<String, dynamic>? dataBody, required String id}) async {
     try {
-      final response = await dioClient.get("${ApiEndPoints.profileApiEnd}/$id", data: dataBody);
+      final response = await dioClient.get("${ApiEndPoints.profileApiEnd}", data: dataBody);
       final Map<String, dynamic> data = response.data;
       debugPrint("API Response Data: ${response.data}");
       final otpResponse = UserResponseModel.fromJson(data);

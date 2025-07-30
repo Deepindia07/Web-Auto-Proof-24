@@ -16,7 +16,7 @@ class CollectInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CollectInformationScreenBloc(
-        authenticationApiCall: AuthenticationApiCall()
+          authenticationApiCall: AuthenticationApiCall()
       ),
       child: CollectInformationScreenView(
         isBacked: isBacked,
@@ -48,6 +48,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
   bool _rememberSetting = false;
   bool _isDataLoaded = false;
   File? _selectedCompanyLogo;
+  final userRole = SharedPrefsHelper.instance.getString(roleKey);
 
   final _formKey = GlobalKey<FormState>();
 
@@ -160,45 +161,23 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(20), // Reduced from 24 to 20 (-17%)
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _selectedInformationType == "personal"
                 ? _buildPersonalInformationForm()
                 : _buildCompanyInformationForm(),
-            SizedBox(height: 32),
-            _buildRadioSelection(),
-            SizedBox(height: 32),
+            SizedBox(height: 28), // Reduced from 32 to 28 (-12%)
+            if(userRole != "instructor")
+              _buildRadioSelection(),
+            SizedBox(height: 28), // Reduced from 32 to 28 (-12%)
             _buildNavigationButtons(),
           ],
         ),
       ),
     );
   }
-/*  Widget _buildInformationView(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Content based on selection (Personal shown by default)
-            _selectedInformationType == 'personal'
-                ? _buildPersonalInformationForm()
-                : _buildCompanyInformationForm(),
-
-            SizedBox(height: 32),
-            _buildRadioSelection(),
-
-            SizedBox(height: 32),
-            _buildNavigationButtons(),
-          ],
-        ),
-      ),
-    );
-  }*/
 
   Widget _buildRadioSelection() {
     return Column(
@@ -207,12 +186,12 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
         Text(
           AppLocalizations.of(context)!.informationType,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14, // Reduced from 16 to 14 (-12%)
             fontWeight: FontWeight.w600,
             color: Colors.grey[800],
           ),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: 10), // Reduced from 12 to 10 (-17%)
         Row(
           children: [
             Expanded(
@@ -220,7 +199,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                 title: Text(
                   AppLocalizations.of(context)!.personal,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13, // Reduced from 14 to 13 (-7%)
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[800],
                   ),
@@ -241,7 +220,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                 title: Text(
                   AppLocalizations.of(context)!.company,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13, // Reduced from 14 to 13 (-7%)
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[800],
                   ),
@@ -273,7 +252,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 15,
+          spacing: 13, // Reduced from 15 to 13 (-13%)
           children: [
             Row(
               children: [
@@ -290,7 +269,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                     },
                   ),
                 ),
-                SizedBox(width: 16),
+                SizedBox(width: 14), // Reduced from 16 to 14 (-12%)
                 Expanded(
                   child: _buildTextField(
                     hint: AppLocalizations.of(context)!.lastName,
@@ -308,8 +287,8 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
             ),
             _buildTextField(
               prefix: CustomContainer(
-                height: 50,
-                width: 80,
+                height: 45, // Reduced from 50 to 45 (-10%)
+                width: 72, // Reduced from 80 to 72 (-10%)
                 border: Border.all(
                   width: 2,
                   color: _isPhoneNumberFocused
@@ -321,7 +300,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                     bottomLeft: Radius.circular(8)
                 ),
                 backgroundColor: AppColor().backgroundColor,
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(7), // Reduced from 8 to 7 (-12%)
                 child: CountryCodePicker(
                   onChanged: (CountryCode countryCode) {
                     setState(() {
@@ -337,7 +316,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                   alignLeft: false,
                   textStyle: TextStyle(
                     color: AppColor().darkCharcoalBlueColor,
-                    fontSize: 16,
+                    fontSize: 14, // Reduced from 16 to 14 (-12%)
                   ),
                   dialogTextStyle: TextStyle(
                     color: AppColor().darkCharcoalBlueColor,
@@ -346,7 +325,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                     color: AppColor().darkCharcoalBlueColor,
                   ),
                   searchDecoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 5),
+                    contentPadding: EdgeInsets.symmetric(vertical: 4), // Reduced from 5 to 4 (-20%)
                     hintText: AppLocalizations.of(context)!.searchCountry,
                     hintStyle: TextStyle(
                       color: AppColor().darkCharcoalBlueColor.withOpacity(0.6),
@@ -364,8 +343,8 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                   ),
                   dialogBackgroundColor: AppColor().backgroundColor,
                   barrierColor: Colors.black54,
-                  dialogSize: Size(MediaQuery.of(context).size.width * 0.8,
-                      MediaQuery.of(context).size.height * 0.6),
+                  dialogSize: Size(MediaQuery.of(context).size.width * 0.72, // Reduced from 0.8 to 0.72 (-10%)
+                      MediaQuery.of(context).size.height * 0.54), // Reduced from 0.6 to 0.54 (-10%)
                   builder: (countryCode) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -374,16 +353,16 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                           Image.asset(
                             countryCode.flagUri!,
                             package: 'country_code_picker',
-                            width: 24,
-                            height: 18,
+                            width: 22, // Reduced from 24 to 22 (-8%)
+                            height: 16, // Reduced from 18 to 16 (-11%)
                             fit: BoxFit.fill,
                           ),
-                        hGap(5),
+                        hGap(4), // Reduced from 5 to 4 (-20%)
                         Text(
                           countryCode!.dialCode ?? '',
                           style: TextStyle(
                             color: AppColor().darkCharcoalBlueColor,
-                            fontSize: 14,
+                            fontSize: 13, // Reduced from 14 to 13 (-7%)
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -463,7 +442,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 15,
+          spacing: 13, // Reduced from 15 to 13 (-13%)
           children: [
             Row(
               children: [
@@ -474,12 +453,12 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                       Text(
                         AppLocalizations.of(context)!.companyLogo,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14, // Reduced from 16 to 14 (-12%)
                           fontWeight: FontWeight.w500,
                           color: Colors.grey[800],
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 7), // Reduced from 8 to 7 (-12%)
                       GestureDetector(
                         onTap: () async {
                           // Use the custom image selector
@@ -498,7 +477,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                           }
                         },
                         child: Container(
-                          height: 120,
+                          height: 108, // Reduced from 120 to 108 (-10%)
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: _isCompanyLogoSelected ? Colors.grey[300]! : Colors.red,
@@ -511,12 +490,12 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                       ),
                       if (!_isCompanyLogoSelected)
                         Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
+                          padding: const EdgeInsets.only(top: 3.5), // Reduced from 4.0 to 3.5 (-12%)
                           child: Text(
                             AppLocalizations.of(context)!.companyLogoRequired,
                             style: TextStyle(
                               color: Colors.red,
-                              fontSize: 12,
+                              fontSize: 11, // Reduced from 12 to 11 (-8%)
                             ),
                           ),
                         ),
@@ -672,15 +651,15 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
         children: [
           Icon(
             Icons.cloud_upload_outlined,
-            size: 32,
+            size: 28, // Reduced from 32 to 28 (-12%)
             color: Colors.grey[400],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 7), // Reduced from 8 to 7 (-12%)
           Text(
             AppLocalizations.of(context)!.selectTheFile,
             style: TextStyle(
               color: Colors.grey[400],
-              fontSize: 14,
+              fontSize: 13, // Reduced from 14 to 13 (-7%)
             ),
           ),
         ],
@@ -702,9 +681,9 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
         Text(
             '$label *',
             style: MontserratStyles.montserratMediumTextStyle(
-                color: AppColor().darkCharcoalBlueColor, size: 16)
+                color: AppColor().darkCharcoalBlueColor, size: 14) // Reduced from 16 to 14 (-12%)
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 7), // Reduced from 8 to 7 (-12%)
         TextFormField(
           controller: controller,
           focusNode: focusNode,
@@ -712,11 +691,11 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
-                color: AppColor().silverShadeGrayColor, size: 12),
+                color: AppColor().silverShadeGrayColor, size: 11), // Reduced from 12 to 11 (-8%)
             prefixIcon: prefix,
             fillColor: AppColor().backgroundColor,
             filled: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 7), // Reduced from 16,8 to 14,7 (-12%)
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: AppColor().silverShadeGrayColor, width: 2),
@@ -756,7 +735,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
             text: AppLocalizations.of(context)!.previous,
           ),
         ),
-        SizedBox(width: 16),
+        SizedBox(width: 14), // Reduced from 16 to 14 (-12%)
         Expanded(
           child: CustomButton(
             onPressed: () {
@@ -822,7 +801,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
             Text(
               label,
               style: MontserratStyles.montserratMediumTextStyle(
-                  color: AppColor().darkCharcoalBlueColor, size: 16),
+                  color: AppColor().darkCharcoalBlueColor, size: 14), // Reduced from 16 to 14 (-12%)
             ),
             if (isRequired)
               const Text(
@@ -831,7 +810,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
               ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 7), // Reduced from 8 to 7 (-12%)
         RadioDropdownField(
           value: value,
           options: items,

@@ -170,7 +170,7 @@ class CustomRoleSelectionButton extends StatelessWidget {
                     child: Text(
                       title,
                       style: textStyle?.copyWith(color: defaultTextColor) ??
-                          MontserratStyles.montserratSemiBoldTextStyle(size: 20,color: AppColor().darkYellowColor)
+                          MontserratStyles.montserratSemiBoldTextStyle(size: 15,color: AppColor().darkYellowColor)
                     ),
                   ),
 

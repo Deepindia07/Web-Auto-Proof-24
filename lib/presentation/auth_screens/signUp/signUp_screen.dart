@@ -48,7 +48,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      // Reload verification status when app comes back to foreground
       _loadEmailVerificationStatus();
     }
   }
@@ -231,7 +230,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    final headerHeight = 200.0 + statusBarHeight + 40;
+    final headerHeight = 180.0 + statusBarHeight;
 
     return BlocProvider<SignUpScreenBloc>.value(
       value: _signUpBloc,
@@ -251,7 +250,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
               CustomLoader.hidePopupLoader(context);
               CherryToast.error(context, state.message);
             }
-            // Handle registration loading
             else if (state is SignUpScreenLoading) {
               CustomLoader.showPopupLoader(context);
             }
@@ -282,7 +280,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    vGap(headerHeight + 20),
+                    vGap(headerHeight),
                     Padding(
                       padding: const EdgeInsets.all(30),
                       child: Form(
@@ -291,7 +289,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                           spacing: 15,
                           children: [
                             Row(
-                              spacing: 2,
+                              spacing: 3,
                               children: [
                                 Expanded(
                                   child: _buildTextField(
@@ -314,7 +312,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                               controller: _emailController,
                               hint: AppLocalizations.of(context)!.emailAddress,
                               onChanged: (value) {
-                                // Reset email verification when email is changed
                                 if (_isEmailVerified) {
                                   _resetEmailVerification();
                                 }
@@ -353,7 +350,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                               icon: Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: CustomContainer(
-                                  height: 50,
+                                  height: 35,
                                   width: 90,
                                   border: Border(
                                     right: BorderSide(
@@ -445,7 +442,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                             ),
                             CustomPasswordField(
                               borderRadius: 48,
-                              borderWidth: 3,
+                              borderWidth: 1,
                               fillColor: AppColor().backgroundColor,
                               controller: _passwordController,
                               hintText: AppLocalizations.of(context)!.password,
@@ -462,7 +459,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                             ),
                             CustomPasswordField(
                               borderRadius: 48,
-                              borderWidth: 3,
+                              borderWidth: 1,
                               fillColor: AppColor().backgroundColor,
                               controller: _retypePasswordController,
                               hintText: AppLocalizations.of(context)!.retypePassword,
@@ -477,41 +474,44 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                               },
                               prefix: const Icon(Icons.lock, color: Colors.grey),
                             ),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: _agreeToTerms,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _agreeToTerms = value ?? false;
-                                    });
-                                  },
-                                  activeColor: const Color(0xFF2D3748),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: AppLocalizations.of(context)!.agreeTerms,
-                                      style: MontserratStyles.montserratMediumTextStyle(
-                                        size: 14,
-                                        color: AppColor().silverShadeGrayColor,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: AppLocalizations.of(context)!.termsPrivacy,
-                                          style: MontserratStyles.montserratMediumTextStyle(
-                                            size: 14,
-                                            color: AppColor().darkCharcoalBlueColor,
-                                          ),
-                                        ),
-                                      ],
+                            Padding(
+                              padding: const EdgeInsets.only(left: 40.0),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: _agreeToTerms,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _agreeToTerms = value ?? false;
+                                      });
+                                    },
+                                    activeColor: const Color(0xFF2D3748),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: AppLocalizations.of(context)!.agreeTerms,
+                                        style: MontserratStyles.montserratMediumTextStyle(
+                                          size: 14,
+                                          color: AppColor().silverShadeGrayColor,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: AppLocalizations.of(context)!.termsPrivacy,
+                                            style: MontserratStyles.montserratMediumTextStyle(
+                                              size: 14,
+                                              color: AppColor().darkCharcoalBlueColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               width: double.infinity,
@@ -550,6 +550,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                                     color: AppColor().silverShadeGrayColor,
                                   ),
                                 ),
+                                hGap(10),
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.pop(context);
@@ -577,7 +578,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
                 top: 0,
                 left: 0,
                 right: 0,
-                child: UpperContainerWidget(height: headerHeight + 20),
+                child: UpperContainerWidget(height: headerHeight),
               ),
             ],
           ),
@@ -604,17 +605,16 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
       obscureText: isPassword && !isPasswordVisible,
       keyboardType: keyboardType,
       fillColor: AppColor().backgroundColor,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       hintText: hint,
       suffixIcon: suffix,
       onChanged: onChanged,
-      hintStyle: MontserratStyles.montserratRegularTextStyle(
-        size: 16,
+      hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
+        size: 14,
         color: AppColor().silverShadeGrayColor,
       ),
       borderRadius: 48,
       prefixIcon: icon,
-      borderWidth: 3,
+      borderWidth: 1,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'This field is required';

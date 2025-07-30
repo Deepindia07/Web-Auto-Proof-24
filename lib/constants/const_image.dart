@@ -4,6 +4,7 @@ const String carIcon = "assets/image/Car.png";
 const String car1Icon = "assets/image/Car (1).png";
 const String car2Icon = "assets/image/download__3_-removebg-preview 1.png";
 const String contextsIcon = "assets/image/Frame 13.png";
+const String carCopy = "assets/image/car_copy.png";
 
 /// Icons
 

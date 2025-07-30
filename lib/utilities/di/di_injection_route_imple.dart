@@ -1,5 +1,6 @@
 library di_injection_route_imple.dart;
 
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:auto_proof/auth/server/share_app/bloc/share_app_bloc.dart';
 import 'package:auto_proof/presentation/auth_screens/forgot/bloc/forgot_screen_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:auto_proof/presentation/screens/team_View/bloc/team_screen_bloc.
 import 'package:auto_proof/presentation/splash/bloc/splash_screen_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../constants/const_string.dart';
 import '../../presentation/screens/home/bloc/home_screen_bloc.dart';
 import '../../presentation/screens/inspector_create_admin/bloc/inspector_create_admin_bloc.dart';
 

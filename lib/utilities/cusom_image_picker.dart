@@ -405,7 +405,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
       captureWidthPercentage = 0.6; // 60% for small screens
       captureHeightPercentage = 0.75;
     } else if (isMediumScreen) {
-      captureWidthPercentage = 0.55; // 55% for medium screens
+      captureWidthPercentage = 0.6; // 55% for medium screens
       captureHeightPercentage = 0.8;
     } else {
       captureWidthPercentage = 0.5; // 50% for large screens
@@ -555,6 +555,15 @@ class _CustomCameraViewState extends State<CustomCameraView> {
   }
 
   Widget _buildReferenceImage(double borderRadius) {
+    // Get screen dimensions for responsive sizing
+    final screenSize = MediaQuery.of(context).size;
+    final dimensions = _getResponsiveDimensions(screenSize);
+
+    final captureWidth = dimensions['captureWidth']!;
+    final captureHeight = dimensions['captureHeight']!;
+    final referenceImageWidth = captureWidth * 9;
+    final referenceImageHeight = captureHeight * 9;
+
     if (widget.referenceImagePath == null || widget.referenceImagePath!.isEmpty) {
       return Container(
         decoration: BoxDecoration(
@@ -566,32 +575,36 @@ class _CustomCameraViewState extends State<CustomCameraView> {
 
     if (widget.referenceImagePath!.startsWith('assets/')) {
       return Container(
-        padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.0),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Center(
-          child: Image.asset(
-            widget.referenceImagePath!,
-            fit: BoxFit.contain,
-            color: AppColor().darkCharcoalBlueColor,
-            errorBuilder: (context, error, stackTrace) {
-              print('Error loading asset image: $error');
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.greenAccent.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(borderRadius),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.image_not_supported,
-                    color: Colors.white54,
-                    size: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              width: referenceImageWidth,
+              height: referenceImageHeight,
+              widget.referenceImagePath!,
+              fit: BoxFit.contain,
+              color: AppColor().darkCharcoalBlueColor,
+              errorBuilder: (context, error, stackTrace) {
+                print('Error loading asset image: $error');
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.greenAccent.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(borderRadius),
                   ),
-                ),
-              );
-            },
+                  child: const Center(
+                    child: Icon(
+                      Icons.image_not_supported,
+                      color: Colors.white54,
+                      size: 40,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       );

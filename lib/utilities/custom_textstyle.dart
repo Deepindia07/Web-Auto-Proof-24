@@ -105,6 +105,24 @@ class MontserratStyles {
         letterSpacing: letterSpacing,
         shadows: shadows);
   }
+  static montserratLitleBoldTextStyle({
+    double size = 14,
+    double height = 1.2,
+    double letterSpacing = 0,
+    Color color = Colors.white,
+    bool underLineNeeded = false,
+    List<Shadow>? shadows,
+  }) {
+    return GoogleFonts.montserrat(
+        fontSize: size,
+        height: height,
+        decoration:
+        underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+        fontWeight: FontWeight.w700,
+        color: color,
+        letterSpacing: letterSpacing,
+        shadows: shadows);
+  }
 
   static TextStyle? commonTextStyle(
       double fontSize, FontWeight fontWeight, Color color) {

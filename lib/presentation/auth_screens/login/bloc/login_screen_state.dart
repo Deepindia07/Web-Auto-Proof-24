@@ -5,7 +5,7 @@ abstract class LoginScreenState extends Equatable {
   const LoginScreenState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoginScreenInitial extends LoginScreenState {}
@@ -13,12 +13,22 @@ class LoginScreenInitial extends LoginScreenState {}
 class LoginLoading extends LoginScreenState {}
 
 class LoginSuccess extends LoginScreenState {
-  final LoginResponseModel loginResponse;
+  final LoginResponseModel? loginResponse;
+
 
   const LoginSuccess({required this.loginResponse});
 
   @override
-  List<Object> get props => [loginResponse];
+  List<Object?> get props => [loginResponse];
+}
+
+class EmployeeLoginSuccess extends LoginScreenState {
+  final EmployeeLoginResponseModel employeeLoginResponseModel;
+
+  const EmployeeLoginSuccess({required this.employeeLoginResponseModel});
+
+  @override
+  List<Object?> get props => [employeeLoginResponseModel];
 }
 
 class LoginFailure extends LoginScreenState {

@@ -188,7 +188,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     ? theme.colorScheme.surface
                     : theme.colorScheme.surface.withOpacity(0.5)),
             contentPadding: widget.contentPadding ??
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             border: _buildBorder(
               widget.borderColor ?? AppColor().darkCharcoalBlueColor,
             ),
@@ -266,7 +266,7 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
       focusedBorderColor: widget.focusedBorderColor,
       obscureText: _obscureText,
       prefixIcon: widget.prefix,
-      hintStyle: MontserratStyles.montserratRegularTextStyle(size: 16,color: AppColor().silverShadeGrayColor),
+      hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 14,color: AppColor().silverShadeGrayColor),
       borderRadius: widget.borderRadius ,
       fillColor: widget.fillColor,
       borderWidth: widget.borderWidth,

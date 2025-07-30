@@ -127,11 +127,11 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildInformationSection(),
-                  SizedBox(height: 24),
+                  SizedBox(height: 18), // Reduced from 24
                   _buildChecklistSection(),
-                  SizedBox(height: 24),
+                  SizedBox(height: 18), // Reduced from 24
                   _buildCommentSection(),
-                  SizedBox(height: 24),
+                  SizedBox(height: 18), // Reduced from 24
                   // _buildActionButtons(state),
                 ],
               ),
@@ -150,7 +150,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           children: [
             Text(
               AppLocalizations.of(context)!.information,
-              style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 18),
+              style: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkCharcoalBlueColor, size: 16), // Reduced from 18
             ),
             Text(
               ' *',
@@ -160,15 +160,15 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             CustomButton(
               side: BorderSide.none,
               onPressed: (){},
-              borderRadius: 12,
+              borderRadius: 10, // Reduced from 12
               text: AppLocalizations.of(context)!.importInformation,
-              textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 14),
+              textStyle: MontserratStyles.montserratMediumTextStyle(color: AppColor().darkYellowColor,size: 13), // Reduced from 14
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Divider(color: AppColor().lightSilverGrayColor,),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Row(
           children: [
             Expanded(
@@ -180,7 +180,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 isRequired: true,
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 6), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildTextField(
@@ -190,7 +190,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 isRequired: true,
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 6), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildTextField(
@@ -202,9 +202,9 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Divider(color: AppColor().lightSilverGrayColor,),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         // Second row: Mileage, Gas Type, Gas Level
         Row(
           children: [
@@ -218,7 +218,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 isRequired: true,
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 6), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildDropdownField(
@@ -240,7 +240,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 dropValue: 'Diesel',
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 6), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildDropdownField(
@@ -269,9 +269,9 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Divider(color: AppColor().lightSilverGrayColor,),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Row(
           children: [
             Expanded(
@@ -283,7 +283,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 isRequired: true,
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 6), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildTextField(
@@ -293,7 +293,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 isRequired: true,
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 6), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildTextField(
@@ -306,9 +306,9 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Divider(color: AppColor().lightSilverGrayColor,),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Row(
           children: [
             Expanded(
@@ -320,7 +320,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 isRequired: true,
               ),
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 6), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildFileUploadField(
@@ -347,13 +347,13 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
     return Column(
       children: [
         Divider(color: AppColor().lightSilverGrayColor,),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         Row(
           children: [
             Text(
               AppLocalizations.of(context)!.checklist,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16, // Reduced from 18
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
@@ -364,65 +364,81 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             ),
           ],
         ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              flex:1,
-              child: _buildSwitchField(
-                label: AppLocalizations.of(context)!.softyPack,
-                value: softPackYes,
-                onChanged: (value) => setState(() => softPackYes = value),
-                isRequired: true,
+        SizedBox(height: 12), // Reduced from 16
+        Padding(
+          padding: const EdgeInsets.only(left: 25.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex:1,
+                    child: _buildSwitchField(
+                      label: AppLocalizations.of(context)!.softyPack,
+                      value: softPackYes,
+                      onChanged: (value) => setState(() => softPackYes = value),
+                      isRequired: true,
+                    ),
+                  ),
+                  SizedBox(width: 6), // Reduced from 8
+                  Expanded(
+                    flex: 1,
+                    child: _buildSwitchField(
+                      label: AppLocalizations.of(context)!.spareWheel,
+                      value: spareWheelYes,
+                      onChanged: (value) => setState(() => spareWheelYes = value),
+                      isRequired: true,
+                    ),
+                  ),
+                  SizedBox(width: 6), // Reduced from 8
+                  Expanded(
+                    flex: 1,
+                    child: _buildSwitchField(
+                      label: AppLocalizations.of(context)!.phoneOlder,
+                      value: phoneOlderYes,
+                      onChanged: (value) => setState(() => phoneOlderYes = value),
+                      isRequired: true,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              flex: 1,
-              child: _buildSwitchField(
-                label: AppLocalizations.of(context)!.spareWheel,
-                value: spareWheelYes,
-                onChanged: (value) => setState(() => spareWheelYes = value),
-                isRequired: true,
+              SizedBox(height: 16), // Reduced from 20
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: _buildSwitchField(
+                      label: AppLocalizations.of(context)!.gps,
+                      value: gpsYes,
+                      onChanged: (value) => setState(() => phoneOlderYes = value),
+                      isRequired: true,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _buildSwitchField(
+                      label: AppLocalizations.of(context)!.chargingPort,
+                      value: chargingPortYes,
+                      onChanged: (value) => setState(() => chargingPortYes = value),
+                      isRequired: true,
+                    ),
+                  ),
+                  SizedBox(width: 6), // Reduced from 8
+                  Expanded(
+                    flex: 1,
+                    child: _buildSwitchField(
+                      label: AppLocalizations.of(context)!.carPapers,
+                      value: carPapersYes,
+                      onChanged: (value) => setState(() => carPapersYes = value),
+                      isRequired: true,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              flex: 1,
-              child: _buildSwitchField(
-                label: AppLocalizations.of(context)!.phoneOlder,
-                value: phoneOlderYes,
-                onChanged: (value) => setState(() => phoneOlderYes = value),
-                isRequired: true,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 20),
-        // Second row: GPS, Charging Port, Car Papers
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: _buildSwitchField(
-                label: AppLocalizations.of(context)!.chargingPort,
-                value: chargingPortYes,
-                onChanged: (value) => setState(() => chargingPortYes = value),
-                isRequired: true,
-              ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              flex: 1,
-              child: _buildSwitchField(
-                label: AppLocalizations.of(context)!.carPapers,
-                value: carPapersYes,
-                onChanged: (value) => setState(() => carPapersYes = value),
-                isRequired: true,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -437,7 +453,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Text(
               AppLocalizations.of(context)!.comment,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16, // Reduced from 18
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
@@ -448,13 +464,13 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 12), // Reduced from 16
         CustomTextField(
           controller: _commentController,
           maxLines: 3,
           fillColor: Colors.white,
           hintText: AppLocalizations.of(context)!.enterComments,
-          hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 14, color: AppColor().silverShadeGrayColor),
+          hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 13, color: AppColor().silverShadeGrayColor), // Reduced from 14
         )
       ],
     );
@@ -475,7 +491,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13, // Reduced from 14
                 fontWeight: FontWeight.w500,
                 color: Colors.grey[700],
               ),
@@ -487,12 +503,12 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               ),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 6), // Reduced from 8
         CustomTextField(
           controller:controller,
           hintText: hintText,
           keyboardType: keyboardType,
-          hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 14, color: AppColor().silverShadeGrayColor),
+          hintStyle: MontserratStyles.montserratSemiBoldTextStyle(size: 13, color: AppColor().silverShadeGrayColor), // Reduced from 14
           fillColor: AppColor().backgroundColor,
         )
       ],
@@ -515,7 +531,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13, // Reduced from 14
                 fontWeight: FontWeight.w500,
                 color: Colors.grey[700],
               ),
@@ -527,7 +543,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               ),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 6), // Reduced from 8
         RadioDropdownField(
           value: value,
           options: items,
@@ -551,7 +567,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13, // Reduced from 14
                 fontWeight: FontWeight.w500,
                 color: Colors.grey[700],
               ),
@@ -563,11 +579,11 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               ),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 6), // Reduced from 8
         CustomRectangularSwitch(
           value: value,
-          width: 80,
-          height: 40,
+          width: 70, // Reduced from 80
+          height: 35, // Reduced from 40
           inactiveColor: Colors.red,
           activeColor: Colors.green,
           onChanged: (newValue) {
@@ -589,31 +605,31 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
         Text(
           label,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 13, // Reduced from 14
             fontWeight: FontWeight.w500,
             color: Colors.grey[700],
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 6), // Reduced from 8
         CustomContainer(
           backgroundColor: AppColor().backgroundColor,
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          padding: EdgeInsets.symmetric(horizontal: 18,vertical: 5),
+          borderRadius: BorderRadius.circular(10), // Reduced from 12
+          padding: EdgeInsets.symmetric(horizontal: 14,vertical: 4), // Reduced padding
           border: Border.all(color: AppColor().darkCharcoalBlueColor.withOpacity(0.2)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.cloud_upload_outlined,
-                size: 32,
+                size: 28, // Reduced from 32
                 color: Colors.grey[400],
               ),
               Text(
                 AppLocalizations.of(context)!.dropTheFile,
                 style: TextStyle(
                   color: Colors.grey[400],
-                  fontSize: 12,
+                  fontSize: 11, // Reduced from 12
                 ),
               ),
             ],
@@ -638,10 +654,10 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 child: Material(
                   color: Colors.transparent,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10), // Reduced from 12
                     child: Container(
                       width: double.infinity,
-                      height: 250,
+                      height: 220, // Reduced from 250
                       child: Stack(
                         children: [
                           profileImagePath != null
@@ -655,15 +671,15 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                                   children: [
                                     Icon(
                                       Icons.error_outline,
-                                      size: 48,
+                                      size: 42, // Reduced from 48
                                       color: Colors.red[400],
                                     ),
-                                    SizedBox(height: 8),
+                                    SizedBox(height: 6), // Reduced from 8
                                     Text(
                                       AppLocalizations.of(context)!.errorLoadingImage,
                                       style: TextStyle(
                                         color: Colors.red[400],
-                                        fontSize: 16,
+                                        fontSize: 14, // Reduced from 16
                                       ),
                                     ),
                                   ],
@@ -677,27 +693,27 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                               children: [
                                 Icon(
                                   Icons.image_outlined,
-                                  size: 48,
+                                  size: 42, // Reduced from 48
                                   color: Colors.grey[400],
                                 ),
-                                SizedBox(height: 8),
+                                SizedBox(height: 6), // Reduced from 8
                                 Text(
                                   AppLocalizations.of(context)!.noImageSelected,
                                   style: TextStyle(
                                     color: Colors.grey[400],
-                                    fontSize: 16,
+                                    fontSize: 14, // Reduced from 16
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           Positioned(
-                            top: 8,
-                            right: 8,
+                            top: 6, // Reduced from 8
+                            right: 6, // Reduced from 8
                             child: GestureDetector(
                               onTap: () => Navigator.of(context).pop(),
                               child: Container(
-                                padding: EdgeInsets.all(8),
+                                padding: EdgeInsets.all(6), // Reduced from 8
                                 decoration: BoxDecoration(
                                   color: Colors.black54,
                                   shape: BoxShape.circle,
@@ -705,7 +721,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                                 child: Icon(
                                   Icons.close,
                                   color: Colors.white,
-                                  size: 20,
+                                  size: 18, // Reduced from 20
                                 ),
                               ),
                             ),
@@ -726,25 +742,25 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
           Text(
             label,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 13, // Reduced from 14
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 6), // Reduced from 8
           Hero(
             tag: "unique_hero_tag",
             child: Container(
-              height: 100,
+              height: 85, // Reduced from 100
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey[300]!),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(6), // Reduced from 8
                 color: Colors.grey[50],
               ),
               child: profileImagePath != null
                   ? ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(6), // Reduced from 8
                 child: Image.file(
                   File(profileImagePath!),
                   fit: BoxFit.cover,
@@ -755,15 +771,15 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                         children: [
                           Icon(
                             Icons.error_outline,
-                            size: 32,
+                            size: 28, // Reduced from 32
                             color: Colors.red[400],
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: 3), // Reduced from 4
                           Text(
                             AppLocalizations.of(context)!.errorLoadingImage,
                             style: TextStyle(
                               color: Colors.red[400],
-                              fontSize: 12,
+                              fontSize: 11, // Reduced from 12
                             ),
                           ),
                         ],
@@ -778,15 +794,15 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                   children: [
                     Icon(
                       Icons.image_outlined,
-                      size: 32,
+                      size: 28, // Reduced from 32
                       color: Colors.grey[400],
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 3), // Reduced from 4
                     Text(
                       AppLocalizations.of(context)!.noImageSelected,
                       style: TextStyle(
                         color: Colors.grey[400],
-                        fontSize: 12,
+                        fontSize: 11, // Reduced from 12
                       ),
                     ),
                   ],

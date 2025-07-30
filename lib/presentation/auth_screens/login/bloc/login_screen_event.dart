@@ -11,14 +11,16 @@ abstract class LoginScreenEvent extends Equatable {
 class LoginSubmitted extends LoginScreenEvent {
   final String emailOrPhone;
   final String password;
+  final String refNo;
 
   const LoginSubmitted({
     required this.emailOrPhone,
     required this.password,
+    required this.refNo
   });
 
   @override
-  List<Object> get props => [emailOrPhone, password];
+  List<Object> get props => [emailOrPhone, password, refNo];
 }
 
 class LoginReset extends LoginScreenEvent {}

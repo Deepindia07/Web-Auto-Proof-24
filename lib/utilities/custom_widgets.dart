@@ -33,3 +33,30 @@ Future<void> redirectToWebPage(String url) async {
     throw 'Could not launch $url';
   }
 }
+
+String maskEmail(String email) {
+  final parts = email.split('@');
+  if (parts.length != 2) return email;
+
+  final username = parts[0];
+  final domain = parts[1];
+
+  String maskedUser;
+  if (username.length <= 5) {
+    maskedUser = username[0] + '*' * (username.length - 1);
+  } else {
+    maskedUser =
+        username.substring(0, 5) +
+            '*' * (username.length - 5) +
+            username.substring(username.length - 2);
+  }
+
+  return '$maskedUser@$domain';
+}
+
+String maskPhoneNumber(String phone) {
+  if (phone.length < 2) return phone;
+  final visiblePart = phone.substring(phone.length - 2);
+  final masked = '*' * (phone.length - 2);
+  return '$masked$visiblePart';
+}

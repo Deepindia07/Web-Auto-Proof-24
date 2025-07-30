@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../data/models/employee_login_response_model.dart';
 import '../../data/models/forgot_response_model.dart';
 import '../../data/models/get_all_inpection_list_response_model.dart';
 import '../../data/models/login_response_model.dart';
@@ -14,6 +15,7 @@ import '../dio_service/error/exception.dart';
 
 abstract class AuthAbstraction{
   Future<Result<LoginResponseModel, String>> loginApiCall({Map<String, dynamic>? dataBody});
+  Future<Result<EmployeeLoginResponseModel, String>> loginEmployeeApiCall({Map<String, dynamic>? dataBody});
   Future<Result<ForgotResponseModel, String>> forgotEmailCheckerApiCall({Map<String, dynamic>? dataBody});
   Future<Result<OtpResponseModel, String>> getOtpforResetPasswordApiCall({Map<String, dynamic>? dataBody});
   Future<Result<VerifyOtpResponseModel, String>> verifyOtpForResetPasswordApiCall({Map<String, dynamic>? dataBody});

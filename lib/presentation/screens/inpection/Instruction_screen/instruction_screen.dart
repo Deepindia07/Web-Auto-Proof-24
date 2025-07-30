@@ -43,18 +43,17 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
       body: Column(
         children: [
           CustomAppBar(
-            backgroundColor: AppColor().backgroundColor,
-            title: currentTitle,
+              backgroundColor: AppColor().backgroundColor,
+              title: currentTitle,
               subTitle: "${AppLocalizations.of(context)!.step} ${currentStep+1} of $totalSteps"
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0), // Reduced from 16.0
               child: Column(
                 children: [
                   _buildProgressIndicator(),
-                  const SizedBox(height: 20),
-                  vGap(24),
+                  vGap(16),
                   Expanded(child: _buildStepContent(currentStep)),
                   _buildNavigationButtons(l10n),
                 ],
@@ -66,12 +65,12 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
     );
   }
 
-  /// Progress indicator
+  /// Progress indicator - Reduced sizes
   Widget _buildProgressIndicator() {
     return Column(
       children: [
         _horizontalSelectiveButtonView(context),
-        vGap(16),
+        vGap(12), // Reduced from 16
         Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: LayoutBuilder(
@@ -84,35 +83,35 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
                 clipBehavior: Clip.none,
                 children: [
                   Container(
-                    height: 10,
+                    height: 8, // Reduced from 10
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(6), // Reduced from 8
                       color: Colors.grey[300],
                     ),
                   ),
                   Container(
-                    height: 10,
+                    height: 8, // Reduced from 10
                     width: progressWidth,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(6), // Reduced from 8
                       color: AppColor().darkYellowColor,
                     ),
                   ),
                   Positioned(
-                    left: progressWidth - 16,
-                    top: -12,
+                    left: progressWidth - 12, // Reduced from 16
+                    top: -10, // Reduced from -12
                     child: Container(
-                      width: 28,
-                      height: 28,
+                      width: 24, // Reduced from 28
+                      height: 24, // Reduced from 28
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColor().darkYellowColor,
-                        border: Border.all(color: Colors.white, width: 3),
+                        border: Border.all(color: Colors.white, width: 2), // Reduced from 3
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.15),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
+                            blurRadius: 3, // Reduced from 4
+                            offset: const Offset(0, 1), // Reduced from Offset(0, 2)
                           )
                         ],
                       ),
@@ -122,6 +121,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
+                          fontSize: 12, // Added explicit smaller font size
                         ),
                       ),
                     ),
@@ -148,8 +148,8 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
           onTap: () => _goToStep(index),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            width: 65,
-            height: 60,
+            width: 55, // Reduced from 65
+            height: 50, // Reduced from 60
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isActive
@@ -159,8 +159,8 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
                   ? [
                 BoxShadow(
                   color: AppColor().darkCharcoalBlueColor.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+                  blurRadius: 6, // Reduced from 8
+                  offset: const Offset(0, 1), // Reduced from Offset(0, 2)
                 ),
               ]
                   : null,
@@ -168,8 +168,8 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
             child: Center(
               child: Image.asset(
                 icons[index],
-                width: 32,
-                height: 32,
+                width: 25, // Reduced from 32
+                height: 25, // Reduced from 32
                 color: isActive
                     ? AppColor().darkYellowColor
                     : AppColor().darkCharcoalBlueColor,
@@ -192,19 +192,19 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
           },
           child: _buildGuideButton(l10n.departureGuide, arrowForwardRoundIcon),
         ),
-        vGap(16),
+        vGap(12), // Reduced from 16
         GestureDetector(
           onTap: () {
             redirectToWebPage("https://www.autoproof24.com/return-guide/");
           },
           child: _buildGuideButton(l10n.returnGuide, arrowForwardRoundIcon),
         ),
-        vGap(32),
+        vGap(24), // Reduced from 32
         CustomContainer(
           backgroundColor: AppColor().darkCharcoalBlueColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10), // Reduced from 12
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16), // Reduced from 20
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -212,14 +212,14 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
                 "AP100001",
                 style: MontserratStyles.montserratMediumTextStyle(
                   color: AppColor().darkYellowColor,
-                  size: 30,
+                  size: 26, // Reduced from 30
                 ),
               ),
-              vGap(8),
+              vGap(6), // Reduced from 8
               Text(
                 l10n.inspectionNumber,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14, // Reduced from 16
                   color: AppColor().darkYellowColor,
                 ),
               ),
@@ -233,10 +233,10 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
   Widget _buildGuideButton(String title, String icon) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Reduced padding
       decoration: BoxDecoration(
         color: AppColor().darkYellowColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10), // Reduced from 12
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,13 +245,13 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
             title,
             style: MontserratStyles.montserratSemiBoldTextStyle(
               color: AppColor().darkCharcoalBlueColor,
-              size: 18,
+              size: 16, // Reduced from 18
             ),
           ),
           Image.asset(
             icon,
-            height: 35,
-            width: 35,
+            height: 30, // Reduced from 35
+            width: 30, // Reduced from 35
             color: AppColor().darkCharcoalBlueColor,
           ),
         ],
@@ -262,6 +262,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
   Widget _buildNavigationButtons(AppLocalizations l10n) {
     return Row(
       children: [
+        if(currentStep != 0)
         Expanded(
           child: CustomButton(
             onPressed: currentStep > 0 ? _previousStep : null,
@@ -269,7 +270,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
             side: BorderSide.none,
           ),
         ),
-        hGap(16),
+        hGap(12), // Reduced from 16
         Expanded(
           child: CustomButton(
             onPressed: currentStep < totalSteps - 1
