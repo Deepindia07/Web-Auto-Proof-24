@@ -3,13 +3,13 @@ part of 'otp_screen_route_imple.dart';
 class OtpScreen extends StatelessWidget {
   final String? email;
   final bool isEmailFromSignUp;
-  const OtpScreen({required this.email, required this.isEmailFromSignUp,super.key});
+  const OtpScreen({required this.email, required this.isEmailFromSignUp, super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OtpViewBloc>(
       create: (context) => OtpViewBloc(apiService: AuthenticationApiCall()),
-      child: OtpScreenView(email: email!,isEmailFromSignUp: isEmailFromSignUp),
+      child: OtpScreenView(email: email!, isEmailFromSignUp: isEmailFromSignUp),
     );
   }
 }
@@ -17,7 +17,7 @@ class OtpScreen extends StatelessWidget {
 class OtpScreenView extends StatefulWidget {
   final String? email;
   final bool isEmailFromSignUp;
-  const OtpScreenView({required this.email,required this.isEmailFromSignUp,  super.key});
+  const OtpScreenView({required this.email, required this.isEmailFromSignUp, super.key});
 
   @override
   State<OtpScreenView> createState() => _OtpScreenViewState();
@@ -63,11 +63,15 @@ class _OtpScreenViewState extends State<OtpScreenView> {
   }
 
   void _resendCode() {
+    // Clear all input fields
     for (var controller in controllers) {
       controller.clear();
     }
+    // Focus on first field
     focusNodes[0].requestFocus();
-    context.read<OtpViewBloc>().add(ResendOtpEvent());
+
+    // Trigger resend event with email parameter
+    context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
   }
 
   @override
@@ -77,7 +81,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
 
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
-      resizeToAvoidBottomInset: true, // Important: Allow screen to resize when keyboard appears
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: BlocListener<OtpViewBloc, OtpViewState>(
           listener: (context, state) {
@@ -86,16 +90,16 @@ class _OtpScreenViewState extends State<OtpScreenView> {
             } else {
               CustomLoader.hidePopupLoader(context);
               if (state is OtpViewSuccess) {
-                if(widget.isEmailFromSignUp != false){
+                if (widget.isEmailFromSignUp != false) {
                   context.pop();
-                }else{
-                  context.push(AppRoute.resetPasswordScreen,extra: widget.email);
+                } else {
+                  context.push(AppRoute.resetPasswordScreen, extra: widget.email);
                 }
                 CherryToast.success(context, AppLocalizations.of(context)!.otpVerified);
               } else if (state is OtpViewFailure) {
                 CherryToast.error(context, state.error);
               } else if (state is OtpResendSuccess) {
-                CherryToast.success(context, AppLocalizations.of(context)!.otpVerified);
+                CherryToast.success(context, state.message);
               } else if (state is OtpResendFailure) {
                 CherryToast.error(context, state.error);
               }
@@ -119,12 +123,12 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(height: keyboardHeight > 0 ? 20 : 54), // Reduce spacing when keyboard is open
+                                SizedBox(height: keyboardHeight > 0 ? 20 : 54),
                                 Image.asset(mailIcon, height: keyboardHeight > 0 ? 60 : 72, width: keyboardHeight > 0 ? 60 : 72),
                                 Text(
                                   AppLocalizations.of(context)!.email,
                                   style: MontserratStyles.montserratLitleBoldTextStyle(
-                                    size: keyboardHeight > 0 ? 32 : 43, // Smaller text when keyboard is open
+                                    size: keyboardHeight > 0 ? 32 : 43,
                                     color: AppColor().darkCharcoalBlueColor,
                                   ),
                                 ),
@@ -169,7 +173,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                         ),
                         // Bottom container - fixed size but responsive
                         Container(
-                          height: keyboardHeight > 0 ? 280 : 360, // Reduce height when keyboard is open
+                          height: keyboardHeight > 0 ? 280 : 360,
                           padding: EdgeInsets.all(keyboardHeight > 0 ? 20 : 29),
                           decoration: BoxDecoration(
                             color: AppColor().darkCharcoalBlueColor,
@@ -268,7 +272,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
                                   ),
                                 ],
                               ),
-                              if (keyboardHeight == 0) SizedBox(height: 14), // Only add spacing when keyboard is closed
+                              if (keyboardHeight == 0) SizedBox(height: 14),
                             ],
                           ),
                         ),

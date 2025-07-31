@@ -1,6 +1,7 @@
 library vehicles_screen_route_imple.dart;
 
 import 'package:auto_proof/constants/const_color.dart';
+import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/presentation/screens/vehicles_screen/bloc/vehicles_screen_bloc.dart';
 import 'package:auto_proof/presentation/widget/appBar.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';

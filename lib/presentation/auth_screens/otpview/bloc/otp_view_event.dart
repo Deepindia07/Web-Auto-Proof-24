@@ -10,4 +10,8 @@ class VerifyOtpEvent extends OtpViewEvent {
   VerifyOtpEvent({required this.otp, required this.email});
 }
 
-class ResendOtpEvent extends OtpViewEvent {}
+class ResendOtpEvent extends OtpViewEvent {
+  final String email;
+
+  ResendOtpEvent({required this.email});
+}

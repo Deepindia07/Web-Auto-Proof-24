@@ -270,7 +270,7 @@ class _InspectionCreateAdminScreenViewState extends State<InspectionCreateAdminS
                       ),
                       _buildButtonView(
                         onTap: isLoading ? null : _handleCreateInspector,
-                        text: isLoading ? "Creating..." : "Create",
+                        text: "Create",
                         isSecondary: false,
                       )
                     ],

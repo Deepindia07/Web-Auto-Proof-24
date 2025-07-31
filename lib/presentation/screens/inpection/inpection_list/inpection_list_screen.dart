@@ -35,10 +35,10 @@ class _InspectionListScreenViewState extends State<InspectionListScreenView> {
             title: "My Inspections List",
           ),
           Container(
-            margin: const EdgeInsets.all(18),
+            margin: const EdgeInsets.all(16.83), // 19.8 * 0.85
             decoration: BoxDecoration(
               color: AppColor().darkCharcoalBlueColor,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(11.22), // 13.2 * 0.85
             ),
             child: Row(
               children: [
@@ -46,24 +46,20 @@ class _InspectionListScreenViewState extends State<InspectionListScreenView> {
                   child: GestureDetector(
                     onTap: () => setState(() => isCompleted = true),
                     child: Padding(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(3.74), // 4.4 * 0.85
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        padding: const EdgeInsets.symmetric(vertical: 16.83), // 19.8 * 0.85
                         decoration: BoxDecoration(
                           color: isCompleted ? AppColor().darkYellowColor : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(11.22), // 13.2 * 0.85
                         ),
                         child: Text(
-                          'Completed',
-                          textAlign: TextAlign.center,
-                          style: MontserratStyles.montserratLitleBoldTextStyle(
-                              color: isCompleted ? AppColor().darkCharcoalBlueColor :AppColor().darkYellowColor,
-                            size: 14
-                          )/*TextStyle(
-                            color: isCompleted ? Colors.black : Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),*/
+                            'Completed',
+                            textAlign: TextAlign.center,
+                            style: MontserratStyles.montserratLitleBoldTextStyle(
+                                color: isCompleted ? AppColor().darkCharcoalBlueColor :AppColor().darkYellowColor,
+                                size: 13.09 // 15.4 * 0.85
+                            )
                         ),
                       ),
                     ),
@@ -73,19 +69,19 @@ class _InspectionListScreenViewState extends State<InspectionListScreenView> {
                   child: GestureDetector(
                     onTap: () => setState(() => isCompleted = false),
                     child: Padding(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(3.74), // 4.4 * 0.85
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        padding: const EdgeInsets.symmetric(vertical: 16.83), // 19.8 * 0.85
                         decoration: BoxDecoration(
                           color: !isCompleted ? const Color(0xFFF1C40F) : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(11.22), // 13.2 * 0.85
                         ),
                         child: Text(
-                          'Make Comparison',
-                          textAlign: TextAlign.center,
+                            'Make Comparison',
+                            textAlign: TextAlign.center,
                             style: MontserratStyles.montserratLitleBoldTextStyle(
                                 color: !isCompleted ? AppColor().darkCharcoalBlueColor :AppColor().darkYellowColor,
-                                size: 14
+                                size: 13.09 // 15.4 * 0.85
                             )
                         ),
                       ),
@@ -138,7 +134,7 @@ class CompletedInspectionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 14.96), // 17.6 * 0.85
       itemCount: completedInspections.length,
       itemBuilder: (context, index) {
         return CompletedInspectionCard(
@@ -172,7 +168,7 @@ class ComparisonInspectionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 14.96), // 17.6 * 0.85
       itemCount: comparisonInspections.length,
       itemBuilder: (context, index) {
         return ComparisonInspectionCard(
@@ -193,14 +189,14 @@ class CompletedInspectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 14.96), // 17.6 * 0.85
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 1),
+        borderRadius: BorderRadius.circular(11.22), // 13.2 * 0.85
+        border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 0.935), // 1.1 * 0.85
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14.96), // 17.6 * 0.85
         child: Column(
           children: [
             Row(
@@ -208,14 +204,14 @@ class CompletedInspectionCard extends StatelessWidget {
               children: [
                 // Car Image
                 Container(
-                  width: 80,
-                  height: 60,
+                  width: 74.8, // 88 * 0.85
+                  height: 56.1, // 66 * 0.85
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(7.48), // 8.8 * 0.85
                     color: Colors.grey[100],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(7.48), // 8.8 * 0.85
                     child: Image.asset(carCopy,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
@@ -223,7 +219,7 @@ class CompletedInspectionCard extends StatelessWidget {
                           color: Colors.grey[200],
                           child: const Icon(
                             Icons.directions_car,
-                            size: 32,
+                            size: 29.92, // 35.2 * 0.85
                             color: Colors.grey,
                           ),
                         );
@@ -231,27 +227,27 @@ class CompletedInspectionCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 14.96), // 17.6 * 0.85
                 // Details
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildDetailRow('Identification', inspection.id),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 4.675), // 5.5 * 0.85
                       _buildDetailRow('Number Plate', inspection.plate),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 4.675), // 5.5 * 0.85
                       _buildDetailRow('Date', inspection.date),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 4.675), // 5.5 * 0.85
                       _buildDetailRow('Name', inspection.name),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 4.675), // 5.5 * 0.85
                       // _buildStatusRow(),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14.96), // 17.6 * 0.85
             // Action Buttons for Completed Inspections
             Row(
               children: [
@@ -264,22 +260,22 @@ class CompletedInspectionCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF1C40F),
                       foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 11.22), // 13.2 * 0.85
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(7.48), // 8.8 * 0.85
                       ),
                       elevation: 0,
                     ),
                     child: const Text(
-                      'View Report',
+                      'Check-in Detailed',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 13.09, // 15.4 * 0.85
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 11.22), // 13.2 * 0.85
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
@@ -289,18 +285,18 @@ class CompletedInspectionCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor().darkCharcoalBlueColor,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 11.22), // 13.2 * 0.85
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(7.48), // 8.8 * 0.85
                       ),
                       elevation: 0,
                     ),
                     child:  Text(
-                      'Download Report',
+                      'Check-out Detailed',
                       style: TextStyle(
                         color: AppColor().darkYellowColor,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 13.09, // 15.4 * 0.85
                       ),
                     ),
                   ),
@@ -318,50 +314,24 @@ class CompletedInspectionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$label : ',
-          style: MontserratStyles.montserratLitleBoldTextStyle(
-            size: 16,color: AppColor().darkCharcoalBlueColor
-          )
+            '$label : ',
+            style: MontserratStyles.montserratLitleBoldTextStyle(
+                size: 14.96, // 17.6 * 0.85
+                color: AppColor().darkCharcoalBlueColor
+            )
         ),
         Expanded(
           child: Text(
-            value,
+              value,
               style: MontserratStyles.montserratSemiBoldTextStyle(
-                  size: 14,color: AppColor().darkCharcoalBlueColor
+                  size: 13.09, // 15.4 * 0.85
+                  color: AppColor().darkCharcoalBlueColor
               )
           ),
         ),
       ],
     );
   }
-
-  // Widget _buildStatusRow() {
-  //   return Row(
-  //     children: [
-  //        Text(
-  //         'Status : ',
-  //           style: MontserratStyles.montserratLitleBoldTextStyle(
-  //               size: 14,color: AppColor().darkCharcoalBlueColor
-  //           )
-  //       ),
-  //       Container(
-  //         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  //         decoration: BoxDecoration(
-  //           color: Colors.green.withOpacity(0.2),
-  //           borderRadius: BorderRadius.circular(4),
-  //         ),
-  //         child: const Text(
-  //           'Completed',
-  //           style: TextStyle(
-  //             color: Colors.green,
-  //             fontSize: 12,
-  //             fontWeight: FontWeight.w600,
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   void _showInspectionReport(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -386,22 +356,14 @@ class ComparisonInspectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 14.96), // 17.6 * 0.85
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 1),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.1),
-        //     spreadRadius: 1,
-        //     blurRadius: 4,
-        //     offset: const Offset(0, 2),
-        //   ),
-        // ],
+        borderRadius: BorderRadius.circular(11.22), // 13.2 * 0.85
+        border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 0.935), // 1.1 * 0.85
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14.96), // 17.6 * 0.85
         child: Column(
           children: [
             Row(
@@ -409,23 +371,23 @@ class ComparisonInspectionCard extends StatelessWidget {
               children: [
                 // Car Image
                 Container(
-                  width: 80,
-                  height: 60,
+                  width: 74.8, // 88 * 0.85
+                  height: 93.5, // 110 * 0.85
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(7.48), // 8.8 * 0.85
                     color: Colors.grey[100],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(7.48), // 8.8 * 0.85
                     child: Image.asset(
-                      'assets/images/yellow_car.png',
+                      carCopy,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           color: Colors.grey[200],
                           child: const Icon(
                             Icons.directions_car,
-                            size: 32,
+                            size: 29.92, // 35.2 * 0.85
                             color: Colors.grey,
                           ),
                         );
@@ -433,81 +395,45 @@ class ComparisonInspectionCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 14.96), // 17.6 * 0.85
                 // Details
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildDetailRow('Identification', inspection.id),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4.675), // 5.5 * 0.85
                       _buildDetailRow('Number Plate', inspection.plate),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4.675), // 5.5 * 0.85
                       _buildDetailRow('Date', inspection.date),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4.675), // 5.5 * 0.85
                       _buildDetailRow('Name', inspection.name),
-                      const SizedBox(height: 8),
-                      _buildStatusRow(),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            // Action Buttons for Comparison Inspections
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle check-in detailed
-                      _handleCheckIn(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor().darkYellowColor,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Check-in Detailed',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+            const SizedBox(height: 7.48), // 8.8 * 0.85
+            ElevatedButton(
+              onPressed: () {
+                _handleCheckIn(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColor().darkYellowColor,
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(vertical: 11.22, horizontal: 18.7), // 13.2 * 0.85, 22 * 0.85
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7.48), // 8.8 * 0.85
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle check-out detailed
-                      _handleCheckOut(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor().darkCharcoalBlueColor,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      elevation: 0,
-                    ),
-                    child:  Text(
-                      'Check-out Detailed',
-                      style: TextStyle(
-                        color: AppColor().darkYellowColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Make comparison',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13.09, // 15.4 * 0.85
                 ),
-              ],
+              ),
             ),
           ],
         ),
@@ -520,49 +446,18 @@ class ComparisonInspectionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$label : ',
-          style: const TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
+            '$label : ',
+            style: MontserratStyles.montserratLitleBoldTextStyle(
+                size: 14.96, // 17.6 * 0.85
+                color: AppColor().darkCharcoalBlueColor
+            )
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatusRow() {
-    return Row(
-      children: [
-        const Text(
-          'Status : ',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.orange.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: const Text(
-            'Pending',
-            style: TextStyle(
-              color: Colors.orange,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+            style: MontserratStyles.montserratSemiBoldTextStyle(
+                size: 13.09, // 15.4 * 0.85
+                color: AppColor().darkCharcoalBlueColor
             ),
           ),
         ),
@@ -583,13 +478,4 @@ class ComparisonInspectionCard extends StatelessWidget {
       SnackBar(content: Text('Check-out for ${inspection.id}')),
     );
   }
-}
-
-// Updated Inspection Model with Status
-
-
-
-// Add this to your AppColor class if not already present
-extension AppColorExtension on AppColor {
-  Color get backgroundColor => const Color(0xFFF5F5F5);
 }

@@ -181,6 +181,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   icon: subscriptionIcon,
                   title: AppLocalizations.of(context)!.mySubscription,
                   onTap: () {
+                    SharedPrefsHelper.instance.setBool(isSubscribedRoutingKey, true);
                     context.push(AppRoute.reportsScreen);
                     // Handle subscription tap
                   },

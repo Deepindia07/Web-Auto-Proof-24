@@ -23,7 +23,6 @@ class CarImageInpectionScreenView extends StatefulWidget {
 class _CarImageInpectionScreenViewState
     extends State<CarImageInpectionScreenView> {
 
-  // Method to open camera for specific car part
   void _openCameraForCarPart(String title, String imagePath) {
     Navigator.push(
       context,
@@ -41,68 +40,68 @@ class _CarImageInpectionScreenViewState
     return [
       CarAddingModel(
         title: local.frontSide,
-        image: frontSideView,
+        image: front_view,
         onTap: () => _openCameraForCarPart(local.frontSide, front_view),
       ),
       CarAddingModel(
         title: local.frontLeftWheel,
-        image: frontLeftWheelView,
-        onTap: () => _openCameraForCarPart(local.frontLeftWheel, left_side_wheel),
+        image: left_front_wheel,
+        onTap: () => _openCameraForCarPart(local.frontLeftWheel, left_front_wheel),
       ),
       CarAddingModel(
         title: local.frontLeftSide,
-        image: frontLeftSideView,
-        onTap: () => _openCameraForCarPart(local.frontLeftSide, front_left_wheel),
+        image: front_left_side,
+        onTap: () => _openCameraForCarPart(local.frontLeftSide, front_left_side),
       ),
       CarAddingModel(
         title: local.rearLeftSide,
-        image: rearLeftSideView,
-        onTap: () => _openCameraForCarPart(local.rearLeftSide, rear_left_side),
+        image: half_front_left_side,
+        onTap: () => _openCameraForCarPart(local.rearLeftSide, half_front_left_side),
       ),
       CarAddingModel(
         title: local.rearLeftWheel,
-        image: rearLeftWheelView,
-        onTap: () => _openCameraForCarPart(local.rearLeftWheel, rear_left_wheel),
+        image: left_back_wheel,
+        onTap: () => _openCameraForCarPart(local.rearLeftWheel, left_back_wheel),
       ),
       CarAddingModel(
         title: local.rearSide,
-        image: rearSideView,
-        onTap: () => _openCameraForCarPart(local.rearSide, rear_side),
+        image: back_view,
+        onTap: () => _openCameraForCarPart(local.rearSide, back_view),
       ),
       CarAddingModel(
         title: local.backRightWheel,
-        image: backRightWheelView,
-        onTap: () => _openCameraForCarPart(local.backRightWheel, back_right_wheel),
+        image: right_back_wheel,
+        onTap: () => _openCameraForCarPart(local.backRightWheel, right_back_wheel),
       ),
       CarAddingModel(
         title: local.rearRightSide,
-        image: rearRightSideView,
-        onTap: () => _openCameraForCarPart(local.rearRightSide, rear_right_side),
+        image: half_back_right_side,
+        onTap: () => _openCameraForCarPart(local.rearRightSide, half_back_right_side),
       ),
       CarAddingModel(
         title: local.frontRightSide,
-        image: frontRightSideView,
-        onTap: () => _openCameraForCarPart(local.frontRightSide, front_right_side),
+        image: half_fron_right_side,
+        onTap: () => _openCameraForCarPart(local.frontRightSide, half_fron_right_side),
       ),
       CarAddingModel(
         title: local.frontRightWheel,
-        image: frontRightWheelView,
-        onTap: () => _openCameraForCarPart(local.frontRightWheel, front_right_wheel),
+        image: right_front_wheel,
+        onTap: () => _openCameraForCarPart(local.frontRightWheel, right_front_wheel),
       ),
       CarAddingModel(
         title: local.frontSeats,
-        image: frontSeatsView,
-        onTap: () => _openCameraForCarPart(local.frontSeats, ""),
+        image: front_seat,
+        onTap: () => _openCameraForCarPart(local.frontSeats, front_seat),
       ),
       CarAddingModel(
         title: local.rearSeats,
-        image: rearSeatsView,
-        onTap: () => _openCameraForCarPart(local.rearSeats, ""),
+        image: back_seat,
+        onTap: () => _openCameraForCarPart(local.rearSeats, back_seat),
       ),
       CarAddingModel(
         title: local.odometer,
-        image: oDoMeeterView,
-        onTap: () => _openCameraForCarPart(local.odometer, ""),
+        image: odometer,
+        onTap: () => _openCameraForCarPart(local.odometer, odometer),
       ),
       CarAddingModel(
         title: local.optionalImage1,
@@ -200,7 +199,7 @@ class _CarImageInpectionScreenViewState
                 image!,
                 height: 42,
                 width: 42,
-                color: AppColor().silverShadeGrayColor,
+                // color: AppColor().silverShadeGrayColor,
               ),
             ),
           ),

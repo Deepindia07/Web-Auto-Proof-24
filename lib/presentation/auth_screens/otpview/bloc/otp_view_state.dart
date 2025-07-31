@@ -19,11 +19,14 @@ class OtpViewFailure extends OtpViewState {
   OtpViewFailure({required this.error});
 }
 
-class OtpResendSuccess extends OtpViewState {}
+class OtpResendSuccess extends OtpViewState {
+  final String message;
+
+  OtpResendSuccess({required this.message});
+}
 
 class OtpResendFailure extends OtpViewState {
   final String error;
 
   OtpResendFailure({required this.error});
 }
-

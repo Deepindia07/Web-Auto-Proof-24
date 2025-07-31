@@ -10,11 +10,11 @@ import 'package:image/image.dart' as img;
 
 class CustomImageSelector {
   static Future<File?> show(
-    BuildContext context, {
-    String? title,
-    Color? primaryColor,
-    Color? backgroundColor,
-  }) async {
+      BuildContext context, {
+        String? title,
+        Color? primaryColor,
+        Color? backgroundColor,
+      }) async {
     return await showDialog<File?>(
       context: context,
       barrierDismissible: true,
@@ -357,6 +357,10 @@ class _CustomCameraViewState extends State<CustomCameraView> {
           enableAudio: false,
         );
         await _controller!.initialize();
+
+        // Set camera to landscape orientation
+        await _controller!.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
+
         if (mounted) {
           setState(() {
             _isCameraInitialized = true;
@@ -391,32 +395,31 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     }
   }
 
-  // Responsive dimensions calculator
+  // Responsive dimensions calculator with increased height
   Map<String, double> _getResponsiveDimensions(Size screenSize) {
     final isSmallScreen = screenSize.width < 600;
     final isMediumScreen = screenSize.width >= 600 && screenSize.width < 900;
     final isLargeScreen = screenSize.width >= 900;
 
-    // Responsive capture area percentage
+    // Responsive capture area percentage - increased height by 10%
     double captureWidthPercentage;
     double captureHeightPercentage;
 
     if (isSmallScreen) {
-      captureWidthPercentage = 0.6; // 60% for small screens
-      captureHeightPercentage = 0.75;
+      captureWidthPercentage = 0.6;
+      captureHeightPercentage = 0.825; // Increased from 0.75 by 10%
     } else if (isMediumScreen) {
-      captureWidthPercentage = 0.6; // 55% for medium screens
-      captureHeightPercentage = 0.8;
+      captureWidthPercentage = 0.6;
+      captureHeightPercentage = 0.88; // Increased from 0.8 by 10%
     } else {
-      captureWidthPercentage = 0.5; // 50% for large screens
-      captureHeightPercentage = 0.85;
+      captureWidthPercentage = 0.5;
+      captureHeightPercentage = 0.935; // Increased from 0.85 by 10%
     }
 
     final captureWidth = screenSize.width * captureWidthPercentage;
     final captureHeight = screenSize.height * captureHeightPercentage;
     final sideWidth = (screenSize.width - captureWidth) / 2;
 
-    // Responsive button sizes
     double buttonSize;
     double smallButtonSize;
     double fontSize;
@@ -452,7 +455,6 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     };
   }
 
-  // Get the crop rectangle based on container position (center area only)
   Rect _getCropRect() {
     final screenSize = MediaQuery.of(context).size;
     final dimensions = _getResponsiveDimensions(screenSize);
@@ -465,10 +467,8 @@ class _CustomCameraViewState extends State<CustomCameraView> {
     return Rect.fromLTWH(left, top, captureWidth, captureHeight);
   }
 
-  // Crop the image to the center area only
   Future<File> _cropImage(String imagePath) async {
     try {
-      // Read the original image
       final bytes = await File(imagePath).readAsBytes();
       final originalImage = img.decodeImage(bytes);
 
@@ -476,27 +476,22 @@ class _CustomCameraViewState extends State<CustomCameraView> {
         throw Exception('Could not decode image');
       }
 
-      // Get screen dimensions and camera preview dimensions
       final screenSize = MediaQuery.of(context).size;
       final cropRect = _getCropRect();
 
-      // Calculate the scaling factors
       final scaleX = originalImage.width / screenSize.width;
       final scaleY = originalImage.height / screenSize.height;
 
-      // Calculate crop coordinates in image space (center area only)
       final cropX = (cropRect.left * scaleX).round();
       final cropY = (cropRect.top * scaleY).round();
       final cropWidth = (cropRect.width * scaleX).round();
       final cropHeight = (cropRect.height * scaleY).round();
 
-      // Ensure crop coordinates are within image bounds
       final actualCropX = cropX.clamp(0, originalImage.width - 1);
       final actualCropY = cropY.clamp(0, originalImage.height - 1);
       final actualCropWidth = (cropWidth).clamp(1, originalImage.width - actualCropX);
       final actualCropHeight = (cropHeight).clamp(1, originalImage.height - actualCropY);
 
-      // Crop the image to center area only
       final croppedImage = img.copyCrop(
         originalImage,
         x: actualCropX,
@@ -505,23 +500,18 @@ class _CustomCameraViewState extends State<CustomCameraView> {
         height: actualCropHeight,
       );
 
-      // Save the cropped image
       final croppedImagePath = imagePath.replaceAll('.jpg', '_center_cropped.jpg');
       final croppedFile = File(croppedImagePath);
       await croppedFile.writeAsBytes(img.encodeJpg(croppedImage));
-
-      // Delete the original uncropped image
       await File(imagePath).delete();
 
       return croppedFile;
     } catch (e) {
       print('Error cropping image: $e');
-      // Return original file if cropping fails
       return File(imagePath);
     }
   }
 
-  // Modified take picture method with center cropping
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) return;
 
@@ -537,8 +527,6 @@ class _CustomCameraViewState extends State<CustomCameraView> {
             backgroundColor: Colors.green,
           ),
         );
-
-        // Return the cropped image path
         Navigator.pop(context, croppedFile.path);
       }
     } catch (e) {
@@ -555,7 +543,6 @@ class _CustomCameraViewState extends State<CustomCameraView> {
   }
 
   Widget _buildReferenceImage(double borderRadius) {
-    // Get screen dimensions for responsive sizing
     final screenSize = MediaQuery.of(context).size;
     final dimensions = _getResponsiveDimensions(screenSize);
 
@@ -587,7 +574,6 @@ class _CustomCameraViewState extends State<CustomCameraView> {
               height: referenceImageHeight,
               widget.referenceImagePath!,
               fit: BoxFit.contain,
-              color: AppColor().darkCharcoalBlueColor,
               errorBuilder: (context, error, stackTrace) {
                 print('Error loading asset image: $error');
                 return Container(
@@ -698,7 +684,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                       height: double.infinity,
                       color: Colors.black,
                       constraints: BoxConstraints(
-                        minWidth: buttonSize + padding * 2, // Ensure minimum width for buttons
+                        minWidth: buttonSize + padding * 2,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0,right: 8),
@@ -766,7 +752,7 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                       height: double.infinity,
                       color: Colors.black,
                       constraints: BoxConstraints(
-                        minWidth: buttonSize + padding * 2, // Ensure minimum width for buttons
+                        minWidth: buttonSize + padding * 2,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -932,39 +918,6 @@ class _CustomCameraViewState extends State<CustomCameraView> {
                 ),
               ),
             ),
-
-            // Center capture indicator
-            // Positioned(
-            //   bottom: padding,
-            //   left: padding,
-            //   right: padding,
-            //   child: Center(
-            //     child: Container(
-            //       constraints: BoxConstraints(
-            //         maxWidth: screenSize.width - (padding * 2),
-            //       ),
-            //       padding: EdgeInsets.symmetric(
-            //         horizontal: padding * 1.2,
-            //         vertical: padding * 0.6,
-            //       ),
-            //       decoration: BoxDecoration(
-            //         color: Colors.green.withOpacity(0.8),
-            //         borderRadius: BorderRadius.circular(25),
-            //       ),
-            //       child: Text(
-            //         'CENTER AREA ONLY - ${(captureWidth/screenSize.width*100).toInt()}% WIDTH CAPTURED',
-            //         style: TextStyle(
-            //           color: Colors.white,
-            //           fontSize: smallFontSize.clamp(8.0, 12.0),
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //         textAlign: TextAlign.center,
-            //         overflow: TextOverflow.ellipsis,
-            //         maxLines: 1,
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

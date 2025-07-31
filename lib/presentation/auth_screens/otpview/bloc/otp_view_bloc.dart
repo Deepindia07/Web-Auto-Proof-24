@@ -30,7 +30,7 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
       final result = await apiService.verifyOtpForResetPasswordApiCall(dataBody: dataBody);
 
       if (result.isSuccess) {
-        SharedPrefsHelper.instance.setBool(isVerifiedEmail, result.data.isEmailVerified??false);
+        SharedPrefsHelper.instance.setBool(isVerifiedEmail, result.data.isEmailVerified ?? false);
         final emailverified = SharedPrefsHelper.instance.getBool(isVerifiedEmail);
         appLogger.w("is email is verified:= ${emailverified}");
         emit(OtpViewSuccess(response: result.data!));
@@ -38,6 +38,7 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
         emit(OtpViewFailure(error: result.error ?? 'Verification failed'));
       }
     } catch (error) {
+      appLogger.e("Error in _onVerifyOtp: $error");
       emit(OtpViewFailure(error: 'An unexpected error occurred'));
     }
   }
@@ -46,15 +47,25 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
     emit(OtpViewLoading());
 
     try {
-      // Call your resend OTP API here
-      // final result = await apiService.resendOtpApiCall();
+      final Map<String, dynamic> dataBody = {
+        "email": event.email.trim().toLowerCase(),
+      };
 
-      // For now, simulating success
-      await Future.delayed(Duration(seconds: 2));
-      emit(OtpResendSuccess());
+      appLogger.w("Resending OTP for email: $dataBody");
+
+      final result = await apiService.getOtpforEmailVerificationApiCall(dataBody: dataBody);
+
+      if (result.isSuccess) {
+        SharedPrefsHelper.instance.setBool(isEmailFromSignUp, true);
+        appLogger.i("OTP resent successfully");
+        emit(OtpResendSuccess(message:'OTP sent successfully'));
+      } else {
+        appLogger.e("Failed to resend OTP: ${result.error}");
+        emit(OtpResendFailure(error: result.error ?? 'Failed to send OTP'));
+      }
     } catch (error) {
-      emit(OtpResendFailure(error: 'Failed to resend OTP'));
+      appLogger.e("Error in _onResendOtp: $error");
+      emit(OtpResendFailure(error: 'Failed to resend OTP: ${error.toString()}'));
     }
   }
 }
-

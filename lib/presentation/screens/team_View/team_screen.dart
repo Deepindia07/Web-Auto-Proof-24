@@ -21,7 +21,7 @@ class TeamScreenView extends StatefulWidget {
 
 class _TeamScreenViewState extends State<TeamScreenView> {
   final ScrollController _scrollController = ScrollController();
-  bool _isLoadingMore = false; // Add local loading state
+  bool _isLoadingMore = false;
 
   @override
   void initState() {

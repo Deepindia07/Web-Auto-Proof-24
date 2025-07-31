@@ -32,12 +32,20 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    final isSubscribed = SharedPrefsHelper.instance.getBool(isSubscribedRoutingKey);
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: Column(
         children: [
           CustomAppBar(
-            onBackPressed: widget.onBack,
+            onBackPressed: () {
+              if (isSubscribed == true) {
+                SharedPrefsHelper.instance.setBool(isSubscribedRoutingKey, false);
+                context.pop();
+              } else {
+                widget.onBack!();
+              }
+            },
             isBacked: widget.isBacked,
             backgroundColor: AppColor().backgroundColor,
             title: "My Subscription",
@@ -47,6 +55,7 @@ class _ReportsScreenViewState extends State<ReportsScreenView> {
       ),
     );
   }
+
 
   Widget _subscriptionView() {
     return CustomContainer(

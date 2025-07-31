@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static const String baseUrl = "https://912010aceac0.ngrok-free.app/";
+  static const String baseUrl = "https://5e701ab1502a.ngrok-free.app/";
   static const String login = "api/auth/login";
   static const String register = "api/auth/signUp";
   static const String verifyOtpEmail = "api/auth/verifyOtpForEmail";

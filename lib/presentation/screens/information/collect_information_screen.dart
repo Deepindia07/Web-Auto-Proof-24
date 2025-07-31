@@ -325,7 +325,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                     color: AppColor().darkCharcoalBlueColor,
                   ),
                   searchDecoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 4), // Reduced from 5 to 4 (-20%)
+                    contentPadding: EdgeInsets.symmetric(vertical: 4),
                     hintText: AppLocalizations.of(context)!.searchCountry,
                     hintStyle: TextStyle(
                       color: AppColor().darkCharcoalBlueColor.withOpacity(0.6),
@@ -343,8 +343,8 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                   ),
                   dialogBackgroundColor: AppColor().backgroundColor,
                   barrierColor: Colors.black54,
-                  dialogSize: Size(MediaQuery.of(context).size.width * 0.72, // Reduced from 0.8 to 0.72 (-10%)
-                      MediaQuery.of(context).size.height * 0.54), // Reduced from 0.6 to 0.54 (-10%)
+                  dialogSize: Size(MediaQuery.of(context).size.width * 0.72,
+                      MediaQuery.of(context).size.height * 0.54),
                   builder: (countryCode) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,

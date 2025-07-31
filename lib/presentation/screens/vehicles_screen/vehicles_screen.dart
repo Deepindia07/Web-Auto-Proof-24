@@ -5,8 +5,10 @@ class VehiclesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<VehiclesScreenBloc>(create: (BuildContext context) =>VehiclesScreenBloc(),
-    child: const VehiclesScreenView());
+    return BlocProvider<VehiclesScreenBloc>(
+      create: (_) => VehiclesScreenBloc(),
+      child: const VehiclesScreenView(),
+    );
   }
 }
 
@@ -18,35 +20,10 @@ class VehiclesScreenView extends StatefulWidget {
 }
 
 class _VehiclesScreenViewState extends State<VehiclesScreenView> {
-  final List<Vehicle> _vehicles = [
-    Vehicle(
-      id: '1',
-      name: 'Honda Civic',
-      model: '2022',
-      plateNumber: 'ABC-1234',
-      type: VehicleType.car,
-    ),
-    Vehicle(
-      id: '2',
-      name: 'Toyota Camry',
-      model: '2023',
-      plateNumber: 'XYZ-5678',
-      type: VehicleType.car,
-    ),
-    Vehicle(
-      id: '3',
-      name: 'Ford Transit',
-      model: '2021',
-      plateNumber: 'DEF-9012',
-      type: VehicleType.van,
-    ),
-    Vehicle(
-      id: '4',
-      name: 'Yamaha R15',
-      model: '2023',
-      plateNumber: 'MNO-3456',
-      type: VehicleType.motorcycle,
-    ),
+  static const _vehicles = [
+    Vehicle(id: '1', name: 'Honda Civic', model: '2022', plateNumber: 'ABC-1234', image: carCopy),
+    Vehicle(id: '2', name: 'Ford Transit', model: '2021', plateNumber: 'DEF-9012', image: carCopy),
+    Vehicle(id: '3', name: 'Yamaha R15', model: '2023', plateNumber: 'MNO-3456', image: carCopy),
   ];
 
   @override
@@ -55,62 +32,41 @@ class _VehiclesScreenViewState extends State<VehiclesScreenView> {
       backgroundColor: AppColor().backgroundColor,
       body: Column(
         children: [
-          _buildAppBar(),
-          _buildVehiclesList(),
+          CustomAppBar(
+            backgroundColor: AppColor().backgroundColor,
+            title: "My Vehicles",
+          ),
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(12),
+              itemCount: _vehicles.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (_, i) => _VehicleCard(
+                vehicle: _vehicles[i],
+                onSelect: () => _selectVehicle(_vehicles[i]),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildAppBar() {
-    return CustomAppBar(
-      backgroundColor: AppColor().backgroundColor,
-      title: "My Vehicles",
-    );
-  }
-
-  Widget _buildVehiclesList() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12.0,right: 12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ListView.separated(
-                itemCount: _vehicles.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
-                itemBuilder: (context, index) => _VehicleCard(
-                  vehicle: _vehicles[index],
-                  onSelect: () => _handleVehicleSelection(_vehicles[index]),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _handleVehicleSelection(Vehicle vehicle) {
-    // Handle vehicle selection logic here
-    print('Selected vehicle: ${vehicle.name}');
-    // You can add navigation, state updates, or other logic here
+  void _selectVehicle(Vehicle vehicle) {
+    print('Selected: ${vehicle.name}');
   }
 }
-
 
 class _VehicleCard extends StatelessWidget {
   final Vehicle vehicle;
   final VoidCallback onSelect;
 
-  const _VehicleCard({
-    required this.vehicle,
-    required this.onSelect,
-  });
+  const _VehicleCard({required this.vehicle, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
+    final color = AppColor().darkCharcoalBlueColor;
+
     return CustomContainer(
       backgroundColor: Colors.white,
       padding: const EdgeInsets.all(14),
@@ -118,123 +74,71 @@ class _VehicleCard extends StatelessWidget {
       border: Border.all(color: Colors.black),
       child: Row(
         children: [
-          _buildVehicleIcon(),
+          Container(
+            width: 80,
+            height: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: color.withOpacity(0.1)),
+            ),
+            child: Image.asset(carCopy, height: 20,width: 20,),
+          ),
           const SizedBox(width: 12),
-          Expanded(child: _buildVehicleInfo()),
-          _buildSelectButton(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  vehicle.name,
+                  style: MontserratStyles.montserratMediumTextStyle(
+                    size: 16,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  vehicle.plateNumber,
+                  style: MontserratStyles.montserratSemiBoldTextStyle(
+                    size: 14,
+                    color: color.withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CustomButton(
+            elevation: 0,
+            side: BorderSide.none,
+            borderRadius: 12,
+            backgroundColor: AppColor().darkYellowColor,
+            onPressed: onSelect,
+            text: "Select",
+            textStyle: MontserratStyles.montserratRegularTextStyle(
+              size: 14,
+              color: color,
+            ),
+          ),
         ],
       ),
     );
   }
-
-  Widget _buildVehicleIcon() {
-    return Container(
-      width: 100,
-      height: 80,
-      decoration: BoxDecoration(
-        // color: _getVehicleColor().withOpacity(0.1),
-        borderRadius: BorderRadius.circular(35),
-        border: Border.all(color: AppColor().darkCharcoalBlueColor.withOpacity(0.09))
-      ),
-      child: Icon(
-        _getVehicleIcon(),
-        color: _getVehicleColor(),
-        size: 24,
-      ),
-    );
-  }
-
-  Widget _buildVehicleInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          vehicle.name,
-          style: MontserratStyles.montserratMediumTextStyle(size: 18,color: AppColor().darkCharcoalBlueColor)
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Number Plate: \n${vehicle.plateNumber}',
-          style: MontserratStyles.montserratSemiBoldTextStyle(size: 16,color: AppColor().darkCharcoalBlueColor.withOpacity(0.8))
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSelectButton() {
-    return CustomButton(
-      elevation: 0,
-      side: BorderSide.none,
-      borderRadius: 14,
-      backgroundColor: AppColor().darkYellowColor,
-      onPressed: onSelect,
-      text: "Select",
-      textStyle: MontserratStyles.montserratRegularTextStyle(size: 16,color: AppColor().darkCharcoalBlueColor),
-    );
-  }
-
-  IconData _getVehicleIcon() {
-    switch (vehicle.type) {
-      case VehicleType.car:
-        return Icons.directions_car;
-      case VehicleType.motorcycle:
-        return Icons.motorcycle;
-      case VehicleType.van:
-        return Icons.airport_shuttle;
-      case VehicleType.truck:
-        return Icons.local_shipping;
-      default:
-        return Icons.directions_car;
-    }
-  }
-
-  Color _getVehicleColor() {
-    switch (vehicle.type) {
-      case VehicleType.car:
-        return Colors.blue;
-      case VehicleType.motorcycle:
-        return Colors.orange;
-      case VehicleType.van:
-        return Colors.green;
-      case VehicleType.truck:
-        return Colors.purple;
-      default:
-        return Colors.blue;
-    }
-  }
-
-  String _getVehicleTypeText() {
-    switch (vehicle.type) {
-      case VehicleType.car:
-        return 'Car';
-      case VehicleType.motorcycle:
-        return 'Motorcycle';
-      case VehicleType.van:
-        return 'Van';
-      case VehicleType.truck:
-        return 'Truck';
-      default:
-        return 'Vehicle';
-    }
-  }
 }
 
-// Data models for vehicles
-enum VehicleType { car, motorcycle, van, truck }
 
 class Vehicle {
   final String id;
   final String name;
   final String model;
   final String plateNumber;
-  final VehicleType type;
+  final String image;
+
 
   const Vehicle({
     required this.id,
     required this.name,
     required this.model,
     required this.plateNumber,
-    required this.type,
+    required this.image
   });
 }
