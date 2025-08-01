@@ -1,7 +1,10 @@
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../constants/const_string.dart';
 
 part 'change_password_screen_event.dart';
 part 'change_password_screen_state.dart';
@@ -19,22 +22,24 @@ class ChangePasswordScreenBloc extends Bloc<ChangePasswordScreenEvent, ChangePas
       ) async {
     try {
       emit(ChangePasswordScreenLoading());
+      final dataBody ={
+          "oldPassword":event.oldPassword,
+          "newPassword":event.newPassword
+      };
+      final response = await repository.changePasswordApiCall(
+        id: SharedPrefsHelper.instance.getString(userId),
+        dataBody: dataBody
+      );
 
-      // Call the API to change password
-      // final response = await repository.changePassword(
-      //   oldPassword: event.oldPassword,
-      //   newPassword: event.newPassword,
-      // );
-
-      // if (response.isSuccess) {
-      //   emit(ChangePasswordScreenSuccess(
-      //     message: response.message ?? 'Password changed successfully',
-      //   ));
-      // } else {
-      //   emit(ChangePasswordScreenFailure(
-      //     error: response.error ?? 'Failed to change password',
-      //   ));
-      // }
+      if (response.isSuccess) {
+        emit(ChangePasswordScreenSuccess(
+          message: response.data.message ?? 'Password changed successfully',
+        ));
+      } else {
+        emit(ChangePasswordScreenFailure(
+          error: response.error ?? 'Failed to change password',
+        ));
+      }
     } catch (error) {
       emit(ChangePasswordScreenFailure(
         error: error.toString(),

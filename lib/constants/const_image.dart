@@ -42,6 +42,7 @@ const String subscriptionIcon = "assets/icon/fi_17358491.png";
 const String activityHistoryIcon = "assets/icon/Activity History 2.png";
 const String shareIcon = "assets/icon/fi_929539.png";
 const String termsIcon = 'assets/icon/fi_2258843.png';
+const String creditCardIcon = "assets/icon/credit_card_icon.png";
 
 
 /// vehicles image

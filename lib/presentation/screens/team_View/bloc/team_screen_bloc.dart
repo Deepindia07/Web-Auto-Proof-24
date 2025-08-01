@@ -1,6 +1,8 @@
 import 'package:auto_proof/auth/data/models/get_all_inpection_list_response_model.dart';
 import 'package:auto_proof/auth/data/models/user_response_model.dart';
+import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
+import 'package:auto_proof/constants/const_string.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -35,7 +37,14 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
 
       if (result.isSuccess && result.data.isNotEmpty) {
         final List<Datum> allTeamMembers = result.data;
-
+        if (allTeamMembers.isNotEmpty) {
+          final companyIdValue = allTeamMembers.first.companyId?.toString();
+          if (companyIdValue != null && companyIdValue.isNotEmpty) {
+            await SharedPrefsHelper.instance.setString(
+                companyId, companyIdValue);
+          }
+          print("companyId: ${SharedPrefsHelper.instance.getString(companyId)}");
+        }
         emit(TeamScreenLoaded(
           teamMembers: allTeamMembers,
           hasReachedMax: allTeamMembers.length < _limit,
@@ -81,10 +90,9 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
           currentPage: nextPage,
         ));
       } else {
-        // Stop loading more if API fails or returns empty data
         emit(currentState.copyWith(
           isLoadingMore: false,
-          hasReachedMax: true, // Assume no more data available
+          hasReachedMax: true,
         ));
       }
     } catch (error) {
@@ -92,3 +100,4 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
     }
   }
 }
+

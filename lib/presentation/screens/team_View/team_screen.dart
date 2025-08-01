@@ -69,10 +69,12 @@ class _TeamScreenViewState extends State<TeamScreenView> {
   }
 
   Widget _buildAppBar(AppLocalizations localizations) {
+    final String? currentCompanyId = SharedPrefsHelper.instance.getString(companyId);
+    print('Company ID: $currentCompanyId');
     return CustomAppBar(
       backgroundColor: AppColor().backgroundColor,
       title: localizations.myTeam,
-      largeWidget: InkWell(
+      largeWidget: (currentCompanyId != null && currentCompanyId.isNotEmpty)?InkWell(
         onTap: () {
           context.push(AppRoute.createInspectorView);
         },
@@ -90,14 +92,13 @@ class _TeamScreenViewState extends State<TeamScreenView> {
             const Icon(Icons.add_circle_rounded, size: 20),
           ],
         ),
-      ),
+      ):Container(),
     );
   }
 
   Widget _buildTeamList(AppLocalizations localizations) {
     return BlocConsumer<TeamScreenBloc, TeamScreenState>(
       listener: (context, state) {
-        // Reset loading state when load more completes
         if (state is TeamScreenLoaded && _isLoadingMore) {
           setState(() {
             _isLoadingMore = false;

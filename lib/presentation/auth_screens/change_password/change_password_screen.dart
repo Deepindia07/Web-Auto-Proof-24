@@ -191,7 +191,6 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                       child: Column(
                         spacing: 20,
                         children: [
-                          vGap(30),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -206,6 +205,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                 fillColor: AppColor().darkCharcoalBlueColor,
                                 borderRadius: 30,
                                 hintText: "Current Password",
+                                // textCapitalization: TextCapitalization.none,
                                 onChanged: (value) => _validatePasswords(),
                               ),
                               if (_oldPasswordError != null)
@@ -235,6 +235,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                 fillColor: AppColor().darkCharcoalBlueColor,
                                 borderRadius: 30,
                                 hintText: "New Password",
+                                // textCapitalization: TextCapitalization.none,
                                 onChanged: (value) => _validatePasswords(),
                               ),
                               if (_newPasswordError != null)
@@ -264,6 +265,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                 fillColor: AppColor().darkCharcoalBlueColor,
                                 borderRadius: 30,
                                 hintText: "Confirm New Password",
+                                // textCapitalization: TextCapitalization.none,
                                 onChanged: (value) => _validatePasswords(),
                               ),
                               if (_confirmPasswordError != null)

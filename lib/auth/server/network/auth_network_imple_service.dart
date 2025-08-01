@@ -1,3 +1,4 @@
+import 'package:auto_proof/auth/data/models/contact_us_response_model.dart';
 import 'package:auto_proof/auth/data/models/forgot_response_model.dart';
 import 'package:auto_proof/auth/data/models/otp_response_model.dart';
 import 'package:auto_proof/auth/data/models/password_setup_response_model.dart';
@@ -9,12 +10,15 @@ import 'package:auto_proof/constants/const_api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../data/models/change_password_response_model.dart';
+import '../../data/models/check_out_response_model.dart';
 import '../../data/models/employee_login_response_model.dart';
 import '../../data/models/get_all_inpection_list_response_model.dart';
 import '../../data/models/login_response_model.dart';
 import '../../data/models/post_inspector_role_response_model.dart';
 import '../../data/models/registeration_response_model.dart';
 import '../../data/models/user_update_profile_reponse_model.dart';
+import '../../data/models/vehicle_list_response_model.dart';
 import '../dio_service/error/exception.dart';
 
 class AuthenticationApiCall implements AuthAbstraction{
@@ -123,10 +127,9 @@ class AuthenticationApiCall implements AuthAbstraction{
   @override
   Future<Result<PasswordSetupResponseModel, String>> resetPasswordApiCall({Map<String, dynamic>? dataBody}) async {
     try {
-      final response = await dioClient.post(ApiEndPoints.changePassword, data: dataBody);
+      final response = await dioClient.put(ApiEndPoints.changePassword, data: dataBody);
       final Map<String, dynamic> data = response.data;
       final otpResponse = PasswordSetupResponseModel.fromJson(data);
-      // print("Otp Data: ${otpResponse.generatedOtp}");
       return Result.success(otpResponse);
     } on DioException catch (dioError) {
       return Result.failure(handleDioError(dioError).toString());
@@ -135,6 +138,7 @@ class AuthenticationApiCall implements AuthAbstraction{
       return Result.failure('Unexpected error occurred: $error');
     }
   }
+
   @override
   Future<Result<RegistrationResponseModel, String>> registerApiCall({Map<String, dynamic>? dataBody}) async {
     try {
@@ -150,11 +154,12 @@ class AuthenticationApiCall implements AuthAbstraction{
   }
 
 @override
-  Future<Result<ChangePasswordResponseModel, String>> changePasswordApiCall({Map<String, dynamic>? dataBody}) async {
+  Future<Result<ChangePasswordResponseModels, String>> changePasswordApiCall({Map<String, dynamic>? dataBody, required id}) async {
     try {
-      final response = await dioClient.post(ApiEndPoints.createNewPassword, data: dataBody);
+      final response = await dioClient.put("${ApiEndPoints.createNewPassword}$id", data: dataBody);
+      print("payload:=========>> ${ApiEndPoints.createNewPassword}$id");
       final Map<String, dynamic> data = response.data;
-      final otpResponse = ChangePasswordResponseModel.fromJson(data);
+      final otpResponse = ChangePasswordResponseModels.fromJson(data);
       return Result.success(otpResponse);
     } on DioException catch (dioError) {
       return Result.failure(handleDioError(dioError).toString());
@@ -180,27 +185,34 @@ class AuthenticationApiCall implements AuthAbstraction{
   }
 
   @override
-  Future<Result<UserProfileImageUpdateResponseModel, String>> userProfileImageApiCall({
-    required FormData multipartBody,
+  Future<Result<UserResponseModel, String>> userProfileImageApiCall({
+    required FormData formData,
   }) async {
     try {
+      debugPrint("API Call: userProfileImageApiCall");
+      debugPrint("FormData fields: ${formData.fields.length}");
+      debugPrint("FormData files: ${formData.files.length}");
+
       final response = await dioClient.put(
-        ApiEndPoints.profilePictureUpdate,
-        data: multipartBody,
+        ApiEndPoints.updateProfileApiEnd,
+        data: formData,
         options: Options(
+          contentType: 'multipart/form-data',
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json',
           },
         ),
       );
 
       final Map<String, dynamic> data = response.data;
-      final updateResponse = UserProfileImageUpdateResponseModel.fromJson(data);
-      return Result.success(updateResponse);
+      debugPrint("API Response Data: ${response.data}");
+      final userResponse = UserResponseModel.fromJson(data);
+      return Result.success(userResponse);
     } on DioException catch (dioError) {
+      debugPrint("error generated: => ${dioError.toString()}");
       return Result.failure(handleDioError(dioError).toString());
     } catch (error) {
-      debugPrint(error.toString());
+      debugPrint("error generated: => ${error.toString()}");
       return Result.failure('Unexpected error occurred: $error');
     }
   }
@@ -261,5 +273,55 @@ class AuthenticationApiCall implements AuthAbstraction{
     }
   }
 
+  @override
+  Future<Result<ContactUsResponseModel, String>> contactUsApiCall({Map<String, dynamic>? dataBody}) async {
+    try {
+      final response = await dioClient.post(ApiEndPoints.contactUsEnd, data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      debugPrint("API Response Data: ${response.data}");
+      final otpResponse = ContactUsResponseModel.fromJson(data);
+      return Result.success(otpResponse);
+    } on DioException catch (dioError) {
+      debugPrint("error generated: => ${dioError.toString()}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint("error generated: => ${error.toString()}");
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+  @override
+  Future<Result<VehicleListResponseModel, String>> vehicleListApiCall({Map<String, dynamic>? dataBody}) async {
+    try {
+      final response = await dioClient.get(ApiEndPoints.vehicleListEnd, data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      debugPrint("API Response Data: ${response.data}");
+      final otpResponse = VehicleListResponseModel.fromJson(data);
+      return Result.success(otpResponse);
+    } on DioException catch (dioError) {
+      debugPrint("error generated: => ${dioError.toString()}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint("error generated: => ${error.toString()}");
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+  @override
+  Future<Result<CheckOutResponseModel, String>> inspectionApiCall({Map<String, dynamic>? dataBody}) async {
+    try {
+      final response = await dioClient.post(ApiEndPoints.checkOutEnd, data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      debugPrint("API Response Data: ${response.data}");
+      final otpResponse = CheckOutResponseModel.fromJson(data);
+      return Result.success(otpResponse);
+    } on DioException catch (dioError) {
+      debugPrint("error generated: => ${dioError.toString()}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint("error generated: => ${error.toString()}");
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
 
 }

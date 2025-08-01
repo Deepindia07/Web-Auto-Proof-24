@@ -5,6 +5,7 @@
   import 'package:auto_proof/route/app_route_imple.dart';
   import 'package:auto_proof/utilities/di/di_injection_route_imple.dart';
   import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
   import 'package:flutter_bloc/flutter_bloc.dart';
   import 'package:flutter_localizations/flutter_localizations.dart';
   import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +18,10 @@
 
   void main() async{
     WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     final blocObserver = AppServiceBlocObserver();
     Bloc.observer = blocObserver;
     await PackageInfo.fromPlatform();

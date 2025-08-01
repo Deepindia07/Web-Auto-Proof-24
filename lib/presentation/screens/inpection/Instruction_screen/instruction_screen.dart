@@ -49,13 +49,14 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(12.0), // Reduced from 16.0
+              padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
                   _buildProgressIndicator(),
                   vGap(16),
                   Expanded(child: _buildStepContent(currentStep)),
                   _buildNavigationButtons(l10n),
+                  vGap(10)
                 ],
               ),
             ),
@@ -265,6 +266,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
         if(currentStep != 0)
         Expanded(
           child: CustomButton(
+            textColor: AppColor().darkYellowColor,
             onPressed: currentStep > 0 ? _previousStep : null,
             text: l10n.back,
             side: BorderSide.none,
@@ -273,6 +275,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
         hGap(12), // Reduced from 16
         Expanded(
           child: CustomButton(
+            textColor: AppColor().darkYellowColor,
             onPressed: currentStep < totalSteps - 1
                 ? _nextStep
                 : () {

@@ -31,6 +31,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
   late AnimationController _fadeAnimationController;
   late Animation<double> _fadeAnimation;
   String? _cachedUserRole;
+  String? _cachedCompanyId; // Add this to cache companyId
 
   List<BottomNavItem> get _navItems {
     final baseItems = [
@@ -75,12 +76,12 @@ class _HomeScreenViewState extends State<HomeScreenView>
 
   void _initializeAnimations() {
     _bottomNavAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 270), // Reduced from 300
+      duration: const Duration(milliseconds: 270),
       vsync: this,
     );
 
     _fadeAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 450), // Reduced from 500
+      duration: const Duration(milliseconds: 450),
       vsync: this,
     );
 
@@ -97,6 +98,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
 
   void _loadUserData() {
     _cachedUserRole = SharedPrefsHelper.instance.getString(roleKey);
+    _cachedCompanyId = SharedPrefsHelper.instance.getString(companyId);
     final accessToken = SharedPrefsHelper.instance.getString(userId);
 
     if (accessToken != null && accessToken.isNotEmpty) {
@@ -104,10 +106,32 @@ class _HomeScreenViewState extends State<HomeScreenView>
     }
   }
 
+  // Method to check if user has companyId
+  bool _hasCompanyId() {
+    return _cachedCompanyId != null && _cachedCompanyId!.isNotEmpty;
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _appSectionsInfo = AppSectionsData.getAppSections(context);
+    // Filter app sections based on companyId
+    _appSectionsInfo = _getFilteredAppSections(context);
+  }
+
+  // Method to get filtered app sections based on companyId
+  List<ContainersData> _getFilteredAppSections(BuildContext context) {
+    final allSections = AppSectionsData.getAppSections(context);
+
+    if (!_hasCompanyId()) {
+      // If no companyId, filter out the "My Team" section
+      // Assuming "My Team" is at index 4 based on your handleContainerTap method
+      return allSections.where((section) {
+        final index = allSections.indexOf(section);
+        return index != 4; // Remove "My Team" section
+      }).toList();
+    }
+
+    return allSections; // Return all sections if companyId exists
   }
 
   @override
@@ -148,6 +172,11 @@ class _HomeScreenViewState extends State<HomeScreenView>
       case HomeScreenProfileLoaded:
         final profileState = state as HomeScreenProfileLoaded;
         debugPrint('Profile loaded: ${profileState.userProfile.toString()}');
+        // Reload companyId after profile is loaded in case it was updated
+        setState(() {
+          _cachedCompanyId = SharedPrefsHelper.instance.getString('companyId');
+          _appSectionsInfo = _getFilteredAppSections(context);
+        });
         break;
     }
   }
@@ -166,11 +195,11 @@ class _HomeScreenViewState extends State<HomeScreenView>
               AppColor().darkYellowColor,
             ),
           ),
-          const SizedBox(height: 14), // Reduced from 16
+          const SizedBox(height: 14),
           Text(
             'Loading...',
             style: MontserratStyles.montserratMediumTextStyle(
-              size: 14, // Reduced from 16
+              size: 14,
               color: AppColor().darkCharcoalBlueColor,
             ),
           ),
@@ -205,7 +234,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
   Widget _buildBottomNavigationBar() {
     return CustomContainer(
       backgroundColor: AppColor().darkCharcoalBlueColor,
-      padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 14.0), // Reduced from 8.0, 16.0
+      padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 14.0),
       child: SafeArea(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -225,17 +254,17 @@ class _HomeScreenViewState extends State<HomeScreenView>
     return GestureDetector(
       onTap: () => _onBottomNavTap(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180), // Reduced from 200
+        duration: const Duration(milliseconds: 180),
         curve: Curves.easeInOutCubic,
         padding: EdgeInsets.symmetric(
-          horizontal: isSelected ? 14.0 : 7.0, // Reduced from 16.0, 8.0
-          vertical: 5.0, // Reduced from 6.0
+          horizontal: isSelected ? 14.0 : 7.0,
+          vertical: 5.0,
         ),
         decoration: BoxDecoration(
           color: isSelected
               ? AppColor().darkYellowColor.withOpacity(0.2)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(11), // Reduced from 12
+          borderRadius: BorderRadius.circular(11),
           border: isSelected
               ? Border.all(
             color: AppColor().darkYellowColor.withOpacity(0.3),
@@ -255,7 +284,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
               ),
               child: Image.asset(
                 isSelected ? item.activeIcon : item.icon,
-                height: 25, // Reduced from 28
+                height: 25,
               ),
             ),
           ],
@@ -321,21 +350,21 @@ class _HomeScreenViewState extends State<HomeScreenView>
         color: AppColor().darkYellowColor,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(right: 22.0, left: 22.0, top: 7), // Reduced from 24.0, 8
+          padding: const EdgeInsets.only(right: 22.0, left: 22.0, top: 7),
           child: Column(
             children: [
               _buildIntroSection(context),
-              const SizedBox(height: 4), // Reduced from 5
+              const SizedBox(height: 4),
               const Divider(),
-              const SizedBox(height: 4), // Reduced from 5
+              const SizedBox(height: 4),
               if (widget.userRole != 'instructor') ...[
                 _buildSubscriptionSection(context),
-                const SizedBox(height: 14), // Reduced from 16
+                const SizedBox(height: 14),
                 _buildContainersGrid(context),
-                const SizedBox(height: 14), // Reduced from 16
+                const SizedBox(height: 14),
               ],
               _buildCreateNewInspectionButton(context),
-              const SizedBox(height: 22), // Reduced from 24
+              const SizedBox(height: 22),
             ],
           ),
         ),
@@ -348,7 +377,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
     if (accessToken != null && accessToken.isNotEmpty) {
       context.read<HomeScreenBloc>().add(GetProfileEvent(userId: accessToken));
     }
-    await Future.delayed(const Duration(milliseconds: 450)); // Reduced from 500
+    await Future.delayed(const Duration(milliseconds: 450));
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
@@ -360,13 +389,13 @@ class _HomeScreenViewState extends State<HomeScreenView>
         builder: (context) => CustomContainer(
           backgroundColor: AppColor().backgroundColor,
           onTap: () => Scaffold.of(context).openDrawer(),
-          height: 27, // Reduced from 30
-          width: 27, // Reduced from 30
+          height: 27,
+          width: 27,
           child: Center(
             child: Image.asset(
               menuIcon,
-              height: 27, // Reduced from 30
-              width: 27, // Reduced from 30
+              height: 27,
+              width: 27,
               color: AppColor().darkCharcoalBlueColor,
             ),
           ),
@@ -378,8 +407,8 @@ class _HomeScreenViewState extends State<HomeScreenView>
 
   Widget _buildSubscriptionSection(BuildContext context) {
     return CustomContainer(
-      padding: const EdgeInsets.all(14), // Reduced from 16
-      borderRadius: BorderRadius.circular(22), // Reduced from 24
+      padding: const EdgeInsets.all(14),
+      borderRadius: BorderRadius.circular(22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -394,15 +423,15 @@ class _HomeScreenViewState extends State<HomeScreenView>
                       AppLocalizations.of(context)!.mySubscription,
                       style: MontserratStyles.montserratSemiBoldTextStyle(
                         color: Colors.white,
-                        size: 18, // Reduced from 20
+                        size: 18,
                       ),
                     ),
-                    const SizedBox(height: 3), // Reduced from 4
+                    const SizedBox(height: 3),
                     Text(
                       "29,99€ / month",
                       style: MontserratStyles.montserratSemiBoldTextStyle(
                         color: AppColor().darkYellowColor,
-                        size: 18, // Reduced from 20
+                        size: 18,
                       ),
                     ),
                   ],
@@ -410,22 +439,22 @@ class _HomeScreenViewState extends State<HomeScreenView>
               ),
               CustomButton(
                 side: BorderSide(color: Colors.white,width: 2),
-                height: AppLocalizations.of(context)!.renewNow == 'Renew Now' ? 45 : 54, // Reduced from 50, 60
+                height: AppLocalizations.of(context)!.renewNow == 'Renew Now' ? 45 : 54,
                 onPressed: () => _handleRenewSubscription(context),
                 backgroundColor: AppColor().darkYellowColor,
                 text: AppLocalizations.of(context)!.renewNow,
                 textStyle: MontserratStyles.montserratSemiBoldTextStyle(
                   color: AppColor().darkCharcoalBlueColor,
-                  size: 13, // Reduced from 14
+                  size: 13,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 18), // Reduced from 20
+          const SizedBox(height: 18),
           _buildSubscriptionFeature(context, AppLocalizations.of(context)!.freeAccount),
-          const SizedBox(height: 4), // Reduced from 5
+          const SizedBox(height: 4),
           _buildSubscriptionFeature(context, AppLocalizations.of(context)!.checkInOutCount),
-          const SizedBox(height: 4), // Reduced from 5
+          const SizedBox(height: 4),
           _buildSubscriptionFeature(context, "${AppLocalizations.of(context)!.validUntil} 31/12/2026"),
         ],
       ),
@@ -436,20 +465,20 @@ class _HomeScreenViewState extends State<HomeScreenView>
     return Row(
       children: [
         Container(
-          width: 3.5, // Reduced from 4
-          height: 3.5, // Reduced from 4
+          width: 3.5,
+          height: 3.5,
           decoration: BoxDecoration(
             color: AppColor().darkYellowColor,
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 7), // Reduced from 8
+        const SizedBox(width: 7),
         Expanded(
           child: Text(
             text,
             style: MontserratStyles.montserratNormalTextStyle(
               color: AppColor().darkYellowColor,
-              size: 13, // Reduced from 14
+              size: 13,
             ),
           ),
         ),
@@ -473,8 +502,8 @@ class _HomeScreenViewState extends State<HomeScreenView>
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
-        crossAxisSpacing: 11, // Reduced from 12
-        mainAxisSpacing: 11, // Reduced from 12
+        crossAxisSpacing: 11,
+        mainAxisSpacing: 11,
         childAspectRatio: 1.0,
       ),
       itemCount: _appSectionsInfo.length,
@@ -492,9 +521,9 @@ class _HomeScreenViewState extends State<HomeScreenView>
   Widget _buildCreateNewInspectionButton(BuildContext context) {
     return CustomContainer(
       onTap: () => _navigateToNewInspection(context),
-      padding: const EdgeInsets.all(14), // Reduced from 16
+      padding: const EdgeInsets.all(14),
       backgroundColor: AppColor().darkCharcoalBlueColor,
-      borderRadius: BorderRadius.circular(11), // Reduced from 12
+      borderRadius: BorderRadius.circular(11),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -502,15 +531,15 @@ class _HomeScreenViewState extends State<HomeScreenView>
             child: Text(
               AppLocalizations.of(context)!.createNewInspection,
               style: MontserratStyles.montserratMediumTextStyle(
-                size: 13, // Reduced from 14
+                size: 13,
                 color: AppColor().darkYellowColor,
               ),
             ),
           ),
           Image.asset(
             arrowForwardRoundIcon,
-            height: 20, // Reduced from 22
-            width: 20, // Reduced from 22
+            height: 20,
+            width: 20,
           ),
         ],
       ),
@@ -525,22 +554,22 @@ class _HomeScreenViewState extends State<HomeScreenView>
       ) {
     return CustomContainer(
       onTap: () => _handleContainerTap(context, index, title),
-      borderRadius: BorderRadius.circular(11), // Reduced from 12
+      borderRadius: BorderRadius.circular(11),
       backgroundColor: AppColor().figmaColor,
-      padding: const EdgeInsets.all(5), // Reduced from 6
+      padding: const EdgeInsets.all(5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             icons,
-            height: 22, // Reduced from 24
-            width: 22, // Reduced from 24
+            height: 22,
+            width: 22,
           ),
-          const SizedBox(height: 7), // Reduced from 8
+          const SizedBox(height: 7),
           Text(
             title,
             style: MontserratStyles.montserratRegularTextStyle(
-              size: 9, // Reduced from 10
+              size: 9,
               color: AppColor().darkCharcoalBlueColor,
             ),
             textAlign: TextAlign.center,
@@ -567,7 +596,12 @@ class _HomeScreenViewState extends State<HomeScreenView>
         context.push(AppRoute.inpectionScreenViewScreen);
         break;
       case 4:
-        context.push(AppRoute.teamSreenView);
+      // Check if user has companyId before allowing access to My Team
+        if (_hasCompanyId()) {
+          context.push(AppRoute.teamSreenView);
+        } else {
+          _showNoCompanyAccessDialog(context);
+        }
         break;
       case 5:
         context.push(AppRoute.vehiclesScreenView);
@@ -579,6 +613,44 @@ class _HomeScreenViewState extends State<HomeScreenView>
         _showFeatureComingSoonDialog(context, title);
         break;
     }
+  }
+
+  // New method to show dialog when user doesn't have companyId
+  void _showNoCompanyAccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColor().backgroundColor,
+          title: Text(
+            'Access Restricted',
+            style: MontserratStyles.montserratSemiBoldTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 16,
+            ),
+          ),
+          content: Text(
+            'You need to be associated with a company to access the My Team feature.',
+            style: MontserratStyles.montserratRegularTextStyle(
+              color: AppColor().darkCharcoalBlueColor,
+              size: 13,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'OK',
+                style: MontserratStyles.montserratMediumTextStyle(
+                  color: AppColor().darkYellowColor,
+                  size: 13,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _navigateToNewInspection(BuildContext context) {
@@ -596,14 +668,14 @@ class _HomeScreenViewState extends State<HomeScreenView>
             title,
             style: MontserratStyles.montserratSemiBoldTextStyle(
               color: AppColor().darkCharcoalBlueColor,
-              size: 16, // Reduced from 18
+              size: 16,
             ),
           ),
           content: Text(
             'This feature is coming soon!',
             style: MontserratStyles.montserratRegularTextStyle(
               color: AppColor().darkCharcoalBlueColor,
-              size: 13, // Reduced from 14
+              size: 13,
             ),
           ),
           actions: [
@@ -613,7 +685,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
                 'OK',
                 style: MontserratStyles.montserratMediumTextStyle(
                   color: AppColor().darkYellowColor,
-                  size: 13, // Reduced from 14
+                  size: 13,
                 ),
               ),
             ),
@@ -646,7 +718,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
 
         return CustomContainer(
           backgroundColor: AppColor().backgroundColor,
-          padding: const EdgeInsets.all(7), // Reduced from 8
+          padding: const EdgeInsets.all(7),
           child: Row(
             children: [
               Container(
@@ -656,11 +728,11 @@ class _HomeScreenViewState extends State<HomeScreenView>
                   color: AppColor().darkYellowColor,
                 ),
                 child: CircleAvatar(
-                  radius: 32, // Reduced from 35
+                  radius: 32,
                   backgroundImage: _buildImageProviderSafe(profileImage),
                 ),
               ),
-              const SizedBox(width: 9), // Reduced from 10
+              const SizedBox(width: 9),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -668,7 +740,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
                     Text(
                       AppLocalizations.of(context)!.welcomeBack,
                       style: MontserratStyles.montserratMediumTextStyle(
-                        size: 14, // Reduced from 16
+                        size: 14,
                         color: AppColor().darkYellowColor,
                       ),
                     ),
@@ -676,7 +748,7 @@ class _HomeScreenViewState extends State<HomeScreenView>
                       Text(
                         name.isNotEmpty ? name : "Guest",
                         style: MontserratStyles.montserratMediumTextStyle(
-                          size: 18, // Reduced from 20
+                          size: 18,
                           color: AppColor().darkCharcoalBlueColor,
                         ),
                         maxLines: 1,
@@ -686,26 +758,26 @@ class _HomeScreenViewState extends State<HomeScreenView>
                       Text(
                         name.isNotEmpty ? name : "Guest",
                         style: MontserratStyles.montserratMediumTextStyle(
-                          size: 18, // Reduced from 20
+                          size: 18,
                           color: AppColor().darkCharcoalBlueColor,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    const SizedBox(height: 9), // Reduced from 10
+                    const SizedBox(height: 9),
                     Row(
                       children: [
                         Image.asset(
                           locationIcon,
-                          height: 16, // Reduced from 18
-                          width: 16, // Reduced from 18
+                          height: 16,
+                          width: 16,
                         ),
-                        const SizedBox(width: 4), // Reduced from 5
+                        const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             location,
                             style: MontserratStyles.montserratSemiBoldTextStyle(
-                              size: 13, // Reduced from 14
+                              size: 13,
                               color: AppColor().darkCharcoalBlueColor,
                             ),
                             maxLines: 1,

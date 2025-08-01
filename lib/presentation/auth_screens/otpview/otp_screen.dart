@@ -67,10 +67,7 @@ class _OtpScreenViewState extends State<OtpScreenView> {
     for (var controller in controllers) {
       controller.clear();
     }
-    // Focus on first field
     focusNodes[0].requestFocus();
-
-    // Trigger resend event with email parameter
     context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
   }
 

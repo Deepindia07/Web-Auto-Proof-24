@@ -613,7 +613,7 @@ Future _onLanguageChangeMethodCall(BuildContext context) {
                             ),
                             leading: Container(
                               width: 36, // Reduced from 40
-                              height: 36, // Reduced from 40
+                              height: 36,
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade50,
                                 borderRadius: BorderRadius.circular(18), // Reduced from 20
@@ -648,8 +648,6 @@ Future _onLanguageChangeMethodCall(BuildContext context) {
                                 : () {
                               HapticFeedback.lightImpact();
                               final selectedLocale = lang['locale'] as Locale;
-
-                              // Trigger language change through BLoC
                               context
                                   .read<LocalizationsBlocController>()
                                   .add(ChangeLanguageEvent(selectedLocale));
@@ -664,7 +662,7 @@ Future _onLanguageChangeMethodCall(BuildContext context) {
 
               // Footer
               Container(
-                padding: const EdgeInsets.all(16), // Reduced from 20
+                padding: const EdgeInsets.all(16),
                 child: Text(
                   AppLocalizations.of(context)!.selectPreferredLanguage,
                   style: MontserratStyles.montserratRegularTextStyle(

@@ -39,9 +39,9 @@ Exception handleDioError(DioException dioError) {
     case DioExceptionType.receiveTimeout:
       return Exception('Server response timeout. Please try again.');
     case DioExceptionType.badResponse:
-      final statusCode = dioError.response?.statusCode;
+      // final statusCode = dioError.response?.statusCode;
       final message = dioError.response?.data?['message'] ?? 'Unknown error';
-      return Exception('Server error ($statusCode): $message');
+      return Exception('$message');
     case DioExceptionType.cancel:
       return Exception('Request cancelled.');
     case DioExceptionType.connectionError:

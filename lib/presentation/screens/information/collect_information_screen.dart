@@ -269,7 +269,7 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                     },
                   ),
                 ),
-                SizedBox(width: 14), // Reduced from 16 to 14 (-12%)
+                SizedBox(width: 14),
                 Expanded(
                   child: _buildTextField(
                     hint: AppLocalizations.of(context)!.lastName,
@@ -309,8 +309,8 @@ class _CollectInformationScreenViewState extends State<CollectInformationScreenV
                     print("Selected Country: ${countryCode.name}");
                     print("Selected Code: ${countryCode.dialCode}");
                   },
-                  initialSelection: _selectedCountryCode.replaceAll('+', '').isEmpty ? 'US' : null,
-                  favorite: ['+1', '+91', '+44'],
+                  initialSelection: 'FR',
+                  favorite: const ['+33', 'FR'],
                   showCountryOnly: true,
                   showOnlyCountryWhenClosed: false,
                   alignLeft: false,

@@ -1,5 +1,6 @@
 import "dart:io";
 
+import "package:auto_proof/constants/const_color.dart";
 import "package:flutter/material.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -59,4 +60,15 @@ String maskPhoneNumber(String phone) {
   final visiblePart = phone.substring(phone.length - 2);
   final masked = '*' * (phone.length - 2);
   return '$masked$visiblePart';
+}
+
+
+Widget universalNull(){
+  return Column(
+    spacing: 10,
+    children: [
+      Image.asset("assets/icon/null_data.png",height: 40,width: 40,color: AppColor().silverShadeGrayColor,),
+      Text("No data available!")
+    ],
+  );
 }

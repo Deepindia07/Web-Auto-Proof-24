@@ -10,6 +10,7 @@ const String emailKey = "emailKey";
 const String phoneKey = "phoneKey";
 const String localeKey = "localeKey";
 const String companyId = "companyId";
+const String vehicleId = "vehicleId";
 const String roleKey = "roleKey";
 const String isVerifiedEmail = "isVerifiedEmail";
 const String isEmailFromSignUp = "isEmailFromSignUp";

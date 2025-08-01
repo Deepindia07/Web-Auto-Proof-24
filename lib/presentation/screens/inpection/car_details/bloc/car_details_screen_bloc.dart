@@ -24,18 +24,13 @@ class CarDetailsScreenBloc extends Bloc<CarDetailsScreenEvent, CarDetailsScreenS
     emit(CarDetailsScreenLoading());
 
     try {
-      // Validate form first
       List<String> validationErrors = _validateCarDetails(event.carDetails);
 
       if (validationErrors.isNotEmpty) {
         emit(CarDetailsScreenValidationError(errors: validationErrors));
         return;
       }
-
-      // Save the car details (you can add your save logic here)
       _currentCarDetails = event.carDetails;
-
-      // Simulate API call delay
       await Future.delayed(Duration(seconds: 1));
 
       emit(CarDetailsScreenSuccess(carDetails: _currentCarDetails));
@@ -104,17 +99,13 @@ class CarDetailsScreenBloc extends Bloc<CarDetailsScreenEvent, CarDetailsScreenS
   }
 
   bool _isValidNumberPlate(String numberPlate) {
-    // Simple validation for LL-DDD-LL format
     RegExp regex = RegExp(r'^[A-Z]{2}-\d{3}-[A-Z]{2}$');
     return regex.hasMatch(numberPlate);
   }
-
-  // Method to get current car details
   CarDetailsModel getCurrentCarDetails() {
     return _currentCarDetails;
   }
 
-  // Method to reset form
   void resetForm() {
     _currentCarDetails = CarDetailsModel.empty();
     add(UpdateCarDetailsEvent(carDetails: _currentCarDetails));

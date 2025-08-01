@@ -243,30 +243,13 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
             ),
           ],
         ),
-        SizedBox(height: 12),
-
-        // Compact checklist items
-        _buildCompactCheckList(
-          label: AppLocalizations.of(context)!.checklist,
-          title: AppLocalizations.of(context)!.licenseInstruction,
-          value: _driverLicenseChecked,
-          onChanged: (value) {
-            setState(() {
-              _driverLicenseChecked = value;
-            });
-          },
-        ),
-        SizedBox(height: 8),
-
-        _buildCompactCheckList(
-          label: AppLocalizations.of(context)!.checklist,
-          title: AppLocalizations.of(context)!.licenseInstructionId,
-          value: _driverIdChecked,
-          onChanged: (value) {
-            setState(() {
-              _driverIdChecked = value;
-            });
-          },
+        vGap(12),
+        _buildTextField(
+          label: "Comments",
+          maxLine:3,
+          hintText: 'Enter comments',
+          controller: _leaseEndDateTimeController,
+          isRequired: true,
         ),
         SizedBox(height: 16), // Reduced from vGap(20)
       ],
@@ -320,6 +303,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
     required String label,
     required TextEditingController controller,
     String? hintText,
+    int? maxLine,
     bool isRequired = false,
   }) {
     return Column(
@@ -343,6 +327,7 @@ class _ClientDetailsScreenViewState extends State<ClientDetailsScreenView> {
         ),
         SizedBox(height: 6), // Reduced from 8
         CustomTextField(
+          maxLines: maxLine,
           fillColor: AppColor().backgroundColor,
           controller: controller,
           hintText: hintText,

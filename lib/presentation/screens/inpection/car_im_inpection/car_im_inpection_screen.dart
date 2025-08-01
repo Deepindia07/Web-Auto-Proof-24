@@ -197,8 +197,8 @@ class _CarImageInpectionScreenViewState
             child: Center(
               child: Image.asset(
                 image!,
-                height: 42,
-                width: 42,
+                height: 55,
+                width: 55,
                 // color: AppColor().silverShadeGrayColor,
               ),
             ),

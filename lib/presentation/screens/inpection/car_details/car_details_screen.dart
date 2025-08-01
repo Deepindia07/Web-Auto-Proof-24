@@ -289,6 +289,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               child: _buildTextField(
                 keyboardType: TextInputType.number,
                 label: AppLocalizations.of(context)!.kmDay,
+                hintText: AppLocalizations.of(context)!.kmDay,
                 controller: _kmDayController,
                 isRequired: true,
               ),
@@ -316,6 +317,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               child: _buildTextField(
                 keyboardType: TextInputType.number,
                 label: AppLocalizations.of(context)!.priceTotal,
+                hintText: "0",
                 controller: _priceTotalController,
                 isRequired: true,
               ),

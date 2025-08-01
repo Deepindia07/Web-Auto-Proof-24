@@ -1,4 +1,8 @@
 part of 'vehicles_screen_bloc.dart';
 
 @immutable
-sealed class VehiclesScreenEvent {}
+abstract class VehiclesScreenEvent {}
+
+class LoadVehiclesEvent extends VehiclesScreenEvent {}
+
+class RefreshVehiclesEvent extends VehiclesScreenEvent {}

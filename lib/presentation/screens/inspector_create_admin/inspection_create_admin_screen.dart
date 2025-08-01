@@ -308,8 +308,9 @@ class _InspectionCreateAdminScreenViewState extends State<InspectionCreateAdminS
             });
           }
         },
-        initialSelection: _selectedCountryCode.replaceAll('+', '').isEmpty ? 'US' : null,
-        favorite: const ['+1', '+91', '+44', '+33'],
+        // Fix: Set initial selection to 'FR' for France (+33)
+        initialSelection: 'FR',
+        favorite: const ['+33', 'FR'],
         showCountryOnly: true,
         showOnlyCountryWhenClosed: false,
         alignLeft: false,
@@ -616,12 +617,8 @@ class _InspectionCreateAdminScreenViewState extends State<InspectionCreateAdminS
       padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 12),
       onPressed: onTap,
       text: text,
-      backgroundColor: isSecondary
-          ? Colors.transparent
-          : AppColor().darkCharcoalBlueColor,
-      textColor: isSecondary
-          ? AppColor().darkCharcoalBlueColor
-          : Colors.white,
+      backgroundColor: AppColor().darkCharcoalBlueColor,
+      textColor: Colors.white,
 
     );
   }

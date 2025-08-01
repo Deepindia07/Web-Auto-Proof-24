@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../auth/data/models/user_response_model.dart';
 import '../../../../constants/const_string.dart';
@@ -17,7 +18,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   HomeScreenBloc({required this.authenticationApiCall}) : super(HomeScreenInitial()) {
     on<GetProfileEvent>(_onGetProfile);
-    on<UpdateProfileImageEvent>(_onChangeProfileImage); // Add this line
+    on<UpdateProfileImageEvent>(_onChangeProfileImage);
   }
 
   Future<void> _onGetProfile(GetProfileEvent event, Emitter<HomeScreenState> emit) async {
@@ -32,6 +33,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       if (result.isSuccess) {
         final userProfile = result.data;
         SharedPrefsHelper.instance.setString(companyId, userProfile.user!.companyId.toString());
+        print("company Id :====================> ${SharedPrefsHelper.instance.getString(companyId)}");
         emit(HomeScreenProfileLoaded(userProfile: userProfile));
       } else {
         emit(HomeScreenError(message: result.error ?? 'Failed to load profile'));
@@ -47,7 +49,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       emit(HomeScreenProfileImageUpdating());
 
       final result = await authenticationApiCall.userProfileImageApiCall(
-        multipartBody: event.multipartBody,
+        formData:  event.multipartBody,
       );
 
       if (result.isSuccess) {

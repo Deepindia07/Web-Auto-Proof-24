@@ -70,7 +70,13 @@ class CustomAppBar extends StatelessWidget {
             Positioned(
               top: 25,
               left: 20,
-              child: Image.asset(arrowBackIcon, height: 20, width: 20),
+              child: GestureDetector(
+                  onTap: onBackPressed ?? () {
+                    if (isBacked != false) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Image.asset(arrowBackIcon, height: 20, width: 20)),
             ),
             Positioned(
               top: (largeWidget != null) ? 20 : 20,

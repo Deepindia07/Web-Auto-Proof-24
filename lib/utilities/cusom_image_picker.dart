@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:auto_proof/constants/const_color.dart';
-import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -139,10 +137,7 @@ class _ImageSelectorDialogState extends State<_ImageSelectorDialog>
         Navigator.of(context).pop();
         return;
       }
-
-      // Different permission handling for iOS vs Android
       if (Platform.isIOS) {
-        // On iOS, image_picker handles permissions automatically
         final XFile? image = await _picker.pickImage(
           source: ImageSource.camera,
           imageQuality: 85,
