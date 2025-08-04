@@ -292,7 +292,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                               vGap(1),
                               CustomButton(
                                 height: screenSize.height * 0.06,
-                                width: screenSize.width * 0.95,
+                                width: screenSize.width * 0.90,
                                 borderRadius: 48,
                                 backgroundColor: AppColor().yellowWarmColor,
                                 onPressed: state is ChangePasswordScreenLoading
