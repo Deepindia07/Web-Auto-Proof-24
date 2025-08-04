@@ -99,7 +99,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
-        child: isLandscape ? _buildLandscapeLayout(context) : _buildPortraitLayout(context),
+        child: _buildPortraitLayout(context),
       ),
     );
   }
@@ -112,54 +112,63 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     return Padding(
       padding: const EdgeInsets.all(30.0),
       child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (widget.userRole != "owner") vGap(screenHeight * 0.09),
+        //Align(alignment: Alignment.topCenter,
+        //             child: ConstrainedBox(
+        //               constraints: BoxConstraints(maxWidth: 600),
+        //
+        //               child:
+        child: Center(
+          child: ConstrainedBox(  constraints: BoxConstraints(maxWidth: 600),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (widget.userRole != "owner") vGap(screenHeight * 0.09),
 
-              // Header section with logo and title
-              SizedBox(
-                height: screenHeight * 0.216,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      appLogo,
-                      height: screenHeight * 0.126,
-                      width: screenHeight * 0.126,
-                      fit: BoxFit.contain,
+                  // Header section with logo and title
+                  SizedBox(
+                    height: screenHeight * 0.216,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          appLogo,
+                          height: screenHeight * 0.126,
+                          width: screenHeight * 0.126,
+                          fit: BoxFit.contain,
+                        ),
+                        vGap(screenHeight * 0.0117),
+                        Text(
+                          "Auto Proof 24",
+                          style: MontserratStyles.montserratBoldTextStyle(
+                            color: AppColor().darkCharcoalBlueColor,
+                            size: 35,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    vGap(screenHeight * 0.0117),
-                    Text(
-                      "Auto Proof 24",
-                      style: MontserratStyles.montserratBoldTextStyle(
-                        color: AppColor().darkCharcoalBlueColor,
-                        size: screenWidth * 0.09,
-                      ),
-                      textAlign: TextAlign.center,
+                  ),
+
+                  vGap(screenHeight * 0.0009),
+                  Text(
+                    AppLocalizations.of(context)!.appTitle,
+                    style: MontserratStyles.montserratSemiBoldTextStyle(
+                      size: 12,
+                      color: AppColor().darkCharcoalBlueColor,
                     ),
-                  ],
-                ),
+                  ),
+
+                  // Form fields
+                  _buildFormFields(context, screenHeight, screenWidth, false),
+
+                  // Buttons
+                  _buildButtons(context, screenHeight, screenWidth, false),
+                ],
               ),
-
-              vGap(screenHeight * 0.0009),
-              Text(
-                AppLocalizations.of(context)!.appTitle,
-                style: MontserratStyles.montserratSemiBoldTextStyle(
-                  size: 12,
-                  color: AppColor().darkCharcoalBlueColor,
-                ),
-              ),
-
-              // Form fields
-              _buildFormFields(context, screenHeight, screenWidth, false),
-
-              // Buttons
-              _buildButtons(context, screenHeight, screenWidth, false),
-            ],
+            ),
           ),
         ),
       ),

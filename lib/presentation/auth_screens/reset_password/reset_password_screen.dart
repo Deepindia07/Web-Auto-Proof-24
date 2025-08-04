@@ -107,147 +107,152 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           builder: (context, state) {
             return Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        vGap(50),
-                        Image.asset(lockLayer1Icon, height: 80, width: 80),
-                        Text(
-                         AppLocalizations.of(context)!.reset,
-                          style: MontserratStyles.montserratBoldTextStyle(
-                            size: 48,
-                            color: AppColor().darkCharcoalBlueColor,
-                          ),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.password,
-                          style: MontserratStyles.montserratSemiBoldTextStyle(
-                            size: 48,
-                            color: AppColor().darkCharcoalBlueColor
-                          )
-                        ),
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF9CA3AF),
-                              height: 1.4,
+              child: Align(
+                alignment: Alignment.center,
+                child: ConstrainedBox(    constraints: BoxConstraints(maxWidth: 600),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            vGap(50),
+                            Image.asset(lockLayer1Icon, height: 80, width: 80),
+                            Text(
+                             AppLocalizations.of(context)!.reset,
+                              style: MontserratStyles.montserratBoldTextStyle(
+                                size: 48,
+                                color: AppColor().darkCharcoalBlueColor,
+                              ),
                             ),
-                            children: [
-                              TextSpan(
-                                text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
-                                style: MontserratStyles.montserratNormalTextStyle(
-                                  color: AppColor().silverShadeGrayColor,
-                                  size: 16,
+                            Text(
+                              AppLocalizations.of(context)!.password,
+                              style: MontserratStyles.montserratSemiBoldTextStyle(
+                                size: 48,
+                                color: AppColor().darkCharcoalBlueColor
+                              )
+                            ),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFF9CA3AF),
+                                  height: 1.4,
                                 ),
+                                children: [
+                                  TextSpan(
+                                    text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
+                                    style: MontserratStyles.montserratNormalTextStyle(
+                                      color: AppColor().silverShadeGrayColor,
+                                      size: 16,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: maskEmail('${widget.email}'),
+                                    style: MontserratStyles.montserratNormalTextStyle(
+                                      color: AppColor().silverShadeGrayColor,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              TextSpan(
-                                text: maskEmail('${widget.email}'),
-                                style: MontserratStyles.montserratNormalTextStyle(
-                                  color: AppColor().silverShadeGrayColor,
-                                  size: 16,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            vGap(20),
+                          ],
                         ),
-                        vGap(20),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: screenSize.height * 0.45,
-                    padding: EdgeInsets.all(32),
-                    decoration: BoxDecoration(
-                      color: AppColor().darkCharcoalBlueColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(48),
-                        topRight: Radius.circular(48),
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        vGap(20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomPasswordField(
-                              textStyle: MontserratStyles.montserratRegularTextStyle(
-                                size: 15,
-                                color: AppColor().darkYellowColor,
-                              ),
-                              controller: _newPasswordController,
-                              focusedBorderColor: AppColor().darkYellowColor,
-                              borderWidth: 2,
-                              fillColor: AppColor().darkCharcoalBlueColor,
-                              borderRadius: 30,
-                              hintText: AppLocalizations.of(context)!.newPassword,
-                              onChanged: (value) => _validatePasswords(),
-                            ),
-                            if (_passwordError != null)
-                              Padding(
-                                padding: EdgeInsets.only(top: 8, left: 16),
-                                child: Text(
-                                  _passwordError!,
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        vGap(20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomPasswordField(
-                              textStyle: MontserratStyles.montserratRegularTextStyle(
-                                size: 15,
-                                color: AppColor().darkYellowColor,
-                              ),
-                              controller: _confirmNewPasswordController,
-                              focusedBorderColor: AppColor().darkYellowColor,
-                              borderWidth: 2,
-                              fillColor: AppColor().darkCharcoalBlueColor,
-                              borderRadius: 30,
-                              hintText: AppLocalizations.of(context)!.confirmPassword,
-                              onChanged: (value) => _validatePasswords(),
-                            ),
-                            if (_confirmPasswordError != null)
-                              Padding(
-                                padding: EdgeInsets.only(top: 8, left: 16),
-                                child: Text(
-                                  _confirmPasswordError!,
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        vGap(25),
-                        CustomButton(
-                          height: screenSize.height * 0.055,
-                          width: screenSize.width * 0.95,
-                          borderRadius: 48,
-                          backgroundColor: AppColor().yellowWarmColor,
-                          onPressed: state is ResetPasswordScreenLoading ? null : _createPassword,
-                          text: state is ResetPasswordScreenLoading ? AppLocalizations.of(context)!.loading: AppLocalizations.of(context)!.create,
-                          textStyle: MontserratStyles.montserratMediumTextStyle(
-                            color: AppColor().darkCharcoalBlueColor,
-                            size: 20,
+                      Container(
+                        height: screenSize.height * 0.45,
+                        padding: EdgeInsets.all(32),
+                        decoration: BoxDecoration(
+                          color: AppColor().darkCharcoalBlueColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(48),
+                            topRight: Radius.circular(48),
                           ),
                         ),
-                      ],
-                    ),
+                        child: Column(
+                          children: [
+                            vGap(20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomPasswordField(
+                                  textStyle: MontserratStyles.montserratRegularTextStyle(
+                                    size: 15,
+                                    color: AppColor().darkYellowColor,
+                                  ),
+                                  controller: _newPasswordController,
+                                  focusedBorderColor: AppColor().darkYellowColor,
+                                  borderWidth: 2,
+                                  fillColor: AppColor().darkCharcoalBlueColor,
+                                  borderRadius: 30,
+                                  hintText: AppLocalizations.of(context)!.newPassword,
+                                  onChanged: (value) => _validatePasswords(),
+                                ),
+                                if (_passwordError != null)
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8, left: 16),
+                                    child: Text(
+                                      _passwordError!,
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            vGap(20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomPasswordField(
+                                  textStyle: MontserratStyles.montserratRegularTextStyle(
+                                    size: 15,
+                                    color: AppColor().darkYellowColor,
+                                  ),
+                                  controller: _confirmNewPasswordController,
+                                  focusedBorderColor: AppColor().darkYellowColor,
+                                  borderWidth: 2,
+                                  fillColor: AppColor().darkCharcoalBlueColor,
+                                  borderRadius: 30,
+                                  hintText: AppLocalizations.of(context)!.confirmPassword,
+                                  onChanged: (value) => _validatePasswords(),
+                                ),
+                                if (_confirmPasswordError != null)
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8, left: 16),
+                                    child: Text(
+                                      _confirmPasswordError!,
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            vGap(25),
+                            CustomButton(
+                              height: screenSize.height * 0.055,
+                              width: screenSize.width * 0.95,
+                              borderRadius: 48,
+                              backgroundColor: AppColor().yellowWarmColor,
+                              onPressed: state is ResetPasswordScreenLoading ? null : _createPassword,
+                              text: state is ResetPasswordScreenLoading ? AppLocalizations.of(context)!.loading: AppLocalizations.of(context)!.create,
+                              textStyle: MontserratStyles.montserratMediumTextStyle(
+                                color: AppColor().darkCharcoalBlueColor,
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           },

@@ -230,7 +230,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    final headerHeight = 180.0 + statusBarHeight;
+    final headerHeight = 230.0 + statusBarHeight;
 
     return BlocProvider<SignUpScreenBloc>.value(
       value: _signUpBloc,
@@ -275,312 +275,318 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
               });
             }
           },
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    vGap(headerHeight),
-                    Padding(
-                      padding: const EdgeInsets.all(30),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          spacing: 15,
-                          children: [
-                            Row(
-                              spacing: 3,
+          child:  Align(alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600),
+
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        vGap(headerHeight),
+                        Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              spacing: 15,
                               children: [
-                                Expanded(
-                                  child: _buildTextField(
-                                    controller: _fullNameController,
-                                    hint: AppLocalizations.of(context)!.firstName,
-                                    keyboardType: TextInputType.name,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: _buildTextField(
-                                    controller: _lastNameController,
-                                    hint: AppLocalizations.of(context)!.lastName,
-                                    keyboardType: TextInputType.name,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            _buildTextField(
-                              readonly: _isEmailVerified,
-                              controller: _emailController,
-                              hint: AppLocalizations.of(context)!.emailAddress,
-                              onChanged: (value) {
-                                if (_isEmailVerified) {
-                                  _resetEmailVerification();
-                                }
-                              },
-                              suffix: TextButton(
-                                onPressed: (_isEmailVerified || _isSendingOtp || _isCheckingVerification)
-                                    ? null
-                                    : _handleEmailVerification,
-                                child: _buildEmailVerificationButton(),
-                              ),
-                              icon: Icon(
-                                _isEmailVerified ? Icons.verified : Icons.mail_outline,
-                                color: _isEmailVerified ? Colors.green : null,
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                            ),
-                            _buildTextField(
-                              controller: _phoneController,
-                              hint: AppLocalizations.of(context)!.phone,
-                              suffix: TextButton(
-                                onPressed: () {
-                                  // TODO: Implement phone verification
-                                },
-                                child: Text(
-                                  _isPhoneVerified
-                                      ? AppLocalizations.of(context)!.verified
-                                      : AppLocalizations.of(context)!.verify,
-                                  textAlign: TextAlign.center,
-                                  style: MontserratStyles.montserratMediumTextStyle(
-                                    color: _isPhoneVerified
-                                        ? Colors.green
-                                        : AppColor().darkYellowColor,
-                                  ),
-                                ),
-                              ),
-                              icon: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: CustomContainer(
-                                  height: 35,
-                                  width: 90,
-                                  border: Border(
-                                    right: BorderSide(
-                                      width: 1,
-                                      color: AppColor().silverShadeGrayColor,
+                                Row(
+                                  spacing: 3,
+                                  children: [
+                                    Expanded(
+                                      child: _buildTextField(
+                                        controller: _fullNameController,
+                                        hint: AppLocalizations.of(context)!.firstName,
+                                        keyboardType: TextInputType.name,
+                                      ),
                                     ),
+                                    Expanded(
+                                      child: _buildTextField(
+                                        controller: _lastNameController,
+                                        hint: AppLocalizations.of(context)!.lastName,
+                                        keyboardType: TextInputType.name,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _buildTextField(
+                                  readonly: _isEmailVerified,
+                                  controller: _emailController,
+                                  hint: AppLocalizations.of(context)!.emailAddress,
+                                  onChanged: (value) {
+                                    if (_isEmailVerified) {
+                                      _resetEmailVerification();
+                                    }
+                                  },
+                                  suffix: TextButton(
+                                    onPressed: (_isEmailVerified || _isSendingOtp || _isCheckingVerification)
+                                        ? null
+                                        : _handleEmailVerification,
+                                    child: _buildEmailVerificationButton(),
                                   ),
-                                  borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(0),
-                                      topLeft: Radius.circular(48),
-                                      bottomLeft: Radius.circular(48),
-                                      bottomRight: Radius.circular(0)
+                                  icon: Icon(
+                                    _isEmailVerified ? Icons.verified : Icons.mail_outline,
+                                    color: _isEmailVerified ? Colors.green : null,
                                   ),
-                                  backgroundColor: AppColor().backgroundColor,
-                                  padding: const EdgeInsets.all(8),
-                                  child: CountryCodePicker(
-                                    onChanged: (CountryCode countryCode) {
-                                      // setState(() {
-                                      //   selectedCountryCode = countryCode.toString();
-                                      //   _isPhoneVerified = false;
-                                      // });
-                                      print("Selected Country: ${countryCode.name}");
-                                      print("Selected Code: ${countryCode.dialCode}");
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                                _buildTextField(
+                                  controller: _phoneController,
+                                  hint: AppLocalizations.of(context)!.phone,
+                                  suffix: TextButton(
+                                    onPressed: () {
+                                      // TODO: Implement phone verification
                                     },
-                                    initialSelection: 'FR',
-                                    favorite: const ["+33"],
-                                    showCountryOnly: true,
-                                    showOnlyCountryWhenClosed: false,
-                                    alignLeft: false,
-                                    textStyle: TextStyle(
-                                      color: AppColor().darkCharcoalBlueColor,
-                                      fontSize: 16,
-                                    ),
-                                    dialogTextStyle: TextStyle(
-                                      color: AppColor().darkCharcoalBlueColor,
-                                    ),
-                                    searchStyle: TextStyle(
-                                      color: AppColor().darkCharcoalBlueColor,
-                                    ),
-                                    searchDecoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 5),
-                                      hintText: 'Search country',
-                                      hintStyle: TextStyle(
-                                        color: AppColor().darkCharcoalBlueColor.withOpacity(0.6),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
+                                    child: Text(
+                                      _isPhoneVerified
+                                          ? AppLocalizations.of(context)!.verified
+                                          : AppLocalizations.of(context)!.verify,
+                                      textAlign: TextAlign.center,
+                                      style: MontserratStyles.montserratMediumTextStyle(
+                                        color: _isPhoneVerified
+                                            ? Colors.green
+                                            : AppColor().darkYellowColor,
                                       ),
                                     ),
-                                    dialogBackgroundColor: AppColor().backgroundColor,
-                                    barrierColor: Colors.black54,
-                                    dialogSize: Size(
-                                        MediaQuery.of(context).size.width * 0.8,
-                                        MediaQuery.of(context).size.height * 0.6
-                                    ),
-                                    builder: (countryCode) {
-                                      return Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          if (countryCode != null)
-                                            Image.asset(
-                                              countryCode.flagUri!,
-                                              package: 'country_code_picker',
-                                              width: 24,
-                                              height: 18,
-                                              fit: BoxFit.fill,
-                                            ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            countryCode!.dialCode ?? '',
-                                            style: TextStyle(
-                                              color: AppColor().darkCharcoalBlueColor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                  ),
+                                  icon: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: CustomContainer(
+                                      height: 35,
+                                      width: 90,
+                                      border: Border(
+                                        right: BorderSide(
+                                          width: 1,
+                                          color: AppColor().silverShadeGrayColor,
+                                        ),
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(0),
+                                          topLeft: Radius.circular(48),
+                                          bottomLeft: Radius.circular(48),
+                                          bottomRight: Radius.circular(0)
+                                      ),
+                                      backgroundColor: AppColor().backgroundColor,
+                                      padding: const EdgeInsets.all(8),
+                                      child: CountryCodePicker(
+                                        onChanged: (CountryCode countryCode) {
+                                          // setState(() {
+                                          //   selectedCountryCode = countryCode.toString();
+                                          //   _isPhoneVerified = false;
+                                          // });
+                                          print("Selected Country: ${countryCode.name}");
+                                          print("Selected Code: ${countryCode.dialCode}");
+                                        },
+                                        initialSelection: 'FR',
+                                        favorite: const ["+33"],
+                                        showCountryOnly: true,
+                                        showOnlyCountryWhenClosed: false,
+                                        alignLeft: false,
+                                        textStyle: TextStyle(
+                                          color: AppColor().darkCharcoalBlueColor,
+                                          fontSize: 16,
+                                        ),
+                                        dialogTextStyle: TextStyle(
+                                          color: AppColor().darkCharcoalBlueColor,
+                                        ),
+                                        searchStyle: TextStyle(
+                                          color: AppColor().darkCharcoalBlueColor,
+                                        ),
+                                        searchDecoration: InputDecoration(
+                                          contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                                          hintText: 'Search country',
+                                          hintStyle: TextStyle(
+                                            color: AppColor().darkCharcoalBlueColor.withOpacity(0.6),
                                           ),
-                                        ],
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                            borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                            borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
+                                          ),
+                                        ),
+                                        dialogBackgroundColor: AppColor().backgroundColor,
+                                        barrierColor: Colors.black54,
+                                        dialogSize: Size(
+                                            MediaQuery.of(context).size.width * 0.8,
+                                            MediaQuery.of(context).size.height * 0.6
+                                        ),
+                                        builder: (countryCode) {
+                                          return Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              if (countryCode != null)
+                                                Image.asset(
+                                                  countryCode.flagUri!,
+                                                  package: 'country_code_picker',
+                                                  width: 24,
+                                                  height: 18,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                countryCode!.dialCode ?? '',
+                                                style: TextStyle(
+                                                  color: AppColor().darkCharcoalBlueColor,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.phone,
+                                ),
+                                CustomPasswordField(
+                                  borderRadius: 48,
+                                  borderWidth: 1,
+                                  fillColor: AppColor().backgroundColor,
+                                  controller: _passwordController,
+                                  hintText: AppLocalizations.of(context)!.password,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'This field is required';
+                                    }
+                                    if (value.length < 6) {
+                                      return 'Password must be at least 6 characters';
+                                    }
+                                    return null;
+                                  },
+                                  prefix: const Icon(Icons.lock, color: Colors.grey),
+                                ),
+                                CustomPasswordField(
+                                  borderRadius: 48,
+                                  borderWidth: 1,
+                                  fillColor: AppColor().backgroundColor,
+                                  controller: _retypePasswordController,
+                                  hintText: AppLocalizations.of(context)!.retypePassword,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'This field is required';
+                                    }
+                                    if (value != _passwordController.text) {
+                                      return 'Passwords do not match';
+                                    }
+                                    return null;
+                                  },
+                                  prefix: const Icon(Icons.lock, color: Colors.grey),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40.0),
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: _agreeToTerms,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _agreeToTerms = value ?? false;
+                                          });
+                                        },
+                                        activeColor: const Color(0xFF2D3748),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: AppLocalizations.of(context)!.agreeTerms,
+                                            style: MontserratStyles.montserratMediumTextStyle(
+                                              size: 14,
+                                              color: AppColor().silverShadeGrayColor,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: AppLocalizations.of(context)!.termsPrivacy,
+                                                style: MontserratStyles.montserratMediumTextStyle(
+                                                  size: 14,
+                                                  color: AppColor().darkCharcoalBlueColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 55,
+                                  child: BlocBuilder<SignUpScreenBloc, SignUpScreenState>(
+                                    bloc: _signUpBloc,
+                                    builder: (context, state) {
+                                      bool isLoading = state is SignUpScreenLoading;
+
+                                      return CustomButton(
+                                        onPressed: _agreeToTerms && !isLoading
+                                            ? () => _handleRegistration(context)
+                                            : null,
+                                        text: isLoading
+                                            ? AppLocalizations.of(context)!.creatingAccount
+                                            : AppLocalizations.of(context)!.createAnAccountTitle,
+                                        borderRadius: 48,
+                                        textStyle: MontserratStyles.montserratMediumTextStyle(
+                                          color: _agreeToTerms && !isLoading
+                                              ? AppColor().yellowWarmColor
+                                              : AppColor().darkCharcoalBlueColor,
+                                          size: 18,
+                                        ),
+                                        elevation: 5,
                                       );
                                     },
                                   ),
                                 ),
-                              ),
-                              keyboardType: TextInputType.phone,
-                            ),
-                            CustomPasswordField(
-                              borderRadius: 48,
-                              borderWidth: 1,
-                              fillColor: AppColor().backgroundColor,
-                              controller: _passwordController,
-                              hintText: AppLocalizations.of(context)!.password,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'This field is required';
-                                }
-                                if (value.length < 6) {
-                                  return 'Password must be at least 6 characters';
-                                }
-                                return null;
-                              },
-                              prefix: const Icon(Icons.lock, color: Colors.grey),
-                            ),
-                            CustomPasswordField(
-                              borderRadius: 48,
-                              borderWidth: 1,
-                              fillColor: AppColor().backgroundColor,
-                              controller: _retypePasswordController,
-                              hintText: AppLocalizations.of(context)!.retypePassword,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'This field is required';
-                                }
-                                if (value != _passwordController.text) {
-                                  return 'Passwords do not match';
-                                }
-                                return null;
-                              },
-                              prefix: const Icon(Icons.lock, color: Colors.grey),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 40.0),
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                    value: _agreeToTerms,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _agreeToTerms = value ?? false;
-                                      });
-                                    },
-                                    activeColor: const Color(0xFF2D3748),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: AppLocalizations.of(context)!.agreeTerms,
-                                        style: MontserratStyles.montserratMediumTextStyle(
-                                          size: 14,
-                                          color: AppColor().silverShadeGrayColor,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: AppLocalizations.of(context)!.termsPrivacy,
-                                            style: MontserratStyles.montserratMediumTextStyle(
-                                              size: 14,
-                                              color: AppColor().darkCharcoalBlueColor,
-                                            ),
-                                          ),
-                                        ],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!.haveAccount,
+                                      style: MontserratStyles.montserratMediumTextStyle(
+                                        size: 14,
+                                        color: AppColor().silverShadeGrayColor,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 55,
-                              child: BlocBuilder<SignUpScreenBloc, SignUpScreenState>(
-                                bloc: _signUpBloc,
-                                builder: (context, state) {
-                                  bool isLoading = state is SignUpScreenLoading;
-
-                                  return CustomButton(
-                                    onPressed: _agreeToTerms && !isLoading
-                                        ? () => _handleRegistration(context)
-                                        : null,
-                                    text: isLoading
-                                        ? AppLocalizations.of(context)!.creatingAccount
-                                        : AppLocalizations.of(context)!.createAnAccountTitle,
-                                    borderRadius: 48,
-                                    textStyle: MontserratStyles.montserratMediumTextStyle(
-                                      color: _agreeToTerms && !isLoading
-                                          ? AppColor().yellowWarmColor
-                                          : AppColor().darkCharcoalBlueColor,
-                                      size: 18,
+                                    hGap(10),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        AppLocalizations.of(context)!.signIn,
+                                        style: MontserratStyles.montserratMediumTextStyle(
+                                          size: 14,
+                                          color: AppColor().darkCharcoalBlueColor,
+                                        ),
+                                      ),
                                     ),
-                                    elevation: 5,
-                                  );
-                                },
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.haveAccount,
-                                  style: MontserratStyles.montserratMediumTextStyle(
-                                    size: 14,
-                                    color: AppColor().silverShadeGrayColor,
-                                  ),
+                                  ],
                                 ),
-                                hGap(10),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)!.signIn,
-                                    style: MontserratStyles.montserratMediumTextStyle(
-                                      size: 14,
-                                      color: AppColor().darkCharcoalBlueColor,
-                                    ),
-                                  ),
-                                ),
+                                vGap(30),
                               ],
                             ),
-                            vGap(30),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  // Header section
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: UpperContainerWidget(height: headerHeight),
+                  ),
+                ],
               ),
-              // Header section
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: UpperContainerWidget(height: headerHeight),
-              ),
-            ],
+            ),
           ),
         ),
       ),

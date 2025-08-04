@@ -2,7 +2,7 @@ part of 'app_route_imple.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: AppRoute.splashScreen,
+    initialLocation: AppRoute.loginScreen,
     routes: [
       GoRoute(
         path: AppRoute.splashScreen,
@@ -42,11 +42,11 @@ class AppRouter {
           print("user role: = $role");
           return _buildPageWithAnimation(
             state: state,
-            child: LoginScreen(userRole: role!,),
+            child: LoginScreen(userRole: "owner"),
             animation: AppAnimations.slideFromBottom,
             duration: const Duration(milliseconds: 500),
           );
-        }
+        },
       ),
       GoRoute(
         path: AppRoute.signUpScreen,
@@ -66,7 +66,7 @@ class AppRouter {
           final email = extraData?['email'] ?? '';
           return _buildPageWithAnimation(
             state: state,
-            child: ForgotScreen(emailOrPhone: email,),
+            child: ForgotScreen(emailOrPhone: email),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           );
@@ -77,23 +77,28 @@ class AppRouter {
         name: 'otp',
         pageBuilder: (context, state) {
           final email = state.extra.toString();
-          final isEmailFromRegister = SharedPrefsHelper.instance.getBool(isEmailFromSignUp);
+          final isEmailFromRegister = SharedPrefsHelper.instance.getBool(
+            isEmailFromSignUp,
+          );
           return _buildPageWithAnimation(
             state: state,
-            child: OtpScreen(email: email,isEmailFromSignUp: isEmailFromRegister!,),
+            child: OtpScreen(
+              email: "tester4646@yopmail.com",
+              isEmailFromSignUp: false,
+            ),
             animation: AppAnimations.slideFromBottom,
             duration: const Duration(milliseconds: 500),
           );
-        }
+        },
       ),
       GoRoute(
         path: AppRoute.resetPasswordScreen,
         name: 'resetpassword',
-        pageBuilder: (context, state){
+        pageBuilder: (context, state) {
           final email = state.extra.toString();
           return _buildPageWithAnimation(
             state: state,
-            child: ResetPasswordScreen(email: email,),
+            child: ResetPasswordScreen(email: email),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           );
@@ -107,19 +112,20 @@ class AppRouter {
           final role = SharedPrefsHelper.instance.getString(roleKey);
           return _buildPageWithAnimation(
             state: state,
-            child: HomeScreen(userRole: role!,),
+            child: HomeScreen(userRole: role!),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           );
-        }
+        },
       ),
 
       GoRoute(
         path: AppRoute.reportsScreen,
         name: 'reports',
-        pageBuilder: (context, state) => _buildPageWithAnimation( /*deep07developer1@gmail.com*/
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          /*deep07developer1@gmail.com*/
           state: state,
-          child: ReportsScreen(isBacked: false,onBack: (){},),
+          child: ReportsScreen(isBacked: false, onBack: () {}),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -149,21 +155,25 @@ class AppRouter {
         name: 'collectInformationScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: CollectInformationScreen(isBacked: false,onBack: (){}, userId: SharedPrefsHelper.instance.getString(userId)!,),
+          child: CollectInformationScreen(
+            isBacked: false,
+            onBack: () {},
+            userId: SharedPrefsHelper.instance.getString(userId)!,
+          ),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
       ),
       GoRoute(
-          path: AppRoute.notificationScreen,
-          name: 'notification',
-          pageBuilder: (context, state) => _buildPageWithAnimation(
-            state: state,
-            child:  NotificationScreen(isBacked: false,onBack: (){},),
-            animation: AppAnimations.slideFromRightWithScale,
-            duration: const Duration(milliseconds: 500),
-          ),
+        path: AppRoute.notificationScreen,
+        name: 'notification',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: NotificationScreen(isBacked: false, onBack: () {}),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
         ),
+      ),
       GoRoute(
         path: AppRoute.instructionScreen,
         name: 'instructionScreen',
@@ -330,11 +340,7 @@ class AppRouter {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.car_crash_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.car_crash_outlined, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               'Route Not Found',
@@ -343,9 +349,9 @@ class AppRouter {
             const SizedBox(height: 8),
             Text(
               state.uri.toString(),
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -360,4 +366,3 @@ class AppRouter {
     );
   }
 }
-
