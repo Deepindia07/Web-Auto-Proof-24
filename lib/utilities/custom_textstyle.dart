@@ -5,6 +5,7 @@ class MontserratStyles {
   static montserratThinTextStyle({
     double size = 14,
     double height = 1.2,
+
     Color color = Colors.white,
     bool underLineNeeded = false,
   }) {
@@ -13,8 +14,10 @@ class MontserratStyles {
       height: height,
       fontWeight: FontWeight.w100,
       color: color,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
     );
   }
 
@@ -27,13 +30,14 @@ class MontserratStyles {
     List<Shadow>? shadows,
   }) {
     return GoogleFonts.montserrat(
-        fontSize: size,
-        height: height,
-        fontWeight: weight,
-        color: color,
-        decoration:
-        underLineNeeded ? TextDecoration.underline : TextDecoration.none,
-        shadows: shadows
+      fontSize: size,
+      height: height,
+      fontWeight: weight,
+      color: color,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
+      shadows: shadows,
     );
   }
 
@@ -41,15 +45,16 @@ class MontserratStyles {
     double size = 15,
     double height = 1.2,
     Color color = Colors.white,
-    bool underLineNeeded = false,
+    bool underLineNeeded = false, double? letterSpacing,
   }) {
     return GoogleFonts.montserrat(
       fontSize: size,
-      height: height,
+      height: height,      letterSpacing: letterSpacing,
       fontWeight: FontWeight.w600,
       color: color,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
     );
   }
 
@@ -65,8 +70,9 @@ class MontserratStyles {
       fontSize: size,
       fontWeight: FontWeight.w400,
       height: height,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
       color: color,
     );
   }
@@ -80,9 +86,10 @@ class MontserratStyles {
     return GoogleFonts.montserrat(
       fontSize: size,
       height: height,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
-      fontWeight: FontWeight.w500,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
+      fontWeight: FontWeight.w700,
       color: color,
     );
   }
@@ -96,15 +103,18 @@ class MontserratStyles {
     List<Shadow>? shadows,
   }) {
     return GoogleFonts.montserrat(
-        fontSize: size,
-        height: height,
-        decoration:
-        underLineNeeded ? TextDecoration.underline : TextDecoration.none,
-        fontWeight: FontWeight.w800,
-        color: color,
-        letterSpacing: letterSpacing,
-        shadows: shadows);
+      fontSize: size,
+      height: height,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
+      fontWeight: FontWeight.w800,
+      color: color,
+      letterSpacing: letterSpacing,
+      shadows: shadows,
+    );
   }
+
   static montserratLitleBoldTextStyle({
     double size = 14,
     double height = 1.2,
@@ -114,18 +124,23 @@ class MontserratStyles {
     List<Shadow>? shadows,
   }) {
     return GoogleFonts.montserrat(
-        fontSize: size,
-        height: height,
-        decoration:
-        underLineNeeded ? TextDecoration.underline : TextDecoration.none,
-        fontWeight: FontWeight.w700,
-        color: color,
-        letterSpacing: letterSpacing,
-        shadows: shadows);
+      fontSize: size,
+      height: height,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
+      fontWeight: FontWeight.w700,
+      color: color,
+      letterSpacing: letterSpacing,
+      shadows: shadows,
+    );
   }
 
   static TextStyle? commonTextStyle(
-      double fontSize, FontWeight fontWeight, Color color) {
+    double fontSize,
+    FontWeight fontWeight,
+    Color color,
+  ) {
     return TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color);
   }
 }
@@ -142,8 +157,9 @@ class LatoStyles {
       height: height,
       fontWeight: FontWeight.w100,
       color: color,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
     );
   }
 
@@ -163,8 +179,9 @@ class LatoStyles {
       color: color,
       letterSpacing: letterSpacing,
       shadows: shadows ?? [],
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
     );
   }
 
@@ -179,8 +196,9 @@ class LatoStyles {
       height: height,
       fontWeight: FontWeight.w500,
       color: color,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
     );
   }
 
@@ -198,8 +216,9 @@ class LatoStyles {
       fontWeight: FontWeight.w300,
       height: height,
       // overflow: TextOverflow.ellipsis,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
       color: color,
     );
   }
@@ -213,8 +232,9 @@ class LatoStyles {
     return GoogleFonts.lato(
       fontSize: size,
       height: height,
-      decoration:
-      underLineNeeded ? TextDecoration.underline : TextDecoration.none,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
       fontWeight: FontWeight.w600,
       color: color,
     );
@@ -228,17 +248,22 @@ class LatoStyles {
     List<Shadow>? shadows,
   }) {
     return GoogleFonts.lato(
-        fontSize: size,
-        height: height,
-        decoration:
-        underLineNeeded ? TextDecoration.underline : TextDecoration.none,
-        fontWeight: FontWeight.bold,
-        color: color,
-        shadows: shadows);
+      fontSize: size,
+      height: height,
+      decoration: underLineNeeded
+          ? TextDecoration.underline
+          : TextDecoration.none,
+      fontWeight: FontWeight.bold,
+      color: color,
+      shadows: shadows,
+    );
   }
 
   static TextStyle? commonTextStyle(
-      double fontSize, FontWeight fontWeight, Color color) {
+    double fontSize,
+    FontWeight fontWeight,
+    Color color,
+  ) {
     return TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color);
   }
 }

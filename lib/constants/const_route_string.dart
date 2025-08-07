@@ -2,8 +2,12 @@ class AppRoute{
   static const String initialRoute = "/";
   static const String onBoardScreenRoute ="/onBoardScreenRoute";
   static const String splashScreen = "/splashScreen";
+  static const String contactSalesFromScreen = "/contactSalesFromScreen";
+  static const String subscriptionScreen = "/subscriptionScreen";
+  static const String webProfileScreen = "/webProfileScreen";
   static const String loginScreen = "/loginScreen";
   static const String signUpScreen = "/signUpScreen";
+  static const String myVehicleDetailsScreen = "/MyVehicleDetailsScreen";
   static const String forgotScreen = "/forgotScreen";
   static const String changeScreen = "/changeScreen";
   static const String otpScreen = "/otpScreen";
@@ -16,9 +20,11 @@ class AppRoute{
   static const String notificationScreen = "/notificationScreen";
   static const String instructionScreen = "/instructionScreen";
   static const String carInstructionDetailsScreen = '/carInstructionDetailsScreen';
+
   static const String ownerDetailsScreen = "/ownerDetailsScreen";
   static const String clientDetailsScreen = '/clientDetailsScreen';
   static const String carImageInpectionScreen = "/carImageInpectionScreen";
+  static const String myTeamDetailsScreen = "/myTeamDetailsScreen";
   static const String ownerSignatureViewScreen = "/ownerSignatureViewScreen";
   static const String teamSreenView = "/teamScreenView";
   static const String vehiclesScreenView = "/vehiclesScreenView";

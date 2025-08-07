@@ -4,9 +4,9 @@ import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/constants/const_string.dart';
 import 'package:auto_proof/presentation/auth_screens/change_password/change_password_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/about_app/about_app_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/card_details/card_details_screen_route_imple.dart';
+import 'package:auto_proof/presentation/screens/card_details/card_details_screen_route_imple.dart' hide CardDetailsScreen;
 import 'package:auto_proof/presentation/screens/history/history_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/home/home_screen_route_imple.dart';
+import 'package:auto_proof/presentation/screens/home/screens/home_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/information/collect_information_screen_route_implement.dart';
 import 'package:auto_proof/presentation/screens/inpection/Instruction_screen/instruction_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/inpection/car_im_inpection/car_im_inpection_screen_route_imple.dart';
@@ -22,7 +22,6 @@ import 'package:auto_proof/presentation/screens/team_View/team_screen_route_impl
 import 'package:auto_proof/presentation/screens/vehicles_screen/vehicles_screen_route_imple.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import '../constants/const_route_string.dart';
 import '../presentation/auth_screens/forgot/forgot_screen_route_imple.dart';
 import '../presentation/auth_screens/login/login_screen_route_imple.dart';
@@ -31,6 +30,9 @@ import '../presentation/auth_screens/otpview/otp_screen_route_imple.dart';
 import '../presentation/auth_screens/reset_password/reset_password_screen_route_imple.dart';
 import '../presentation/auth_screens/signUp/signUp_screen_route_imple.dart';
 import '../presentation/screens/inspector_create_admin/inspection_create_admin_screen_route_imple.dart';
+import '../presentation/screens/subscription/subscription_screen_route_imple.dart';
+import '../presentation/screens/team_View/web_team_profile_screen.dart';
+import '../presentation/screens/vehicles_screen/vehicale_details_screen.dart';
 import '../presentation/splash/splash_screen_route_imple.dart';
 import '../utilities/extensions/routing_animation.dart';
 

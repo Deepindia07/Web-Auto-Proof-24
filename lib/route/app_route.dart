@@ -2,7 +2,7 @@ part of 'app_route_imple.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: AppRoute.loginScreen,
+    initialLocation: AppRoute.cardDetailsScreen,
     routes: [
       GoRoute(
         path: AppRoute.splashScreen,
@@ -10,6 +10,46 @@ class AppRouter {
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
           child: const SplashScreen(),
+          animation: AppAnimations.fadeIn,
+          duration: const Duration(milliseconds: 800),
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.contactSalesFromScreen,
+        name: 'contactSalesFromScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: ContactSalesFromScreen(),
+          animation: AppAnimations.fadeIn,
+          duration: const Duration(milliseconds: 800),
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.subscriptionScreen,
+        name: 'subscriptionScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: SubscriptionScreen(),
+          animation: AppAnimations.fadeIn,
+          duration: const Duration(milliseconds: 800),
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.myVehicleDetailsScreen,
+        name: 'MyVehicleDetailsScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: MyVehicleDetailsScreen(),
+          animation: AppAnimations.fadeIn,
+          duration: const Duration(milliseconds: 800),
+        ),
+      ),
+      GoRoute(
+        path: AppRoute.webProfileScreen,
+        name: 'webProfileScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: const MyProfileScreen(),
           animation: AppAnimations.fadeIn,
           duration: const Duration(milliseconds: 800),
         ),
@@ -98,7 +138,7 @@ class AppRouter {
           final email = state.extra.toString();
           return _buildPageWithAnimation(
             state: state,
-            child: ResetPasswordScreen(email: email),
+            child: ResetPasswordScreen(email: "tester@yopmail.com"),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           );
@@ -112,7 +152,7 @@ class AppRouter {
           final role = SharedPrefsHelper.instance.getString(roleKey);
           return _buildPageWithAnimation(
             state: state,
-            child: HomeScreen(userRole: role!),
+            child: HomeScreen(),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           );
@@ -135,7 +175,7 @@ class AppRouter {
         name: 'payments',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const PaymentScreen(),
+          child: PaymentHistoryScreen(),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -225,6 +265,16 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: AppRoute.myTeamDetailsScreen,
+        name: 'myTeamDetailsScreen',
+        pageBuilder: (context, state) => _buildPageWithAnimation(
+          state: state,
+          child: MyTeamDetailsScreen(),
+          animation: AppAnimations.slideFromRightWithScale,
+          duration: const Duration(milliseconds: 500),
+        ),
+      ),
+      GoRoute(
         path: AppRoute.ownerSignatureViewScreen,
         name: 'ownerSignatureViewScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
@@ -269,7 +319,7 @@ class AppRouter {
         name: 'teamScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: TeamScreen(),
+          child: MyTeamScreen(),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),

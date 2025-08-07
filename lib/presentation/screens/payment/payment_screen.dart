@@ -1,5 +1,6 @@
 part of 'payment_screen_route_imple.dart';
 
+/*
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
 
@@ -352,4 +353,187 @@ class _PaymentScreenViewState extends State<PaymentScreenView> {
       }
     }
   }
+}
+*/
+
+class PaymentHistoryScreen extends StatefulWidget {
+  const PaymentHistoryScreen({super.key});
+
+  @override
+  State<PaymentHistoryScreen> createState() => _PaymentHistoryScreenState();
+}
+
+class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
+  final List<PaymentRecord> paymentRecords = List.generate(
+    10,
+    (index) => PaymentRecord(
+      date: "Jan24, 2025",
+      time: "08.08",
+      amount: "n 2500.00",
+      status: "Paid",
+      cardImagePath: 'assets/images/card.png', // Add your card image in assets
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6F8FA),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [vGap(5),
+          Text(
+            "Payment History",
+            style: MontserratStyles.montserratBoldTextStyle(
+              size: 14,
+              color: AppColor().darkCharcoalBlueColor,
+            ),
+          ),
+
+          vGap(10),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // Header Row
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2C3E50),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "Date",
+                              style: MontserratStyles.montserratMediumTextStyle(
+                                size: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "Payment Method",
+                              style: MontserratStyles.montserratMediumTextStyle(
+                                size: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "Amount",
+                              style: MontserratStyles.montserratMediumTextStyle(
+                                size: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "Status",
+                              style: MontserratStyles.montserratMediumTextStyle(
+                                size: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+
+                    // Data Rows
+                    ...paymentRecords.map((record) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center, // ✅ Align items vertically
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text("${record.date}  ${record.time}"),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    creditCardIcon,
+                                    height: 24,
+                                    width: 36,
+                                    fit: BoxFit.contain,
+                                  ),
+
+
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Row(
+                                children: [
+                                  Text(record.amount),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Row(
+                                children: [
+                                  Text(record.status),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+}
+
+class PaymentRecord {
+  final String date;
+  final String time;
+  final String amount;
+  final String status;
+  final String cardImagePath;
+
+  PaymentRecord({
+    required this.date,
+    required this.time,
+    required this.amount,
+    required this.status,
+    required this.cardImagePath,
+  });
 }

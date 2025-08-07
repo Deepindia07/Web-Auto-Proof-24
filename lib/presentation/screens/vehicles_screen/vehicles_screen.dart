@@ -1,5 +1,6 @@
 part of "vehicles_screen_route_imple.dart";
 
+/*
 class VehiclesScreen extends StatelessWidget {
   const VehiclesScreen({super.key});
 
@@ -299,4 +300,207 @@ class VehicleDetailsScreen extends StatelessWidget {
       ),
     );
   }
+}*/
+
+class VehiclesScreen extends StatefulWidget {
+  const VehiclesScreen({super.key});
+
+  @override
+  State<VehiclesScreen> createState() => _VehiclesScreenState();
+}
+
+class _VehiclesScreenState extends State<VehiclesScreen> {
+  final List<MyVehicleModel> myVehicleModelList = [
+    MyVehicleModel(
+      numberPlate: "00 - 000 - 00",
+      carName: "Jan 24, 2024",
+      vehicleImages: car1Icon,
+    ),
+    MyVehicleModel(
+      numberPlate: "00 - 000 - 00",
+      carName: "Jan 24, 2024",
+      vehicleImages: car2Icon,
+    ),
+    MyVehicleModel(
+      numberPlate: "00 - 000 - 00",
+      carName: "Jan 24, 2024",
+      vehicleImages: carCopy,
+    ),
+    MyVehicleModel(
+      numberPlate: "00 - 000 - 00",
+      carName: "Jan 24, 2024",
+      vehicleImages: carIcon,
+    ),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor().backgroundColor,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double maxWidth = constraints.maxWidth;
+
+          bool isMobile = maxWidth < 800;
+
+          return Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1400),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [vGap(5),
+                  Text(
+                    "My Vehicle",
+                    style: MontserratStyles.montserratBoldTextStyle(
+                      size: 14,
+                      color: AppColor().darkCharcoalBlueColor,
+                    ),
+                  ),vGap(10),
+                  Expanded(
+                    child: Container(
+                      color: AppColor().backgroundColor,
+                      child: ListView.separated(
+
+                        itemCount: myVehicleModelList.length,
+                        separatorBuilder: (context, index) => SizedBox(height: 1,),
+                        itemBuilder: (context, index) {
+                          final vehicleList = myVehicleModelList[index];
+                          return _vehicleItem(vehicleList);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _vehicleItem(MyVehicleModel payment) {
+  return Container(
+    decoration: BoxDecoration( color: AppColor().backgroundColor,
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(width: 1, color: AppColor().silverShadeGrayColor),
+    ),
+    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+    margin: EdgeInsets.symmetric(vertical: 5, ),
+
+    child: Row(
+      children: [
+        const CircleAvatar(
+          radius: 32,
+          backgroundImage: AssetImage('assets/image/profile.png'),
+        ),
+        SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                payment.carName,
+                style: MontserratStyles.montserratSemiBoldTextStyle(
+                  size: 14,
+                  color: AppColor().darkCharcoalBlueColor,
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                payment.numberPlate,
+                style: MontserratStyles.montserratRegularTextStyle(
+                  size: 12,
+                  color: AppColor().darkCharcoalBlueColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            context.push(AppRoute.myTeamDetailsScreen);
+          },
+          child: Container(
+            alignment: Alignment.center,
+            width: 180,
+            height: 50,
+            decoration: BoxDecoration(
+              color: AppColor().yellowWarmColor,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              "view",
+              style: MontserratStyles.montserratSemiBoldTextStyle(
+                size: 14,
+                color: AppColor().darkCharcoalBlueColor,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  ); }
+   /* return Container(
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      color: Colors.white,
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 25,
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Image.asset(payment.vehicleImages, height: 16, width: 16),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  payment.carName,
+                  style: MontserratStyles.montserratSemiBoldTextStyle(
+                    size: 14,
+                    color: AppColor().darkCharcoalBlueColor,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Number Plate:${payment.numberPlate}",
+                  style: MontserratStyles.montserratRegularTextStyle(
+                    size: 12,
+                    color: AppColor().darkCharcoalBlueColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              context.push(AppRoute.myVehicleDetailsScreen);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: 180,
+              height: 50,
+              decoration: BoxDecoration(
+                color: AppColor().yellowWarmColor,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Text(
+                "view",
+                style: MontserratStyles.montserratSemiBoldTextStyle(
+                  size: 14,
+                  color: AppColor().darkCharcoalBlueColor,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );*/
+
 }

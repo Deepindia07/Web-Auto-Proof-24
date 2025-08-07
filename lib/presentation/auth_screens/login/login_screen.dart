@@ -3,16 +3,15 @@ part of 'login_screen_route_imple.dart';
 class LoginScreen extends StatelessWidget {
   final String userRole;
 
-  const LoginScreen({
-    super.key,
-    required this.userRole,
-  });
+  const LoginScreen({super.key, required this.userRole});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginScreenBloc>(
-      create: (context) =>
-          LoginScreenBloc(authRepository: AuthenticationApiCall(), userRole: userRole),
+      create: (context) => LoginScreenBloc(
+        authRepository: AuthenticationApiCall(),
+        userRole: userRole,
+      ),
       child: LoginViewScreen(userRole: userRole),
     );
   }
@@ -28,7 +27,8 @@ class LoginViewScreen extends StatefulWidget {
 
 class _LoginViewScreenState extends State<LoginViewScreen> {
   final TextEditingController _emailOrPhoneController = TextEditingController();
-  final TextEditingController _instructorRefrenceNumberController = TextEditingController();
+  final TextEditingController _instructorRefrenceNumberController =
+      TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -47,9 +47,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
       CustomLoader.hidePopupLoader(context);
       context.read<LoginScreenBloc>().add(
         LoginSubmitted(
-            emailOrPhone: _emailOrPhoneController.text.trim(),
-            password: _passwordController.text.trim(),
-            refNo: _instructorRefrenceNumberController.text.trim()),
+          emailOrPhone: _emailOrPhoneController.text.trim(),
+          password: _passwordController.text.trim(),
+          refNo: _instructorRefrenceNumberController.text.trim(),
+        ),
       );
     }
   }
@@ -90,16 +91,39 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     final screenSize = MediaQuery.of(context).size;
     final screenHeight = screenSize.height;
     final screenWidth = screenSize.width;
-    final isLandscape = screenWidth > screenHeight;
 
-    return Scaffold(
-      backgroundColor: AppColor().backgroundColor,
+    /* return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColor().backgroundColor,
         automaticallyImplyLeading: false,
       ),
+      body: SafeArea(child: _buildPortraitLayout(context)),
+    );*/
+
+    return Scaffold(
+      backgroundColor: Colors.white, // Outer background (e.g., grey/blue)
       body: SafeArea(
-        child: _buildPortraitLayout(context),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 600),
+              padding: EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                color: AppColor().backgroundColor, // White center background
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: _buildPortraitLayout(context),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -118,7 +142,8 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
         //
         //               child:
         child: Center(
-          child: ConstrainedBox(  constraints: BoxConstraints(maxWidth: 600),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 600),
             child: Form(
               key: _formKey,
               child: Column(
@@ -151,7 +176,6 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       ],
                     ),
                   ),
-
                   vGap(screenHeight * 0.0009),
                   Text(
                     AppLocalizations.of(context)!.appTitle,
@@ -160,7 +184,6 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       color: AppColor().darkCharcoalBlueColor,
                     ),
                   ),
-
                   // Form fields
                   _buildFormFields(context, screenHeight, screenWidth, false),
 
@@ -175,86 +198,18 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     );
   }
 
-  Widget _buildLandscapeLayout(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final screenHeight = screenSize.height;
-    final screenWidth = screenSize.width;
-
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: screenHeight),
-        child: Row(
-          children: [
-            // Left side - Logo and branding
-            Container(
-              width: screenWidth * 0.4,
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.02,
-                vertical: screenHeight * 0.05,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    appLogo,
-                    height: screenHeight * 0.35,
-                    width: screenHeight * 0.35,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Text(
-                    "Auto Proof 24",
-                    style: MontserratStyles.montserratBoldTextStyle(
-                      color: AppColor().darkCharcoalBlueColor,
-                      size: screenWidth * 0.028,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  Text(
-                    AppLocalizations.of(context)!.appTitle,
-                    style: MontserratStyles.montserratSemiBoldTextStyle(
-                      size: screenWidth * 0.015,
-                      color: AppColor().darkCharcoalBlueColor,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-
-            // Right side - Login form
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.03,
-                  vertical: screenHeight * 0.05,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Form fields
-                      _buildFormFields(context, screenHeight, screenWidth, true),
-
-                      // Buttons
-                      _buildButtons(context, screenHeight, screenWidth, true),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFormFields(BuildContext context, double screenHeight, double screenWidth, bool isLandscape) {
-    final verticalSpacing = isLandscape ? screenHeight * 0.025 : screenHeight * 0.0162;
-    final topSpacing = isLandscape ? screenHeight * 0.02 : screenHeight * 0.0315;
+  Widget _buildFormFields(
+    BuildContext context,
+    double screenHeight,
+    double screenWidth,
+    bool isLandscape,
+  ) {
+    final verticalSpacing = isLandscape
+        ? screenHeight * 0.025
+        : screenHeight * 0.0162;
+    final topSpacing = isLandscape
+        ? screenHeight * 0.02
+        : screenHeight * 0.0315;
 
     return Column(
       children: [
@@ -273,7 +228,9 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
             hintText: "Enter Registration Number",
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return AppLocalizations.of(context)!.pleaseEnterEmailOrPhoneShort;
+                return AppLocalizations.of(
+                  context,
+                )!.pleaseEnterEmailOrPhoneShort;
               }
               return null;
             },
@@ -294,7 +251,9 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
             hintText: AppLocalizations.of(context)!.emailOrPhone,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return AppLocalizations.of(context)!.pleaseEnterEmailOrPhoneShort;
+                return AppLocalizations.of(
+                  context,
+                )!.pleaseEnterEmailOrPhoneShort;
               }
               return null;
             },
@@ -339,9 +298,18 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     );
   }
 
-  Widget _buildButtons(BuildContext context, double screenHeight, double screenWidth, bool isLandscape) {
-    final verticalSpacing = isLandscape ? screenHeight * 0.025 : screenHeight * 0.0162;
-    final buttonHeight = isLandscape ? screenHeight * 0.08 : screenHeight * 0.0558;
+  Widget _buildButtons(
+    BuildContext context,
+    double screenHeight,
+    double screenWidth,
+    bool isLandscape,
+  ) {
+    final verticalSpacing = isLandscape
+        ? screenHeight * 0.025
+        : screenHeight * 0.0162;
+    final buttonHeight = isLandscape
+        ? screenHeight * 0.08
+        : screenHeight * 0.0558;
     final buttonWidth = isLandscape ? screenWidth * 0.4 : screenWidth * 0.855;
 
     return Column(
@@ -384,9 +352,13 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
           builder: (context, state) {
             return CustomButton(
               borderRadius: 48,
-              height: buttonHeight,
-              width: buttonWidth,
-              onPressed: state is LoginLoading || state is EmailValidationLoading ? null : _onLoginPressed,
+              height: 55,
+              width: double.infinity,
+
+              onPressed:
+                  state is LoginLoading || state is EmailValidationLoading
+                  ? null
+                  : _onLoginPressed,
               text: state is LoginLoading
                   ? AppLocalizations.of(context)!.loggingIn
                   : AppLocalizations.of(context)!.login,
@@ -397,13 +369,13 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
               elevation: 5,
               child: state is LoginLoading
                   ? SizedBox(
-                height: isLandscape ? 16 : 18,
-                width: isLandscape ? 16 : 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppColor().yellowWarmColor,
-                ),
-              )
+                      height: isLandscape ? 16 : 18,
+                      width: isLandscape ? 16 : 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColor().yellowWarmColor,
+                      ),
+                    )
                   : null,
             );
           },
@@ -449,8 +421,8 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
           vGap(verticalSpacing),
           CustomButton(
             borderRadius: 48,
-            height: isLandscape ? screenHeight * 0.085 : screenHeight * 0.0567,
-            width: buttonWidth,
+            height: 55,
+            width: double.infinity,
             onPressed: () {
               SharedPrefsHelper.instance.setBool(isVerifiedEmail, false);
               context.push(AppRoute.signUpScreen);

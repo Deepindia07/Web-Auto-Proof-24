@@ -1,4 +1,3 @@
-// forgot_screen_route_imple.dart
 part of 'forgot_screen_route_imple.dart';
 
 class ForgotScreen extends StatelessWidget {
@@ -8,9 +7,8 @@ class ForgotScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ForgotScreenBloc>(
-      create: (context) => ForgotScreenBloc(
-        apiRepository: AuthenticationApiCall(),
-      ),
+      create: (context) =>
+          ForgotScreenBloc(apiRepository: AuthenticationApiCall()),
       child: ForgotScreenView(emailOrPhone: emailOrPhone),
     );
   }
@@ -61,7 +59,11 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
           }
         },
         builder: (context, state) {
-          return _buildBody(context);
+          return Align(alignment: Alignment.center,
+            child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 600),
+                child: _buildBody(context)),
+          );
         },
       ),
     );
@@ -71,21 +73,17 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
     return SafeArea(
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 36.0), // Reduced from 40.0
+          padding: const EdgeInsets.symmetric(horizontal: 36.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                lockLayer1Icon,
-                height: 72, // Reduced from 80
-                width: 72, // Reduced from 80
-              ),
-              const SizedBox(height: 14), // Reduced from 15
+              Image.asset(lockLayer1Icon, height: 72, width: 72),
+              const SizedBox(height: 14),
               Text(
                 AppLocalizations.of(context)!.forgot,
                 style: MontserratStyles.montserratBoldTextStyle(
-                  size: 43, // Reduced from 48
+                  size: 43,
                   color: AppColor().darkCharcoalBlueColor,
                 ),
                 textAlign: TextAlign.center,
@@ -108,7 +106,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 270), // Reduced from 300
+              const SizedBox(height: 270),
             ],
           ),
         ),
@@ -122,14 +120,18 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
       onClosing: () {},
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.405, // Reduced from 0.45
+          height:
+              MediaQuery.of(context).size.height * 0.405,
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 36), // Reduced from 30, 40
+          padding: const EdgeInsets.symmetric(
+            horizontal: 27,
+            vertical: 36,
+          ),
           decoration: BoxDecoration(
             color: AppColor().darkCharcoalBlueColor,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(45), // Reduced from 50
-              topRight: Radius.circular(45), // Reduced from 50
+              topLeft: Radius.circular(45),
+              topRight: Radius.circular(45),
             ),
           ),
           child: _buildFormContent(context),
@@ -176,7 +178,9 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               },
               onChanged: (value) {
                 if (value.isNotEmpty) {
-                  context.read<ForgotScreenBloc>().add(ValidateEmailEvent(value));
+                  context.read<ForgotScreenBloc>().add(
+                    ValidateEmailEvent(value),
+                  );
                 }
               },
             ),
@@ -191,11 +195,15 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
                   height: 45, // Reduced from 50
                   width: double.infinity,
                   borderRadius: 43, // Reduced from 48
-                  onPressed: state is ForgotScreenLoading ? null : _handleResetPassword,
+                  onPressed: state is ForgotScreenLoading
+                      ? null
+                      : _handleResetPassword,
                   backgroundColor: state is ForgotScreenLoading
                       ? AppColor().darkYellowColor.withOpacity(0.6)
                       : AppColor().darkYellowColor,
-                  text: state is ForgotScreenLoading ? AppLocalizations.of(context)!.resetPassword : AppLocalizations.of(context)!.resetPassword,
+                  text: state is ForgotScreenLoading
+                      ? AppLocalizations.of(context)!.resetPassword
+                      : AppLocalizations.of(context)!.resetPassword,
                   textStyle: MontserratStyles.montserratSemiBoldTextStyle(
                     size: 14, // Reduced from 16
                     color: AppColor().darkCharcoalBlueColor,
