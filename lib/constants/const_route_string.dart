@@ -1,7 +1,11 @@
 class AppRoute{
   static const String initialRoute = "/";
   static const String onBoardScreenRoute ="/onBoardScreenRoute";
+  static const String onDashboardScreen ="/dashboardScreen";
   static const String splashScreen = "/splashScreen";
+  static const String contactUsScreen = "/contactUsScreen";
+  static const String companyInfoScreen = "/companyInfoScreen";
+  static const String personalInformationScreen = "/personalInformationScreen";
   static const String contactSalesFromScreen = "/contactSalesFromScreen";
   static const String subscriptionScreen = "/subscriptionScreen";
   static const String webProfileScreen = "/webProfileScreen";

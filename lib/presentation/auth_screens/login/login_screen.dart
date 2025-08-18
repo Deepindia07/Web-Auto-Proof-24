@@ -82,48 +82,55 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
   bool _isValidEmailOrPhone(String input) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     final phoneRegex = RegExp(r'^[\+]?[1-9][\d]{0,15}$');
-
     return emailRegex.hasMatch(input) || phoneRegex.hasMatch(input);
   }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final screenHeight = screenSize.height;
     final screenWidth = screenSize.width;
-
-    /* return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: AppColor().backgroundColor,
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(child: _buildPortraitLayout(context)),
-    );*/
-
     return Scaffold(
-      backgroundColor: Colors.white, // Outer background (e.g., grey/blue)
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 600),
-              padding: EdgeInsets.all(30),
-              decoration: BoxDecoration(
-                color: AppColor().backgroundColor, // White center background
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
+        child: Responsive.isDesktop(context)
+            ? Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 130.0,
+                        vertical: 30,
+                      ),
+                      child: _buildPortraitLayout(context),
+                    ),
                   ),
+                  Expanded(child: CommonViewAuth()),
                 ],
+              )
+            : Center(
+                // For mobile/tablet, keep it centered with maxWidth
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30.0,
+                      vertical: 30,
+                    ),
+                    constraints: BoxConstraints(maxWidth: 600),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: _buildPortraitLayout(context),
+                  ),
+                ),
               ),
-              child: _buildPortraitLayout(context),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -133,14 +140,13 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     final screenHeight = screenSize.height;
     final screenWidth = screenSize.width;
 
-    return Padding(
-      padding: const EdgeInsets.all(30.0),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+
       child: SingleChildScrollView(
-        //Align(alignment: Alignment.topCenter,
-        //             child: ConstrainedBox(
-        //               constraints: BoxConstraints(maxWidth: 600),
-        //
-        //               child:
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600),
@@ -151,9 +157,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                 children: [
                   if (widget.userRole != "owner") vGap(screenHeight * 0.09),
 
-                  // Header section with logo and title
                   SizedBox(
-                    height: screenHeight * 0.216,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,7 +168,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           width: screenHeight * 0.126,
                           fit: BoxFit.contain,
                         ),
-                        vGap(screenHeight * 0.0117),
+
                         Text(
                           "Auto Proof 24",
                           style: MontserratStyles.montserratBoldTextStyle(
@@ -176,7 +180,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       ],
                     ),
                   ),
-                  vGap(screenHeight * 0.0009),
+                  vGap(screenHeight * 0.0110),
                   Text(
                     AppLocalizations.of(context)!.appTitle,
                     style: MontserratStyles.montserratSemiBoldTextStyle(
@@ -184,6 +188,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       color: AppColor().darkCharcoalBlueColor,
                     ),
                   ),
+                  vGap(screenHeight * 0.0120),
                   // Form fields
                   _buildFormFields(context, screenHeight, screenWidth, false),
 
@@ -213,12 +218,13 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
 
     return Column(
       children: [
+        vGap(2),
         // Inspector reference number field
-        if (widget.userRole != "owner") vGap(topSpacing),
+        /*  if (widget.userRole != "owner") vGap(topSpacing),
         if (widget.userRole != "owner")
           CustomTextField(
             controller: _instructorRefrenceNumberController,
-            fillColor: AppColor().backgroundColor,
+            fillColor: Colors.white,
             borderWidth: 2,
             borderRadius: 30,
             hintStyle: MontserratStyles.montserratRegularTextStyle(
@@ -235,19 +241,17 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
               return null;
             },
           ),
-
+*/
         // Email/Phone field
         if (widget.userRole != "instructor") vGap(verticalSpacing),
         if (widget.userRole != "instructor")
           CustomTextField(
+            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
             controller: _emailOrPhoneController,
-            fillColor: AppColor().backgroundColor,
+            fillColor: Colors.white,
             borderWidth: 2,
             borderRadius: 30,
-            hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
-              size: isLandscape ? 11 : 13,
-              color: AppColor().silverShadeGrayColor,
-            ),
+
             hintText: AppLocalizations.of(context)!.emailOrPhone,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -262,10 +266,12 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
         // Password field
         if (widget.userRole != "instructor") vGap(verticalSpacing),
         if (widget.userRole != "instructor")
-          CustomPasswordField(
+          CustomPasswordField(obscuringCharacter: "*",onSubmitted:  (value) {
+            _onLoginPressed(); // 🔹 Call API when Enter is pressed
+    },
             controller: _passwordController,
             borderWidth: 2,
-            fillColor: AppColor().backgroundColor,
+            fillColor: Colors.white,
             borderRadius: 30,
             hintText: AppLocalizations.of(context)!.password,
             validator: (value) {
@@ -352,7 +358,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
           builder: (context, state) {
             return CustomButton(
               borderRadius: 48,
-              height: 55,
+              height: 45,
               width: double.infinity,
 
               onPressed:
@@ -421,7 +427,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
           vGap(verticalSpacing),
           CustomButton(
             borderRadius: 48,
-            height: 55,
+            height: 45,
             width: double.infinity,
             onPressed: () {
               SharedPrefsHelper.instance.setBool(isVerifiedEmail, false);

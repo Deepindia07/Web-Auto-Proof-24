@@ -30,7 +30,7 @@ abstract class AuthAbstraction{
     required FormData formData,
   });
   Future<Result<PostInspectorRoleResponseModel, String>> postInspectorRoleApiCall({Map<String, dynamic>? dataBody, required String adminId});
-  Future<Result<List<Datum>, String>> getAllInspectionListApiCall({Map<String, dynamic>? dataBody});
+  Future<Result<List<GetTeamUserData>, String>> getAllInspectionListApiCall({Map<String, dynamic>? dataBody});
   Future<Result<OtpForEmailResponseModel, String>> getOtpforEmailVerificationApiCall({Map<String, dynamic>? dataBody});
   Future<Result<ContactUsResponseModel, String>> contactUsApiCall({Map<String, dynamic>? dataBody});
   Future<Result<VehicleListResponseModel, String>> vehicleListApiCall({Map<String, dynamic>? dataBody});

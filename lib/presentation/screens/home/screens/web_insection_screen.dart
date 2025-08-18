@@ -1,8 +1,13 @@
 part of "home_screen_route_imple.dart";
 
-class WebInspectionScreen extends StatelessWidget {
+class WebInspectionScreen extends StatefulWidget {
   const WebInspectionScreen({super.key});
 
+  @override
+  State<WebInspectionScreen> createState() => _WebInspectionScreenState();
+}
+
+class _WebInspectionScreenState extends State<WebInspectionScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -50,105 +55,109 @@ class WebInspectionScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black,
-                          ),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  launchUrl(
-                                    Uri.parse(
-                                      'https://apps.apple.com/app/idXXXXXXXXX',
+                        GestureDetector(onTap: (){
+
+                          launchUrl(
+                            Uri.parse(
+                              'https://apps.apple.com/app/idXXXXXXXXX',
+                            ),
+                          );setState(() {
+
+                          });
+                        },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.black,
+                            ),
+                            child: Row(
+                              children: [
+                               Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Image.asset(
+                                      appleLogoIcon,
+                                      width: 25,
+                                      height: 30,
                                     ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Image.asset(
-                                    appleLogoIcon,
-                                    width: 25,
-                                    height: 30,
                                   ),
+
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Télécharger dans",
+                                      style:
+                                      MontserratStyles.montserratRegularTextStyle(
+                                        size: 10,
+                                      ),
+                                    ),
+                                    Text(
+                                      "I'App Store",
+                                      style:
+                                      MontserratStyles.montserratSemiBoldTextStyle(
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Télécharger dans",
-                                    style:
-                                    MontserratStyles.montserratRegularTextStyle(
-                                      size: 10,
-                                    ),
-                                  ),
-                                  Text(
-                                    "I'App Store",
-                                    style:
-                                    MontserratStyles.montserratSemiBoldTextStyle(
-                                      size: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(width: 10),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
+                        GestureDetector(onTap: (){
+                          launchUrl(
+                            Uri.parse(
+                              'https://play.google.com/store/apps/details?id=com.example.app',
+                            ),
+                          );setState(() {
 
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black,
-                          ),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // Open Google Play URL
-                                  launchUrl(
-                                    Uri.parse(
-                                      'https://play.google.com/store/apps/details?id=com.example.app',
+                          });
+                        },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.black,
+                            ),
+                            child: Row(
+                              children: [
+                               Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Image.asset(
+                                      playStoreIcon,
+                                      width: 25,
+                                      height: 30,
                                     ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Image.asset(
-                                    playStoreIcon,
-                                    width: 25,
-                                    height: 30,
-                                  ),
+
                                 ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "DISPONIBLE SUR",
-                                    style:
-                                    MontserratStyles.montserratRegularTextStyle(
-                                      size: 10,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "DISPONIBLE SUR",
+                                      style:
+                                      MontserratStyles.montserratRegularTextStyle(
+                                        size: 10,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Google Play",
-                                    style:
-                                    MontserratStyles.montserratSemiBoldTextStyle(
-                                      size: 16,
+                                    Text(
+                                      "Google Play",
+                                      style:
+                                      MontserratStyles.montserratSemiBoldTextStyle(
+                                        size: 16,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

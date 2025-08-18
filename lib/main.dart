@@ -1,19 +1,18 @@
   import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
-  import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
+import 'package:auto_proof/bloc_provider.dart';
   import 'package:auto_proof/l10n/app_localizations.dart';
-  import 'package:auto_proof/presentation/splash/bloc/splash_screen_bloc.dart';
-  import 'package:auto_proof/route/app_route_imple.dart';
+import 'package:auto_proof/route/app_route_imple.dart';
   import 'package:auto_proof/utilities/di/di_injection_route_imple.dart';
   import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
   import 'package:flutter_bloc/flutter_bloc.dart';
   import 'package:flutter_localizations/flutter_localizations.dart';
   import 'package:flutter_screenutil/flutter_screenutil.dart';
-  import 'package:flutter_stripe/flutter_stripe.dart';
   import 'package:package_info_plus/package_info_plus.dart';
 
   import 'auth/server/observer/app_bloc_observer.dart';
-  import 'l10n_controller/l10n_switcher_bloc.dart';
+  import 'constants/const_color.dart';
+import 'l10n_controller/l10n_switcher_bloc.dart';
 
 
   void main() async{
@@ -47,13 +46,7 @@ import 'package:flutter/services.dart';
         //         .size
         //         .height
         // ),
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<SplashScreenBloc>(
-                create: (context) => SplashScreenBloc()),
-            BlocProvider<LocalizationsBlocController>(
-                create: (context) => LocalizationsBlocController()),
-          ],
+        child: AppProviders(
           child: BlocBuilder<LocalizationsBlocController, LocalizationsState>(
             builder: (context, state) {
               return MaterialApp.router(
@@ -78,7 +71,7 @@ import 'package:flutter/services.dart';
                 ],
                 debugShowCheckedModeBanner: false,
                 title: 'Flutter Demo',
-                theme: ThemeData(
+                theme: ThemeData(cardColor: AppColor().darkCharcoalBlueColor,
                   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                 ),
                 routerConfig: AppRouter.router,

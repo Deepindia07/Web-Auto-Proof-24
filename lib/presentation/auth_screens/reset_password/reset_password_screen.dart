@@ -7,9 +7,8 @@ class ResetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ResetPasswordScreenBloc(
-        repository: AuthenticationApiCall(),
-      ),
+      create: (context) =>
+          ResetPasswordScreenBloc(repository: AuthenticationApiCall()),
       child: ResetPasswordView(email: email),
     );
   }
@@ -25,9 +24,11 @@ class ResetPasswordView extends StatefulWidget {
 
 class _ResetPasswordViewState extends State<ResetPasswordView> {
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmNewPasswordController = TextEditingController();
+  final TextEditingController _confirmNewPasswordController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  bool obscurePassword = true;
+  bool obscureRePassword = true;
   String? _passwordError;
   String? _confirmPasswordError;
 
@@ -57,19 +58,24 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
 
       // Check if confirm password is empty
       if (_confirmNewPasswordController.text.isEmpty) {
-        _confirmPasswordError = AppLocalizations.of(context)!.pleaseConfirmPassword;
+        _confirmPasswordError = AppLocalizations.of(
+          context,
+        )!.pleaseConfirmPassword;
         return;
       }
 
       // Check if passwords match
       if (_newPasswordController.text != _confirmNewPasswordController.text) {
-        _confirmPasswordError = AppLocalizations.of(context)!.passwordsDoNotMatch;
+        _confirmPasswordError = AppLocalizations.of(
+          context,
+        )!.passwordsDoNotMatch;
         return;
       }
     });
   }
 
   void _createPassword() {
+    context.push(AppRoute.homeScreen);
     _validatePasswords();
 
     // Only proceed if validation passes
@@ -87,177 +93,279 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: AppColor().backgroundColor,
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: BlocConsumer<ResetPasswordScreenBloc, ResetPasswordScreenState>(
-          listener: (context, state) {
-            if (state is ResetPasswordScreenLoading) {
-              CustomLoader.showPopupLoader(context);
-            } else {
-              CustomLoader.hidePopupLoader(context);
+        child: Responsive.isDesktop(context)
+            ? Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 100),
+                      child: resetWidget(screenSize),
+                    ),
+                  ),
+                  Expanded(child: CommonViewAuth()),
+                ],
+              )
+            : Container(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: resetWidget(screenSize),
+              ),
+      ),
+    );
+  }
 
-              if (state is ResetPasswordScreenSuccess) {
-                CherryToast.success(context, AppLocalizations.of(context)!.passwordResetSuccess );
-                context.pushNamed('login');
-              } else if (state is ResetPasswordScreenFailure) {
-                CherryToast.error(context, state.error);
-              }
-            }
-          },
-          builder: (context, state) {
-            return Form(
+  Widget resetWidget(screenSize) {
+    return BlocConsumer<ResetPasswordScreenBloc, ResetPasswordScreenState>(
+      listener: (context, state) {
+        if (state is ResetPasswordScreenLoading) {
+          CustomLoader.showPopupLoader(context);
+        } else {
+          CustomLoader.hidePopupLoader(context);
+
+          if (state is ResetPasswordScreenSuccess) {
+            CherryToast.success(
+              context,
+              AppLocalizations.of(context)!.passwordResetSuccess,
+            );
+            context.pushNamed('login');
+          } else if (state is ResetPasswordScreenFailure) {
+            CherryToast.error(context, state.error);
+          }
+        }
+      },
+      builder: (context, state) {
+        return Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 600),
+            child: Form(
               key: _formKey,
-              child: Align(
-                alignment: Alignment.center,
-                child: ConstrainedBox(    constraints: BoxConstraints(maxWidth: 600),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            vGap(50),
-                            Image.asset(lockLayer1Icon, height: 80, width: 80),
-                            Text(
-                             AppLocalizations.of(context)!.reset,
-                              style: MontserratStyles.montserratBoldTextStyle(
-                                size: 48,
-                                color: AppColor().darkCharcoalBlueColor,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 600),
+
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 42),
+                          Image.asset(
+                            lockLayer1Icon,
+                            height: 72,
+                            width: 62,
+                            fit: BoxFit.cover,
+                          ),
+                          vGap(10),
+                          Text(
+                            AppLocalizations.of(context)!.reset,
+                            style: MontserratStyles.montserratBoldTextStyle(
+                              size: 30,
+                              color: AppColor().darkCharcoalBlueColor,
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.password,
+                            style: MontserratStyles.montserratMediumTextStyle(
+                              size: 28,
+                              color: AppColor().darkCharcoalBlueColor,
+                            ),
+                          ),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xFF9CA3AF),
+                                height: 1.4,
                               ),
-                            ),
-                            Text(
-                              AppLocalizations.of(context)!.password,
-                              style: MontserratStyles.montserratSemiBoldTextStyle(
-                                size: 48,
-                                color: AppColor().darkCharcoalBlueColor
-                              )
-                            ),
-                            RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFF9CA3AF),
-                                  height: 1.4,
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${AppLocalizations.of(context)!.emailSentMessage}\n',
+                                  style:
+                                      MontserratStyles.montserratNormalTextStyle(
+                                        color: AppColor().silverShadeGrayColor,
+                                        size: 14,
+                                      ),
                                 ),
-                                children: [
-                                  TextSpan(
-                                    text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
-                                    style: MontserratStyles.montserratNormalTextStyle(
-                                      color: AppColor().silverShadeGrayColor,
-                                      size: 16,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: maskEmail('${widget.email}'),
-                                    style: MontserratStyles.montserratNormalTextStyle(
-                                      color: AppColor().silverShadeGrayColor,
-                                      size: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                TextSpan(
+                                  text: maskEmail('${widget.email}'),
+                                  style:
+                                      MontserratStyles.montserratNormalTextStyle(
+                                        color: AppColor().silverShadeGrayColor,
+                                        size: 14,
+                                      ),
+                                ),
+                              ],
                             ),
-                            vGap(20),
+                          ),
+                          vGap(20),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: screenSize.height * 0.45,
+                    padding: EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: AppColor().darkCharcoalBlueColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(48),
+                        topRight: Radius.circular(48),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        vGap(20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextField(
+                              hintStyle:
+                                  MontserratStyles.montserratRegularTextStyle(
+                                    color: AppColor().silverShadeGrayColor,
+                                    size: 15,
+                                  ),
+                              onChanged: (value) => _validatePasswords(),
+                              fillColor: AppColor().darkCharcoalBlueColor,
+                              textStyle:
+                                  MontserratStyles.montserratRegularTextStyle(
+                                    size: 15,
+                                    color: AppColor().darkYellowColor,
+                                  ),
+                              focusedBorderColor: AppColor().darkYellowColor,
+                              obscureText: obscurePassword,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscurePassword = !obscurePassword;
+                                  });
+                                },
+                              ),
+                              obscuringCharacter: '*',
+                              validator: InputValidators.validatePassword,
+                              controller: _newPasswordController,
+                              prefixIcon: Icon(Icons.lock, color: Colors.grey),
+
+                              hintText: AppLocalizations.of(
+                                context,
+                              )!.newPassword,
+                              borderRadius: 30,
+
+                              borderColor: AppColor().silverShadeGrayColor,
+                              borderWidth: 2,
+                            ),
+                            if (_passwordError != null)
+                              Padding(
+                                padding: EdgeInsets.only(top: 8, left: 16),
+                                child: Text(
+                                  _passwordError!,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
-                      ),
-                      Container(
-                        height: screenSize.height * 0.45,
-                        padding: EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: AppColor().darkCharcoalBlueColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(48),
-                            topRight: Radius.circular(48),
+                        vGap(20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextField(   textStyle:
+                            MontserratStyles.montserratRegularTextStyle(
+                              size: 15,
+                              color: AppColor().darkYellowColor,
+                            ), focusedBorderColor: AppColor().darkYellowColor,
+                              hintStyle:
+                              MontserratStyles.montserratRegularTextStyle(
+                                color: AppColor().silverShadeGrayColor,
+                                size: 15,
+                              ),
+                              onChanged: (value) => _validatePasswords(),
+                              obscureText: obscureRePassword,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  obscureRePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscureRePassword = !obscureRePassword;
+                                  });
+                                },
+                              ),
+
+                              obscuringCharacter: '*',
+                              validator: InputValidators.validatePassword,
+                              controller: _confirmNewPasswordController,
+                              prefixIcon: Icon(Icons.lock, color: Colors.grey),
+
+                              hintText: AppLocalizations.of(
+                                context,
+                              )!.confirmPassword,
+                              borderRadius: 30,
+                              fillColor: AppColor().darkCharcoalBlueColor,
+                              borderColor: AppColor().silverShadeGrayColor,
+                              borderWidth: 2,
+                            ),
+                            if (_confirmPasswordError != null)
+                              Padding(
+                                padding: EdgeInsets.only(top: 8, left: 16),
+                                child: Text(
+                                  _confirmPasswordError!,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        vGap(25),
+                        CustomButton(
+                          height: 45,
+                          width: screenSize.width * 0.95,
+                          borderRadius: 48,
+                          backgroundColor: AppColor().yellowWarmColor,
+                          onPressed: state is ResetPasswordScreenLoading
+                              ? null
+                              : _createPassword,
+                          text: state is ResetPasswordScreenLoading
+                              ? AppLocalizations.of(context)!.loading
+                              : AppLocalizations.of(context)!.create,
+                          textStyle: MontserratStyles.montserratMediumTextStyle(
+                            color: AppColor().darkCharcoalBlueColor,
+                            size: 20,
                           ),
                         ),
-                        child: Column(
-                          children: [
-                            vGap(20),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomPasswordField(
-                                  textStyle: MontserratStyles.montserratRegularTextStyle(
-                                    size: 15,
-                                    color: AppColor().darkYellowColor,
-                                  ),
-                                  controller: _newPasswordController,
-                                  focusedBorderColor: AppColor().darkYellowColor,
-                                  borderWidth: 2,
-                                  fillColor: AppColor().darkCharcoalBlueColor,
-                                  borderRadius: 30,
-                                  hintText: AppLocalizations.of(context)!.newPassword,
-                                  onChanged: (value) => _validatePasswords(),
-                                ),
-                                if (_passwordError != null)
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 8, left: 16),
-                                    child: Text(
-                                      _passwordError!,
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            vGap(20),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomPasswordField(
-                                  textStyle: MontserratStyles.montserratRegularTextStyle(
-                                    size: 15,
-                                    color: AppColor().darkYellowColor,
-                                  ),
-                                  controller: _confirmNewPasswordController,
-                                  focusedBorderColor: AppColor().darkYellowColor,
-                                  borderWidth: 2,
-                                  fillColor: AppColor().darkCharcoalBlueColor,
-                                  borderRadius: 30,
-                                  hintText: AppLocalizations.of(context)!.confirmPassword,
-                                  onChanged: (value) => _validatePasswords(),
-                                ),
-                                if (_confirmPasswordError != null)
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 8, left: 16),
-                                    child: Text(
-                                      _confirmPasswordError!,
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            vGap(25),
-                            CustomButton(
-                              height: screenSize.height * 0.055,
-                              width: screenSize.width * 0.95,
-                              borderRadius: 48,
-                              backgroundColor: AppColor().yellowWarmColor,
-                              onPressed: state is ResetPasswordScreenLoading ? null : _createPassword,
-                              text: state is ResetPasswordScreenLoading ? AppLocalizations.of(context)!.loading: AppLocalizations.of(context)!.create,
-                              textStyle: MontserratStyles.montserratMediumTextStyle(
-                                color: AppColor().darkCharcoalBlueColor,
-                                size: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

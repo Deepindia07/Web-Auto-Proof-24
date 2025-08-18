@@ -6,6 +6,8 @@ const String car2Icon = "assets/image/download__3_-removebg-preview 1.png";
 const String contextsIcon = "assets/image/Frame 13.png";
 const String carCopy = "assets/image/car_copy.png";
 const String profileImageCopy = "assets/image/profile.png";
+const String loginImage = "assets/image/login_image.png";
+const String loginAutoLogoImage = "assets/image/login_auto_logo.png";
 
 /// Icons
 
@@ -26,7 +28,6 @@ const String personIcon = "assets/icon/fi_1077063.png";
 const String listIcon = "assets/icon/fi_9623117.png";
 const String notificationsIcon = "assets/icon/Layer 2.png";
 const String headPhoneIcon = "assets/icon/fi_6511790.png";
-const String menuIcon = "assets/icon/Frame 17.png";
 const String arrowBackIcon = "assets/icon/fi_507257 (1).png";
 const String alertIcon = "assets/icon/Group (1).png";
 const String cameraIcon = "assets/icon/fi_7713930.png";
@@ -59,6 +60,9 @@ const String car4Icon = "assets/image/car_icon.png";
 const String dashboardIcon = "assets/icon/dashboard.png";
 const String prizeIcon = "assets/icon/Prize.png";
 const String dummyCardIcon = "assets/icon/dummy_card.png";
+const String companyInfoIcon = "assets/icon/company_info.png";
+const String contactUsIcon = "assets/icon/contact_us.png";
+const String addIcon = "assets/icon/Add (1).png";
 
 /// vehicles image
 
@@ -76,6 +80,7 @@ const String frontSeatsView = "assets/inspection_images/Group 2.png";
 const String rearSeatsView = "assets/inspection_images/Frame 118.png";
 const String oDoMeeterView = "assets/inspection_images/Frame 119.png";
 const String addIconView = "assets/inspection_images/add_icon.png";
+const String downArrowImage = "assets/icon/Down_Arrow_3_.png";
 
 /// Camera Images
 

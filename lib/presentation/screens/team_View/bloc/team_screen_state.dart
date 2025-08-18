@@ -8,7 +8,7 @@ class TeamScreenInitial extends TeamScreenState {}
 class TeamScreenLoading extends TeamScreenState {}
 
 class TeamScreenLoaded extends TeamScreenState {
-  final List<Datum> teamMembers;
+  final List<GetTeamUserData> teamMembers;
   final bool hasReachedMax;
   final bool isLoadingMore;
   final int currentPage;
@@ -21,7 +21,7 @@ class TeamScreenLoaded extends TeamScreenState {
   });
 
   TeamScreenLoaded copyWith({
-   List<Datum>? teamMembers,
+   List<GetTeamUserData>? teamMembers,
     bool? hasReachedMax,
     bool? isLoadingMore,
     int? currentPage,

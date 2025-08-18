@@ -96,6 +96,15 @@ class MyProfileScreen extends StatelessWidget {
               buildRow("Ongoing", "6", labelFontSize, valueFontSize),
               Divider(color: AppColor().silverShadeGrayColor),
               SizedBox(height: 20),
+
+              CustomButtonWeb(containerColor: Colors.transparent,
+                  width: double.infinity,
+                  text: "Update", onPressed: (){
+                    context.push(AppRoute.personalInformationScreen);
+
+
+                  }, color: AppColor().darkCharcoalBlueColor,
+                  textColor: AppColor().yellowWarmColor, borderRadius: 30)
             ],
           ),
         ),

@@ -1,12 +1,9 @@
 import 'package:auto_proof/auth/data/models/get_all_inpection_list_response_model.dart';
-import 'package:auto_proof/auth/data/models/user_response_model.dart';
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:auto_proof/constants/const_string.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
-import '../datasource/model.dart';
 
 part 'team_screen_event.dart';
 part 'team_screen_state.dart';
@@ -36,7 +33,7 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
       );
 
       if (result.isSuccess && result.data.isNotEmpty) {
-        final List<Datum> allTeamMembers = result.data;
+        final List<GetTeamUserData> allTeamMembers = result.data;
         if (allTeamMembers.isNotEmpty) {
           final companyIdValue = allTeamMembers.first.companyId?.toString();
           if (companyIdValue != null && companyIdValue.isNotEmpty) {
@@ -79,8 +76,8 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
       );
 
       if (result.isSuccess && result.data.isNotEmpty) {
-        final List<Datum> newTeamMembers = result.data;
-        final allTeamMembers = List<Datum>.from(currentState.teamMembers)
+        final List<GetTeamUserData> newTeamMembers = result.data;
+        final allTeamMembers = List<GetTeamUserData>.from(currentState.teamMembers)
           ..addAll(newTeamMembers);
 
         emit(TeamScreenLoaded(

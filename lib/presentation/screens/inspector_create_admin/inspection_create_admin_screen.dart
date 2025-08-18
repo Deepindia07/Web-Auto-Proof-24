@@ -490,7 +490,7 @@ class _InspectionCreateAdminScreenViewState extends State<InspectionCreateAdminS
     }
 
     if (mounted) {
-      context.read<InspectorCreateAdminBloc>().add(
+   /*   context.read<InspectorCreateAdminBloc>().add(
         CreateInspectorEvent(
           firstName: _firstNameController.text.trim(),
           lastName: _lastNameController.text.trim(),
@@ -502,7 +502,7 @@ class _InspectionCreateAdminScreenViewState extends State<InspectionCreateAdminS
           adminId: adminId,
           companyId: companyId,
         ),
-      );
+      );*/
     }
   }
 

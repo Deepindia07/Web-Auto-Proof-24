@@ -11,7 +11,7 @@ class GetAllInspectionListResponseModel {
   final int? totalPages;
   final int? totalRecords;
   final int? pageSize;
-  final List<Datum> data;
+  final List<GetTeamUserData> data;
 
   factory GetAllInspectionListResponseModel.fromJson(Map<String, dynamic> json){
     return GetAllInspectionListResponseModel(
@@ -19,14 +19,14 @@ class GetAllInspectionListResponseModel {
       totalPages: json["totalPages"],
       totalRecords: json["totalRecords"],
       pageSize: json["pageSize"],
-      data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+      data: json["data"] == null ? [] : List<GetTeamUserData>.from(json["data"]!.map((x) => GetTeamUserData.fromJson(x))),
     );
   }
 
 }
 
-class Datum {
-  Datum({
+class GetTeamUserData {
+  GetTeamUserData({
     required this.inspectorId,
     required this.adminId,
     required this.companyId,
@@ -62,8 +62,8 @@ class Datum {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  factory Datum.fromJson(Map<String, dynamic> json){
-    return Datum(
+  factory GetTeamUserData.fromJson(Map<String, dynamic> json){
+    return GetTeamUserData(
       inspectorId: json["inspectorId"],
       adminId: json["adminId"],
       companyId: json["companyId"],

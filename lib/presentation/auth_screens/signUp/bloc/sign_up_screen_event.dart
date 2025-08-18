@@ -32,5 +32,14 @@ class SendOtpEmailEvent extends SignUpScreenEvent {
     required this.email,
   });
 }
+class SendOtpEmailSignUpEvent extends SignUpScreenEvent {
+  final String email;
+
+  SendOtpEmailSignUpEvent({
+    required this.email,
+  });
+}
+
+
 
 class ResetToInitialState extends SignUpScreenEvent {}

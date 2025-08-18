@@ -1,3 +1,5 @@
+
+
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/logger/app_logger.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
@@ -18,22 +20,29 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
     on<ResendOtpEvent>(_onResendOtp);
   }
 
-  Future<void> _onVerifyOtp(VerifyOtpEvent event, Emitter<OtpViewState> emit) async {
+  Future<void> _onVerifyOtp(
+    VerifyOtpEvent event,
+    Emitter<OtpViewState> emit,
+  ) async {
     emit(OtpViewLoading());
 
     try {
-      final dataBody = {
-        'otp': event.otp,
-        'email': event.email,
-      };
+      final dataBody = { 'email': event.email,'otp': event.otp,};
 
-      final result = await apiService.verifyOtpForResetPasswordApiCall(dataBody: dataBody);
+      final result = await apiService.verifyOtpForResetPasswordApiCall(
+        dataBody: dataBody,
+      );
 
       if (result.isSuccess) {
-        SharedPrefsHelper.instance.setBool(isVerifiedEmail, result.data.isEmailVerified ?? false);
-        final emailverified = SharedPrefsHelper.instance.getBool(isVerifiedEmail);
-        appLogger.w("is email is verified:= ${emailverified}");
-        emit(OtpViewSuccess(response: result.data!));
+        SharedPrefsHelper.instance.setBool(
+          isVerifiedEmail,
+          result.data.isEmailVerified ?? false,
+        );
+        final emailverified = SharedPrefsHelper.instance.getBool(
+          isVerifiedEmail,
+        );
+        appLogger.w("is email is verified:= $emailverified");
+        emit(OtpViewSuccess(response: result.data));
       } else {
         emit(OtpViewFailure(error: result.error ?? 'Verification failed'));
       }
@@ -43,7 +52,13 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
     }
   }
 
-  Future<void> _onResendOtp(ResendOtpEvent event, Emitter<OtpViewState> emit) async {
+
+
+
+  Future<void> _onResendOtp(
+    ResendOtpEvent event,
+    Emitter<OtpViewState> emit,
+  ) async {
     emit(OtpViewLoading());
 
     try {
@@ -53,19 +68,23 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
 
       appLogger.w("Resending OTP for email: $dataBody");
 
-      final result = await apiService.getOtpforEmailVerificationApiCall(dataBody: dataBody);
+      final result = await apiService.getOtpforEmailVerificationApiCall(
+        dataBody: dataBody,
+      );
 
       if (result.isSuccess) {
         SharedPrefsHelper.instance.setBool(isEmailFromSignUp, true);
         appLogger.i("OTP resent successfully");
-        emit(OtpResendSuccess(message:'OTP sent successfully'));
+        emit(OtpResendSuccess(message: 'OTP sent successfully'));
       } else {
         appLogger.e("Failed to resend OTP: ${result.error}");
-        emit(OtpResendFailure(error: result.error ?? 'Failed to send OTP'));
+        emit(OtpResendFailure(error: result.error));
       }
     } catch (error) {
       appLogger.e("Error in _onResendOtp: $error");
-      emit(OtpResendFailure(error: 'Failed to resend OTP: ${error.toString()}'));
+      emit(
+        OtpResendFailure(error: 'Failed to resend OTP: ${error.toString()}'),
+      );
     }
   }
 }

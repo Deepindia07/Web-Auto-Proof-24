@@ -1,8 +1,6 @@
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../l10n/app_localizations.dart';
 import '../../../../utilities/custom_textstyle.dart';
 
 class MyVehicleDetailsScreen extends StatelessWidget {

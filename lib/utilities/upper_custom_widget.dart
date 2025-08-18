@@ -2,6 +2,7 @@ import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../constants/const_color.dart';
 import 'custom_textstyle.dart';
+import 'custom_widgets.dart';
 
 class UpperContainerWidget extends StatelessWidget {
   final double height ;
@@ -11,8 +12,8 @@ class UpperContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return   Container(
       width: double.infinity,
-      height: height ,
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+
+      padding: const EdgeInsets.only(left: 30,right: 30,bottom: 20),
       decoration: BoxDecoration(
         color: AppColor().darkCharcoalBlueColor,
         borderRadius: BorderRadius.only(
@@ -25,7 +26,7 @@ class UpperContainerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(height: 30),
+
           const Text(
             '...',
             style: TextStyle(
@@ -71,3 +72,5 @@ class UpperContainerWidget extends StatelessWidget {
     );
   }
 }
+
+

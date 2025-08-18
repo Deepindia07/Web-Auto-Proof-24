@@ -2,8 +2,6 @@ import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-
 import '../../../../constants/const_string.dart';
 
 part 'change_password_screen_event.dart';
@@ -37,7 +35,7 @@ class ChangePasswordScreenBloc extends Bloc<ChangePasswordScreenEvent, ChangePas
         ));
       } else {
         emit(ChangePasswordScreenFailure(
-          error: response.error ?? 'Failed to change password',
+          error: response.error,
         ));
       }
     } catch (error) {

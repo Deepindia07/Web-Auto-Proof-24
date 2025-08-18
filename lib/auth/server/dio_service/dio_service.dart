@@ -6,8 +6,6 @@ import 'package:auto_proof/constants/const_string.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'interceptor_dio_handler.dart';
 // import 'log_interceptor.dart'as LogInterceptor;
 
@@ -97,8 +95,9 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
+      debugPrint("🔹 Sending GET to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.get(
-        url,
+        "${ApiEndPoints.baseUrl}$url",
         queryParameters: queryParameters,
         data: data,
         cancelToken: cancelToken,

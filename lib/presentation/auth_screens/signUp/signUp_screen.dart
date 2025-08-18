@@ -1,20 +1,24 @@
 part of 'signUp_screen_route_imple.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  final String email; // immutable
+  const SignUpScreen({Key? key, required this.email}) : super(key: key);
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _RegistrationScreenScreenState extends State<RegistrationScreen> with WidgetsBindingObserver {
+class _SignUpScreenState extends State<SignUpScreen>
+    with WidgetsBindingObserver {
   final _formKey = GlobalKey<FormState>();
-  final _fullNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _retypePasswordController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController authorizationController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController retypePasController = TextEditingController();
+  final TextEditingController approvalController = TextEditingController();
   bool _agreeToTerms = false;
   bool _isEmailVerified = false;
   bool _isPhoneVerified = false;
@@ -22,26 +26,24 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
   bool _isCheckingVerification = false;
   String selectedCountryCode = "+33";
   late final SignUpScreenBloc _signUpBloc;
+  String? phoneError = "";
 
+  bool termsPrivacy = false;
+  String inputType = "";
+  bool isVerifying = false;
+  bool isVerified = false;
+  bool obscurePassword = true;
+  bool obscureRePassword = false;
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    print("email0----->${widget.email}");
+    emailController.text = widget.email.toString();
     _signUpBloc = SignUpScreenBloc(apiRepository: AuthenticationApiCall());
     _loadEmailVerificationStatus();
-  }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _fullNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _passwordController.dispose();
-    _retypePasswordController.dispose();
-    _signUpBloc.close();
-    super.dispose();
+    super.initState();
   }
 
   @override
@@ -52,13 +54,27 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
     }
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    fullNameController.dispose();
+    lastNameController.dispose();
+    phoneController.dispose();
+    phoneController.dispose();
+    retypePasController.dispose();
+    _signUpBloc.close();
+    super.dispose();
+  }
+
   void _loadEmailVerificationStatus() async {
     setState(() {
       _isCheckingVerification = true;
     });
 
     try {
-      final isVerified = await SharedPrefsHelper.instance.getBool(isVerifiedEmail);
+      final isVerified = await SharedPrefsHelper.instance.getBool(
+        isVerifiedEmail,
+      );
       if (mounted) {
         setState(() {
           _isEmailVerified = isVerified ?? false;
@@ -73,14 +89,6 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
           _isCheckingVerification = false;
         });
       }
-    }
-  }
-
-  void _saveEmailVerificationStatus(bool isVerified) async {
-    try {
-      await SharedPrefsHelper.instance.setBool(isVerifiedEmail, isVerified);
-    } catch (e) {
-      print('Error saving email verification status: $e');
     }
   }
 
@@ -106,17 +114,17 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
       //   return;
       // }
 
-      String fullPhoneNumber = _phoneController.text;
+      String fullPhoneNumber = phoneController.text;
       String phoneNumber = fullPhoneNumber.replaceAll(RegExp(r'[^\d]'), '');
 
       _signUpBloc.add(
         RegisterUser(
-          firstName: _fullNameController.text.trim(),
-          lastName: _lastNameController.text.trim(),
-          email: _emailController.text.trim(),
+          firstName: fullNameController.text.trim(),
+          lastName: lastNameController.text.trim(),
+          email: emailController.text.trim(),
           countryCode: selectedCountryCode,
           phoneNumber: phoneNumber,
-          password: _passwordController.text,
+          password: passwordController.text,
           isEmailVerified: _isEmailVerified,
           termsAndConditions: _agreeToTerms,
         ),
@@ -132,7 +140,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
   }
 
   void _handleEmailVerification() async {
-    if (_emailController.text.isEmpty) {
+    if (emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter your email address first'),
@@ -143,7 +151,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
     }
 
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(_emailController.text.trim())) {
+    if (!emailRegex.hasMatch(emailController.text.trim())) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a valid email address'),
@@ -158,12 +166,20 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
     });
 
     _signUpBloc.add(
-        SendOtpEmailEvent(email: _emailController.text.trim())
+      SendOtpEmailSignUpEvent(email: emailController.text.trim()),
     );
   }
 
   void _navigateToOtpScreen() async {
-    final result = await context.push(AppRoute.otpScreen, extra: _emailController.text);
+    print("email-----${emailController.text}");
+    final result = await context.push(
+      AppRoute.otpScreen,
+      extra: {
+        'email': emailController.text,
+        'isEmailFromSignUp': true,
+        'otpType': '1',
+      },
+    );
 
     // Check verification status after returning from OTP screen
     _loadEmailVerificationStatus();
@@ -187,6 +203,14 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
     _saveEmailVerificationStatus(false);
   }
 
+  void _saveEmailVerificationStatus(bool isVerified) async {
+    try {
+      await SharedPrefsHelper.instance.setBool(isVerifiedEmail, isVerified);
+    } catch (e) {
+      print('Error saving email verification status: $e');
+    }
+  }
+
   Widget _buildEmailVerificationButton() {
     if (_isCheckingVerification) {
       return SizedBox(
@@ -194,9 +218,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
         height: 16,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(
-              AppColor().darkYellowColor
-          ),
+          valueColor: AlwaysStoppedAnimation<Color>(AppColor().darkYellowColor),
         ),
       );
     }
@@ -207,9 +229,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
         height: 16,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(
-              AppColor().darkYellowColor
-          ),
+          valueColor: AlwaysStoppedAnimation<Color>(AppColor().darkYellowColor),
         ),
       );
     }
@@ -220,22 +240,411 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
           : AppLocalizations.of(context)!.verify,
       textAlign: TextAlign.center,
       style: MontserratStyles.montserratMediumTextStyle(
-        color: _isEmailVerified
-            ? Colors.green
-            : AppColor().darkYellowColor,
+        color: _isEmailVerified ? Colors.green : AppColor().darkYellowColor,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).padding.top;
-    final headerHeight = 230.0 + statusBarHeight;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: BlocProvider<SignUpScreenBloc>.value(
+          value: _signUpBloc,
+          child: Responsive.isDesktop(context)
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 100),
+                        child: bodyWidget(screenHeight, screenWidth),
+                      ),
+                    ),
+                    Expanded(child: CommonViewAuth()),
+                  ],
+                )
+              : Container(
+                  padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: bodyWidget(screenHeight, screenWidth),
+                ),
+        ),
+      ),
+    );
+  }
 
+  bodyWidget(screenHeight, screenWidth) {
+    return BlocListener<SignUpScreenBloc, SignUpScreenState>(
+      bloc: _signUpBloc,
+      listener: (context, state) {
+        // Handle registration success/error
+        if (state is SignUpScreenSuccess) {
+          CustomLoader.hidePopupLoader(context);
+          CherryToast.success(context, "Account created successfully!");
+          // Clear verification status after successful registration
+          _saveEmailVerificationStatus(false);
+          context.pushNamed("login");
+        } else if (state is SignUpScreenError) {
+          CustomLoader.hidePopupLoader(context);
+          CherryToast.error(context, state.message);
+        } else if (state is SignUpSendOtpScreenLoading) {
+          CustomLoader.showPopupLoader(context);
+        }
+        // Handle OTP send success
+        else if (state is SignUpSendOtpOnEmailSuccess) {
+          setState(() {
+            _isSendingOtp = false;
+          });
+          CherryToast.success(context, "Verification code sent to your email!");
+          _navigateToOtpScreen();
+        }
+        // Handle OTP send error
+        else if (state is SignUpSendOtpOnEmailError) {
+          setState(() {
+            _isSendingOtp = false;
+          });
+          CherryToast.error(context, state.message);
+        }
+        // Handle OTP send loading
+        else if (state is SignUpSendOtpScreenLoading) {
+          setState(() {
+            _isSendingOtp = true;
+          });
+        }
+      },
+      child: Column(
+        children: [
+          UpperContainerWidget(height: screenHeight / 4),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              color: Colors.white,
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(height: 30),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: CustomTextField(
+                              validator: InputValidators.validateFirstName,
+                              controller: fullNameController,
+
+                              hintText: "Full Name",
+                              borderRadius: 30,
+                              fillColor: Colors.transparent,
+                              borderColor: AppColor().darkCharcoalBlueColor,
+                              borderWidth: 2,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 2,
+                            child: CustomTextField(
+                              validator: InputValidators.validateLastName,
+                              controller: lastNameController,
+
+                              hintText: "Last Name",
+                              borderRadius: 30,
+                              fillColor: Colors.transparent,
+                              borderColor: AppColor().darkCharcoalBlueColor,
+                              borderWidth: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(height: 15),
+
+                      CustomTextField(
+                        keyboardType: TextInputType.emailAddress,
+                        readOnly: _isEmailVerified,
+                        validator: InputValidators.validateEmailOrPhone,
+                        controller: emailController,
+
+                        prefixIcon: Icon(
+                          _isEmailVerified
+                              ? Icons.verified
+                              : Icons.mail_outline,
+                          color: _isEmailVerified ? Colors.green : null,
+                        ),
+                        suffixIcon: TextButton(
+                          onPressed:
+                              (_isEmailVerified ||
+                                  _isSendingOtp ||
+                                  _isCheckingVerification)
+                              ? null
+                              : _handleEmailVerification,
+                          child: _buildEmailVerificationButton(),
+                        ),
+                        hintText: AppLocalizations.of(context)!.emailAddress,
+
+                        borderRadius: 48,
+                        fillColor: Colors.transparent,
+                        borderColor: AppColor().darkCharcoalBlueColor,
+                        borderWidth: 2,
+                        onChanged: (value) {
+                          if (_isEmailVerified) {
+                            _resetEmailVerification();
+                          }
+                        },
+                      ),
+
+                      Container(height: 15),
+                      PhoneNumberField(
+                        controller: phoneController,
+                        isVerified: false,
+                        onVerify: () {},
+                      ),
+
+                      Container(height: 15),
+
+                      CustomTextField(
+                        obscureText: obscurePassword,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              obscurePassword = !obscurePassword;
+                            });
+                          },
+                        ),
+                        obscuringCharacter: '*',
+                        validator: InputValidators.validatePassword,
+                        controller: passwordController,
+                        prefixIcon: Icon(Icons.lock, color: Colors.grey),
+
+                        hintText: AppLocalizations.of(context)!.password,
+                        borderRadius: 30,
+                        fillColor: Colors.transparent,
+                        borderColor: AppColor().darkCharcoalBlueColor,
+                        borderWidth: 2,
+                      ),
+                      Container(height: 15),
+                      CustomTextField(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscureRePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              obscureRePassword = !obscureRePassword;
+                            });
+                          },
+                        ),
+                        obscuringCharacter: '*',
+                        validator: (value) =>
+                            InputValidators.validateConfirmPassword(
+                              value,
+                              retypePasController.text,
+                            ),
+                        controller: retypePasController,
+                        prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                        obscureText:
+                            obscureRePassword, // ✅ toggles between show/hide
+                        hintText: AppLocalizations.of(context)!.retypePassword,
+                        borderRadius: 30,
+                        fillColor: Colors.transparent,
+                        borderColor: AppColor().darkCharcoalBlueColor,
+                        borderWidth: 2,
+                      ),
+
+                      SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value: _agreeToTerms,
+                              onChanged: (value) {
+                                setState(() {
+                                  _agreeToTerms = value ?? false;
+                                });
+                              },
+                              activeColor: const Color(0xFF2D3748),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                            Flexible(
+                              child: RichText(
+                                text: TextSpan(
+                                  text: AppLocalizations.of(
+                                    context,
+                                  )!.agreeTerms,
+                                  style:
+                                      MontserratStyles.montserratMediumTextStyle(
+                                        size: 14,
+                                        color: AppColor().silverShadeGrayColor,
+                                      ),
+                                  children: [
+                                    TextSpan(
+                                      text: AppLocalizations.of(
+                                        context,
+                                      )!.termsPrivacy,
+                                      style:
+                                          MontserratStyles.montserratMediumTextStyle(
+                                            size: 14,
+                                            color: AppColor()
+                                                .darkCharcoalBlueColor,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: BlocBuilder<SignUpScreenBloc, SignUpScreenState>(
+                          bloc: _signUpBloc,
+                          builder: (context, state) {
+                            bool isLoading = state is SignUpScreenLoading;
+
+                            return CustomButton(
+                              onPressed: _agreeToTerms && !isLoading
+                                  ? () => _handleRegistration(context)
+                                  : null,
+                              text: isLoading
+                                  ? AppLocalizations.of(
+                                      context,
+                                    )!.creatingAccount
+                                  : AppLocalizations.of(
+                                      context,
+                                    )!.createAnAccountTitle,
+                              borderRadius: 48,
+                              textStyle:
+                                  MontserratStyles.montserratMediumTextStyle(
+                                    color: _agreeToTerms && !isLoading
+                                        ? AppColor().yellowWarmColor
+                                        : AppColor().darkCharcoalBlueColor,
+                                    size: 18,
+                                  ),
+                              elevation: 5,
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 15),
+
+                      RichText(
+                        text: TextSpan(
+                          text: 'Have an account? ',
+                          style: MontserratStyles.montserratSemiBoldTextStyle(
+                            color: AppColor().silverShadeGrayColor,
+                            size: 14,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Sign In',
+                              style:
+                                  MontserratStyles.montserratSemiBoldTextStyle(
+                                    color: AppColor().darkCharcoalBlueColor,
+                                    size: 14,
+                                  ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          LoginScreen(userRole: ''),
+                                    ),
+                                  );
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(height: 100),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void customGetValue() {
+    final input = emailController.text.trim();
+
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final phoneRegex = RegExp(r'^[6-9]\d{9}$');
+
+    if (emailRegex.hasMatch(input)) {
+      inputType = 'email';
+    } else if (phoneRegex.hasMatch(input)) {
+      inputType = 'phone';
+    } else {
+      inputType = 'invalid';
+    }
+
+    print("User input: $input");
+    print("Detected type: $inputType");
+  }
+}
+
+/*
+class SignUpScreen1 extends StatefulWidget {
+  const SignUpScreen1({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpScreen1> createState() => _SignUpScreenScreenState();
+}
+
+class _SignUpScreenScreenState extends State<SignUpScreen1>
+    with WidgetsBindingObserver {
+
+
+  void _saveEmailVerificationStatus(bool isVerified) async {
+    try {
+      await SharedPrefsHelper.instance.setBool(isVerifiedEmail, isVerified);
+    } catch (e) {
+      print('Error saving email verification status: $e');
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final statusBarHeight = MediaQuery.of(context).padding.top;
+    final headerHeight = 210.0 + statusBarHeight;
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
     return BlocProvider<SignUpScreenBloc>.value(
       value: _signUpBloc,
       child: Scaffold(
-        backgroundColor: AppColor().backgroundColor,
+        backgroundColor: Colors.white,
         body: BlocListener<SignUpScreenBloc, SignUpScreenState>(
           bloc: _signUpBloc,
           listener: (context, state) {
@@ -249,8 +658,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
             } else if (state is SignUpScreenError) {
               CustomLoader.hidePopupLoader(context);
               CherryToast.error(context, state.message);
-            }
-            else if (state is SignUpScreenLoading) {
+            } else if (state is SignUpScreenLoading) {
               CustomLoader.showPopupLoader(context);
             }
             // Handle OTP send success
@@ -258,7 +666,10 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
               setState(() {
                 _isSendingOtp = false;
               });
-              CherryToast.success(context, "Verification code sent to your email!");
+              CherryToast.success(
+                context,
+                "Verification code sent to your email!",
+              );
               _navigateToOtpScreen();
             }
             // Handle OTP send error
@@ -275,317 +686,313 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
               });
             }
           },
-          child:  Align(alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 600),
+          child: Container(
 
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        vGap(headerHeight),
-                        Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Form(
-                            key: _formKey,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+
+                    constraints: BoxConstraints(maxWidth: 600),
+                    child: Align(alignment: Alignment.topCenter,
+                      child: Stack(
+                        children: [
+                          SingleChildScrollView(
                             child: Column(
-                              spacing: 15,
                               children: [
-                                Row(
-                                  spacing: 3,
-                                  children: [
-                                    Expanded(
-                                      child: _buildTextField(
-                                        controller: _fullNameController,
-                                        hint: AppLocalizations.of(context)!.firstName,
-                                        keyboardType: TextInputType.name,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: _buildTextField(
-                                        controller: _lastNameController,
-                                        hint: AppLocalizations.of(context)!.lastName,
-                                        keyboardType: TextInputType.name,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                _buildTextField(
-                                  readonly: _isEmailVerified,
-                                  controller: _emailController,
-                                  hint: AppLocalizations.of(context)!.emailAddress,
-                                  onChanged: (value) {
-                                    if (_isEmailVerified) {
-                                      _resetEmailVerification();
-                                    }
-                                  },
-                                  suffix: TextButton(
-                                    onPressed: (_isEmailVerified || _isSendingOtp || _isCheckingVerification)
-                                        ? null
-                                        : _handleEmailVerification,
-                                    child: _buildEmailVerificationButton(),
-                                  ),
-                                  icon: Icon(
-                                    _isEmailVerified ? Icons.verified : Icons.mail_outline,
-                                    color: _isEmailVerified ? Colors.green : null,
-                                  ),
-                                  keyboardType: TextInputType.emailAddress,
-                                ),
-                                _buildTextField(
-                                  controller: _phoneController,
-                                  hint: AppLocalizations.of(context)!.phone,
-                                  suffix: TextButton(
-                                    onPressed: () {
-                                      // TODO: Implement phone verification
-                                    },
-                                    child: Text(
-                                      _isPhoneVerified
-                                          ? AppLocalizations.of(context)!.verified
-                                          : AppLocalizations.of(context)!.verify,
-                                      textAlign: TextAlign.center,
-                                      style: MontserratStyles.montserratMediumTextStyle(
-                                        color: _isPhoneVerified
-                                            ? Colors.green
-                                            : AppColor().darkYellowColor,
-                                      ),
-                                    ),
-                                  ),
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: CustomContainer(
-                                      height: 35,
-                                      width: 90,
-                                      border: Border(
-                                        right: BorderSide(
-                                          width: 1,
-                                          color: AppColor().silverShadeGrayColor,
-                                        ),
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(0),
-                                          topLeft: Radius.circular(48),
-                                          bottomLeft: Radius.circular(48),
-                                          bottomRight: Radius.circular(0)
-                                      ),
-                                      backgroundColor: AppColor().backgroundColor,
-                                      padding: const EdgeInsets.all(8),
-                                      child: CountryCodePicker(
-                                        onChanged: (CountryCode countryCode) {
-                                          // setState(() {
-                                          //   selectedCountryCode = countryCode.toString();
-                                          //   _isPhoneVerified = false;
-                                          // });
-                                          print("Selected Country: ${countryCode.name}");
-                                          print("Selected Code: ${countryCode.dialCode}");
-                                        },
-                                        initialSelection: 'FR',
-                                        favorite: const ["+33"],
-                                        showCountryOnly: true,
-                                        showOnlyCountryWhenClosed: false,
-                                        alignLeft: false,
-                                        textStyle: TextStyle(
-                                          color: AppColor().darkCharcoalBlueColor,
-                                          fontSize: 16,
-                                        ),
-                                        dialogTextStyle: TextStyle(
-                                          color: AppColor().darkCharcoalBlueColor,
-                                        ),
-                                        searchStyle: TextStyle(
-                                          color: AppColor().darkCharcoalBlueColor,
-                                        ),
-                                        searchDecoration: InputDecoration(
-                                          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-                                          hintText: 'Search country',
-                                          hintStyle: TextStyle(
-                                            color: AppColor().darkCharcoalBlueColor.withOpacity(0.6),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(color: AppColor().darkCharcoalBlueColor),
-                                          ),
-                                        ),
-                                        dialogBackgroundColor: AppColor().backgroundColor,
-                                        barrierColor: Colors.black54,
-                                        dialogSize: Size(
-                                            MediaQuery.of(context).size.width * 0.8,
-                                            MediaQuery.of(context).size.height * 0.6
-                                        ),
-                                        builder: (countryCode) {
-                                          return Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              if (countryCode != null)
-                                                Image.asset(
-                                                  countryCode.flagUri!,
-                                                  package: 'country_code_picker',
-                                                  width: 24,
-                                                  height: 18,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                countryCode!.dialCode ?? '',
-                                                style: TextStyle(
-                                                  color: AppColor().darkCharcoalBlueColor,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  keyboardType: TextInputType.phone,
-                                ),
-                                CustomPasswordField(
-                                  borderRadius: 48,
-                                  borderWidth: 1,
-                                  fillColor: AppColor().backgroundColor,
-                                  controller: _passwordController,
-                                  hintText: AppLocalizations.of(context)!.password,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'This field is required';
-                                    }
-                                    if (value.length < 6) {
-                                      return 'Password must be at least 6 characters';
-                                    }
-                                    return null;
-                                  },
-                                  prefix: const Icon(Icons.lock, color: Colors.grey),
-                                ),
-                                CustomPasswordField(
-                                  borderRadius: 48,
-                                  borderWidth: 1,
-                                  fillColor: AppColor().backgroundColor,
-                                  controller: _retypePasswordController,
-                                  hintText: AppLocalizations.of(context)!.retypePassword,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'This field is required';
-                                    }
-                                    if (value != _passwordController.text) {
-                                      return 'Passwords do not match';
-                                    }
-                                    return null;
-                                  },
-                                  prefix: const Icon(Icons.lock, color: Colors.grey),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 40.0),
-                                  child: Row(
+                                vGap(headerHeight),
+                                Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    spacing: 15,
                                     children: [
-                                      Checkbox(
-                                        value: _agreeToTerms,
+                                      Row(
+                                        spacing: 3,
+                                        children: [
+                                          Expanded(
+                                            child: _buildTextField(
+                                              controller:
+                                                  _fullNameController,
+                                              hint: AppLocalizations.of(
+                                                context,
+                                              )!.firstName,
+                                              keyboardType:
+                                                  TextInputType.name,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: _buildTextField(
+                                              controller:
+                                                  _lastNameController,
+                                              hint: AppLocalizations.of(
+                                                context,
+                                              )!.lastName,
+                                              keyboardType:
+                                                  TextInputType.name,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      _buildTextField(
+                                        readonly: _isEmailVerified,
+                                        controller: _emailController,
+                                        hint: AppLocalizations.of(
+                                          context,
+                                        )!.emailAddress,
                                         onChanged: (value) {
-                                          setState(() {
-                                            _agreeToTerms = value ?? false;
-                                          });
+                                          if (_isEmailVerified) {
+                                            _resetEmailVerification();
+                                          }
                                         },
-                                        activeColor: const Color(0xFF2D3748),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(4),
+                                        suffix: TextButton(
+                                          onPressed:
+                                              (_isEmailVerified ||
+                                                  _isSendingOtp ||
+                                                  _isCheckingVerification)
+                                              ? null
+                                              : _handleEmailVerification,
+                                          child:
+                                              _buildEmailVerificationButton(),
+                                        ),
+                                        icon: Icon(
+                                          _isEmailVerified
+                                              ? Icons.verified
+                                              : Icons.mail_outline,
+                                          color: _isEmailVerified
+                                              ? Colors.green
+                                              : null,
+                                        ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                      ),
+                                      PhoneNumberField(
+                                        controller: TextEditingController(),
+                                        isVerified: false,
+                                        onVerify: () {
+                                          print("Verify button pressed");
+                                        },
+                                      ),
+
+                                      CustomPasswordField(
+                                        borderRadius: 48,
+                                        borderWidth: 1,
+                                        fillColor: Colors.white,
+                                        controller: _passwordController,
+                                        hintText: AppLocalizations.of(
+                                          context,
+                                        )!.password,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty) {
+                                            return 'This field is required';
+                                          }
+                                          if (value.length < 6) {
+                                            return 'Password must be at least 6 characters';
+                                          }
+                                          return null;
+                                        },
+                                        prefix: const Icon(
+                                          Icons.lock,
+                                          color: Colors.grey,
                                         ),
                                       ),
-                                      Expanded(
-                                        child: RichText(
-                                          text: TextSpan(
-                                            text: AppLocalizations.of(context)!.agreeTerms,
-                                            style: MontserratStyles.montserratMediumTextStyle(
-                                              size: 14,
-                                              color: AppColor().silverShadeGrayColor,
+                                      CustomPasswordField(
+                                        borderRadius: 48,
+                                        borderWidth: 1,
+                                        fillColor: Colors.white,
+                                        controller:
+                                            _retypePasswordController,
+                                        hintText: AppLocalizations.of(
+                                          context,
+                                        )!.retypePassword,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty) {
+                                            return 'This field is required';
+                                          }
+                                          if (value !=
+                                              _passwordController.text) {
+                                            return 'Passwords do not match';
+                                          }
+                                          return null;
+                                        },
+                                        prefix: const Icon(
+                                          Icons.lock,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 40.0,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Checkbox(
+                                              value: _agreeToTerms,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _agreeToTerms =
+                                                      value ?? false;
+                                                });
+                                              },
+                                              activeColor: const Color(
+                                                0xFF2D3748,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      4,
+                                                    ),
+                                              ),
                                             ),
-                                            children: [
-                                              TextSpan(
-                                                text: AppLocalizations.of(context)!.termsPrivacy,
-                                                style: MontserratStyles.montserratMediumTextStyle(
-                                                  size: 14,
-                                                  color: AppColor().darkCharcoalBlueColor,
+                                            Expanded(
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  text: AppLocalizations.of(
+                                                    context,
+                                                  )!.agreeTerms,
+                                                  style: MontserratStyles.montserratMediumTextStyle(
+                                                    size: 14,
+                                                    color: AppColor()
+                                                        .silverShadeGrayColor,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          AppLocalizations.of(
+                                                            context,
+                                                          )!.termsPrivacy,
+                                                      style: MontserratStyles.montserratMediumTextStyle(
+                                                        size: 14,
+                                                        color: AppColor()
+                                                            .darkCharcoalBlueColor,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        height: 45,
+                                        child: BlocBuilder<SignUpScreenBloc, SignUpScreenState>(
+                                          bloc: _signUpBloc,
+                                          builder: (context, state) {
+                                            bool isLoading =
+                                                state
+                                                    is SignUpScreenLoading;
+
+                                            return CustomButton(
+                                              onPressed:
+                                                  _agreeToTerms &&
+                                                      !isLoading
+                                                  ? () =>
+                                                        _handleRegistration(
+                                                          context,
+                                                        )
+                                                  : null,
+                                              text: isLoading
+                                                  ? AppLocalizations.of(
+                                                      context,
+                                                    )!.creatingAccount
+                                                  : AppLocalizations.of(
+                                                      context,
+                                                    )!.createAnAccountTitle,
+                                              borderRadius: 48,
+                                              textStyle:
+                                                  MontserratStyles.montserratMediumTextStyle(
+                                                    color:
+                                                        _agreeToTerms &&
+                                                            !isLoading
+                                                        ? AppColor()
+                                                              .yellowWarmColor
+                                                        : AppColor()
+                                                              .darkCharcoalBlueColor,
+                                                    size: 18,
+                                                  ),
+                                              elevation: 5,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.haveAccount,
+                                            style:
+                                                MontserratStyles.montserratMediumTextStyle(
+                                                  size: 14,
+                                                  color: AppColor()
+                                                      .silverShadeGrayColor,
+                                                ),
+                                          ),
+                                          hGap(10),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.signIn,
+                                              style: MontserratStyles.montserratMediumTextStyle(
+                                                size: 14,
+                                                color: AppColor()
+                                                    .darkCharcoalBlueColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      vGap(30),
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 55,
-                                  child: BlocBuilder<SignUpScreenBloc, SignUpScreenState>(
-                                    bloc: _signUpBloc,
-                                    builder: (context, state) {
-                                      bool isLoading = state is SignUpScreenLoading;
-
-                                      return CustomButton(
-                                        onPressed: _agreeToTerms && !isLoading
-                                            ? () => _handleRegistration(context)
-                                            : null,
-                                        text: isLoading
-                                            ? AppLocalizations.of(context)!.creatingAccount
-                                            : AppLocalizations.of(context)!.createAnAccountTitle,
-                                        borderRadius: 48,
-                                        textStyle: MontserratStyles.montserratMediumTextStyle(
-                                          color: _agreeToTerms && !isLoading
-                                              ? AppColor().yellowWarmColor
-                                              : AppColor().darkCharcoalBlueColor,
-                                          size: 18,
-                                        ),
-                                        elevation: 5,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.haveAccount,
-                                      style: MontserratStyles.montserratMediumTextStyle(
-                                        size: 14,
-                                        color: AppColor().silverShadeGrayColor,
-                                      ),
-                                    ),
-                                    hGap(10),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context)!.signIn,
-                                        style: MontserratStyles.montserratMediumTextStyle(
-                                          size: 14,
-                                          color: AppColor().darkCharcoalBlueColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                vGap(30),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                          // Header section
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            child: Padding(
+                              padding: Responsive.isDesktop(context) ?const EdgeInsets.symmetric(horizontal: 150,) :EdgeInsets.zero,
+                              child: UpperContainerWidget(height: headerHeight),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  // Header section
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: UpperContainerWidget(height: headerHeight),
-                  ),
-                ],
-              ),
+                ),
+                if (Responsive.isDesktop(context))
+                  Expanded(flex: 1, child: Container( color: AppColor().newBgColor,
+                    child: Column(
+                      children: [Spacer(),
+                        CommonViewAuth(),Spacer()
+                      ],
+                    ),
+                  )),
+              ],
             ),
           ),
         ),
@@ -610,7 +1017,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
       readOnly: readonly,
       obscureText: isPassword && !isPasswordVisible,
       keyboardType: keyboardType,
-      fillColor: AppColor().backgroundColor,
+      fillColor: Colors.white,
       hintText: hint,
       suffixIcon: suffix,
       onChanged: onChanged,
@@ -642,3 +1049,7 @@ class _RegistrationScreenScreenState extends State<RegistrationScreen> with Widg
     );
   }
 }
+
+
+
+*/

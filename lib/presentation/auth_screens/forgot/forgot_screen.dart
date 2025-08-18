@@ -42,9 +42,12 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
-      bottomSheet: _buildBottomSheet(context),
+
       body: BlocConsumer<ForgotScreenBloc, ForgotScreenState>(
         listener: (context, state) {
           if (state is! ForgotScreenLoading) {
@@ -53,62 +56,89 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
 
           if (state is ForgotScreenSuccess) {
             CherryToast.success(context, state.message);
-            context.push(AppRoute.otpScreen, extra: state.email);
+            log("email----${state.email}");
+            context.push(
+              AppRoute.otpScreen,
+              extra: {
+                'email': state.email,
+                'isEmailFromSignUp': true,
+                'otpType': '2',
+              },
+            );
           } else if (state is ForgotScreenError) {
             CherryToast.error(context, state.error);
           }
         },
         builder: (context, state) {
-          return Align(alignment: Alignment.center,
-            child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 600),
-                child: _buildBody(context)),
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              children: [
+                Expanded(child: _buildBody(context, screenWidth)),
+                if (Responsive.isDesktop(context))
+                  Expanded(flex: 1, child: CommonViewAuth()),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, double screenWidth) {
     return SafeArea(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 36.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(lockLayer1Icon, height: 72, width: 72),
-              const SizedBox(height: 14),
-              Text(
-                AppLocalizations.of(context)!.forgot,
-                style: MontserratStyles.montserratBoldTextStyle(
-                  size: 43,
-                  color: AppColor().darkCharcoalBlueColor,
-                ),
-                textAlign: TextAlign.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 36.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50),
+                  Image.asset(
+                    lockLayer1Icon,
+                    height: 80,
+                    width: 62,
+                    fit: BoxFit.cover,
+                  ),
+                  vGap(10),
+                  Text(
+                    AppLocalizations.of(context)!.forgot,
+                    style: MontserratStyles.montserratBoldTextStyle(
+                      size: 30,
+                      color: AppColor().darkCharcoalBlueColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  // const SizedBox(height: ),
+                  Text(
+                    "${AppLocalizations.of(context)!.password}?",
+                    style: MontserratStyles.montserratMediumTextStyle(
+                      color: AppColor().darkCharcoalBlueColor,
+                      size: 28, // Reduced from 48
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 9), // Reduced from 10
+                  Text(
+                    AppLocalizations.of(context)!.resetInstructionsMessage,
+                    style: MontserratStyles.montserratNormalTextStyle(
+                      color: AppColor().darkCharcoalBlueColor,
+                      size: 14, // Reduced from 18
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  vGap(20),
+                ],
               ),
-              // const SizedBox(height: ),
-              Text(
-                "${AppLocalizations.of(context)!.password}?",
-                style: MontserratStyles.montserratSemiBoldTextStyle(
-                  color: AppColor().darkCharcoalBlueColor,
-                  size: 43, // Reduced from 48
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 9), // Reduced from 10
-              Text(
-                AppLocalizations.of(context)!.resetInstructionsMessage,
-                style: MontserratStyles.montserratNormalTextStyle(
-                  color: AppColor().darkCharcoalBlueColor,
-                  size: 16, // Reduced from 18
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 270),
-            ],
-          ),
+            ),
+            _buildBottomSheet(context),
+          ],
         ),
       ),
     );
@@ -120,13 +150,9 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
       onClosing: () {},
       builder: (BuildContext context) {
         return Container(
-          height:
-              MediaQuery.of(context).size.height * 0.405,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 27,
-            vertical: 36,
-          ),
+          height: MediaQuery.of(context).size.height * 0.405,
+          width: 600,
+          padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 36),
           decoration: BoxDecoration(
             color: AppColor().darkCharcoalBlueColor,
             borderRadius: const BorderRadius.only(

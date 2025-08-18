@@ -1,9 +1,7 @@
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
+import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../l10n/app_localizations.dart';
-import '../../../../utilities/custom_textstyle.dart';
 
 class MyTeamDetailsScreen extends StatelessWidget {
   const MyTeamDetailsScreen({super.key});
@@ -18,7 +16,7 @@ class MyTeamDetailsScreen extends StatelessWidget {
     double valueFontSize = screenWidth * 0.014;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F6FB),
+      backgroundColor: AppColor().backgroundColor,
       body: Center(
         child: Container(
           width: screenWidth > 900 ? 600 : screenWidth * 0.9,
@@ -26,10 +24,7 @@ class MyTeamDetailsScreen extends StatelessWidget {
             horizontal: horizontalPadding / 2,
             vertical: 20,
           ),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(12),
-          ),
+
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
