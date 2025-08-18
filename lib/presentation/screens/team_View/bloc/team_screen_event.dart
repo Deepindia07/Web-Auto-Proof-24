@@ -10,3 +10,7 @@ class LoadTeamMembers extends TeamScreenEvent {
 }
 
 class LoadMoreTeamMembers extends TeamScreenEvent {}
+
+class GetSingleTeamMember extends TeamScreenEvent {
+
+}

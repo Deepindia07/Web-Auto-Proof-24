@@ -25,4 +25,6 @@ class ApiEndPoints {
   static const String vehicleListEnd =
       '/api/admin/vehicle/get-all-vehicle-detailList';
   static const String sendOtpApi = '/api/auth/send-otp';
+  static const String getTeamMember =
+      '/api/admin/team/getInspectorMemberDetails/';
 }
