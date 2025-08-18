@@ -21,7 +21,7 @@ class TeamScreenLoaded extends TeamScreenState {
   });
 
   TeamScreenLoaded copyWith({
-   List<GetTeamUserData>? teamMembers,
+    List<GetTeamUserData>? teamMembers,
     bool? hasReachedMax,
     bool? isLoadingMore,
     int? currentPage,
@@ -42,3 +42,19 @@ class TeamScreenError extends TeamScreenState {
 }
 
 ///-----Get single
+///
+class GetSingleTeamMemberLoading extends TeamScreenState {}
+
+class GetSingleTeamMemberSuccess extends TeamScreenState {
+  final GetSingleTeamMemberModel getSingleTeamMemberModel;
+  GetSingleTeamMemberSuccess({required this.getSingleTeamMemberModel});
+  @override
+  List<Object> get props => [getSingleTeamMemberModel];
+}
+
+class GetSingleTeamMemberError extends TeamScreenState {
+  final String error;
+  GetSingleTeamMemberError({required this.error});
+  @override
+  List<Object> get props => [error];
+}

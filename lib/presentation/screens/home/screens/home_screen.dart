@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   case ScreenType.addInspector:
                                     return AddInspectorScreen();
                                   case ScreenType.viewTeamProfile:
-                                    return MyTeamDetailsScreen();
+                                    return MyTeamDetailsScreen(inspectorId: '1ab87983-775a-4ad6-b81d-1b797eb52bbf',);
                                 }
                               },
                             ),

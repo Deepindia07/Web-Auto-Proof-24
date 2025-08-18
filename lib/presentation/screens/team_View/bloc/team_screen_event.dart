@@ -11,6 +11,9 @@ class LoadTeamMembers extends TeamScreenEvent {
 
 class LoadMoreTeamMembers extends TeamScreenEvent {}
 
-class GetSingleTeamMember extends TeamScreenEvent {
-
+class GetSingleTeamMemberEvent extends TeamScreenEvent {
+  final String inspectorId;
+  GetSingleTeamMemberEvent({required this.inspectorId});
+  @override
+  List<Object?> get props => [inspectorId];
 }

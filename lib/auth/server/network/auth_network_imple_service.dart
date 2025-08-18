@@ -18,6 +18,7 @@ import 'package:auto_proof/auth/server/dio_service/dio_service.dart';
 import 'package:auto_proof/auth/server/dio_service/error/exception.dart';
 import 'package:auto_proof/auth/server/network/auth_abstract_network_imple.dart';
 import 'package:auto_proof/constants/const_api_endpoints.dart';
+import 'package:auto_proof/presentation/screens/team_View/models/get_single_team_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -308,7 +309,9 @@ class AuthenticationApiCall implements AuthAbstraction {
     required String adminId,
   }) async {
     try {
-      debugPrint("🔹 Sending GET to ${ApiEndPoints.teamApiEnd}/$adminId/create-inspector-member");
+      debugPrint(
+        "🔹 Sending GET to ${ApiEndPoints.teamApiEnd}/$adminId/create-inspector-member",
+      );
       debugPrint("🔹 Sending data   $dataBody");
       final response = await dioClient.post(
         "${ApiEndPoints.teamApiEnd}/$adminId/create-inspector-member",
@@ -449,6 +452,26 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure(handleDioError(dioError).toString());
     } catch (error) {
       return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+  ///get single team member ---
+  ///
+  Future<Result<GetSingleTeamMemberModel, String>> getSingleTeamMember({
+    required String id,
+  }) async {
+    try {
+      final response = await dioClient.get("${ApiEndPoints.getTeamMember}$id");
+      final Map<String, dynamic> data = response.data;
+      debugPrint("Api response data : ${response.data}");
+      final dataResponse = GetSingleTeamMemberModel.fromJson(data);
+      return Result.success(dataResponse);
+    } on DioException catch (dioError) {
+      debugPrint("Api response data : $dioError");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (e) {
+      debugPrint("error generated: => ${e.toString()}");
+      return Result.failure('Unexpected error occurred: $e');
     }
   }
 }

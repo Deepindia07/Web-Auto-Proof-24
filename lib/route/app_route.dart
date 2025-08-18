@@ -319,7 +319,7 @@ class AppRouter {
         name: 'myTeamDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: MyTeamDetailsScreen(),
+          child: MyTeamDetailsScreen(inspectorId: '',),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),

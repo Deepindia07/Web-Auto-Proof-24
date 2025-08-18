@@ -1,19 +1,31 @@
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/presentation/screens/team_View/bloc/team_screen_bloc.dart';
+import 'package:auto_proof/presentation/screens/team_View/models/get_single_team_model.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyTeamDetailsScreen extends StatelessWidget {
-  const MyTeamDetailsScreen({super.key});
+class MyTeamDetailsScreen extends StatefulWidget {
+  final String inspectorId ;
+  const MyTeamDetailsScreen({super.key, required this.inspectorId});
+
+  @override
+  State<MyTeamDetailsScreen> createState() => _MyTeamDetailsScreenState();
+}
+
+class _MyTeamDetailsScreenState extends State<MyTeamDetailsScreen> {
+  GetSingleTeamMemberModel? getSingleTeamMemberModel;
+  Inspector? inspector;
+  @override
+  void initState() {
+    context.read<TeamScreenBloc>().add(GetSingleTeamMemberEvent(inspectorId:widget.inspectorId));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     // Dynamic padding and font scaling
     double horizontalPadding = screenWidth * 0.05;
@@ -33,7 +45,9 @@ class MyTeamDetailsScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: BlocConsumer<TeamScreenBloc, TeamScreenState>(
               listener: (context, state) {
-
+                if (state is GetSingleTeamMemberSuccess) {
+                  inspector = state.getSingleTeamMemberModel.inspector;
+                }
               },
               builder: (context, state) {
                 return Column(
@@ -68,7 +82,8 @@ class MyTeamDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: "James Paul",
+                            text:
+                                "${inspector?.firstName} ${inspector?.lastName}",
                             style: MontserratStyles.montserratNormalTextStyle(
                               color: AppColor().darkCharcoalBlueColor,
                               size: 20,
@@ -81,14 +96,14 @@ class MyTeamDetailsScreen extends StatelessWidget {
                     SizedBox(height: 20),
                     buildRow(
                       "Gmail:",
-                      "preet@gmail.com",
+                      inspector?.email ?? "",
                       labelFontSize,
                       valueFontSize,
                     ),
                     Divider(color: AppColor().silverShadeGrayColor),
                     buildRow(
                       "Phone Number",
-                      "638364839",
+                      inspector?.phoneNumber ?? "",
                       labelFontSize,
                       valueFontSize,
                     ),
@@ -113,10 +128,12 @@ class MyTeamDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildRow(String label,
-      String value,
-      double labelSize,
-      double valueSize,) {
+  Widget buildRow(
+    String label,
+    String value,
+    double labelSize,
+    double valueSize,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
       child: Row(
