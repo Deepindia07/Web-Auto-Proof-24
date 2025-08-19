@@ -58,3 +58,18 @@ class GetSingleTeamMemberError extends TeamScreenState {
   @override
   List<Object> get props => [error];
 }
+
+/// Update team member info states --
+class UpdateTeamMemberInfoLoading extends TeamScreenState{}
+class UpdateTeamMemberInfoSuccess extends TeamScreenState{
+  final UpdateTeamInfoModel updateTeamInfoModel;
+  UpdateTeamMemberInfoSuccess({required this.updateTeamInfoModel});
+  @override
+  List<Object> get props => [updateTeamInfoModel];
+}
+class UpdateTeamMemberInfoError extends TeamScreenState{
+  final String error ;
+  UpdateTeamMemberInfoError({required this.error});
+  @override
+  List<Object> get props => [error];
+}

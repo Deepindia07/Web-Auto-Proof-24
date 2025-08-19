@@ -161,7 +161,6 @@ class AppRouter {
         path: AppRoute.otpScreen,
         name: 'otp',
         pageBuilder: (context, state) {
-
           final extra = state.extra as Map<String, dynamic>;
           final isEmailFromRegister = SharedPrefsHelper.instance.getBool(
             isEmailFromSignUp,
@@ -172,7 +171,6 @@ class AppRouter {
               email: extra['email'] as String?,
               isEmailFromSignUp: extra['isEmailFromSignUp'] as bool,
               otpType: extra['otpType'] as String,
-
             ),
             animation: AppAnimations.slideFromBottom,
             duration: const Duration(milliseconds: 500),
@@ -186,7 +184,7 @@ class AppRouter {
           final email = state.extra.toString();
           return _buildPageWithAnimation(
             state: state,
-            child: ResetPasswordScreen(email: email ),
+            child: ResetPasswordScreen(email: email),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           );
@@ -319,7 +317,13 @@ class AppRouter {
         name: 'myTeamDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: MyTeamDetailsScreen(inspectorId: '',),
+          child: MyTeamDetailsScreen(
+            inspectorId: '',
+            onScreenChange: (screen, {inspectorId}) {
+              // Handle navigation or state here
+              debugPrint("Navigated to $screen with inspectorId: $inspectorId");
+            },
+          ),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -369,11 +373,17 @@ class AppRouter {
         name: 'teamScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: MyTeamScreen(onScreenChange: (ScreenType ) {  },),
+          child: MyTeamScreen(
+            onScreenChange: (screen, {inspectorId}) {
+              // Handle navigation or state here
+              debugPrint("Navigated to $screen with inspectorId: $inspectorId");
+            },
+          ), // ✅ works now
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
       ),
+
       GoRoute(
         path: AppRoute.vehiclesScreenView,
         name: 'vehiclesScreenView',

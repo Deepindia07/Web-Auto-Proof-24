@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:auto_proof/auth/data/models/get_all_inpection_list_response_model.dart';
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
-import 'package:auto_proof/constants/const_api_endpoints.dart';
 import 'package:auto_proof/constants/const_string.dart';
+import 'package:auto_proof/presentation/screens/team_View/models/update_team_info_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -22,6 +20,7 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
     on<LoadTeamMembers>(_onLoadTeamMembers);
     on<LoadMoreTeamMembers>(_onLoadMoreTeamMembers);
     on<GetSingleTeamMemberEvent>(_onGetSingleTeamMemberEvent);
+    on<UpdateTeamMemberInfoEvent>(_onUpdateTeamMemberInfoEvent);
   }
 
   Future<void> _onLoadTeamMembers(
@@ -119,7 +118,9 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
   ) async {
     emit(GetSingleTeamMemberLoading());
     try {
-      final result = await apiRepository.getSingleTeamMember(id:event.inspectorId);
+      final result = await apiRepository.getSingleTeamMember(
+        id: event.inspectorId,
+      );
       if (result.isSuccess) {
         final getSingleTeamMemberModel = result.data;
         emit(
@@ -132,6 +133,29 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
       }
     } catch (error) {
       emit(GetSingleTeamMemberError(error: error.toString()));
+    }
+  }
+
+  Future<void> _onUpdateTeamMemberInfoEvent(
+    UpdateTeamMemberInfoEvent event,
+    Emitter<TeamScreenState> emit,
+  ) async {
+    emit(UpdateTeamMemberInfoLoading());
+    try {
+      final result = await apiRepository.updateTeamMemberInfoEvent(
+        id: event.inspectorId,
+        dataBody: event.body,
+      );
+      if (result.isSuccess) {
+        final updateTeamInfoModel = result.data;
+        emit(
+          UpdateTeamMemberInfoSuccess(updateTeamInfoModel: updateTeamInfoModel),
+        );
+      } else {
+        emit(UpdateTeamMemberInfoError(error: result.error));
+      }
+    } catch (e) {
+      emit(UpdateTeamMemberInfoError(error: e.toString()));
     }
   }
 }

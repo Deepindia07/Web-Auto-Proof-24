@@ -61,8 +61,9 @@ class PhoneNumberField extends StatelessWidget {
             child: CountryCodePicker(
               padding: EdgeInsets.zero,
               onChanged: onChanged,
-              initialSelection: initialCountryCode ?? 'IN', // 👈 use dynamic value
-              favorite: const ["+91", "IN"], // 👈 optional
+              initialSelection: initialCountryCode ?? '+33',
+
+              favorite: const ["+33", "FR"],
               showCountryOnly: false,
               alignLeft: false,
               flagWidth: 20,

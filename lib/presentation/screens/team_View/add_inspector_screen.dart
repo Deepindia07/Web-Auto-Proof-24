@@ -20,6 +20,7 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
 
   @override
   void initState() {
+
     adminId = SharedPrefsHelper.instance.getString(userId);
     super.initState();
   }

@@ -226,6 +226,8 @@ class CustomButtonWeb extends StatelessWidget {
   final Color textColor;
   final double borderRadius;
   final Color? containerColor;
+  final bool? isLoading;
+
 
   const CustomButtonWeb({
     super.key,
@@ -238,7 +240,7 @@ class CustomButtonWeb extends StatelessWidget {
     this.containerColor,
     this.width,
     this.textSize,
-    this.height,
+    this.height, this.isLoading,
   });
 
   @override
@@ -273,7 +275,17 @@ class CustomButtonWeb extends StatelessWidget {
               borderRadius,
             ), // Rounded corners
           ),
-          child: Text(
+          child: isLoading == true?
+               Center(
+                 child: SizedBox(
+                             height:  18,
+                             width:  18,
+                             child: CircularProgressIndicator(
+                               strokeWidth: 2,
+                               color: AppColor().yellowWarmColor,
+                             ),
+                           ),
+               ) : Text(
             textAlign: TextAlign.center,
             text,
             style: MontserratStyles.montserratMediumTextStyle(

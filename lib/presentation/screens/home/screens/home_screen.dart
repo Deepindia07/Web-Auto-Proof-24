@@ -9,11 +9,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScreenType currentScreen = ScreenType.dashboard;
-
-  void updateScreen(ScreenType type) {
+  String? selectedInspectorId;
+  void updateScreen(ScreenType type, {String? inspectorId}) {
     setState(() {
       currentScreen = type;
-      print("current-----$currentScreen-----$type");
+      if (inspectorId != null) {
+        selectedInspectorId = inspectorId;
+      }
     });
   }
 
@@ -142,10 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   case ScreenType.myTeam:
                                     return MyTeamScreen(
-                                      onScreenChange: (type) {
+                                      onScreenChange: (type, {inspectorId}) {
                                         setState(() {
-                                          currentScreen =
-                                              type;
+                                          currentScreen = type;
+                                          selectedInspectorId = inspectorId;
                                         });
                                       },
                                     );
@@ -170,7 +172,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   case ScreenType.addInspector:
                                     return AddInspectorScreen();
                                   case ScreenType.viewTeamProfile:
-                                    return MyTeamDetailsScreen(inspectorId: '1ab87983-775a-4ad6-b81d-1b797eb52bbf',);
+                                    return MyTeamDetailsScreen(
+                                      inspectorId: selectedInspectorId ?? '',
+                                      onScreenChange: (type, {inspectorId}) {
+                                        setState(() {
+                                          currentScreen = type;
+                                          selectedInspectorId = inspectorId;
+                                        });
+                                      },
+                                    );
                                 }
                               },
                             ),

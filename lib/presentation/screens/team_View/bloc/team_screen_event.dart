@@ -17,3 +17,14 @@ class GetSingleTeamMemberEvent extends TeamScreenEvent {
   @override
   List<Object?> get props => [inspectorId];
 }
+
+/// Update team member info event --
+
+class UpdateTeamMemberInfoEvent extends TeamScreenEvent{
+  final String inspectorId;
+ final  Map<String, dynamic> body ;
+  UpdateTeamMemberInfoEvent( {required this.inspectorId,required this.body,});
+  @override
+  List<Object> get props => [inspectorId];
+
+}

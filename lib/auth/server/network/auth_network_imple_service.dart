@@ -23,6 +23,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../constants/const_string.dart';
+import '../../../presentation/screens/team_View/models/update_team_info_model.dart';
 import '../default_db/sharedprefs_method.dart';
 
 class AuthenticationApiCall implements AuthAbstraction {
@@ -474,4 +475,31 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $e');
     }
   }
+
+
+
+
+    Future<Result<UpdateTeamInfoModel, String>> updateTeamMemberInfoEvent({
+    required String id,required Map<String, dynamic> dataBody
+  }) async {
+    try {
+      log("dataBody----_${dataBody}");
+      final response = await dioClient.put("${ApiEndPoints.updateTeamMemberInfo}$id",data: dataBody);
+      final Map<String, dynamic> data = response.data;
+      debugPrint("Api response data : ${response.data}");
+      final dataResponse = UpdateTeamInfoModel.fromJson(data);
+      return Result.success(dataResponse);
+    } on DioException catch (dioError) {
+      debugPrint("Api response data : $dioError");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (e) {
+      debugPrint("error generated: => ${e.toString()}");
+      return Result.failure('Unexpected error occurred: $e');
+    }
+  }
+
+
+
+
+
 }

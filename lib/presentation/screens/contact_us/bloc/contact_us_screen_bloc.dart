@@ -7,17 +7,19 @@ import '../../../../auth/data/models/contact_us_response_model.dart';
 part 'contact_us_screen_event.dart';
 part 'contact_us_screen_state.dart';
 
-class ContactUsScreenBloc extends Bloc<ContactUsScreenEvent, ContactUsScreenState> {
+class ContactUsScreenBloc
+    extends Bloc<ContactUsScreenEvent, ContactUsScreenState> {
   final AuthenticationApiCall apiRepository;
 
-  ContactUsScreenBloc({required this.apiRepository}) : super(ContactUsScreenInitial()) {
+  ContactUsScreenBloc({required this.apiRepository})
+    : super(ContactUsScreenInitial()) {
     on<SubmitContactUsEvent>(_onSubmitContactUs);
   }
 
   Future<void> _onSubmitContactUs(
-      SubmitContactUsEvent event,
-      Emitter<ContactUsScreenState> emit,
-      ) async {
+    SubmitContactUsEvent event,
+    Emitter<ContactUsScreenState> emit,
+  ) async {
     emit(ContactUsScreenLoading());
 
     try {
@@ -27,16 +29,15 @@ class ContactUsScreenBloc extends Bloc<ContactUsScreenEvent, ContactUsScreenStat
       };
       final result = await apiRepository.contactUsApiCall(dataBody: dataBody);
 
-      // result.when(
-      //   success: (response) {
-      //     emit(ContactUsScreenSuccess(response: response));
-      //   },
-      //   failure: (error) {
-      //     emit(ContactUsScreenError(errorMessage: error));
-      //   },
-      // );
+      if (result.isSuccess) {
+        emit(ContactUsScreenSuccess(response: result.data));
+      } else {
+        emit(ContactUsScreenError(errorMessage: result.error));
+      }
     } catch (error) {
-      emit(ContactUsScreenError(errorMessage: 'Unexpected error occurred: $error'));
+      emit(
+        ContactUsScreenError(errorMessage: 'Unexpected error occurred: $error'),
+      );
     }
   }
 }
