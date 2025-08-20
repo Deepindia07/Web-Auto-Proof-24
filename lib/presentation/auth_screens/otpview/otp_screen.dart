@@ -36,10 +36,7 @@ class OtpScreenView extends StatefulWidget {
 
 class _OtpScreenViewState extends State<OtpScreenView>
     with TickerProviderStateMixin {
-  List<FocusNode> focusNodes = List.generate(4, (index) => FocusNode());
   TextEditingController pinController = TextEditingController();
-  bool _isLoading = false;
-  bool _isResending = false;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -64,26 +61,10 @@ class _OtpScreenViewState extends State<OtpScreenView>
 
     pinController.dispose();
 
-    for (var node in focusNodes) {
-      node.dispose();
-    }
+
     super.dispose();
   }
 
-  void _onCodeChanged(String value, int index) {
-    if (value.length == 1) {
-      if (index < 3) {
-        focusNodes[index + 1].requestFocus();
-      } else {
-        // Auto-verify when all 4 digits are entered
-        _verifyCode();
-      }
-    } else if (value.isEmpty) {
-      if (index > 0) {
-        focusNodes[index - 1].requestFocus();
-      }
-    }
-  }
 
   void _verifyCode() {
     if (pinController.text.length == 4) {
@@ -104,8 +85,6 @@ class _OtpScreenViewState extends State<OtpScreenView>
     // Clear all input fields
 
     pinController.clear();
-
-    focusNodes[0].requestFocus();
     context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
   }
 

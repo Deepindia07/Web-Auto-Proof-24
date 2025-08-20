@@ -1,5 +1,8 @@
+import 'package:auto_proof/presentation/screens/company/bloc/create_company_bloc.dart';
+import 'package:auto_proof/presentation/screens/home/bloc/delete_account_bloc/delete_account_bloc.dart';
 import 'package:auto_proof/presentation/screens/personal_information_screens/bloc/personal_information_bloc/personal_information_bloc.dart';
 import 'package:auto_proof/presentation/screens/team_View/bloc/team_screen_bloc.dart';
+import 'package:auto_proof/presentation/screens/vehicles_screen/bloc/vehicles_screen_bloc.dart';
 import 'package:auto_proof/presentation/splash/bloc/splash_screen_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,9 +27,29 @@ class AppProviders extends StatelessWidget {
         ),
 
         BlocProvider<SplashScreenBloc>(create: (context) => SplashScreenBloc()),
-        BlocProvider<ContactUsScreenBloc>(create: (context) => ContactUsScreenBloc(apiRepository: AuthenticationApiCall())),
-        BlocProvider<InspectorCreateAdminBloc>(create: (context) => InspectorCreateAdminBloc(apiRepository: AuthenticationApiCall())),
-        BlocProvider<TeamScreenBloc>(create: (context) => TeamScreenBloc(apiRepository: AuthenticationApiCall())),
+        BlocProvider<CreateCompanyBloc>(
+          create: (context) =>
+              CreateCompanyBloc(apiRepository: AuthenticationApiCall()),
+        ),  BlocProvider<DeleteAccountBloc>(
+          create: (context) =>
+              DeleteAccountBloc(authenticationApiCall: AuthenticationApiCall()),
+        ),
+        BlocProvider<VehiclesScreenBloc>(
+          create: (context) =>
+              VehiclesScreenBloc(vehicleRepository: AuthenticationApiCall()),
+        ),
+        BlocProvider<ContactUsScreenBloc>(
+          create: (context) =>
+              ContactUsScreenBloc(apiRepository: AuthenticationApiCall()),
+        ),
+        BlocProvider<InspectorCreateAdminBloc>(
+          create: (context) =>
+              InspectorCreateAdminBloc(apiRepository: AuthenticationApiCall()),
+        ),
+        BlocProvider<TeamScreenBloc>(
+          create: (context) =>
+              TeamScreenBloc(apiRepository: AuthenticationApiCall()),
+        ),
         BlocProvider<LocalizationsBlocController>(
           create: (context) => LocalizationsBlocController(),
         ),

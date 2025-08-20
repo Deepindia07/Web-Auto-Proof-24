@@ -181,6 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         });
                                       },
                                     );
+                                  case ScreenType.deleteAccount:
+                                  return   Container();
                                 }
                               },
                             ),
@@ -197,211 +199,60 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
 
-class SideMenu extends StatelessWidget {
-  final ScreenType? currentScreen;
-  final Function(ScreenType) onMenuSelected;
 
-  const SideMenu({super.key, required this.onMenuSelected, this.currentScreen});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 270,
-      color: const Color(0xFF1F2D4A),
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(height: 32),
-                  ProfileImageUploader(),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Jonathan Patterson',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 24), // Menu Items
-                  MenuItem(
-                    selected: currentScreen == ScreenType.dashboard,
-                    icon: dashboardIcon,
-                    title: 'Dashboard',
-                    onTap: () => onMenuSelected(ScreenType.dashboard),
-                  ),
-                  MenuItem(
-                    selected: currentScreen == ScreenType.subscription,
-                    icon: prizeIcon,
-                    title: 'My Package',
-                    onTap: () => onMenuSelected(ScreenType.subscription),
-                  ),
-                  MenuItem(
-                    selected: currentScreen == ScreenType.profile,
-                    icon: whitePersonIcon,
-                    title: 'My Profile',
-                    onTap: () => onMenuSelected(ScreenType.profile),
-                  ),
-                  MenuItem(
-                    selected: currentScreen == ScreenType.companyInformation,
-                    icon: companyInfoIcon,
-                    title: 'Company Information',
-                    onTap: () => onMenuSelected(ScreenType.companyInformation),
-                  ),
-                  MenuItem(
-                    selected: currentScreen == ScreenType.myTeam,
-                    icon: teamIcon,
-                    title: 'My Team',
-                    onTap: () => onMenuSelected(ScreenType.myTeam),
-                  ),
-                  MenuItem(
-                    selected: currentScreen == ScreenType.myVehicle,
-                    icon: car4Icon,
-                    title: 'My Vehicle',
-                    onTap: () => onMenuSelected(ScreenType.myVehicle),
-                  ),
-                  MenuItem(
-                    selected: currentScreen == ScreenType.paymentHistory,
-                    icon: paymentIcon,
-                    title: 'Payment History',
-                    onTap: () => onMenuSelected(ScreenType.paymentHistory),
-                  ),
-
-                  MenuItem(
-                    selected: currentScreen == ScreenType.contactUs,
-                    icon: contactUsIcon,
-                    title: 'Contact us',
-                    onTap: () => onMenuSelected(ScreenType.contactUs),
-                  ),
-                  MenuItem(
-                    selected: currentScreen == ScreenType.changePassword,
-                    icon: changePasswordLockIcon,
-                    title: 'Change password',
-                    onTap: () => onMenuSelected(ScreenType.changePassword),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              _showSignOutDialog(context);
-            },
-            child: Container(
-              alignment: Alignment.center,
-              width: 180,
-              margin: const EdgeInsets.only(bottom: 12.0),
-              decoration: BoxDecoration(
-                color: AppColor().yellowWarmColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-                child: Text(
-                  'Sign Out',
-                  style: MontserratStyles.montserratSemiBoldTextStyle(
-                    color: AppColor().darkCharcoalBlueColor,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  ImageProvider _buildImageProviderSafe(String imagePath) {
-    if (imagePath.isEmpty) {
-      return AssetImage('assets/image/profile.png');
-    } else if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
-      return NetworkImage(imagePath);
-    } else {
-      try {
-        final file = File(imagePath);
-        if (file.existsSync()) {
-          return FileImage(file);
-        } else {
-          return AssetImage('assets/image/profile.png');
-        }
-      } catch (e) {
-        print('Error loading image from path: $imagePath, Error: $e');
-        return AssetImage('assets/image/profile.png');
-      }
-    }
-  }
-
-  void _showSignOutDialog(BuildContext context) {
+  void _showAccountDeleteDialog(BuildContext context, VoidCallback onConfirm) {
     final localizations = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           backgroundColor: AppColor().backgroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), // Reduced from 12
+            borderRadius: BorderRadius.circular(10),
           ),
           title: Text(
-            localizations.signOutTitle, // e.g., "Sign Out"
+            localizations.accountDelete, // e.g. "Delete Account"
             style: MontserratStyles.montserratBoldTextStyle(
               size: 18,
               color: AppColor().darkCharcoalBlueColor,
-            ), // Reduced from 20
-          ),
-          content: SizedBox(
-            width: 220, // Reduced from 250
-            child: Text(
-              localizations.signOutConfirm,
-              style: MontserratStyles.montserratMediumTextStyle(
-                size: 15,
-                color: AppColor().darkCharcoalBlueColor,
-              ), // Reduced from 16
             ),
           ),
-          actionsPadding: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-            bottom: 20,
-          ), // Reduced padding
-          actionsAlignment: MainAxisAlignment.spaceBetween,
+          content: Text(
+            localizations.accountDeleteConfirm,
+            style: MontserratStyles.montserratMediumTextStyle(
+              size: 15,
+              color: AppColor().darkCharcoalBlueColor,
+            ),
+          ),
           actions: [
             CustomButton(
-              width: 130,
-              height: 40, // Reduced from 45
-              borderRadius: 10, // Reduced from 12
-              padding: EdgeInsets.symmetric(horizontal: 32), // Reduced from 40
+              width: 120,
+              height: 40,
+              borderRadius: 10,
               text: localizations.cancelButton,
               textStyle: MontserratStyles.montserratSemiBoldTextStyle(
                 color: AppColor().yellowWarmColor,
                 size: 14,
               ),
               backgroundColor: AppColor().darkCharcoalBlueColor,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
             ),
             CustomButton(
-              width: 130,
-              height: 40, // Reduced from 45
-              borderRadius: 10, // Reduced from 12
-              padding: EdgeInsets.symmetric(horizontal: 32), // Reduced from 40
-              text: localizations.signOutButton,
+              width: 120,
+              height: 40,
+              borderRadius: 10,
+              text: localizations.deleteButton,
               textStyle: MontserratStyles.montserratSemiBoldTextStyle(
                 color: AppColor().darkCharcoalBlueColor,
                 size: 14,
               ),
               backgroundColor: AppColor().darkYellowColor,
-              onPressed: () async {
-                await SharedPrefsHelper.instance.remove(localToken);
-                if (context.mounted) {
-                  context.pushReplacement(AppRoute.loginScreen);
-                }
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirm(); // Trigger delete
               },
             ),
           ],
@@ -409,7 +260,10 @@ class SideMenu extends StatelessWidget {
       },
     );
   }
+
 }
+
+
 
 enum ScreenType {
   dashboard,
@@ -425,6 +279,7 @@ enum ScreenType {
   changePassword,
   addInspector,
   viewTeamProfile,
+  deleteAccount,
 }
 
 class MenuItem extends StatelessWidget {

@@ -219,30 +219,6 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     return Column(
       children: [
         vGap(2),
-        // Inspector reference number field
-        /*  if (widget.userRole != "owner") vGap(topSpacing),
-        if (widget.userRole != "owner")
-          CustomTextField(
-            controller: _instructorRefrenceNumberController,
-            fillColor: Colors.white,
-            borderWidth: 2,
-            borderRadius: 30,
-            hintStyle: MontserratStyles.montserratRegularTextStyle(
-              size: isLandscape ? 12 : 14,
-              color: AppColor().silverShadeGrayColor,
-            ),
-            hintText: "Enter Registration Number",
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return AppLocalizations.of(
-                  context,
-                )!.pleaseEnterEmailOrPhoneShort;
-              }
-              return null;
-            },
-          ),
-*/
-        // Email/Phone field
         if (widget.userRole != "instructor") vGap(verticalSpacing),
         if (widget.userRole != "instructor")
           CustomTextField(

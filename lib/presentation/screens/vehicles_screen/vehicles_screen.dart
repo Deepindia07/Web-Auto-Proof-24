@@ -24,7 +24,7 @@ class _VehiclesScreenViewState extends State<VehiclesScreenView> {
   @override
   void initState() {
     super.initState();
-    context.read<VehiclesScreenBloc>().add(LoadVehiclesEvent());
+
   }
 
   @override
@@ -332,6 +332,13 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
       vehicleImages: carIcon,
     ),
   ];
+
+  @override
+  void initState() {
+    context.read<VehiclesScreenBloc>().add(LoadVehiclesEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -346,31 +353,52 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
             alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1400),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [vGap(5),
-                  Text(
-                    "My Vehicle",
-                    style: MontserratStyles.montserratBoldTextStyle(
-                      size: 14,
-                      color: AppColor().darkCharcoalBlueColor,
-                    ),
-                  ),vGap(10),
-                  Expanded(
-                    child: Container(
-                      color: AppColor().backgroundColor,
-                      child: ListView.separated(
+              child: BlocConsumer<VehiclesScreenBloc, VehiclesScreenState>(
+                  builder: (context, state) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [vGap(5),
+                        Text(
+                          "My Vehicle",
+                          style: MontserratStyles.montserratBoldTextStyle(
+                            size: 14,
+                            color: AppColor().darkCharcoalBlueColor,
+                          ),
+                        ), vGap(10),
+                        Expanded(
+                          child: Container(
+                            color: AppColor().backgroundColor,
+                            child: ListView.separated(
 
-                        itemCount: myVehicleModelList.length,
-                        separatorBuilder: (context, index) => SizedBox(height: 1,),
-                        itemBuilder: (context, index) {
-                          final vehicleList = myVehicleModelList[index];
-                          return _vehicleItem(vehicleList);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+                              itemCount: myVehicleModelList.length,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 1,),
+                              itemBuilder: (context, index) {
+                                final vehicleList = myVehicleModelList[index];
+                                return _vehicleItem(vehicleList);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                listener: (BuildContext context, VehiclesScreenState state) {
+
+                    if (state is VehiclesScreenLoading) {
+                  Center(
+                  child: CustomLoader(),
+                );
+              } else if (state is VehiclesScreenLoaded) {
+                if (state.vehicles.isEmpty) {
+                  Center(
+                    child: universalNull(),
+                  );
+                }
+
+              }
+
+                },
               ),
             ),
           );
@@ -380,68 +408,69 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
   }
 
   Widget _vehicleItem(MyVehicleModel payment) {
-  return Container(
-    decoration: BoxDecoration( color: AppColor().backgroundColor,
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(width: 1, color: AppColor().silverShadeGrayColor),
-    ),
-    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-    margin: EdgeInsets.symmetric(vertical: 5, ),
+    return Container(
+      decoration: BoxDecoration(color: AppColor().backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 1, color: AppColor().silverShadeGrayColor),
+      ),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+      margin: EdgeInsets.symmetric(vertical: 5,),
 
-    child: Row(
-      children: [
-        const CircleAvatar(
-          radius: 32,
-          backgroundImage: AssetImage('assets/image/profile.png'),
-        ),
-        SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                payment.carName,
+      child: Row(
+        children: [
+          const CircleAvatar(
+            radius: 32,
+            backgroundImage: AssetImage('assets/image/profile.png'),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  payment.carName,
+                  style: MontserratStyles.montserratSemiBoldTextStyle(
+                    size: 14,
+                    color: AppColor().darkCharcoalBlueColor,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Number Plate: ${payment.numberPlate}",
+                  style: MontserratStyles.montserratRegularTextStyle(
+                    size: 12,
+                    color: AppColor().darkCharcoalBlueColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              context.push(AppRoute.myTeamDetailsScreen);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: 180,
+              height: 50,
+              decoration: BoxDecoration(
+                color: AppColor().yellowWarmColor,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Text(
+                "view",
                 style: MontserratStyles.montserratSemiBoldTextStyle(
                   size: 14,
                   color: AppColor().darkCharcoalBlueColor,
                 ),
               ),
-              SizedBox(height: 4),
-              Text(
-                payment.numberPlate,
-                style: MontserratStyles.montserratRegularTextStyle(
-                  size: 12,
-                  color: AppColor().darkCharcoalBlueColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            context.push(AppRoute.myTeamDetailsScreen);
-          },
-          child: Container(
-            alignment: Alignment.center,
-            width: 180,
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColor().yellowWarmColor,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Text(
-              "view",
-              style: MontserratStyles.montserratSemiBoldTextStyle(
-                size: 14,
-                color: AppColor().darkCharcoalBlueColor,
-              ),
             ),
           ),
-        ),
-      ],
-    ),
-  ); }
-   /* return Container(
+        ],
+      ),
+    );
+  }
+/* return Container(
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       color: Colors.white,
       child: Row(

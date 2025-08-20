@@ -7,8 +7,10 @@ import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/constants/const_route_string.dart';
 import 'package:auto_proof/presentation/auth_screens/change_password/change_password_screen_route_imple.dart';
+import 'package:auto_proof/presentation/auth_screens/login/login_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/company/company_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/contact_us/contact_us_screen_route_imple.dart';
+import 'package:auto_proof/presentation/screens/home/bloc/delete_account_bloc/delete_account_bloc.dart';
 import 'package:auto_proof/presentation/screens/notification/notification_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/personal_information_screens/personal_information_route_imple.dart';
 import 'package:auto_proof/presentation/screens/team_View/web_team_profile_screen.dart';
@@ -32,6 +34,7 @@ import '../../team_View/team_screen_route_imple.dart';
 import '../../vehicles_screen/vehicles_screen_route_imple.dart';
 
 part 'home_screen.dart';
+part 'side_menu_screen.dart';
 part 'dashboard_screen.dart';
 part 'profile_screen.dart';
 part 'subscription_card_view.dart';

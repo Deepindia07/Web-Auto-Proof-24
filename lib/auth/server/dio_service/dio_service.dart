@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
@@ -66,6 +67,7 @@ class DioClient {
   /// Helper method to get authorization headers
   Map<String, dynamic> _getAuthHeaders() {
     final token = SharedPrefsHelper.instance.getString(localToken);
+    log("token------$token");
     return token != null ? {'Authorization': 'Bearer $token'} : {};
   }
 
@@ -120,6 +122,7 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
+      debugPrint("🔹 Sending PUT to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.post(
         url,
         data: data,
@@ -168,6 +171,7 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
+      debugPrint("🔹 Sending delete to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.delete(
         url,
         queryParameters: queryParameters,

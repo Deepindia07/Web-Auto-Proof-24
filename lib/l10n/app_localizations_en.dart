@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'VEHICLE INSPECTION APPLICATION';
 
   @override
+  String get emailValidationMsg => 'Please enter your email address';
+
+  @override
   String get pleaseWait => 'Please wait...';
 
   @override
@@ -820,7 +823,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Whether you’re handling a fleet or just one vehicle, Auto Proof 24 gives you a smart and reliable way to document your car’s condition — anytime, anywhere.';
 
   @override
+  String get companyInformationSuccessfully =>
+      'Company information has been created successfully.';
+
+  @override
+  String get accountDelete => 'Delete Account';
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
   String appVersion(Object version) {
     return 'App Version: $version';
   }
+
+  @override
+  // TODO: implement accountDeleteConfirm
+  String get accountDeleteConfirm => "Are you sure you want to delete?";
 }

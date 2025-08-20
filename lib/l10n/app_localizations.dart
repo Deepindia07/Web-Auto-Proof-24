@@ -104,14 +104,20 @@ abstract class AppLocalizations {
   /// **'VEHICLE INSPECTION APPLICATION'**
   String get appTitle;
 
+  /// No description provided for @emailValidationMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email address'**
+  String get emailValidationMsg;
+
   /// No description provided for @pleaseWait.
   ///
   /// In en, this message translates to:
   /// **'Please wait...'**
   String get pleaseWait;
+  String get companyInformationSuccessfully;
 
   /// No description provided for @welcome.
-  ///
   /// In en, this message translates to:
   /// **'WELCOME'**
   String get welcome;
@@ -661,12 +667,15 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to sign out?'**
   String get signOutConfirm;
+  String get accountDeleteConfirm;
+  String get accountDelete;
 
   /// No description provided for @signOutButton.
   ///
   /// In en, this message translates to:
   /// **'Sign Out'**
   String get signOutButton;
+  String get deleteButton;
 
   /// No description provided for @cancelButton.
   ///

@@ -476,7 +476,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                               child: Text("${record.date}  ${record.time}"),
                             ),
                             Expanded(
-                              flex: 2,
+                              flex: 3,
                               child: Row(
                                 children: [
                                   Image.asset(

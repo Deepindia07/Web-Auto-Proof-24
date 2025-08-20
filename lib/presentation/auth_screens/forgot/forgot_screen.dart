@@ -276,8 +276,8 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
 
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your email address'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.emailValidationMsg),
           backgroundColor: Colors.red,
         ),
       );

@@ -2,7 +2,7 @@ part of 'app_route_imple.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: AppRoute.splashScreen,
+    initialLocation: AppRoute.loginScreen,
     routes: [
       GoRoute(
         path: AppRoute.splashScreen,

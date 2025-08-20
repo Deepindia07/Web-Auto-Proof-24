@@ -12,6 +12,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appTitle => 'APPLICATION D\'INSPECTION DE VÉHICULE';
 
   @override
+  String get emailValidationMsg => 'Veuillez entrer votre adresse e-mail';
+
+  @override
   String get pleaseWait => 'Veuillez patienter...';
 
   @override
@@ -824,8 +827,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get whoItsForTitle => 'Pour qui c\'est';
 
   @override
+  String get companyInformationSuccessfully =>
+      "Les informations sur l'entreprise ont été créées avec succès.";
+
+  @override
   String get whoItsForDescription =>
       'Que vous gériez une flotte ou un seul véhicule, Auto Proof 24 vous offre un moyen intelligent et fiable de documenter l\'état de votre voiture — à tout moment, n\'importe où.';
+
+  @override
+  String get accountDelete => 'Supprimer le compte';
+  @override
+  String get deleteButton => 'Supprimer';
+
+  @override
+  String get accountDeleteConfirm => 'Êtes-vous sûr de vouloir supprimer ?';
 
   @override
   String appVersion(Object version) {

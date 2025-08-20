@@ -24,7 +24,7 @@ class InputValidators {
     return null;
   }
 
-  static  String? validateEmail(String? value) {
+  static String? validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Email is required';
     }
@@ -116,24 +116,36 @@ class InputValidators {
   }
 
   static String? validateVAT(String? value) {
-    if (value == null || value.isEmpty) return 'URL is required';
-    final pattern = "r'\s+|-''";
-    if (!RegExp(pattern, caseSensitive: false).hasMatch(value)) {
-      return 'Enter a valid URL (starting with http:// or https://)';
+    if (value == null || value.isEmpty) {
+      return 'VAT number is required';
+    }
+    if (value.length < 8) {
+      return 'VAT number must be at least 8 characters long';
+    }
+    final pattern = r'^[A-Za-z0-9-]+$';
+    if (!RegExp(pattern).hasMatch(value)) {
+      return 'Enter a valid VAT number (only letters, numbers, and dash allowed)';
     }
     return null;
   }
 
-  static String? validateRegisterNumber(String? val) {
+  static String? validateCompanyRegNumber(String? val) {
     if (val == null || val.isEmpty) {
-      return 'CIN is required';
+      return 'Company Registration Number is required';
     }
-    final pattern = r'^[LU]\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$';
+    if (val.length < 6) {
+      return 'Registration Number must be at least 6 characters long';
+    }
+    if (val.length > 20) {
+      return 'Registration Number must not exceed 20 characters';
+    }
+    final pattern = r'^[A-Za-z0-9-]+$';
     if (!RegExp(pattern).hasMatch(val.trim())) {
-      return 'Enter a valid 21‑char CIN (e.g. U12345MH2023PTC000789)';
+      return 'Enter a valid Registration Number (only letters, numbers, and dash allowed)';
     }
     return null;
   }
+
 
   /// validation for password -
   static String? validatePassword(String? password) {
@@ -164,9 +176,9 @@ class InputValidators {
 
   /// validation for confirm password -
   static String? validateConfirmPassword(
-      String? confirmPassword,
-      String originalPassword,
-      ) {
+    String? confirmPassword,
+    String originalPassword,
+  ) {
     if (confirmPassword == null || confirmPassword.trim().isEmpty) {
       return 'Please confirm your password';
     }
