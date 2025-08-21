@@ -6,11 +6,14 @@ import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_route_string.dart';
 import 'package:auto_proof/constants/const_string.dart';
 import 'package:auto_proof/l10n/app_localizations.dart';
+import 'package:auto_proof/l10n_controller/l10n_switcher_bloc.dart';
 import 'package:auto_proof/responsive.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_textfields.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 

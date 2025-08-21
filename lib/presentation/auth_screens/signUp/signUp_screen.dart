@@ -1,8 +1,8 @@
 part of 'signUp_screen_route_imple.dart';
 
 class SignUpScreen extends StatefulWidget {
-  final String email; // immutable
-  const SignUpScreen({Key? key, required this.email}) : super(key: key);
+  final String email;
+  const SignUpScreen({super.key, required this.email});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -21,7 +21,6 @@ class _SignUpScreenState extends State<SignUpScreen>
   final TextEditingController approvalController = TextEditingController();
   bool _agreeToTerms = false;
   bool _isEmailVerified = false;
-  bool _isPhoneVerified = false;
   bool _isSendingOtp = false;
   bool _isCheckingVerification = false;
   String selectedCountryCode = "+33";
@@ -37,12 +36,9 @@ class _SignUpScreenState extends State<SignUpScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-
-    print("email0----->${widget.email}");
     emailController.text = widget.email.toString();
     _signUpBloc = SignUpScreenBloc(apiRepository: AuthenticationApiCall());
     _loadEmailVerificationStatus();
-
     super.initState();
   }
 
@@ -96,23 +92,13 @@ class _SignUpScreenState extends State<SignUpScreen>
     if (_formKey.currentState!.validate() && _agreeToTerms) {
       if (!_isEmailVerified) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please verify your email address first'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.verifyEmailAddress),
             backgroundColor: Colors.red,
           ),
         );
         return;
       }
-
-      // if (!_isPhoneVerified) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(
-      //       content: Text('Please verify your phone number first'),
-      //       backgroundColor: Colors.red,
-      //     ),
-      //   );
-      //   return;
-      // }
 
       String fullPhoneNumber = phoneController.text;
       String phoneNumber = fullPhoneNumber.replaceAll(RegExp(r'[^\d]'), '');
@@ -131,8 +117,8 @@ class _SignUpScreenState extends State<SignUpScreen>
       );
     } else if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please agree to the Terms & Privacy'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.agreeTermsPrivacy),
           backgroundColor: Colors.red,
         ),
       );
@@ -142,8 +128,8 @@ class _SignUpScreenState extends State<SignUpScreen>
   void _handleEmailVerification() async {
     if (emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your email address first'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.enterEmail),
           backgroundColor: Colors.red,
         ),
       );
@@ -153,8 +139,8 @@ class _SignUpScreenState extends State<SignUpScreen>
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(emailController.text.trim())) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a valid email address'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.emailInvalid),
           backgroundColor: Colors.red,
         ),
       );
@@ -187,8 +173,8 @@ class _SignUpScreenState extends State<SignUpScreen>
     if (result == true) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Email verified successfully!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.emailSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -304,12 +290,16 @@ class _SignUpScreenState extends State<SignUpScreen>
         } else if (state is SignUpSendOtpScreenLoading) {
           CustomLoader.showPopupLoader(context);
         }
+
         // Handle OTP send success
         else if (state is SignUpSendOtpOnEmailSuccess) {
           setState(() {
             _isSendingOtp = false;
           });
-          CherryToast.success(context, "Verification code sent to your email!");
+          CherryToast.success(
+            context,
+            AppLocalizations.of(context)!.verificationOtpMsg,
+          );
           _navigateToOtpScreen();
         }
         // Handle OTP send error
@@ -347,7 +337,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                               validator: InputValidators.validateFirstName,
                               controller: fullNameController,
 
-                              hintText: "Full Name",
+                              hintText: AppLocalizations.of(context)!.firstName,
                               borderRadius: 30,
                               fillColor: Colors.transparent,
                               borderColor: AppColor().darkCharcoalBlueColor,
@@ -360,8 +350,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                             child: CustomTextField(
                               validator: InputValidators.validateLastName,
                               controller: lastNameController,
+                              hintText: AppLocalizations.of(context)!.lastName,
 
-                              hintText: "Last Name",
                               borderRadius: 30,
                               fillColor: Colors.transparent,
                               borderColor: AppColor().darkCharcoalBlueColor,
@@ -508,43 +498,56 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     },
                                   children: [
                                     TextSpan(
-                                      text: AppLocalizations.of(
-                                context,
-                                )!.terms,
-                                      style: MontserratStyles.montserratMediumTextStyle(
-                                        size: 14,
-                                        color: AppColor().darkCharcoalBlueColor,
-                                      ),
+                                      text: AppLocalizations.of(context)!.terms,
+                                      style:
+                                          MontserratStyles.montserratMediumTextStyle(
+                                            size: 14,
+                                            color: AppColor()
+                                                .darkCharcoalBlueColor,
+                                          ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
+                                          _openLink(
+                                            "https://www.autoproof24.com/termes-et-conditions/",
+                                          );
                                           // 👉 Link 1
-                                          print("Terms clicked - open Terms link");
+                                          print(
+                                            "Terms clicked - open Terms link",
+                                          );
                                           // launchUrl(Uri.parse("https://example.com/terms"));
                                         },
                                     ),
                                     TextSpan(
                                       text: " & ", // connector
-                                      style: MontserratStyles.montserratMediumTextStyle(
-                                        size: 14,
-                                        color: AppColor().silverShadeGrayColor,
-                                      ),
+                                      style:
+                                          MontserratStyles.montserratMediumTextStyle(
+                                            size: 14,
+                                            color: AppColor()
+                                                .darkCharcoalBlueColor,
+                                          ),
                                     ),
                                     TextSpan(
                                       text: AppLocalizations.of(
                                         context,
                                       )!.privacy,
-                                      style: MontserratStyles.montserratMediumTextStyle(
-                                        size: 14,
-                                        color: AppColor().darkCharcoalBlueColor,
-                                      ),
+                                      style:
+                                          MontserratStyles.montserratMediumTextStyle(
+                                            size: 14,
+                                            color: AppColor()
+                                                .darkCharcoalBlueColor,
+                                          ),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
+                                          _openLink(
+                                            "https://www.autoproof24.com/politique-de-confidentialite/",
+                                          );
                                           // 👉 Link 2
-                                          print("Privacy clicked - open Privacy link");
+                                          print(
+                                            "Privacy clicked - open Privacy link",
+                                          );
                                           // launchUrl(Uri.parse("https://example.com/privacy"));
                                         },
                                     ),
-
                                   ],
                                 ),
                               ),
@@ -627,6 +630,17 @@ class _SignUpScreenState extends State<SignUpScreen>
         ],
       ),
     );
+  }
+
+  Future<void> _openLink(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication, // opens in new tab/browser on web
+    )) {
+      throw Exception("Could not launch $url");
+    }
   }
 
   void customGetValue() {

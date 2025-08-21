@@ -1,5 +1,7 @@
 part of 'login_screen_route_imple.dart';
 
+int selectedIndex = 0;
+
 class LoginScreen extends StatelessWidget {
   final String userRole;
 
@@ -162,6 +164,84 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Text(
+                          AppLocalizations.of(context)!.selectLanguage,
+                          style: MontserratStyles.montserratSemiBoldTextStyle(
+                            size: 12,
+                            color: AppColor().darkCharcoalBlueColor,
+                          ),
+                        ),
+                        vGap(screenHeight * 0.0120),
+                        BlocBuilder<
+                          LocalizationsBlocController,
+                          LocalizationsState
+                        >(
+                          builder: (context, state) {
+                            final currentLocale =
+                                state.locale ?? const Locale('en');
+
+                            // Map locale to index
+                            selectedIndex = currentLocale.languageCode == 'en'
+                                ? 0
+                                : 1;
+
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: ToggleButtons(
+                                borderRadius: BorderRadius.circular(30),
+                                borderWidth: 0,
+                                borderColor: Colors.transparent,
+                                selectedBorderColor: Colors.transparent,
+                                fillColor: Colors.amber,
+                                selectedColor: Colors.white,
+                                color: Colors.black,
+                                constraints: const BoxConstraints(
+                                  minWidth: 120,
+                                  minHeight: 35,
+                                ),
+                                isSelected: [
+                                  selectedIndex == 0, // English
+                                  selectedIndex == 1, // French
+                                ],
+                                onPressed: (index) {
+                                  final newLocale = index == 0
+                                      ? const Locale('en')
+                                      : const Locale('fr');
+
+                                  // Dispatch change event to bloc
+                                  context
+                                      .read<LocalizationsBlocController>()
+                                      .add(ChangeLanguageEvent(newLocale));
+                                },
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.englishText,
+                                    style:
+                                        MontserratStyles.montserratSemiBoldTextStyle(
+                                          size: 12,
+                                          color:
+                                              AppColor().darkCharcoalBlueColor,
+                                        ),
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)!.frenchText,
+                                    style:
+                                        MontserratStyles.montserratSemiBoldTextStyle(
+                                          size: 12,
+                                          color:
+                                              AppColor().darkCharcoalBlueColor,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+
+                        vGap(screenHeight * 0.02),
                         Image.asset(
                           appLogo,
                           height: screenHeight * 0.126,
@@ -239,12 +319,14 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
             },
           ),
 
-        // Password field
+        //---------- Password field
         if (widget.userRole != "instructor") vGap(verticalSpacing),
         if (widget.userRole != "instructor")
-          CustomPasswordField(obscuringCharacter: "*",onSubmitted:  (value) {
-            _onLoginPressed(); // 🔹 Call API when Enter is pressed
-    },
+          CustomPasswordField(
+            obscuringCharacter: "*",
+            onSubmitted: (value) {
+              _onLoginPressed();
+            },
             controller: _passwordController,
             borderWidth: 2,
             fillColor: Colors.white,
@@ -289,10 +371,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
     final verticalSpacing = isLandscape
         ? screenHeight * 0.025
         : screenHeight * 0.0162;
-    final buttonHeight = isLandscape
-        ? screenHeight * 0.08
-        : screenHeight * 0.0558;
-    final buttonWidth = isLandscape ? screenWidth * 0.4 : screenWidth * 0.855;
+
 
     return Column(
       children: [
@@ -420,4 +499,5 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
       ],
     );
   }
+
 }

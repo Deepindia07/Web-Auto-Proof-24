@@ -157,12 +157,11 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forget Password ?'**
   String get forgotPassword;
-  String get login;
 
   /// No description provided for @terms.
   ///
   /// In en, this message translates to:
-  /// **'Terms'**
+  /// **' Terms'**
   String get terms;
 
   /// No description provided for @privacy.
@@ -224,6 +223,11 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login successful!'**
   String get loginSuccessful;
+  String get verifyEmailAddress;
+  String get agreeTermsPrivacy;
+  String get enterEmail;
+  String get emailSuccessfully;
+
 
   /// No description provided for @pleaseEnterPassword.
   ///
@@ -471,6 +475,12 @@ abstract class AppLocalizations {
   /// **'Back to Login'**
   String get backToLogin;
 
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
   /// No description provided for @email.
   ///
   /// In en, this message translates to:
@@ -536,6 +546,13 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change Language'**
   String get changeLanguage;
+  String get createAccountNow;
+  String get  staticTitle;
+  String get  subTitleText1;
+  String get  subTitleText2;
+  String get  selectLanguage;
+  String get  englishText;
+  String get  frenchText;
 
   /// No description provided for @generalSettings.
   ///
@@ -1652,6 +1669,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About the App'**
   String get aboutTheAppTitle;
+  String get verificationOtpMsg;
 
   /// No description provided for @aboutTheAppDescription.
   ///

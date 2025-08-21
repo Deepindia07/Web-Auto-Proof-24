@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static const String baseUrl = "http://192.168.1.12:3002";
+  static const String baseUrl = "http://10.191.125.84:3002";
   static const String login = "/api/auth/login";
   static const String register = "/api/auth/signUp";
   static const String verifyOtpEmail = "/api/auth/verifyOtpForEmail";
@@ -33,4 +33,6 @@ class ApiEndPoints {
   static const String getCompanyProfile =
       '/api/company-profile/get-company-profile';
   static const String deleteAccount = '/api/personal-profile/delete';
+  static const String updateCompanyProfile   = '/api/company-profile/update-company-profile';
+
 }

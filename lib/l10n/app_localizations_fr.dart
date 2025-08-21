@@ -39,13 +39,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgotPassword => 'Mot de passe oublié ?';
 
   @override
-  String get terms => 'Termes';
+  String get terms => ' Termes';
 
   @override
   String get privacy => 'Confidentialité';
+  @override
+  String get staticTitle => 'Obtenez 3 inspections gratuites';
 
   @override
+  String get selectLanguage => "Sélectionnez la langue";
+  @override
   String get deleteButton => 'Supprimer';
+  @override
+  String get frenchText => 'French';
+  @override
+  String get subTitleText1 =>
+      "L'application d'inspection de véhicule intelligente.";
+  @override
+  String get createAccountNow => 'Créez un compte gratuit maintenant';
+  String get subTitleText12 => "Numérisez vos rapports d'état.";
+  String get englishText => "Anglaise";
 
   @override
   String get accountDelete => 'Supprimer le compte';
@@ -199,6 +212,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get backToLogin => 'Retour à la connexion';
+
+  @override
+  String get login => 'Connexion';
 
   @override
   String get email => 'E-mail';
@@ -848,6 +864,28 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  // TODO: implement login
-  String get login => "Connexion";
+  // TODO: implement subTitleText2
+  String get subTitleText2 => "Numérisez vos rapports d'état.";
+
+  @override
+  // TODO: implement verifyEmailAddress
+  String get verifyEmailAddress =>
+      "Veuillez d'abord vérifier votre adresse e-mail";
+
+  @override
+  // TODO: implement agreeTermsPrivacy
+  String get agreeTermsPrivacy =>
+      "Veuillez accepter les conditions générales et la confidentialité";
+
+  @override
+  // TODO: implement enterEmail
+  String get enterEmail => "Veuillez d'abord saisir votre adresse e-mail";
+
+  @override
+  // TODO: implement emailSuccessfully
+  String get emailSuccessfully => "E-mail vérifié avec succès!";
+
+  @override
+  // TODO: implement verificationOtpMsg
+  String get verificationOtpMsg => "Code de vérification envoyé à votre email !";
 }

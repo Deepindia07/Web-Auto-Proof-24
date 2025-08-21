@@ -18,6 +18,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../constants/const_color.dart';
 import '../../../../utilities/custom_button.dart';
 import '../../../../utilities/custom_widgets.dart';

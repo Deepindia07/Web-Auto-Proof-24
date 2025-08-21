@@ -70,9 +70,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                         addressController.text = user.user?.address ?? "";
                         selectedGender = user.user?.gender ?? "";
                         selectDialCode = user.user?.countryCode ?? "";
-                      });    print("object-----${firstNameController.text.trim().toString()}");
+                      });
+                      print(
+                        "object-----${firstNameController.text.trim().toString()}",
+                      );
                     }
-
 
                     if (state is GetPersonalInfoError) {
                       CherryToast.error(context, state.error);
@@ -160,7 +162,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                             ),
                           ),
-                          PhoneNumberField(initialCountryCode: selectDialCode ?? "+33",
+                          PhoneNumberField(
+                            initialCountryCode: selectDialCode ?? "+33",
                             color: Colors.transparent,
                             borderRadiusGeometry: BorderRadius.only(),
                             borderRadius: 10,
@@ -228,7 +231,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                         onPressed: () {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            print("object-----${firstNameController.text.trim().toString()}");
+                                            print(
+                                              "object-----${firstNameController.text.trim().toString()}",
+                                            );
                                             ProfileModel profile = ProfileModel(
                                               userType: "individual",
                                               firstName: firstNameController

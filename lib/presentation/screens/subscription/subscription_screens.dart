@@ -6,7 +6,7 @@ class SubscriptionScreen extends StatelessWidget {
   static const List<SubscriptionPlan> plans = [
     SubscriptionPlan(
       title: "Flexible Pack",
-      price: "1.99 € / Unit",
+      price: "1.99 ",
       features: [
         "Free Account",
         "Scalable On Demand",
@@ -19,7 +19,7 @@ class SubscriptionScreen extends StatelessWidget {
     ),
     SubscriptionPlan(
       title: "Growth Pack",
-      price: "338.30 € Total",
+      price: "338.30",
       features: [
         "Free Account",
         "Prepaid 200 Units",
@@ -31,7 +31,7 @@ class SubscriptionScreen extends StatelessWidget {
     ),
     SubscriptionPlan(
       title: "Pro Pack",
-      price: "746.25 € Total",
+      price: "746.25",
       features: [
         "Free Account",
         "Prepaid 500 Units",
@@ -89,10 +89,31 @@ class SubscriptionScreen extends StatelessWidget {
   }
 }
 
-class SubscriptionCard extends StatelessWidget {
+class SubscriptionCard extends StatefulWidget {
   final SubscriptionPlan plan;
 
   const SubscriptionCard({super.key, required this.plan});
+
+  @override
+  State<SubscriptionCard> createState() => _SubscriptionCardState();
+}
+
+class _SubscriptionCardState extends State<SubscriptionCard> {
+  final TextEditingController _qtyController = TextEditingController(text: "1");
+  int _quantity = 1;
+  void _updateQuantity() {
+    final int? qty = int.tryParse(_qtyController.text);
+    setState(() {
+      _quantity = (qty != null && qty > 0) ? qty : 1;
+    });
+  }
+
+  double get totalPrice {
+    // Assuming price in plan.price is like "₹100" or "$99"
+    final String numeric = widget.plan.price.replaceAll(RegExp(r'[^0-9.]'), "");
+    final double basePrice = double.tryParse(numeric) ?? 0;
+    return basePrice * _quantity;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +141,11 @@ class SubscriptionCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...plan.mainFeatures.map((f) => _buildFeature(f, false)),
+                      ...widget.plan.mainFeatures.map((f) => _buildFeature(f, false)),
                       const SizedBox(height: 4),
-                      ...plan.features.map((f) => _buildFeature(f, true)),
+                      ...widget.plan.features.map((f) => _buildFeature(f, true)),
                       const Spacer(),
+
                     ],
                   ),
                 ),
@@ -134,9 +156,9 @@ class SubscriptionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(),
-                ...plan.mainFeatures.map((f) => _buildFeature(f, false)),
+                ...widget.plan.mainFeatures.map((f) => _buildFeature(f, false)),
                 const SizedBox(height: 4),
-                ...plan.features.map((f) => _buildFeature(f, true)),
+                ...widget.plan.features.map((f) => _buildFeature(f, true)),
 
                 // 👇 Spacer pushes button to the bottom
                 _buildActionButton(),
@@ -153,20 +175,21 @@ class SubscriptionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              plan.title,
+              widget.plan.title,
               style: MontserratStyles.montserratSemiBoldTextStyle(size: 16),
             ),
             const SizedBox(height: 4),
             Text(
-              plan.price,
+              "${totalPrice} ${(widget.plan.showQuantitySelector) ? "€ Unit": "€ Total"}",
               style: MontserratStyles.montserratSemiBoldTextStyle(
                 size: 14,
                 color: AppColor().yellowWarmColor,
               ),
             ),
+
           ],
         ),
-        if (plan.showQuantitySelector) _buildQuantitySelector(),
+        if (widget.plan.showQuantitySelector) _buildQuantitySelector(),
       ],
     );
   }
@@ -191,7 +214,10 @@ class SubscriptionCard extends StatelessWidget {
             SizedBox(
               width: 40,
               height: 28,
-              child: TextField(
+              child: TextFormField(onChanged: (v){
+                _updateQuantity();
+              },
+
                 textAlign: TextAlign.center,
                 style: MontserratStyles.montserratSemiBoldTextStyle(
                   size: 14,
@@ -204,7 +230,7 @@ class SubscriptionCard extends StatelessWidget {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                controller: TextEditingController(text: "1"),
+                controller: _qtyController,
               ),
             ),
 
@@ -241,7 +267,7 @@ class SubscriptionCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         ),
-        child: Text(plan.buttonText),
+        child: Text(widget.plan.buttonText),
       ),
     );
   }
@@ -256,8 +282,6 @@ class SubscriptionCard extends StatelessWidget {
       child: Icon(icon, color: AppColor().yellowWarmColor, size: 14),
     );
   }
-
-  // ... keep your helper widgets as is
 }
 
 class SubscriptionPlan {

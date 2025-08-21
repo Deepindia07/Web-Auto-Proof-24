@@ -39,10 +39,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPassword => 'Forget Password ?';
 
   @override
-  String get terms => 'Terms';
+  String get terms => ' Terms';
 
   @override
   String get privacy => 'Privacy';
+
+  @override
+  String get staticTitle => 'Get 3 free Inspections';
+
+  @override
+  String get subTitleText1 => 'The smart vehicle inspection app.';
+  @override
+  String get englishText => 'English';
+  @override
+  String get frenchText => 'French';
+
+  @override
+  String get subTitleText2 => 'Digitize your condition reports.';  @override
+  String get selectLanguage => "Select Language";
+
+
+  @override
+  String get createAccountNow => 'Create Free Account Now';
 
   @override
   String get deleteButton => 'Delete';
@@ -198,6 +216,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToLogin => 'Back to Login';
+
+  @override
+  String get login => 'Login';
 
   @override
   String get email => 'Email';
@@ -840,6 +861,25 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  // TODO: implement login
-  String get login => "Login";
+  // TODO: implement verifyEmailAddress
+  String get verifyEmailAddress => "Please verify your email address first";
+
+  @override
+  // TODO: implement agreeTermsPrivacy
+  String get agreeTermsPrivacy => "Please agree to the Terms & Privacy";
+
+
+  @override
+  // TODO: implement agreeTermsPrivacy
+  String get enterEmail => "Please enter your email address first";
+
+  @override
+  // TODO: implement agreeTermsPrivacy
+  String get verificationOtpMsg => "Verification code sent to your email!";
+
+  @override
+  // TODO: implement emailSuccessfully
+  String get emailSuccessfully => "Email verified successfully!";
+
+
 }

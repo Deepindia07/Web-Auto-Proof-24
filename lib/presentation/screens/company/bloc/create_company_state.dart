@@ -46,3 +46,21 @@ final class GetCompanyError extends CreateCompanyState {
   @override
   List<Object> get props => [error];
 }
+
+//---
+final class UpdateCompanyLoading extends CreateCompanyState {
+  @override
+  List<Object> get props => [];
+}
+
+final class UpdateCompanySuccess extends CreateCompanyState {
+  @override
+  List<Object> get props => [];
+}
+
+final class UpdateCompanyError extends CreateCompanyState {
+  final String error;
+  const UpdateCompanyError({required this.error});
+  @override
+  List<Object> get props => [];
+}

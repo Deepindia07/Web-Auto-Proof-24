@@ -39,7 +39,7 @@ class PhoneNumberField extends StatelessWidget {
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius ?? 30),
-        border: Border.all(color: AppColor().darkCharcoalBlueColor, width: 1),
+        border: Border.all(color: AppColor().darkCharcoalBlueColor, width: 2),
         color: color ?? Colors.white,
       ),
       child: Row(

@@ -26,6 +26,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../constants/const_string.dart';
+import '../../../presentation/screens/company/models/update_company_model.dart';
 import '../../../presentation/screens/team_View/models/update_team_info_model.dart';
 import '../default_db/sharedprefs_method.dart';
 
@@ -382,27 +383,23 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $error');
     }
   }
-  /*  Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
+    Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
     Map<String, dynamic>? dataBody,
-    Uint8List? imageBytes, // image file bytes
-    String? fileName,
+  /*  Uint8List? imageBytes, // image file bytes
+    String? fileName,*/
   }) async {
     try {
-      final formData = FormData();
 
-      // Add text fields
-      dataBody?.forEach((key, value) {
-        formData.fields.add(MapEntry(key, value.toString()));
-      });
 
-      if (imageBytes != null) {
-        final multipartFile = MultipartFile.fromBytes(
-          imageBytes,
-          filename: fileName ?? "company_logo.png",
-          contentType: MediaType("image", "png"),
+
+
+        final response = await dioClient.post(
+          ApiEndPoints.createCompanyProfile,
+          data: dataBody,
         );
-        formData.files.add(MapEntry("companyLogo", multipartFile)); // 👈 param name
-      }
+
+
+    /*  //////
 
       // Send request as multipart
       final response = await dioClient.post(
@@ -411,7 +408,7 @@ class AuthenticationApiCall implements AuthAbstraction {
         options: Options(headers: {
           "Content-Type": "multipart/form-data",
         }),
-      );
+      );*/
 
       final Map<String, dynamic> data = response.data;
       debugPrint("API Response Data: ${response.data}");
@@ -425,9 +422,16 @@ class AuthenticationApiCall implements AuthAbstraction {
       debugPrint("error generated: => ${error.toString()}");
       return Result.failure('Unexpected error occurred: $error');
     }
-  }*/
+  }
 
-  Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
+
+
+
+
+
+
+
+/*  Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
     Map<String, dynamic>? dataBody,
   }) async {
     try {
@@ -446,7 +450,12 @@ class AuthenticationApiCall implements AuthAbstraction {
       debugPrint("error generated: => ${error.toString()}");
       return Result.failure('Unexpected error occurred: $error');
     }
-  }
+  }*/
+
+
+
+
+
 
   Future<Result<GetCompanyModel, String>> getCompanyApiCall({
     Map<String, dynamic>? dataBody,
@@ -597,4 +606,23 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $e');
     }
   }
+  Future<Result<UpdateAccountModel, String>> updateCompanyApi() async {
+    try {
+      final response = await dioClient.put(ApiEndPoints.updateCompanyProfile);
+
+      final Map<String, dynamic> data = response.data;
+      debugPrint("Api response data : ${response.data}");
+      final dataResponse = UpdateAccountModel.fromJson(data);
+
+
+      return Result.success(dataResponse);
+    } on DioException catch (dioError) {
+      debugPrint("Api response data : $dioError");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (e) {
+      debugPrint("error generated: => ${e.toString()}");
+      return Result.failure('Unexpected error occurred: $e');
+    }
+  }
+
 }

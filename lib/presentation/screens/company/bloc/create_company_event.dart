@@ -22,3 +22,10 @@ class GetCompanyApiEvent extends CreateCompanyEvent {
 }
 
 
+///--------
+class UpdateCompanyApiEvent extends CreateCompanyEvent{
+  final Map<String, dynamic> body;
+  UpdateCompanyApiEvent({required this.body});
+  @override
+  List<Object?> get props => [body];
+}

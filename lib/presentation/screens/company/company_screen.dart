@@ -19,6 +19,8 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
   Uint8List? _imageBytes;
   String? _imageBase64;
   GetCompanyModel? getCompanyModel;
+
+  String? _fileName;
   @override
   void initState() {
     context.read<CreateCompanyBloc>().add(GetCompanyApiEvent());
@@ -85,14 +87,16 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                       border: Border.all(color: Colors.black45),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    child: _imageBase64 != null
-                                        ? Container(
-                                            width: ResponsiveSizes(
-                                              context,
-                                            ).screenWidth,
-                                            padding: EdgeInsets.all(5),
-                                            child: Image.network(
-                                              "data:image/png;base64,$_imageBase64",
+                                    child: _imageBytes != null
+                                        ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            child: Image.memory(
+                                              _imageBytes!,
+                                              height: 200,
+                                              width: 200,
+                                              fit: BoxFit.cover,
                                             ),
                                           )
                                         : Center(
@@ -161,28 +165,108 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child:
-                                BlocConsumer<
-                                  CreateCompanyBloc,
-                                  CreateCompanyState
-                                >(
-                                  listener: (context, state) {
-                                    if (state is CreateCompanySuccess) {
-                                      CherryToast.success(
-                                        context,""
+                            child: BlocConsumer<CreateCompanyBloc, CreateCompanyState>(
+                              listener: (context, state) {
+                                if (state is CreateCompanySuccess) {
+                                  CherryToast.success(
+                                    context,
+                                    "",
                                     /*    AppLocalizations.of(
                                           context,
                                         )!.companyInformationSuccessfully,*/
-                                      );
+                                  );
+                                }
+                              },
+                              builder: (context, state) {
+                                return CustomButtonWeb(
+                                  isLoading: (state is CreateCompanyLoading)
+                                      ? true
+                                      : false,
+                                  text:
+                                      (getCompanyModel == null ||
+                                          getCompanyModel!.companyId == null)
+                                      ? "Save"
+                                      : "Update",
+                                  onPressed: () {
+
+
+                                    if (_formKey.currentState!.validate()) {
+                                      if (getCompanyModel == null ||
+                                          getCompanyModel?.companyId == null) {
+                                        // 👉 CREATE
+                                        context.read<CreateCompanyBloc>().add(
+                                          CreateCompanyApiEvent(
+                                            body: {
+                                              "companyName":
+                                                  companyNameController.text
+                                                      .trim(),
+                                              "website": webSiteController.text
+                                                  .trim(),
+                                              "VatNumber": vatNumberController
+                                                  .text
+                                                  .trim(),
+                                              "companyLogo": "",
+                                              "companyRegistrationNumber":
+                                                  registrationNoController.text
+                                                      .trim(),
+                                              "shareCapital": int.tryParse(
+                                                shareController.text.trim(),
+                                              ),
+                                              "termAndConditions":
+                                                  termController.text.trim(),
+                                              "companyPolicy": privacyController
+                                                  .text
+                                                  .trim(),
+                                            },
+                                          ),
+                                        );
+                                      } else {
+                                        // 👉 UPDATE
+                                        context.read<CreateCompanyBloc>().add(
+                                          UpdateCompanyApiEvent(
+                                            body: {
+                                              "companyName":
+                                                  companyNameController.text
+                                                      .trim(),
+                                              "website": webSiteController.text
+                                                  .trim(),
+                                              "VatNumber": vatNumberController
+                                                  .text
+                                                  .trim(),
+                                              "companyLogo": "https://dummyimage.com/600x400/000/fff",
+                                              "companyRegistrationNumber":
+                                                  registrationNoController.text
+                                                      .trim(),
+                                              "shareCapital": int.tryParse(
+                                                shareController.text.trim(),
+                                              ),
+                                              "termAndConditions":
+                                                  termController.text.trim(),
+                                              "companyPolicy": privacyController
+                                                  .text
+                                                  .trim(),
+                                            },
+                                            /*  id: getCompanyModel!.companyId, // 👈 pass the ID for update
+                  body: {
+                  "companyName": companyNameController.text.trim(),
+                  "website": webSiteController.text.trim(),
+                  "VatNumber": vatNumberController.text.trim(),
+                  "companyLogo": _imageBase64,
+                  "companyRegistrationNumber": registrationNoController.text.trim(),
+                  "shareCapital": int.tryParse(shareController.text.trim()),
+                  "termAndConditions": termController.text.trim(),
+                  "companyPolicy": privacyController.text.trim(),
+                  },*/
+                                          ),
+                                        );
+                                      }
                                     }
                                   },
-                                  builder: (context, state) {
-                                    return CustomButtonWeb(
-                                      isLoading: (state is CreateCompanyLoading)
-                                          ? true
-                                          : false,
-                                      text: "Save",
-                                      onPressed: () {
+
+                                  /*    if (_imageBase64 == null) return;
+                                        debugPrint(
+                                          "🚀 Sending image to API, size: ${_imageBase64!.length} chars",
+                                        );
                                         if (_formKey.currentState!.validate()) {
                                           context.read<CreateCompanyBloc>().add(
                                             CreateCompanyApiEvent(
@@ -199,7 +283,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                                     .text
                                                     .trim()
                                                     .toString(),
-                                                "companyLogo": "https://fastly.picsum.photos/id/866/500/300.jpg?hmac=gTBX2xIXKy_WSASp2ITBfmK7WFeBZyiuIumiEUmowcw",
+                                                "companyLogo": _imageBase64,
                                                 "companyRegistrationNumber":
                                                     registrationNoController
                                                         .text
@@ -221,14 +305,13 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                               },
                                             ),
                                           );
-                                        }
-                                      },
-                                      color: AppColor().darkCharcoalBlueColor,
-                                      textColor: AppColor().yellowWarmColor,
-                                      borderRadius: 30,
-                                    );
-                                  },
-                                ),
+                                        }*/
+                                  color: AppColor().darkCharcoalBlueColor,
+                                  textColor: AppColor().yellowWarmColor,
+                                  borderRadius: 30,
+                                );
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -243,36 +326,30 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
     );
   }
 
+
+
+
+  Future<Uint8List> compressImage(Uint8List inputBytes) async {
+    final image = img.decodeImage(inputBytes);
+    if (image == null) return inputBytes;
+    final resized = img.copyResize(image, width: 800);
+    final compressed = img.encodeJpg(resized, quality: 70);
+    return Uint8List.fromList(compressed);
+  }
+
   Future<void> _pickImage() async {
-    if (kIsWeb) {
-      final html.FileUploadInputElement input = html.FileUploadInputElement();
-      input.accept = 'image/*';
-      input.click();
-      input.onChange.listen((event) {
-        final files = input.files;
-        if (files != null && files.isNotEmpty) {
-          final reader = html.FileReader();
-          reader.readAsArrayBuffer(files[0]);
-          reader.onLoadEnd.listen((event) {
-            setState(() {
-              _imageBytes = reader.result as Uint8List;
-              _imageBase64 = base64Encode(_imageBytes!);
-            });
-          });
-        }
+    Uint8List? bytes = await ImagePickerWeb.getImageAsBytes();
+    final info = await ImagePickerWeb.getImageInfo();
+    String? name = info?.fileName;
+
+    if (bytes != null) {
+      Uint8List compressed = await compressImage(bytes);
+      setState(() {
+        _imageBytes = compressed;
+        _fileName = name ?? "image.jpg";
+        _imageBase64 = base64Encode(compressed);
       });
-    } else {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-        withData: true,
-      );
-      if (result != null && result.files.isNotEmpty) {
-        setState(() {
-          _imageBytes = result.files.first.bytes;
-          _imageBase64 = base64Encode(_imageBytes!);
-        });
-      }
+      debugPrint("Picked and compressed: $_fileName (${compressed.lengthInBytes / 1024} KB)---$_imageBase64");
     }
   }
 

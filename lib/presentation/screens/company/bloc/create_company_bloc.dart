@@ -12,6 +12,7 @@ class CreateCompanyBloc extends Bloc<CreateCompanyEvent, CreateCompanyState> {
     : super(CreateCompanyInitial()) {
     on<CreateCompanyApiEvent>(_onCreateCompanyApiEvent);
     on<GetCompanyApiEvent>(_onGetCompanyApiEvent);
+    on<UpdateCompanyApiEvent>(_onUpdateCompanyApiEvent);
   }
 
   Future<void> _onCreateCompanyApiEvent(
@@ -49,6 +50,25 @@ class CreateCompanyBloc extends Bloc<CreateCompanyEvent, CreateCompanyState> {
       }
     } catch (e) {
       emit(GetCompanyError(error: e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateCompanyApiEvent(
+    UpdateCompanyApiEvent event,
+    Emitter<CreateCompanyState> emit,
+  ) async {
+    emit(UpdateCompanyLoading());
+    try {
+      final result = await apiRepository.updateCompanyApi();
+      if (result.isSuccess) {
+        final updateModel = result.data;
+        print("updateModel----_$updateModel");
+        emit(UpdateCompanySuccess());
+      } else {
+        emit(UpdateCompanyError(error: result.error));
+      }
+    } catch (e) {
+      emit(UpdateCompanyError(error: e.toString()));
     }
   }
 }

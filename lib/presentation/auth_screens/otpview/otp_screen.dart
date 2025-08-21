@@ -129,12 +129,6 @@ class _OtpScreenViewState extends State<OtpScreenView>
           } else {
             CustomLoader.hidePopupLoader(context);
             if (state is OtpViewSuccess) {
-           /*   if (widget.isEmailFromSignUp != false) {
-                context.pop();
-              } else {
-                print("hh----${widget.email}");
-                context.push(AppRoute.signUpScreen, extra: widget.email);
-              }*/
               print("hh----${widget.email}");
               String email = widget.email.toString();
               if(widget.otpType == "1"){  context.push(AppRoute.signUpScreen, extra: email);}else {

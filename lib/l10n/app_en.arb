@@ -11,8 +11,23 @@
     "emailOrPhone": "Email or Phone",
     "password": "Password",
     "forgotPassword": "Forget Password ?",
-    "terms": "Terms",
+    "terms": " Terms",
     "privacy": "Privacy",
+    "createAccountNow": "Create Free Account Now",
+    "staticTitle": "Get 3 free Inspections ",
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "frenchText": "French",
+    "verifyEmailAddress": "Please verify your email address first",
+    "agreeTermsPrivacy": "Please agree to the Terms & Privacy",
+    "enterEmail": "Please enter your email address first",
+    "emailSuccessfully": "Email verified successfully!",
+    "verificationOtpMsg": "Verification code sent to your email!",
+
+
+
+     "subTitleText1": "The smart vehicle inspection app.",
+     "subTitleText2": "Digitize your condition reports.",
 
 
 
