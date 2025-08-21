@@ -24,10 +24,13 @@ class _SplashScreenViewState extends State<SplashScreenView>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
-
+  String? token;
   @override
   void initState() {
     super.initState();
+    token = SharedPrefsHelper.instance.getString(localToken);
+    print("token --splash----$token");
+    _navigateToOnboarding();
     _initializeAnimations();
   }
 
@@ -37,21 +40,13 @@ class _SplashScreenViewState extends State<SplashScreenView>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeIn,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
 
-    _scaleAnimation = Tween<double>(
-      begin: 0.5,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
 
     _animationController.forward();
   }
@@ -70,9 +65,7 @@ class _SplashScreenViewState extends State<SplashScreenView>
 
     return BlocListener<SplashScreenBloc, SplashScreenState>(
       listener: (context, state) {
-        if (state is SplashScreenCompleted) {
-          _navigateToOnboarding();
-        }
+        if (state is SplashScreenCompleted) {}
       },
       child: Scaffold(
         backgroundColor: AppColor().darkCharcoalBlueColor,
@@ -203,12 +196,10 @@ class _SplashScreenViewState extends State<SplashScreenView>
   }
 
   void _navigateToOnboarding() {
-    final token = SharedPrefsHelper.instance.getString(localToken);
-    if(token != null ){
+    if (token != null) {
       context.pushReplacement("/homeScreen");
-    }else{
-      context.pushReplacement("/onBoardScreenRoute");
+    } else {
+      context.pushReplacement("/loginScreen");
     }
-
   }
 }

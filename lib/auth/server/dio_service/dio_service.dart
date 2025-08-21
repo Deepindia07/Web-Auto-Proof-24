@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
@@ -6,8 +7,6 @@ import 'package:auto_proof/constants/const_string.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'interceptor_dio_handler.dart';
 // import 'log_interceptor.dart'as LogInterceptor;
 
@@ -68,6 +67,7 @@ class DioClient {
   /// Helper method to get authorization headers
   Map<String, dynamic> _getAuthHeaders() {
     final token = SharedPrefsHelper.instance.getString(localToken);
+    log("token------$token");
     return token != null ? {'Authorization': 'Bearer $token'} : {};
   }
 
@@ -97,8 +97,9 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
+      debugPrint("🔹 Sending GET to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.get(
-        url,
+        "${ApiEndPoints.baseUrl}$url",
         queryParameters: queryParameters,
         data: data,
         cancelToken: cancelToken,
@@ -121,6 +122,7 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
+      debugPrint("🔹 Sending PUT to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.post(
         url,
         data: data,
@@ -145,6 +147,7 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
+      debugPrint("🔹 Sending PUT to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.put(
         url,
         data: data,
@@ -168,6 +171,7 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
+      debugPrint("🔹 Sending delete to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.delete(
         url,
         queryParameters: queryParameters,

@@ -1,12 +1,13 @@
+import 'dart:async';
 import 'package:auto_proof/auth/data/models/get_all_inpection_list_response_model.dart';
-import 'package:auto_proof/auth/data/models/user_response_model.dart';
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:auto_proof/constants/const_string.dart';
+import 'package:auto_proof/presentation/screens/team_View/models/update_team_info_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
-import '../datasource/model.dart';
+import '../models/get_single_team_model.dart';
 
 part 'team_screen_event.dart';
 part 'team_screen_state.dart';
@@ -18,12 +19,14 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
   TeamScreenBloc({required this.apiRepository}) : super(TeamScreenInitial()) {
     on<LoadTeamMembers>(_onLoadTeamMembers);
     on<LoadMoreTeamMembers>(_onLoadMoreTeamMembers);
+    on<GetSingleTeamMemberEvent>(_onGetSingleTeamMemberEvent);
+    on<UpdateTeamMemberInfoEvent>(_onUpdateTeamMemberInfoEvent);
   }
 
   Future<void> _onLoadTeamMembers(
-      LoadTeamMembers event,
-      Emitter<TeamScreenState> emit,
-      ) async {
+    LoadTeamMembers event,
+    Emitter<TeamScreenState> emit,
+  ) async {
     if (event.isRefresh && state is TeamScreenLoaded) {
       emit((state as TeamScreenLoaded).copyWith(isLoadingMore: true));
     } else {
@@ -36,24 +39,32 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
       );
 
       if (result.isSuccess && result.data.isNotEmpty) {
-        final List<Datum> allTeamMembers = result.data;
+        final List<GetTeamUserData> allTeamMembers = result.data;
         if (allTeamMembers.isNotEmpty) {
           final companyIdValue = allTeamMembers.first.companyId?.toString();
           if (companyIdValue != null && companyIdValue.isNotEmpty) {
             await SharedPrefsHelper.instance.setString(
-                companyId, companyIdValue);
+              companyId,
+              companyIdValue,
+            );
           }
-          print("companyId: ${SharedPrefsHelper.instance.getString(companyId)}");
+          print(
+            "companyId: ${SharedPrefsHelper.instance.getString(companyId)}",
+          );
         }
-        emit(TeamScreenLoaded(
-          teamMembers: allTeamMembers,
-          hasReachedMax: allTeamMembers.length < _limit,
-          currentPage: 1,
-        ));
+        emit(
+          TeamScreenLoaded(
+            teamMembers: allTeamMembers,
+            hasReachedMax: allTeamMembers.length < _limit,
+            currentPage: 1,
+          ),
+        );
       } else {
         final errorMessage = result.isFailure
             ? result.error
-            : (result.data.isEmpty ? 'No team members found' : 'Unknown error occurred');
+            : (result.data.isEmpty
+                  ? 'No team members found'
+                  : 'Unknown error occurred');
         emit(TeamScreenError(errorMessage));
       }
     } catch (error) {
@@ -62,9 +73,9 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
   }
 
   Future<void> _onLoadMoreTeamMembers(
-      LoadMoreTeamMembers event,
-      Emitter<TeamScreenState> emit,
-      ) async {
+    LoadMoreTeamMembers event,
+    Emitter<TeamScreenState> emit,
+  ) async {
     if (state is! TeamScreenLoaded) return;
 
     final currentState = state as TeamScreenLoaded;
@@ -79,25 +90,72 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
       );
 
       if (result.isSuccess && result.data.isNotEmpty) {
-        final List<Datum> newTeamMembers = result.data;
-        final allTeamMembers = List<Datum>.from(currentState.teamMembers)
-          ..addAll(newTeamMembers);
+        final List<GetTeamUserData> newTeamMembers = result.data;
+        final allTeamMembers = List<GetTeamUserData>.from(
+          currentState.teamMembers,
+        )..addAll(newTeamMembers);
 
-        emit(TeamScreenLoaded(
-          teamMembers: allTeamMembers,
-          hasReachedMax: newTeamMembers.length < _limit,
-          isLoadingMore: false,
-          currentPage: nextPage,
-        ));
+        emit(
+          TeamScreenLoaded(
+            teamMembers: allTeamMembers,
+            hasReachedMax: newTeamMembers.length < _limit,
+            isLoadingMore: false,
+            currentPage: nextPage,
+          ),
+        );
       } else {
-        emit(currentState.copyWith(
-          isLoadingMore: false,
-          hasReachedMax: true,
-        ));
+        emit(currentState.copyWith(isLoadingMore: false, hasReachedMax: true));
       }
     } catch (error) {
       emit(currentState.copyWith(isLoadingMore: false));
     }
   }
-}
 
+  ///single team data
+  Future<void> _onGetSingleTeamMemberEvent(
+    GetSingleTeamMemberEvent event,
+    Emitter<TeamScreenState> emit,
+  ) async {
+    emit(GetSingleTeamMemberLoading());
+    try {
+      final result = await apiRepository.getSingleTeamMember(
+        id: event.inspectorId,
+      );
+      if (result.isSuccess) {
+        final getSingleTeamMemberModel = result.data;
+        emit(
+          GetSingleTeamMemberSuccess(
+            getSingleTeamMemberModel: getSingleTeamMemberModel,
+          ),
+        );
+      } else {
+        emit(GetSingleTeamMemberError(error: result.error));
+      }
+    } catch (error) {
+      emit(GetSingleTeamMemberError(error: error.toString()));
+    }
+  }
+
+  Future<void> _onUpdateTeamMemberInfoEvent(
+    UpdateTeamMemberInfoEvent event,
+    Emitter<TeamScreenState> emit,
+  ) async {
+    emit(UpdateTeamMemberInfoLoading());
+    try {
+      final result = await apiRepository.updateTeamMemberInfoEvent(
+        id: event.inspectorId,
+        dataBody: event.body,
+      );
+      if (result.isSuccess) {
+        final updateTeamInfoModel = result.data;
+        emit(
+          UpdateTeamMemberInfoSuccess(updateTeamInfoModel: updateTeamInfoModel),
+        );
+      } else {
+        emit(UpdateTeamMemberInfoError(error: result.error));
+      }
+    } catch (e) {
+      emit(UpdateTeamMemberInfoError(error: e.toString()));
+    }
+  }
+}

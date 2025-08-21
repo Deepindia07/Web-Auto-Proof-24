@@ -1,6 +1,10 @@
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+
+import '../constants/const_image.dart';
+import 'custom_textstyle.dart';
 
 class RadioDropdownOption {
   final String value;
@@ -346,6 +350,134 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
             ),
         ],
       ),
+    );
+  }
+}
+
+
+class CustomDropdownNew extends StatefulWidget {
+  final List<String> items;
+  final String title;
+  final String hint;
+  final Widget? preFix;
+  final double? borderRadius;
+  final String? value;
+  final void Function(String? val) onChanged;
+  final double width;
+
+  const CustomDropdownNew({
+    super.key,
+    required this.items,
+    required this.title,
+    required this.hint,
+    required this.value,
+    required this.onChanged,
+    required this.width,
+    this.borderRadius,
+    this.preFix,
+  });
+
+  @override
+  State<CustomDropdownNew> createState() => _CustomDropdownNewState();
+}
+
+class _CustomDropdownNewState extends State<CustomDropdownNew> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.title,
+          style: MontserratStyles.montserratSemiBoldTextStyle(
+            size: 16,
+            color: AppColor().darkCharcoalBlueColor,
+          ),
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonHideUnderline(
+          child: DropdownButton2<String>(
+            customButton: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              width: widget.width,
+              height: 48,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColor().darkCharcoalBlueColor),
+                borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(child: widget.preFix),
+
+
+                  Expanded(
+                    child: Text(
+                      widget.value ?? widget.hint,
+                      style: MontserratStyles.montserratRegularTextStyle(
+                        size: 15,
+                        color:  widget.value != null
+                            ? Colors.black
+                            : AppColor().silverShadeGrayColor,
+                      ),
+                    ),
+                  ),
+                  Image.asset(downArrowImage, height: 10, width: 16),
+                ],
+              ),
+            ),
+            items: widget.items
+                .map(
+                  (item) => DropdownMenuItem<String>(
+                value: item,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(item, style: const TextStyle(fontSize: 16)),
+                    const SizedBox(width: 8),
+
+                    Container(
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: widget.value == item
+                              ? AppColor().darkCharcoalBlueColor
+                              : Colors.grey,
+                          width: 2,
+                        ),
+                      ),
+                      child: widget.value == item
+                          ? Center(
+                        child: Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: AppColor().darkCharcoalBlueColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      )
+                          : null,
+                    ),
+                  ],
+                ),
+              ),
+            )
+                .toList(),
+            onChanged: widget.onChanged,
+            dropdownStyleData: DropdownStyleData(
+              width: widget.width /1.9,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColor().darkCharcoalBlueColor),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+      ],
     );
   }
 }

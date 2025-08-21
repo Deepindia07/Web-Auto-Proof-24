@@ -12,6 +12,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appTitle => 'APPLICATION D\'INSPECTION DE VÉHICULE';
 
   @override
+  String get emailValidationMsg => 'Veuillez entrer votre adresse e-mail';
+
+  @override
   String get pleaseWait => 'Veuillez patienter...';
 
   @override
@@ -831,4 +834,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String appVersion(Object version) {
     return 'Version de l\'application : $version';
   }
+
+  @override
+  // TODO: implement accountDelete
+  String get accountDelete => "Supprimer le compte";
+
+
+
+  String get deleteButton => "Supprimer";
+
+
+  @override
+  // TODO: implement accountDeleteConfirm
+  String get accountDeleteConfirm => "Êtes-vous sûr de vouloir supprimer ?";
 }

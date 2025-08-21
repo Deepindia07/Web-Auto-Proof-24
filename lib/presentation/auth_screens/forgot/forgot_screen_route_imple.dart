@@ -1,12 +1,14 @@
 library forgot_screen_route_imple.dart;
 
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/constants/const_route_string.dart';
 import 'package:auto_proof/presentation/auth_screens/forgot/bloc/forgot_screen_bloc.dart';
+import 'package:auto_proof/responsive.dart';
+import 'package:auto_proof/utilities/common_view_auth.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_textfields.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';

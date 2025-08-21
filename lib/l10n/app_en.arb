@@ -2,6 +2,7 @@
     "@@locale": "en",
 
     "appTitle": "VEHICLE INSPECTION APPLICATION",
+    "emailValidationMsg": "Please enter your email address",
     "pleaseWait": "Please wait...",
     "welcome": "WELCOME",
     "secureCheckIn": "Secure Check-In.",
@@ -11,6 +12,18 @@
     "password": "Password",
     "forgotPassword": "Forget Password ?",
     "login": "Login",
+
+
+
+    "deleteButton": "Delete",
+    "accountDelete": "Delete Account",
+    "accountDeleteConfirm": "Are you sure you want to delete?",
+
+
+
+
+
+
     "createAccount": "Create an account",
     "or": "or",
     "loggingIn": "Logging in...",

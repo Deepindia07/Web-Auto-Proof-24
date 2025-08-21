@@ -2,6 +2,7 @@
   "@@locale": "fr",
 
   "appTitle": "APPLICATION D'INSPECTION DE VÉHICULE",
+ "emailValidationMsg": "Veuillez entrer votre adresse e-mail",
   "pleaseWait": "Veuillez patienter...",
   "welcome": "Bienvenue",
   "secureCheckIn": "Enregistrement sécurisé.",
@@ -139,6 +140,15 @@
   "previous": "précédente",
   "next": "Suivant",
   "finish": "Terminer",
+
+
+
+  "deleteButton": "Supprimer",
+  "accountDelete": "Supprimer le compte",
+  "accountDeleteConfirm": "Êtes-vous sûr de vouloir supprimer ?",
+
+
+
   "fillAllFields": "Veuillez remplir tous les champs requis",
   "selectCompanyLogo": "Veuillez sélectionner un logo d'entreprise",
   "selectCountryCode": "Veuillez sélectionner un indicatif",

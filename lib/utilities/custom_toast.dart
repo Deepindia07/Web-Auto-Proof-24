@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../constants/const_color.dart';
 import 'enum/cherrry_toast_enum.dart';
 
 class CherryToast {

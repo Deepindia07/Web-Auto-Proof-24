@@ -20,18 +20,19 @@ class _OnboardViewScreenState extends State<OnboardViewScreen> {
   int currentPage = 0;
   PageController pageController = PageController();
 
-  final List<OnboardingData> onboardingPages = [
-    OnboardingData(
-      title: "WELCOME !",
-      subtitle: "Smart Check-out.",
-      description: "Secure Check-In.",
-      imagePath: carIcon,
-      showGetStarted: true,
-    ),
-  ];
+   List<OnboardingData> onboardingPages = [];
 
   @override
   Widget build(BuildContext context) {
+    onboardingPages = [
+      OnboardingData(
+        title: "${AppLocalizations.of(context)!.welcome} !",
+        subtitle: AppLocalizations.of(context)!.smartCheckOut,
+        description:AppLocalizations.of(context)!.secureCheckIn,
+        imagePath: carIcon,
+        showGetStarted: true,
+      ),
+    ];
     final screenSize = MediaQuery.of(context).size;
     final screenHeight = screenSize.height;
     final screenWidth = screenSize.width;

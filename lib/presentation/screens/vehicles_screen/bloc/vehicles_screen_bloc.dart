@@ -25,7 +25,7 @@ class VehiclesScreenBloc extends Bloc<VehiclesScreenEvent, VehiclesScreenState> 
       final result = await vehicleRepository.vehicleListApiCall();
 
       if(result.isSuccess){
-        final vehicles = result.data.vehicles ?? [];
+        final vehicles = result.data.vehicles ;
         emit(VehiclesScreenLoaded(vehicles: vehicles));
       }else{
         emit(VehiclesScreenError(errorMessage: result.error));
@@ -43,7 +43,7 @@ class VehiclesScreenBloc extends Bloc<VehiclesScreenEvent, VehiclesScreenState> 
       final result = await vehicleRepository.vehicleListApiCall();
 
       if(result.isSuccess){
-        final vehicles = result.data.vehicles ?? [];
+        final vehicles = result.data.vehicles;
         emit(VehiclesScreenLoaded(vehicles: vehicles));
       }else{
         emit(VehiclesScreenError(errorMessage: result.error));

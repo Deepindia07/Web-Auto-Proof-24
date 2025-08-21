@@ -8,7 +8,7 @@ class TeamScreenInitial extends TeamScreenState {}
 class TeamScreenLoading extends TeamScreenState {}
 
 class TeamScreenLoaded extends TeamScreenState {
-  final List<Datum> teamMembers;
+  final List<GetTeamUserData> teamMembers;
   final bool hasReachedMax;
   final bool isLoadingMore;
   final int currentPage;
@@ -21,7 +21,7 @@ class TeamScreenLoaded extends TeamScreenState {
   });
 
   TeamScreenLoaded copyWith({
-   List<Datum>? teamMembers,
+    List<GetTeamUserData>? teamMembers,
     bool? hasReachedMax,
     bool? isLoadingMore,
     int? currentPage,
@@ -39,4 +39,37 @@ class TeamScreenError extends TeamScreenState {
   final String message;
 
   TeamScreenError(this.message);
+}
+
+///-----Get single
+///
+class GetSingleTeamMemberLoading extends TeamScreenState {}
+
+class GetSingleTeamMemberSuccess extends TeamScreenState {
+  final GetSingleTeamMemberModel getSingleTeamMemberModel;
+  GetSingleTeamMemberSuccess({required this.getSingleTeamMemberModel});
+  @override
+  List<Object> get props => [getSingleTeamMemberModel];
+}
+
+class GetSingleTeamMemberError extends TeamScreenState {
+  final String error;
+  GetSingleTeamMemberError({required this.error});
+  @override
+  List<Object> get props => [error];
+}
+
+/// Update team member info states --
+class UpdateTeamMemberInfoLoading extends TeamScreenState{}
+class UpdateTeamMemberInfoSuccess extends TeamScreenState{
+  final UpdateTeamInfoModel updateTeamInfoModel;
+  UpdateTeamMemberInfoSuccess({required this.updateTeamInfoModel});
+  @override
+  List<Object> get props => [updateTeamInfoModel];
+}
+class UpdateTeamMemberInfoError extends TeamScreenState{
+  final String error ;
+  UpdateTeamMemberInfoError({required this.error});
+  @override
+  List<Object> get props => [error];
 }

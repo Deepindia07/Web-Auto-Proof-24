@@ -1,16 +1,20 @@
 part of 'otp_screen_route_imple.dart';
 
-/*
 class OtpScreen extends StatelessWidget {
   final String? email;
   final bool isEmailFromSignUp;
-  const OtpScreen({required this.email, required this.isEmailFromSignUp, super.key});
+  final String otpType;
+  const OtpScreen({
+    required this.email,
+    required this.isEmailFromSignUp,
+    super.key, required this.otpType,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OtpViewBloc>(
       create: (context) => OtpViewBloc(apiService: AuthenticationApiCall()),
-      child: OtpScreenView(email: email!, isEmailFromSignUp: isEmailFromSignUp),
+      child: OtpScreenView(email: email!, isEmailFromSignUp: isEmailFromSignUp, otpType: otpType,),
     );
   }
 }
@@ -18,299 +22,11 @@ class OtpScreen extends StatelessWidget {
 class OtpScreenView extends StatefulWidget {
   final String? email;
   final bool isEmailFromSignUp;
-  const OtpScreenView({required this.email, required this.isEmailFromSignUp, super.key});
-
-  @override
-  State<OtpScreenView> createState() => _OtpScreenViewState();
-}
-
-class _OtpScreenViewState extends State<OtpScreenView> {
-  List<TextEditingController> controllers = List.generate(4, (index) => TextEditingController());
-  List<FocusNode> focusNodes = List.generate(4, (index) => FocusNode());
-
-  @override
-  void dispose() {
-    for (var controller in controllers) {
-      controller.dispose();
-    }
-    for (var node in focusNodes) {
-      node.dispose();
-    }
-    super.dispose();
-  }
-
-  void _onCodeChanged(String value, int index) {
-    if (value.length == 1) {
-      if (index < 3) {
-        focusNodes[index + 1].requestFocus();
-      }
-    } else if (value.isEmpty) {
-      if (index > 0) {
-        focusNodes[index - 1].requestFocus();
-      }
-    }
-  }
-
-  void _verifyCode() {
-    String code = controllers.map((controller) => controller.text).join();
-    if (code.length == 4) {
-      context.read<OtpViewBloc>().add(VerifyOtpEvent(
-        otp: code,
-        email: widget.email!,
-      ));
-    } else {
-      CherryToast.warning(context, AppLocalizations.of(context)!.pleaseEnterCompleteCode);
-    }
-  }
-
-  void _resendCode() {
-    // Clear all input fields
-    for (var controller in controllers) {
-      controller.clear();
-    }
-    focusNodes[0].requestFocus();
-    context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-
-    return Scaffold(
-      backgroundColor: AppColor().backgroundColor,
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: BlocListener<OtpViewBloc, OtpViewState>(
-          listener: (context, state) {
-            if (state is OtpViewLoading) {
-              CustomLoader.showPopupLoader(context);
-            } else {
-              CustomLoader.hidePopupLoader(context);
-              if (state is OtpViewSuccess) {
-                if (widget.isEmailFromSignUp != false) {
-                  context.pop();
-                } else {
-                  context.push(AppRoute.resetPasswordScreen, extra: widget.email);
-                }
-                CherryToast.success(context, AppLocalizations.of(context)!.otpVerified);
-              } else if (state is OtpViewFailure) {
-                CherryToast.error(context, state.error);
-              } else if (state is OtpResendSuccess) {
-                CherryToast.success(context, state.message);
-              } else if (state is OtpResendFailure) {
-                CherryToast.error(context, state.error);
-              }
-            }
-          },
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                physics: ClampingScrollPhysics(),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight,
-                  ),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        // Top content - flexible space
-                        Flexible(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(height: keyboardHeight > 0 ? 20 : 54),
-                                Image.asset(mailIcon, height: keyboardHeight > 0 ? 60 : 72, width: keyboardHeight > 0 ? 60 : 72),
-                                Text(
-                                  AppLocalizations.of(context)!.email,
-                                  style: MontserratStyles.montserratLitleBoldTextStyle(
-                                    size: keyboardHeight > 0 ? 32 : 43,
-                                    color: AppColor().darkCharcoalBlueColor,
-                                  ),
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!.verification,
-                                  style: MontserratStyles.montserratSemiBoldTextStyle(
-                                      size: keyboardHeight > 0 ? 32 : 43,
-                                      color: AppColor().darkCharcoalBlueColor
-                                  ),
-                                ),
-                                vGap(keyboardHeight > 0 ? 5 : 9),
-                                RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                      fontSize: keyboardHeight > 0 ? 12 : 14,
-                                      color: Color(0xFF9CA3AF),
-                                      height: 1.4,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: '${AppLocalizations.of(context)!.emailSentMessage}\n',
-                                        style: MontserratStyles.montserratRegularTextStyle(
-                                          color: AppColor().silverShadeGrayColor,
-                                          size: keyboardHeight > 0 ? 11 : 13,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: maskEmail(widget.email!),
-                                        style: MontserratStyles.montserratNormalTextStyle(
-                                          color: AppColor().darkCharcoalBlueColor,
-                                          size: keyboardHeight > 0 ? 11 : 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                vGap(keyboardHeight > 0 ? 10 : 18),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // Bottom container - fixed size but responsive
-                        Container(
-                          height: keyboardHeight > 0 ? 280 : 360,
-                          padding: EdgeInsets.all(keyboardHeight > 0 ? 20 : 29),
-                          decoration: BoxDecoration(
-                            color: AppColor().darkCharcoalBlueColor,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(43),
-                              topRight: Radius.circular(43),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              vGap(keyboardHeight > 0 ? 20 : 45),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: List.generate(4, (index) {
-                                  return Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.white.withOpacity(0.6),
-                                      ),
-                                      borderRadius: BorderRadius.circular(7),
-                                    ),
-                                    child: TextField(
-                                      controller: controllers[index],
-                                      focusNode: focusNodes[index],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                        LengthLimitingTextInputFormatter(1),
-                                      ],
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "*",
-                                        hintStyle: TextStyle(
-                                          color: Color(0xFF9CA3AF),
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      onChanged: (value) => _onCodeChanged(value, index),
-                                    ),
-                                  );
-                                }),
-                              ),
-                              vGap(keyboardHeight > 0 ? 20 : 29),
-                              BlocBuilder<OtpViewBloc, OtpViewState>(
-                                builder: (context, state) {
-                                  return CustomButton(
-                                    height: screenSize.height * 0.054,
-                                    width: screenSize.width * 0.855,
-                                    borderRadius: 43,
-                                    backgroundColor: AppColor().yellowWarmColor,
-                                    onPressed: state is OtpViewLoading ? null : _verifyCode,
-                                    text: state is OtpViewLoading ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
-                                    textStyle: MontserratStyles.montserratMediumTextStyle(
-                                      color: AppColor().darkCharcoalBlueColor,
-                                      size: 18,
-                                    ),
-                                  );
-                                },
-                              ),
-                              vGap(keyboardHeight > 0 ? 15 : 22),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.dontReceiveCode,
-                                    style: MontserratStyles.montserratSemiBoldTextStyle(
-                                        size: 13,
-                                        color: AppColor().silverShadeGrayColor
-                                    ),
-                                  ),
-                                  hGap(5),
-                                  BlocBuilder<OtpViewBloc, OtpViewState>(
-                                    builder: (context, state) {
-                                      return GestureDetector(
-                                        onTap: state is OtpViewLoading ? null : _resendCode,
-                                        child: Text(
-                                          AppLocalizations.of(context)!.resend,
-                                          style: TextStyle(
-                                            color: state is OtpViewLoading
-                                                ? Color(0xFF9CA3AF)
-                                                : Color(0xFFECC94B),
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              if (keyboardHeight == 0) SizedBox(height: 14),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}*/
-
-class OtpScreen extends StatelessWidget {
-  final String? email;
-  final bool isEmailFromSignUp;
-  const OtpScreen({
-    required this.email,
-    required this.isEmailFromSignUp,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-      return BlocProvider<OtpViewBloc>(
-      create: (context) => OtpViewBloc(apiService: AuthenticationApiCall()),
-      child: OtpScreenView(email: email!, isEmailFromSignUp: isEmailFromSignUp),
-    );
-  }
-}
-
-class OtpScreenView extends StatefulWidget {
-  final String? email;
-  final bool isEmailFromSignUp;
+  final String otpType;
   const OtpScreenView({
     required this.email,
     required this.isEmailFromSignUp,
+    required this.otpType,
     super.key,
   });
 
@@ -320,22 +36,15 @@ class OtpScreenView extends StatefulWidget {
 
 class _OtpScreenViewState extends State<OtpScreenView>
     with TickerProviderStateMixin {
-  List<TextEditingController> controllers = List.generate(
-    4,
-    (index) => TextEditingController(),
-  );
-  List<FocusNode> focusNodes = List.generate(4, (index) => FocusNode());
-
-  bool _isLoading = false;
-  bool _isResending = false;
+  TextEditingController pinController = TextEditingController();
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-
-
 
   @override
   void initState() {
     super.initState();
+
+    print("email0----->${widget.email}");
     _pulseController = AnimationController(
       duration: Duration(seconds: 2),
       vsync: this,
@@ -349,49 +58,33 @@ class _OtpScreenViewState extends State<OtpScreenView>
   @override
   void dispose() {
     _pulseController.dispose();
-    for (var controller in controllers) {
-      controller.dispose();
-    }
-    for (var node in focusNodes) {
-      node.dispose();
-    }
+
+    pinController.dispose();
+
+
     super.dispose();
   }
 
-  void _onCodeChanged(String value, int index) {
-    if (value.length == 1) {
-      if (index < 3) {
-        focusNodes[index + 1].requestFocus();
-      } else {
-        // Auto-verify when all 4 digits are entered
-        _verifyCode();
-      }
-    } else if (value.isEmpty) {
-      if (index > 0) {
-        focusNodes[index - 1].requestFocus();
-      }
-    }
-  }
 
   void _verifyCode() {
-    String code = controllers.map((controller) => controller.text).join();
-    if (code.length == 4) {
-      context.read<OtpViewBloc>().add(VerifyOtpEvent(
-        otp: code,
-        email: widget.email!,
-      ));
+    if (pinController.text.length == 4) {
+
+
+      context.read<OtpViewBloc>().add(
+        VerifyOtpEvent(otp: pinController.text, email: widget.email!),
+      );
     } else {
-      CherryToast.warning(context, AppLocalizations.of(context)!.pleaseEnterCompleteCode);
+      CherryToast.warning(
+        context,
+        AppLocalizations.of(context)!.pleaseEnterCompleteCode,
+      );
     }
   }
-
 
   void _resendCode() {
     // Clear all input fields
-    for (var controller in controllers) {
-      controller.clear();
-    }
-    focusNodes[0].requestFocus();
+
+    pinController.clear();
     context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
   }
 
@@ -428,7 +121,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
     final screenSize = MediaQuery.of(context).size;
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
-      backgroundColor:  AppColor().backgroundColor,
+      backgroundColor: Colors.white,
       body: BlocListener<OtpViewBloc, OtpViewState>(
         listener: (context, state) {
           if (state is OtpViewLoading) {
@@ -436,12 +129,22 @@ class _OtpScreenViewState extends State<OtpScreenView>
           } else {
             CustomLoader.hidePopupLoader(context);
             if (state is OtpViewSuccess) {
-              if (widget.isEmailFromSignUp != false) {
+           /*   if (widget.isEmailFromSignUp != false) {
                 context.pop();
               } else {
-                context.push(AppRoute.resetPasswordScreen, extra: widget.email);
+                print("hh----${widget.email}");
+                context.push(AppRoute.signUpScreen, extra: widget.email);
+              }*/
+              print("hh----${widget.email}");
+              String email = widget.email.toString();
+              if(widget.otpType == "1"){  context.push(AppRoute.signUpScreen, extra: email);}else {
+                context.push(AppRoute.resetPasswordScreen, extra: email);
               }
-              CherryToast.success(context, AppLocalizations.of(context)!.otpVerified);
+
+              CherryToast.success(
+                context,
+                AppLocalizations.of(context)!.otpVerified,
+              );
             } else if (state is OtpViewFailure) {
               CherryToast.error(context, state.error);
             } else if (state is OtpResendSuccess) {
@@ -451,21 +154,37 @@ class _OtpScreenViewState extends State<OtpScreenView>
             }
           }
         },
-  child: LayoutBuilder(
-        builder: (context, constraints) {
-          // Responsive design
-          bool isLargeDesktop = constraints.maxWidth > 1400;
-          bool isDesktop = constraints.maxWidth > 1000;
-          bool isTablet = constraints.maxWidth > 600;
-
-        return  _buildDesktopLayout(isLargeDesktop,screenSize,keyboardHeight);
-         
-        },
+        child: Responsive.isDesktop(context)
+            ? Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 100),
+                      child: _buildDesktopLayout(screenSize, keyboardHeight),
+                    ),
+                  ),
+                  Expanded(child: CommonViewAuth()),
+                ],
+              )
+            : Container(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: _buildDesktopLayout(screenSize, keyboardHeight),
+              ),
       ),
-),
     );
-
   }
+
   final defaultPinTheme = PinTheme(
     width: 40,
     height: 40,
@@ -476,83 +195,84 @@ class _OtpScreenViewState extends State<OtpScreenView>
     ),
   );
 
-  Widget _buildDesktopLayout(bool isLargeDesktop,Size screenSize,double keyboardHeight, ) {
+  Widget _buildDesktopLayout(Size screenSize, double keyboardHeight) {
     return Center(
       child: Container(
         constraints: BoxConstraints(maxWidth: 600),
         child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [ AppColor().backgroundColor, Colors.white],
-            ),
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
           child: Column(
             children: [
               // Header section
               Expanded(
                 flex: 1,
-                child: Container(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(mailIcon, height: 72, width: 72),
-                      SizedBox(height: 32),
-                      Text(
-                        AppLocalizations.of(context)!.email,
-                        style: MontserratStyles.montserratLitleBoldTextStyle(
-                          size: 35,
-                          color: AppColor().darkCharcoalBlueColor,
+                child: Align(alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 42),
+                        Image.asset(
+                          mailIcon,
+                          height: 52,
+                          width: 62,
+                          fit: BoxFit.cover,
                         ),
-                      ),
-
-                      Text(
-                        AppLocalizations.of(context)!.verification,
-                        style: MontserratStyles.montserratSemiBoldTextStyle(
-                          size: 43,
-                          color: AppColor().darkCharcoalBlueColor,
-                        ),
-                      ),
-                      vGap(9),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF9CA3AF),
-                            height: 1.4,
+                        vGap(10),
+                        Text(
+                          AppLocalizations.of(context)!.email,
+                          style: MontserratStyles.montserratLitleBoldTextStyle(
+                            size: 35,
+                            color: AppColor().darkCharcoalBlueColor,
                           ),
-                          children: [
-                            TextSpan(
-                              text:
-                                  '${AppLocalizations.of(context)!.emailSentMessage}\n',
-                              style:
-                                  MontserratStyles.montserratRegularTextStyle(
-                                    color: AppColor().silverShadeGrayColor,
-                                    size: 13,
-                                  ),
-                            ),
-                            TextSpan(
-                              text: maskEmail(widget.email!),
-                              style: MontserratStyles.montserratNormalTextStyle(
-                                color: AppColor().darkCharcoalBlueColor,
-                                size: 13,
-                              ),
-                            ),
-                          ],
                         ),
-                      ),
-                    ],
+
+                        Text(
+                          AppLocalizations.of(context)!.verification,
+                          style: MontserratStyles.montserratMediumTextStyle(
+                            size: 28,
+                            color: AppColor().darkCharcoalBlueColor,
+                          ),
+                        ),
+                        vGap(9),
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF9CA3AF),
+                              height: 1.4,
+                            ),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${AppLocalizations.of(context)!.emailSentMessage}\n',
+                                style:
+                                    MontserratStyles.montserratRegularTextStyle(
+                                      color: AppColor().silverShadeGrayColor,
+                                      size: 13,
+                                    ),
+                              ),
+                              TextSpan(
+                                text: maskEmail(widget.email!),
+                                style: MontserratStyles.montserratNormalTextStyle(
+                                  color: AppColor().darkCharcoalBlueColor,
+                                  size: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
+
               // OTP Input section
               Container(
-
-                padding: EdgeInsets.all(20 ),
+                padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: AppColor().darkCharcoalBlueColor,
                   borderRadius: BorderRadius.only(
@@ -563,7 +283,9 @@ class _OtpScreenViewState extends State<OtpScreenView>
                 child: Column(
                   children: [
                     vGap(keyboardHeight > 0 ? 20 : 45),
+
                     Pinput(
+                      controller: pinController,
                       preFilledWidget: Container(
                         padding: EdgeInsets.only(top: 5),
                         alignment: Alignment.center,
@@ -580,17 +302,26 @@ class _OtpScreenViewState extends State<OtpScreenView>
                         ),
                       ),
                       defaultPinTheme: defaultPinTheme,
-                      separatorBuilder: (index) => SizedBox(width:10),
-                      validator: (value) =>
-                      value == '2222' ? null : 'Pin is incorrect',
+                      separatorBuilder: (index) => SizedBox(width: 10),
+                      validator: (value) {
+                        if (value == pinController.text) {
+                          return null; // Correct
+                        } else {
+                          return 'Pin is incorrect';
+                        }
+                      },
+
                       hapticFeedbackType: HapticFeedbackType.lightImpact,
                       onCompleted: (pin) => debugPrint('onCompleted: $pin'),
                       onChanged: (value) => debugPrint('onChanged: $value'),
+
                       cursor: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: keyboardHeight * 0.012),
+                            margin: EdgeInsets.only(
+                              bottom: keyboardHeight * 0.012,
+                            ),
                             width: keyboardHeight * 0.06,
                             height: 1,
                             color: AppColor().silverShadeGrayColor,
@@ -600,33 +331,45 @@ class _OtpScreenViewState extends State<OtpScreenView>
                       focusedPinTheme: defaultPinTheme.copyWith(
                         decoration: defaultPinTheme.decoration!.copyWith(
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColor().silverShadeGrayColor),
+                          border: Border.all(
+                            color: AppColor().silverShadeGrayColor,
+                          ),
                         ),
                       ),
                       submittedPinTheme: defaultPinTheme.copyWith(
                         decoration: defaultPinTheme.decoration!.copyWith(
                           color: const Color.fromRGBO(243, 246, 249, 0),
                           borderRadius: BorderRadius.circular(19),
-                          border: Border.all(color: AppColor().silverShadeGrayColor),
+                          border: Border.all(
+                            color: AppColor().silverShadeGrayColor,
+                          ),
                         ),
                       ),
                       errorPinTheme: defaultPinTheme.copyBorderWith(
                         border: Border.all(color: Colors.redAccent),
                       ),
                     ),
+
                     vGap(keyboardHeight > 0 ? 20 : 29),
                     BlocBuilder<OtpViewBloc, OtpViewState>(
                       builder: (context, state) {
-                        return CustomButton(
-                          height: screenSize.height * 0.054,
-                          width: screenSize.width * 0.58,
-                          borderRadius: 43,
-                          backgroundColor: AppColor().yellowWarmColor,
-                          onPressed: state is OtpViewLoading ? null : _verifyCode,
-                          text: state is OtpViewLoading ? AppLocalizations.of(context)!.verified : AppLocalizations.of(context)!.verify,
-                          textStyle: MontserratStyles.montserratMediumTextStyle(
-                            color: AppColor().darkCharcoalBlueColor,
-                            size: 18,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: CustomButton(
+                            height: 45,
+                            width: screenSize.width * 0.58,
+                            borderRadius: 43,
+                            backgroundColor: AppColor().yellowWarmColor,
+                            onPressed: state is OtpViewLoading
+                                ? null
+                                : _verifyCode,
+                            text: state is OtpViewLoading
+                                ? AppLocalizations.of(context)!.verified
+                                : AppLocalizations.of(context)!.verify,
+                            textStyle: MontserratStyles.montserratMediumTextStyle(
+                              color: AppColor().darkCharcoalBlueColor,
+                              size: 18,
+                            ),
                           ),
                         );
                       },
@@ -638,15 +381,17 @@ class _OtpScreenViewState extends State<OtpScreenView>
                         Text(
                           AppLocalizations.of(context)!.dontReceiveCode,
                           style: MontserratStyles.montserratSemiBoldTextStyle(
-                              size: 13,
-                              color: AppColor().silverShadeGrayColor
+                            size: 13,
+                            color: AppColor().silverShadeGrayColor,
                           ),
                         ),
                         hGap(5),
                         BlocBuilder<OtpViewBloc, OtpViewState>(
                           builder: (context, state) {
                             return GestureDetector(
-                              onTap: state is OtpViewLoading ? null : _resendCode,
+                              onTap: state is OtpViewLoading
+                                  ? null
+                                  : _resendCode,
                               child: Text(
                                 AppLocalizations.of(context)!.resend,
                                 style: TextStyle(
@@ -662,7 +407,8 @@ class _OtpScreenViewState extends State<OtpScreenView>
                         ),
                       ],
                     ),
-                    if (keyboardHeight == 0) SizedBox(height: 14), vGap(keyboardHeight > 0 ? 20 : 30),
+                    if (keyboardHeight == 0) SizedBox(height: 14),
+                    vGap(keyboardHeight > 0 ? 20 : 30),
                   ],
                 ),
               ),

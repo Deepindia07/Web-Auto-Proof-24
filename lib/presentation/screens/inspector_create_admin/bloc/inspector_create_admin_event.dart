@@ -4,27 +4,11 @@ part of 'inspector_create_admin_bloc.dart';
 abstract class InspectorCreateAdminEvent {}
 
 class CreateInspectorEvent extends InspectorCreateAdminEvent {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String phoneNumber;
-  final String countryCode;
-  final String gender;
-  final String address;
-  final String adminId;
-  final String companyId;
+  final Map<dynamic, String> body;
+  final String adminID;
 
-  CreateInspectorEvent({
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.phoneNumber,
-    required this.countryCode,
-    required this.gender,
-    required this.address,
-    required this.adminId,
-    required this.companyId
-  });
+
+  CreateInspectorEvent({required this.body,required this.adminID, });
 }
 
 class ResetInspectorCreateState extends InspectorCreateAdminEvent {}

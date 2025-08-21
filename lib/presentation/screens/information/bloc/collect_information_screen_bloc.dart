@@ -16,12 +16,12 @@ class CollectInformationScreenBloc extends Bloc<CollectInformationScreenEvent, C
   final AuthenticationApiCall authenticationApiCall;
 
   CollectInformationScreenBloc({required this.authenticationApiCall}) : super(CollectInformationScreenInitial()) {
-    on<UpdatePersonalInformationEvent>(_onUpdatePersonalInformation);
+/*    on<UpdatePersonalInformationEvent>(_onUpdatePersonalInformation);*/
     on<UpdateCompanyInformationEvent>(_onUpdateCompanyInformation);
     on<ResetCollectInformationStateEvent>(_onResetState);
   }
 
-  /// Handle personal information update
+/*  /// Handle personal information update
   Future<void> _onUpdatePersonalInformation(
       UpdatePersonalInformationEvent event,
       Emitter<CollectInformationScreenState> emit,
@@ -44,8 +44,8 @@ class CollectInformationScreenBloc extends Bloc<CollectInformationScreenEvent, C
       debugPrint("Personal Info Payload: $payload");
 
       final result = await authenticationApiCall.userUpdateProfileApiCall(
-        dataBody: payload,
-        id: event.userId,
+        dataBody: payload, id: '',
+
       );
 
       if (result.isSuccess) {
@@ -54,13 +54,13 @@ class CollectInformationScreenBloc extends Bloc<CollectInformationScreenEvent, C
           message: "Personal information updated successfully",
         ));
       } else {
-        emit(CollectInformationScreenError(error: result.error ?? "Unknown error occurred"));
+        emit(CollectInformationScreenError(error: result.error ));
       }
     } catch (e) {
       debugPrint("Personal update error: $e");
       emit(CollectInformationScreenError(error: "Failed to update personal information: $e"));
     }
-  }
+  }*/
 
   /// Handle company information update with multipart form data
   Future<void> _onUpdateCompanyInformation(
@@ -151,7 +151,7 @@ class CollectInformationScreenBloc extends Bloc<CollectInformationScreenEvent, C
           message: "Company information updated successfully",
         ));
       } else {
-        emit(CollectInformationScreenError(error: result.error ?? "Unknown error occurred"));
+        emit(CollectInformationScreenError(error: result.error));
       }
     } catch (e) {
       debugPrint("Company update error: $e");

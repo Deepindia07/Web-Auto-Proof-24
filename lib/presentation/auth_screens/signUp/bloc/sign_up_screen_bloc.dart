@@ -14,16 +14,18 @@ part 'sign_up_screen_state.dart';
 class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
   final AuthenticationApiCall apiRepository;
 
-  SignUpScreenBloc({required this.apiRepository}) : super(SignUpScreenInitial()) {
+  SignUpScreenBloc({required this.apiRepository})
+    : super(SignUpScreenInitial()) {
     on<SendOtpEmailEvent>(_sendOtpOnEmail);
+    on<SendOtpEmailSignUpEvent>(_getOtpOnSignUp);
     on<RegisterUser>(_onRegisterUser);
     on<ResetToInitialState>(_resetToInitialState);
   }
 
   Future<void> _sendOtpOnEmail(
-      SendOtpEmailEvent event,
-      Emitter<SignUpScreenState> emit,
-      ) async {
+    SendOtpEmailEvent event,
+    Emitter<SignUpScreenState> emit,
+  ) async {
     emit(SendOtpScreenLoading());
 
     try {
@@ -31,23 +33,57 @@ class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
         "email": event.email.trim().toLowerCase(),
       };
       appLogger.w("email data :$dataBody");
-      final result = await apiRepository.getOtpforEmailVerificationApiCall(dataBody: dataBody);
+      final result = await apiRepository.getOtpforEmailVerificationApiCall(
+        dataBody: dataBody,
+      );
 
       if (result.isSuccess) {
         SharedPrefsHelper.instance.setBool(isEmailFromSignUp, true);
         emit(SendOtpOnEmailSuccess(result.data));
       } else {
-        emit(SendOtpOnEmailError(result.error ?? 'Failed to send OTP'));
+        emit(SendOtpOnEmailError(result.error));
       }
     } catch (e) {
-      emit(SendOtpOnEmailError("Failed to send verification code: ${e.toString()}"));
+      emit(
+        SendOtpOnEmailError(
+          "Failed to send verification code: ${e.toString()}",
+        ),
+      );
+    }
+  }
+
+  Future<void> _getOtpOnSignUp(
+    SendOtpEmailSignUpEvent event,
+    Emitter<SignUpScreenState> emit,
+  ) async {
+    emit(SignUpSendOtpScreenLoading());
+
+    try {
+      final Map<String, dynamic> dataBody = {
+        "email": event.email.trim().toLowerCase(),
+      };
+      appLogger.w("email data :$dataBody");
+      final result = await apiRepository.getOtpOnSignUp(dataBody: dataBody);
+
+      if (result.isSuccess) {
+        SharedPrefsHelper.instance.setBool(isEmailFromSignUp, true);
+        emit(SignUpSendOtpOnEmailSuccess(result.data));
+      } else {
+        emit(SignUpSendOtpOnEmailError(result.error));
+      }
+    } catch (e) {
+      emit(
+        SignUpSendOtpOnEmailError(
+          "Failed to send verification code: ${e.toString()}",
+        ),
+      );
     }
   }
 
   Future<void> _onRegisterUser(
-      RegisterUser event,
-      Emitter<SignUpScreenState> emit,
-      ) async {
+    RegisterUser event,
+    Emitter<SignUpScreenState> emit,
+  ) async {
     emit(SignUpScreenLoading());
 
     try {
@@ -96,17 +132,19 @@ class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
       if (result.isSuccess) {
         emit(SignUpScreenSuccess(result.data));
       } else {
-        emit(SignUpScreenError(result.error ?? 'Registration failed'));
+        emit(SignUpScreenError(result.error));
       }
     } catch (error) {
-      emit(SignUpScreenError('An unexpected error occurred: ${error.toString()}'));
+      emit(
+        SignUpScreenError('An unexpected error occurred: ${error.toString()}'),
+      );
     }
   }
 
   void _resetToInitialState(
-      ResetToInitialState event,
-      Emitter<SignUpScreenState> emit,
-      ) {
+    ResetToInitialState event,
+    Emitter<SignUpScreenState> emit,
+  ) {
     emit(SignUpScreenInitial());
   }
 }
