@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  void _showAccountDeleteDialog(BuildContext context, VoidCallback onConfirm) {
+/*  void _showAccountDeleteDialog(BuildContext context, VoidCallback onConfirm) {
     final localizations = AppLocalizations.of(context)!;
 
     showDialog(
@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
-  }
+  }*/
 
 }
 

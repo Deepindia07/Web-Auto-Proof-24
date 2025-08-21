@@ -169,10 +169,10 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                   listener: (context, state) {
                                     if (state is CreateCompanySuccess) {
                                       CherryToast.success(
-                                        context,
-                                        AppLocalizations.of(
+                                        context,""
+                                    /*    AppLocalizations.of(
                                           context,
-                                        )!.companyInformationSuccessfully,
+                                        )!.companyInformationSuccessfully,*/
                                       );
                                     }
                                   },

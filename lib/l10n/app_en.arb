@@ -11,8 +11,19 @@
     "emailOrPhone": "Email or Phone",
     "password": "Password",
     "forgotPassword": "Forget Password ?",
-    "CompanyInformationSuccessfully.": "Company information has been created successfully.",
     "login": "Login",
+
+
+
+    "deleteButton": "Delete",
+    "accountDelete": "Delete Account",
+    "accountDeleteConfirm": "Are you sure you want to delete?",
+
+
+
+
+
+
     "createAccount": "Create an account",
     "or": "or",
     "loggingIn": "Logging in...",
