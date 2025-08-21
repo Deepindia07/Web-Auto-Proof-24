@@ -39,7 +39,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPassword => 'Forget Password ?';
 
   @override
-  String get login => 'Login';
+  String get terms => 'Terms';
+
+  @override
+  String get privacy => 'Privacy';
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
+  String get accountDelete => 'Delete Account';
+
+  @override
+  String get accountDeleteConfirm => 'Are you sure you want to delete?';
 
   @override
   String get createAccount => 'Create an account';
@@ -828,14 +840,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-
-  String get accountDelete => "Delect Account";
-
-  @override
-
-  String get deleteButton => "Delect";
-
-  @override
-  // TODO: implement accountDeleteConfirm
-  String get accountDeleteConfirm => "Are you sure you want to delete?";
+  // TODO: implement login
+  String get login => "Login";
 }

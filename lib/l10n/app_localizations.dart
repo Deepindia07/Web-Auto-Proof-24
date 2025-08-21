@@ -115,9 +115,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please wait...'**
   String get pleaseWait;
-  String get accountDelete;
-  String get deleteButton;
-  String get accountDeleteConfirm;
 
   /// No description provided for @welcome.
   ///
@@ -160,12 +157,37 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forget Password ?'**
   String get forgotPassword;
+  String get login;
 
-  /// No description provided for @login.
+  /// No description provided for @terms.
   ///
   /// In en, this message translates to:
-  /// **'Login'**
-  String get login;
+  /// **'Terms'**
+  String get terms;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// No description provided for @deleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButton;
+
+  /// No description provided for @accountDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get accountDelete;
+
+  /// No description provided for @accountDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete?'**
+  String get accountDeleteConfirm;
 
   /// No description provided for @createAccount.
   ///

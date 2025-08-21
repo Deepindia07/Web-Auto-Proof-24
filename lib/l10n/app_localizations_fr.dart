@@ -39,7 +39,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgotPassword => 'Mot de passe oublié ?';
 
   @override
-  String get login => 'Connexion';
+  String get terms => 'Termes';
+
+  @override
+  String get privacy => 'Confidentialité';
+
+  @override
+  String get deleteButton => 'Supprimer';
+
+  @override
+  String get accountDelete => 'Supprimer le compte';
+
+  @override
+  String get accountDeleteConfirm => 'Êtes-vous sûr de vouloir supprimer ?';
 
   @override
   String get createAccount => 'Créer un compte';
@@ -836,15 +848,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  // TODO: implement accountDelete
-  String get accountDelete => "Supprimer le compte";
-
-
-
-  String get deleteButton => "Supprimer";
-
-
-  @override
-  // TODO: implement accountDeleteConfirm
-  String get accountDeleteConfirm => "Êtes-vous sûr de vouloir supprimer ?";
+  // TODO: implement login
+  String get login => "Connexion";
 }

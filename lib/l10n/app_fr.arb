@@ -141,7 +141,8 @@
   "next": "Suivant",
   "finish": "Terminer",
 
-
+    "terms": "Termes",
+    "privacy": "Confidentialité",
 
   "deleteButton": "Supprimer",
   "accountDelete": "Supprimer le compte",

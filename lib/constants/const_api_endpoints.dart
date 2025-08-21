@@ -32,6 +32,5 @@ class ApiEndPoints {
       '/api/company-profile/create-company-profile';
   static const String getCompanyProfile =
       '/api/company-profile/get-company-profile';
-
   static const String deleteAccount = '/api/personal-profile/delete';
 }

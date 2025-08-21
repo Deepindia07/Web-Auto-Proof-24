@@ -11,7 +11,8 @@
     "emailOrPhone": "Email or Phone",
     "password": "Password",
     "forgotPassword": "Forget Password ?",
-    "login": "Login",
+    "terms": "Terms",
+    "privacy": "Privacy",
 
 
 
@@ -75,6 +76,7 @@
     "forgot": "Forgot",
     "resetPassword": "Reset Password",
     "backToLogin": "Back to Login",
+    "login": "Login",
 
     "email": "Email",
     "verification": "Verification",

@@ -488,29 +488,63 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 borderRadius: BorderRadius.circular(4),
                               ),
                             ),
+
                             Flexible(
                               child: RichText(
                                 text: TextSpan(
                                   text: AppLocalizations.of(
                                     context,
-                                  )!.agreeTerms,
+                                  )!.agreeTerms, // 👈 This will be tappable
                                   style:
                                       MontserratStyles.montserratMediumTextStyle(
                                         size: 14,
                                         color: AppColor().silverShadeGrayColor,
                                       ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      _agreeToTerms = !_agreeToTerms;
+                                      setState(() {});
+                                      print("Agree Terms clicked");
+                                    },
                                   children: [
                                     TextSpan(
                                       text: AppLocalizations.of(
-                                        context,
-                                      )!.termsPrivacy,
-                                      style:
-                                          MontserratStyles.montserratMediumTextStyle(
-                                            size: 14,
-                                            color: AppColor()
-                                                .darkCharcoalBlueColor,
-                                          ),
+                                context,
+                                )!.terms,
+                                      style: MontserratStyles.montserratMediumTextStyle(
+                                        size: 14,
+                                        color: AppColor().darkCharcoalBlueColor,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // 👉 Link 1
+                                          print("Terms clicked - open Terms link");
+                                          // launchUrl(Uri.parse("https://example.com/terms"));
+                                        },
                                     ),
+                                    TextSpan(
+                                      text: " & ", // connector
+                                      style: MontserratStyles.montserratMediumTextStyle(
+                                        size: 14,
+                                        color: AppColor().silverShadeGrayColor,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: AppLocalizations.of(
+                                        context,
+                                      )!.privacy,
+                                      style: MontserratStyles.montserratMediumTextStyle(
+                                        size: 14,
+                                        color: AppColor().darkCharcoalBlueColor,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // 👉 Link 2
+                                          print("Privacy clicked - open Privacy link");
+                                          // launchUrl(Uri.parse("https://example.com/privacy"));
+                                        },
+                                    ),
+
                                   ],
                                 ),
                               ),
@@ -613,443 +647,3 @@ class _SignUpScreenState extends State<SignUpScreen>
     print("Detected type: $inputType");
   }
 }
-
-/*
-class SignUpScreen1 extends StatefulWidget {
-  const SignUpScreen1({Key? key}) : super(key: key);
-
-  @override
-  State<SignUpScreen1> createState() => _SignUpScreenScreenState();
-}
-
-class _SignUpScreenScreenState extends State<SignUpScreen1>
-    with WidgetsBindingObserver {
-
-
-  void _saveEmailVerificationStatus(bool isVerified) async {
-    try {
-      await SharedPrefsHelper.instance.setBool(isVerifiedEmail, isVerified);
-    } catch (e) {
-      print('Error saving email verification status: $e');
-    }
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).padding.top;
-    final headerHeight = 210.0 + statusBarHeight;
-    final screenSize = MediaQuery.of(context).size;
-    final screenWidth = screenSize.width;
-    return BlocProvider<SignUpScreenBloc>.value(
-      value: _signUpBloc,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: BlocListener<SignUpScreenBloc, SignUpScreenState>(
-          bloc: _signUpBloc,
-          listener: (context, state) {
-            // Handle registration success/error
-            if (state is SignUpScreenSuccess) {
-              CustomLoader.hidePopupLoader(context);
-              CherryToast.success(context, "Account created successfully!");
-              // Clear verification status after successful registration
-              _saveEmailVerificationStatus(false);
-              context.pushNamed("login");
-            } else if (state is SignUpScreenError) {
-              CustomLoader.hidePopupLoader(context);
-              CherryToast.error(context, state.message);
-            } else if (state is SignUpScreenLoading) {
-              CustomLoader.showPopupLoader(context);
-            }
-            // Handle OTP send success
-            else if (state is SendOtpOnEmailSuccess) {
-              setState(() {
-                _isSendingOtp = false;
-              });
-              CherryToast.success(
-                context,
-                "Verification code sent to your email!",
-              );
-              _navigateToOtpScreen();
-            }
-            // Handle OTP send error
-            else if (state is SendOtpOnEmailError) {
-              setState(() {
-                _isSendingOtp = false;
-              });
-              CherryToast.error(context, state.message);
-            }
-            // Handle OTP send loading
-            else if (state is SendOtpScreenLoading) {
-              setState(() {
-                _isSendingOtp = true;
-              });
-            }
-          },
-          child: Container(
-
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-
-                    constraints: BoxConstraints(maxWidth: 600),
-                    child: Align(alignment: Alignment.topCenter,
-                      child: Stack(
-                        children: [
-                          SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                vGap(headerHeight),
-                                Form(
-                                  key: _formKey,
-                                  child: Column(
-                                    spacing: 15,
-                                    children: [
-                                      Row(
-                                        spacing: 3,
-                                        children: [
-                                          Expanded(
-                                            child: _buildTextField(
-                                              controller:
-                                                  _fullNameController,
-                                              hint: AppLocalizations.of(
-                                                context,
-                                              )!.firstName,
-                                              keyboardType:
-                                                  TextInputType.name,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: _buildTextField(
-                                              controller:
-                                                  _lastNameController,
-                                              hint: AppLocalizations.of(
-                                                context,
-                                              )!.lastName,
-                                              keyboardType:
-                                                  TextInputType.name,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      _buildTextField(
-                                        readonly: _isEmailVerified,
-                                        controller: _emailController,
-                                        hint: AppLocalizations.of(
-                                          context,
-                                        )!.emailAddress,
-                                        onChanged: (value) {
-                                          if (_isEmailVerified) {
-                                            _resetEmailVerification();
-                                          }
-                                        },
-                                        suffix: TextButton(
-                                          onPressed:
-                                              (_isEmailVerified ||
-                                                  _isSendingOtp ||
-                                                  _isCheckingVerification)
-                                              ? null
-                                              : _handleEmailVerification,
-                                          child:
-                                              _buildEmailVerificationButton(),
-                                        ),
-                                        icon: Icon(
-                                          _isEmailVerified
-                                              ? Icons.verified
-                                              : Icons.mail_outline,
-                                          color: _isEmailVerified
-                                              ? Colors.green
-                                              : null,
-                                        ),
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                      ),
-                                      PhoneNumberField(
-                                        controller: TextEditingController(),
-                                        isVerified: false,
-                                        onVerify: () {
-                                          print("Verify button pressed");
-                                        },
-                                      ),
-
-                                      CustomPasswordField(
-                                        borderRadius: 48,
-                                        borderWidth: 1,
-                                        fillColor: Colors.white,
-                                        controller: _passwordController,
-                                        hintText: AppLocalizations.of(
-                                          context,
-                                        )!.password,
-                                        validator: (value) {
-                                          if (value == null ||
-                                              value.isEmpty) {
-                                            return 'This field is required';
-                                          }
-                                          if (value.length < 6) {
-                                            return 'Password must be at least 6 characters';
-                                          }
-                                          return null;
-                                        },
-                                        prefix: const Icon(
-                                          Icons.lock,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      CustomPasswordField(
-                                        borderRadius: 48,
-                                        borderWidth: 1,
-                                        fillColor: Colors.white,
-                                        controller:
-                                            _retypePasswordController,
-                                        hintText: AppLocalizations.of(
-                                          context,
-                                        )!.retypePassword,
-                                        validator: (value) {
-                                          if (value == null ||
-                                              value.isEmpty) {
-                                            return 'This field is required';
-                                          }
-                                          if (value !=
-                                              _passwordController.text) {
-                                            return 'Passwords do not match';
-                                          }
-                                          return null;
-                                        },
-                                        prefix: const Icon(
-                                          Icons.lock,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 40.0,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Checkbox(
-                                              value: _agreeToTerms,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _agreeToTerms =
-                                                      value ?? false;
-                                                });
-                                              },
-                                              activeColor: const Color(
-                                                0xFF2D3748,
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                      4,
-                                                    ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  text: AppLocalizations.of(
-                                                    context,
-                                                  )!.agreeTerms,
-                                                  style: MontserratStyles.montserratMediumTextStyle(
-                                                    size: 14,
-                                                    color: AppColor()
-                                                        .silverShadeGrayColor,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text:
-                                                          AppLocalizations.of(
-                                                            context,
-                                                          )!.termsPrivacy,
-                                                      style: MontserratStyles.montserratMediumTextStyle(
-                                                        size: 14,
-                                                        color: AppColor()
-                                                            .darkCharcoalBlueColor,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        height: 45,
-                                        child: BlocBuilder<SignUpScreenBloc, SignUpScreenState>(
-                                          bloc: _signUpBloc,
-                                          builder: (context, state) {
-                                            bool isLoading =
-                                                state
-                                                    is SignUpScreenLoading;
-
-                                            return CustomButton(
-                                              onPressed:
-                                                  _agreeToTerms &&
-                                                      !isLoading
-                                                  ? () =>
-                                                        _handleRegistration(
-                                                          context,
-                                                        )
-                                                  : null,
-                                              text: isLoading
-                                                  ? AppLocalizations.of(
-                                                      context,
-                                                    )!.creatingAccount
-                                                  : AppLocalizations.of(
-                                                      context,
-                                                    )!.createAnAccountTitle,
-                                              borderRadius: 48,
-                                              textStyle:
-                                                  MontserratStyles.montserratMediumTextStyle(
-                                                    color:
-                                                        _agreeToTerms &&
-                                                            !isLoading
-                                                        ? AppColor()
-                                                              .yellowWarmColor
-                                                        : AppColor()
-                                                              .darkCharcoalBlueColor,
-                                                    size: 18,
-                                                  ),
-                                              elevation: 5,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            AppLocalizations.of(
-                                              context,
-                                            )!.haveAccount,
-                                            style:
-                                                MontserratStyles.montserratMediumTextStyle(
-                                                  size: 14,
-                                                  color: AppColor()
-                                                      .silverShadeGrayColor,
-                                                ),
-                                          ),
-                                          hGap(10),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              AppLocalizations.of(
-                                                context,
-                                              )!.signIn,
-                                              style: MontserratStyles.montserratMediumTextStyle(
-                                                size: 14,
-                                                color: AppColor()
-                                                    .darkCharcoalBlueColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      vGap(30),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Header section
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: Padding(
-                              padding: Responsive.isDesktop(context) ?const EdgeInsets.symmetric(horizontal: 150,) :EdgeInsets.zero,
-                              child: UpperContainerWidget(height: headerHeight),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                if (Responsive.isDesktop(context))
-                  Expanded(flex: 1, child: Container( color: AppColor().newBgColor,
-                    child: Column(
-                      children: [Spacer(),
-                        CommonViewAuth(),Spacer()
-                      ],
-                    ),
-                  )),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    bool readonly = false,
-    Widget? icon,
-    final Widget? suffix,
-    bool isPassword = false,
-    bool isPasswordVisible = false,
-    VoidCallback? onTogglePassword,
-    TextInputType? keyboardType,
-    Function(String)? onChanged,
-  }) {
-    return CustomTextField(
-      controller: controller,
-      readOnly: readonly,
-      obscureText: isPassword && !isPasswordVisible,
-      keyboardType: keyboardType,
-      fillColor: Colors.white,
-      hintText: hint,
-      suffixIcon: suffix,
-      onChanged: onChanged,
-      hintStyle: MontserratStyles.montserratSemiBoldTextStyle(
-        size: 14,
-        color: AppColor().silverShadeGrayColor,
-      ),
-      borderRadius: 48,
-      prefixIcon: icon,
-      borderWidth: 1,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'This field is required';
-        }
-        if (hint == 'Email Address') {
-          final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-          if (!emailRegex.hasMatch(value)) {
-            return 'Please enter a valid email';
-          }
-        }
-        if (hint == 'Password' && value.length < 6) {
-          return 'Password must be at least 6 characters';
-        }
-        if (hint == 'Retype Password' && value != _passwordController.text) {
-          return 'Passwords do not match';
-        }
-        return null;
-      },
-    );
-  }
-}
-
-
-
-*/

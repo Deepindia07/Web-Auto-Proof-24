@@ -44,10 +44,10 @@ class SubscriptionScreen extends StatelessWidget {
   ];
 
   double getAspectRatioForLargeTablet(
-      double containerWidth,
-      double containerHeight, {
-        double spacing = 20,
-      }) {
+    double containerWidth,
+    double containerHeight, {
+    double spacing = 20,
+  }) {
     final int cols = 2;
     final totalSpacing = spacing * (cols - 1);
     final cardWidth = (math.max(300.0, containerWidth) - totalSpacing) / cols;
@@ -58,7 +58,6 @@ class SubscriptionScreen extends StatelessWidget {
     double ratio = cardWidth / desiredHeight;
     return ratio.clamp(0.6, 1.5);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -102,19 +101,47 @@ class SubscriptionCard extends StatelessWidget {
         color: const Color(0xFF2C3E50),
         borderRadius: BorderRadius.circular(16),
       ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(),
-          const SizedBox(height: 8),
-          ...plan.mainFeatures.map((f) => _buildFeature(f, false)),
-          const SizedBox(height: 4),
-          ...plan.features.map((f) => _buildFeature(f, true)),
-        Responsive.isTablet(context) ?vGap(10) :  vGap(15),
-          _buildActionButton(),
-        ],
-      ),
+      padding: EdgeInsets.all(16),
+      child:
+          Responsive.isTablet(context) ||
+              Responsive.isLargeTablet(context) ||
+              Responsive.isDesktop(context)
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Responsive.isDesktop(context)
+                    ? const SizedBox(height: 20)
+                    : const SizedBox(height: 0),
+
+                _buildHeader(),
+                const SizedBox(height: 8),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...plan.mainFeatures.map((f) => _buildFeature(f, false)),
+                      const SizedBox(height: 4),
+                      ...plan.features.map((f) => _buildFeature(f, true)),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+                _buildActionButton(),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                ...plan.mainFeatures.map((f) => _buildFeature(f, false)),
+                const SizedBox(height: 4),
+                ...plan.features.map((f) => _buildFeature(f, true)),
+
+                // 👇 Spacer pushes button to the bottom
+                _buildActionButton(),
+              ],
+            ),
     );
   }
 
@@ -147,29 +174,41 @@ class SubscriptionCard extends StatelessWidget {
   Widget _buildQuantitySelector() {
     return Container(
       padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
         decoration: BoxDecoration(
-          color: AppColor().yellowWarmColor,
+          color: Colors.transparent,
+          border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _circleButton(Icons.remove),
             const SizedBox(width: 8),
-            Text(
-              "1",
-              style: MontserratStyles.montserratSemiBoldTextStyle(
-                size: 14,
-                color: AppColor().darkCharcoalBlueColor,
+
+            // 👇 Looks like textfield, fixed size
+            SizedBox(
+              width: 40,
+              height: 28,
+              child: TextField(
+                textAlign: TextAlign.center,
+                style: MontserratStyles.montserratSemiBoldTextStyle(
+                  size: 14,
+                  color: Colors.white,
+                ),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                controller: TextEditingController(text: "1"),
               ),
             ),
+
             const SizedBox(width: 8),
-            _circleButton(Icons.add),
           ],
         ),
       ),
@@ -217,6 +256,8 @@ class SubscriptionCard extends StatelessWidget {
       child: Icon(icon, color: AppColor().yellowWarmColor, size: 14),
     );
   }
+
+  // ... keep your helper widgets as is
 }
 
 class SubscriptionPlan {
