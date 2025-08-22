@@ -43,22 +43,49 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get privacy => 'Confidentialité';
+
+  @override
+  String get createAccountNow => 'Créez un compte gratuit maintenant';
+
   @override
   String get staticTitle => 'Obtenez 3 inspections gratuites';
 
   @override
-  String get selectLanguage => "Sélectionnez la langue";
+  String get selectLanguage => 'Sélectionnez la langue';
+
   @override
-  String get deleteButton => 'Supprimer';
+  String get english => 'Anglaise';
+
   @override
-  String get frenchText => 'French';
+  String get frenchText => 'Anglaise';
+
+  @override
+  String get verifyEmailAddress =>
+      'Veuillez d\'abord vérifier votre adresse e-mail';
+
+  @override
+  String get agreeTermsPrivacy =>
+      'Veuillez accepter les conditions générales et la confidentialité';
+
+  @override
+  String get enterEmail => 'Veuillez d\'abord saisir votre adresse e-mail';
+
+  @override
+  String get emailSuccessfully => 'E-mail vérifié avec succès!';
+
+  @override
+  String get verificationOtpMsg =>
+      'Code de vérification envoyé à votre email !';
+
   @override
   String get subTitleText1 =>
-      "L'application d'inspection de véhicule intelligente.";
+      'L\'application d\'inspection de véhicule intelligente.';
+
   @override
-  String get createAccountNow => 'Créez un compte gratuit maintenant';
-  String get subTitleText12 => "Numérisez vos rapports d'état.";
-  String get englishText => "Anglaise";
+  String get subTitleText2 => 'Numérisez vos rapports d\'état.';
+
+  @override
+  String get deleteButton => 'Supprimer';
 
   @override
   String get accountDelete => 'Supprimer le compte';
@@ -808,6 +835,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
+  String get changeText => 'Changement';
+
+  @override
+  String get passwordText => 'Mot de passe';
+
+  @override
   String get validate => 'Valider';
 
   @override
@@ -816,6 +849,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get signatureValidated => 'Signature validée avec succès';
+
+  @override
+  String get accountCreatedSuccessfully => 'Compte créé avec succès!';
+
+  @override
+  String get pinIncorrect => 'Le code PIN est incorrect';
 
   @override
   String get clientSignature => 'Signature du client';
@@ -864,28 +903,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  // TODO: implement subTitleText2
-  String get subTitleText2 => "Numérisez vos rapports d'état.";
-
-  @override
-  // TODO: implement verifyEmailAddress
-  String get verifyEmailAddress =>
-      "Veuillez d'abord vérifier votre adresse e-mail";
-
-  @override
-  // TODO: implement agreeTermsPrivacy
-  String get agreeTermsPrivacy =>
-      "Veuillez accepter les conditions générales et la confidentialité";
-
-  @override
-  // TODO: implement enterEmail
-  String get enterEmail => "Veuillez d'abord saisir votre adresse e-mail";
-
-  @override
-  // TODO: implement emailSuccessfully
-  String get emailSuccessfully => "E-mail vérifié avec succès!";
-
-  @override
-  // TODO: implement verificationOtpMsg
-  String get verificationOtpMsg => "Code de vérification envoyé à votre email !";
+  // TODO: implement emailSentMessageTittle
+  String get emailSentMessageTittle => "Nous avons envoyé le code à votre";
 }

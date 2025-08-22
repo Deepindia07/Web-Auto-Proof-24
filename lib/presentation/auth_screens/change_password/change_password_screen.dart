@@ -41,7 +41,6 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
     super.dispose();
   }
 
-
   void _validatePasswords() {
     setState(() {
       _oldPasswordError = null;
@@ -123,9 +122,13 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                 _newPasswordController.clear();
                 _confirmNewPasswordController.clear();
                 print("dsdssffsfsPassword changed successfully!");
-                CherryToast.success(context, "Password changed successfully!");
+                CherryToast.success(
+                  context,
+                  AppLocalizations.of(context)!.passwordResetSuccess,
+                );
                 context.pop();
               } else if (state is ChangePasswordScreenFailure) {
+                // add localization text --------------
                 CherryToast.error(context, state.error);
               }
             }
@@ -138,11 +141,9 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                     : 600,
               ),
               decoration: BoxDecoration(
-
                 borderRadius: BorderRadius.circular(20),
-
               ),
-              child:  Form(
+              child: Form(
                 key: _formKey,
                 child: Align(
                   alignment: Alignment.center,
@@ -152,8 +153,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                       children: [
                         Expanded(
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(height: 42),
                               Image.asset(
@@ -165,22 +165,19 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                               vGap(10),
 
                               Text(
-                                'Change',
-                                style:
-                                MontserratStyles.montserratBoldTextStyle(
+                                AppLocalizations.of(context)!.changeText,
+                                style: MontserratStyles.montserratBoldTextStyle(
                                   size: 30,
-                                  color: AppColor()
-                                      .darkCharcoalBlueColor,
+                                  color: AppColor().darkCharcoalBlueColor,
                                 ),
                               ),
                               Text(
-                                'New Password',
+                                AppLocalizations.of(context)!.passwordText,
                                 style:
-                                MontserratStyles.montserratMediumTextStyle(
-                                  size: 28,
-                                  color: AppColor()
-                                      .darkCharcoalBlueColor,
-                                ),
+                                    MontserratStyles.montserratMediumTextStyle(
+                                      size: 28,
+                                      color: AppColor().darkCharcoalBlueColor,
+                                    ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
@@ -188,14 +185,13 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                   right: 20,
                                 ),
                                 child: Text(
-                                  'We have sent code to your \ndevesh***29gmail.com',
+                                  '${AppLocalizations.of(context)!.emailSentMessageTittle}\ndevesh***29gmail.com',
                                   textAlign: TextAlign.center,
                                   style:
-                                  MontserratStyles.montserratNormalTextStyle(
-                                    color: AppColor()
-                                        .silverShadeGrayColor,
-                                    size: 14,
-                                  ),
+                                      MontserratStyles.montserratNormalTextStyle(
+                                        color: AppColor().silverShadeGrayColor,
+                                        size: 14,
+                                      ),
                                 ),
                               ),
                             ],
@@ -217,24 +213,22 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                               spacing: 20,
                               children: [
                                 Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomTextField(
                                       hintStyle:
-                                      MontserratStyles.montserratRegularTextStyle(
-                                        size: 15,
-                                        color: AppColor()
-                                            .silverShadeGrayColor,
-                                      ),
+                                          MontserratStyles.montserratRegularTextStyle(
+                                            size: 15,
+                                            color:
+                                                AppColor().silverShadeGrayColor,
+                                          ),
                                       textStyle:
-                                      MontserratStyles.montserratRegularTextStyle(
-                                        size: 15,
-                                        color: AppColor()
-                                            .darkYellowColor,
-                                      ),
+                                          MontserratStyles.montserratRegularTextStyle(
+                                            size: 15,
+                                            color: AppColor().darkYellowColor,
+                                          ),
                                       focusedBorderColor:
-                                      AppColor().yellowWarmColor,
+                                          AppColor().yellowWarmColor,
                                       obscureText: obscurePassword,
                                       suffixIcon: IconButton(
                                         icon: Icon(
@@ -244,16 +238,14 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            obscurePassword =
-                                            !obscurePassword;
+                                            obscurePassword = !obscurePassword;
                                           });
                                         },
                                       ),
                                       obscuringCharacter: '*',
-                                      validator: InputValidators
-                                          .validatePassword,
-                                      controller:
-                                      _oldPasswordController,
+                                      validator:
+                                          InputValidators.validatePassword,
+                                      controller: _oldPasswordController,
 
                                       hintText: AppLocalizations.of(
                                         context,
@@ -261,8 +253,8 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
 
                                       borderRadius: 30,
                                       fillColor: Colors.transparent,
-                                      borderColor: AppColor()
-                                          .silverShadeGrayColor,
+                                      borderColor:
+                                          AppColor().silverShadeGrayColor,
 
                                       borderWidth: 2,
                                     ),
@@ -284,30 +276,30 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                   ],
                                 ),
                                 Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomPasswordField(hintStyle:
-                                    MontserratStyles.montserratRegularTextStyle(
-                                      size: 15,
-                                      color: AppColor()
-                                          .silverShadeGrayColor,
-                                    ),
+                                    CustomPasswordField(
+                                      validator:
+                                          InputValidators.validatePassword,
+                                      hintStyle:
+                                          MontserratStyles.montserratRegularTextStyle(
+                                            size: 15,
+                                            color:
+                                                AppColor().silverShadeGrayColor,
+                                          ),
                                       textStyle:
-                                      MontserratStyles.montserratRegularTextStyle(
-                                        size: 15,
-                                        color: AppColor()
-                                            .darkYellowColor,
-                                      ),
+                                          MontserratStyles.montserratRegularTextStyle(
+                                            size: 15,
+                                            color: AppColor().darkYellowColor,
+                                          ),
 
                                       obscuringCharacter: "*",
-                                      controller:
-                                      _newPasswordController,
+                                      controller: _newPasswordController,
                                       focusedBorderColor:
-                                      AppColor().darkYellowColor,
+                                          AppColor().darkYellowColor,
                                       borderWidth: 2,
-                                      fillColor: AppColor()
-                                          .darkCharcoalBlueColor,
+                                      fillColor:
+                                          AppColor().darkCharcoalBlueColor,
                                       borderRadius: 30,
                                       hintText: "New Password",
                                       // textCapitalization: TextCapitalization.none,
@@ -331,33 +323,37 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                   ],
                                 ),
                                 Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomPasswordField( hintStyle:
-                                    MontserratStyles.montserratRegularTextStyle(
-                                      size: 15,
-                                      color: AppColor()
-                                          .silverShadeGrayColor,
-                                    ),
+                                    CustomPasswordField(
+                                      validator: (value) =>
+                                          InputValidators.validateConfirmPassword(
+                                            value,
+                                            _newPasswordController.text,
+                                          ),
+                                      hintStyle:
+                                          MontserratStyles.montserratRegularTextStyle(
+                                            size: 15,
+                                            color:
+                                                AppColor().silverShadeGrayColor,
+                                          ),
                                       textStyle:
-                                      MontserratStyles.montserratRegularTextStyle(
-                                        size: 15,
-                                        color: AppColor()
-                                            .darkYellowColor,
-                                      ),
+                                          MontserratStyles.montserratRegularTextStyle(
+                                            size: 15,
+                                            color: AppColor().darkYellowColor,
+                                          ),
                                       obscuringCharacter: "*",
 
-                                      controller:
-                                      _confirmNewPasswordController,
+                                      controller: _confirmNewPasswordController,
                                       focusedBorderColor:
-                                      AppColor().darkYellowColor,
+                                          AppColor().darkYellowColor,
                                       borderWidth: 2,
-                                      fillColor: AppColor()
-                                          .darkCharcoalBlueColor,
+                                      fillColor:
+                                          AppColor().darkCharcoalBlueColor,
                                       borderRadius: 30,
-                                      hintText:
-                                      "Confirm New Password",
+                                      hintText: AppLocalizations.of(
+                                        context,
+                                      )!.confirmPassword,
                                       // textCapitalization: TextCapitalization.none,
                                       onChanged: (value) =>
                                           _validatePasswords(),
@@ -384,17 +380,14 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                   height: 45,
                                   width: screenSize.width * 0.90,
                                   borderRadius: 48,
-                                  backgroundColor:
-                                  AppColor().yellowWarmColor,
-                                  onPressed:
-                                  _changePassword,
+                                  backgroundColor: AppColor().yellowWarmColor,
+                                  onPressed: _changePassword,
                                   text: "Change Password",
                                   textStyle:
-                                  MontserratStyles.montserratMediumTextStyle(
-                                    color: AppColor()
-                                        .darkCharcoalBlueColor,
-                                    size: 18,
-                                  ),
+                                      MontserratStyles.montserratMediumTextStyle(
+                                        color: AppColor().darkCharcoalBlueColor,
+                                        size: 18,
+                                      ),
                                 ),
                               ],
                             ),

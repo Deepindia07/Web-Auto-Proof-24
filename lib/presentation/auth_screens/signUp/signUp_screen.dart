@@ -26,13 +26,13 @@ class _SignUpScreenState extends State<SignUpScreen>
   String selectedCountryCode = "+33";
   late final SignUpScreenBloc _signUpBloc;
   String? phoneError = "";
-
   bool termsPrivacy = false;
   String inputType = "";
   bool isVerifying = false;
   bool isVerified = false;
   bool obscurePassword = true;
   bool obscureRePassword = false;
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -167,7 +167,6 @@ class _SignUpScreenState extends State<SignUpScreen>
       },
     );
 
-    // Check verification status after returning from OTP screen
     _loadEmailVerificationStatus();
 
     if (result == true) {
@@ -280,7 +279,11 @@ class _SignUpScreenState extends State<SignUpScreen>
         // Handle registration success/error
         if (state is SignUpScreenSuccess) {
           CustomLoader.hidePopupLoader(context);
-          CherryToast.success(context, "Account created successfully!");
+
+          CherryToast.success(
+            context,
+            AppLocalizations.of(context)!.accountCreatedSuccessfully,
+          );
           // Clear verification status after successful registration
           _saveEmailVerificationStatus(false);
           context.pushNamed("login");
@@ -290,7 +293,6 @@ class _SignUpScreenState extends State<SignUpScreen>
         } else if (state is SignUpSendOtpScreenLoading) {
           CustomLoader.showPopupLoader(context);
         }
-
         // Handle OTP send success
         else if (state is SignUpSendOtpOnEmailSuccess) {
           setState(() {
@@ -307,6 +309,8 @@ class _SignUpScreenState extends State<SignUpScreen>
           setState(() {
             _isSendingOtp = false;
           });
+
+          // add localization text --------------
           CherryToast.error(context, state.message);
         }
         // Handle OTP send loading
@@ -336,7 +340,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                             child: CustomTextField(
                               validator: InputValidators.validateFirstName,
                               controller: fullNameController,
-
                               hintText: AppLocalizations.of(context)!.firstName,
                               borderRadius: 30,
                               fillColor: Colors.transparent,
@@ -402,9 +405,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                         isVerified: false,
                         onVerify: () {},
                       ),
-
                       Container(height: 15),
-
                       CustomTextField(
                         obscureText: obscurePassword,
                         suffixIcon: IconButton(
@@ -423,7 +424,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                         validator: InputValidators.validatePassword,
                         controller: passwordController,
                         prefixIcon: Icon(Icons.lock, color: Colors.grey),
-
                         hintText: AppLocalizations.of(context)!.password,
                         borderRadius: 30,
                         fillColor: Colors.transparent,
@@ -452,8 +452,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                             ),
                         controller: retypePasController,
                         prefixIcon: Icon(Icons.lock, color: Colors.grey),
-                        obscureText:
-                            obscureRePassword, // ✅ toggles between show/hide
+                        obscureText: obscureRePassword,
                         hintText: AppLocalizations.of(context)!.retypePassword,
                         borderRadius: 30,
                         fillColor: Colors.transparent,
@@ -484,7 +483,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 text: TextSpan(
                                   text: AppLocalizations.of(
                                     context,
-                                  )!.agreeTerms, // 👈 This will be tappable
+                                  )!.agreeTerms,
                                   style:
                                       MontserratStyles.montserratMediumTextStyle(
                                         size: 14,
@@ -589,17 +588,16 @@ class _SignUpScreenState extends State<SignUpScreen>
                         ),
                       ),
                       SizedBox(height: 15),
-
                       RichText(
                         text: TextSpan(
-                          text: 'Have an account? ',
+                          text: AppLocalizations.of(context)!.haveAccount,
                           style: MontserratStyles.montserratSemiBoldTextStyle(
                             color: AppColor().silverShadeGrayColor,
                             size: 14,
                           ),
                           children: [
                             TextSpan(
-                              text: 'Sign In',
+                              text: AppLocalizations.of(context)!.signIn,
                               style:
                                   MontserratStyles.montserratSemiBoldTextStyle(
                                     color: AppColor().darkCharcoalBlueColor,
@@ -637,8 +635,9 @@ class _SignUpScreenState extends State<SignUpScreen>
 
     if (!await launchUrl(
       uri,
-      mode: LaunchMode.externalApplication, // opens in new tab/browser on web
+      mode: LaunchMode.externalApplication,
     )) {
+      // add localization text --------------
       throw Exception("Could not launch $url");
     }
   }

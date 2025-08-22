@@ -17,11 +17,11 @@ part 'login_screen_state.dart';
 
 class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   final AuthenticationApiCall authRepository;
-  final String userRole; // Add userRole parameter
+  final String userRole;
 
   LoginScreenBloc({
     required this.authRepository,
-    required this.userRole, // Add this parameter
+    required this.userRole,
   }) : super(LoginScreenInitial()) {
     on<LoginSubmitted>(_onLoginSubmitted);
     on<LoginReset>(_onLoginReset);
@@ -43,8 +43,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
         await _handleRegularLogin(event, emit);
       }
     } catch (error) {
-      emit(LoginFailure(error: 'Login failed: $error'));
-      print("Login error: $error");
+      emit(LoginFailure(error: ' $error'));
     }
   }
 

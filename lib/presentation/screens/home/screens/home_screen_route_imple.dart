@@ -1,5 +1,6 @@
 library home_screen_route_imple.dart;
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -16,23 +17,26 @@ import 'package:auto_proof/presentation/screens/personal_information_screens/per
 import 'package:auto_proof/presentation/screens/team_View/web_team_profile_screen.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../auth/server/default_db/sharedprefs_method.dart';
+import '../../../../auth/server/dio_service/dio_service.dart';
 import '../../../../constants/const_string.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../responsive.dart';
 import '../../../../utilities/custom_widgets.dart';
 import '../../../../utilities/profile_image.dart';
+import '../../inspection/Instruction_screen/instruction_screen_route_imple.dart';
 import '../../payment/payment_screen_route_imple.dart';
 import '../../personal_information_screens/bloc/personal_information_bloc/personal_information_bloc.dart';
 import '../../subscription/subscription_screen_route_imple.dart';
 import '../../team_View/team_screen_route_imple.dart';
 import '../../vehicles_screen/vehicles_screen_route_imple.dart';
-
+import 'package:http/http.dart' as http;
 part 'home_screen.dart';
 part 'side_menu_screen.dart';
 part 'dashboard_screen.dart';

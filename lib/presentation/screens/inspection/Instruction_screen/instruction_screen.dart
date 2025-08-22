@@ -21,7 +21,7 @@ class InstructionScreenView extends StatefulWidget {
 
 class _InstructionScreenViewState extends State<InstructionScreenView> {
   int currentStep = 0;
-  final int totalSteps = 5;
+  final int totalSteps = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
       l10n.carDetails,
       l10n.ownerDetails,
       l10n.clientDetails,
-      l10n.clientDetails,
+      /* l10n.clientDetails,*/
     ];
 
     String currentTitle =
@@ -42,11 +42,11 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
       backgroundColor: AppColor().backgroundColor,
       body: Column(
         children: [
-          CustomAppBar(
+         /* CustomAppBar(
               backgroundColor: AppColor().backgroundColor,
               title: currentTitle,
               subTitle: "${AppLocalizations.of(context)!.step} ${currentStep+1} of $totalSteps"
-          ),
+          ),*/
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -185,7 +185,29 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
 
   Widget _buildContentArea() {
     final l10n = AppLocalizations.of(context)!;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Define breakpoints
+    final bool isDesktop = screenWidth >= 1024;
+    final bool isTablet = screenWidth >= 600 && screenWidth < 1024;
+
+    // Dynamic values
+    final double fontSize = isDesktop
+        ? 28
+        : isTablet
+        ? 24
+        : 20;
+    final double subTextSize = isDesktop
+        ? 16
+        : isTablet
+        ? 14
+        : 12;
+    final double cardPadding = isDesktop ? 24 : 16;
+    final double spacingSmall = isDesktop ? 12 : 8;
+    final double spacingLarge = isDesktop ? 32 : 20;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         GestureDetector(
           onTap: () {
@@ -193,19 +215,21 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
           },
           child: _buildGuideButton(l10n.departureGuide, arrowForwardRoundIcon),
         ),
-        vGap(12), // Reduced from 16
+        SizedBox(height: spacingSmall),
         GestureDetector(
           onTap: () {
             redirectToWebPage("https://www.autoproof24.com/return-guide/");
           },
           child: _buildGuideButton(l10n.returnGuide, arrowForwardRoundIcon),
         ),
-        vGap(24), // Reduced from 32
+        SizedBox(height: spacingLarge),
+
+        // Responsive card container
         CustomContainer(
           backgroundColor: AppColor().darkCharcoalBlueColor,
-          borderRadius: BorderRadius.circular(10), // Reduced from 12
+          borderRadius: BorderRadius.circular(isDesktop ? 12 : 10),
           width: double.infinity,
-          padding: const EdgeInsets.all(16), // Reduced from 20
+          padding: EdgeInsets.all(cardPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -213,14 +237,14 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
                 "AP100001",
                 style: MontserratStyles.montserratMediumTextStyle(
                   color: AppColor().darkYellowColor,
-                  size: 26, // Reduced from 30
+                  size: fontSize,
                 ),
               ),
-              vGap(6), // Reduced from 8
+              SizedBox(height: spacingSmall),
               Text(
                 l10n.inspectionNumber,
                 style: TextStyle(
-                  fontSize: 14, // Reduced from 16
+                  fontSize: subTextSize,
                   color: AppColor().darkYellowColor,
                 ),
               ),
@@ -230,6 +254,7 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
       ],
     );
   }
+
 
   Widget _buildGuideButton(String title, String icon) {
     return Container(
@@ -319,10 +344,10 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
         return CarDetailsScreen();
       case 2:
         return OwnerDetailsScreen();
-      case 3:
+   case 3:
         return ClientDetailsScreen();
-      case 4:
-        return CarImInpectionScreen();
+    /*       case 4:
+        return CarImInpectionScreen();*/
       default:
         return _buildStep0();
     }

@@ -45,22 +45,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacy => 'Privacy';
 
   @override
-  String get staticTitle => 'Get 3 free Inspections';
+  String get createAccountNow => 'Create Free Account Now';
 
   @override
-  String get subTitleText1 => 'The smart vehicle inspection app.';
+  String get staticTitle => 'Get 3 free Inspections ';
+
   @override
-  String get englishText => 'English';
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get english => 'English';
+
   @override
   String get frenchText => 'French';
 
   @override
-  String get subTitleText2 => 'Digitize your condition reports.';  @override
-  String get selectLanguage => "Select Language";
-
+  String get verifyEmailAddress => 'Please verify your email address first';
 
   @override
-  String get createAccountNow => 'Create Free Account Now';
+  String get agreeTermsPrivacy => 'Please agree to the Terms & Privacy';
+
+  @override
+  String get enterEmail => 'Please enter your email address first';
+
+  @override
+  String get emailSuccessfully => 'Email verified successfully!';
+
+  @override
+  String get verificationOtpMsg => 'Verification code sent to your email!';
+
+  @override
+  String get subTitleText1 => 'The smart vehicle inspection app.';
+
+  @override
+  String get subTitleText2 => 'Digitize your condition reports.';
 
   @override
   String get deleteButton => 'Delete';
@@ -171,8 +189,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get emailSentMessage => 'We have sent code to your email';
 
+
   @override
   String get dontReceiveCode => 'Don’t receive code ?';
+  @override
+  String get emailSentMessageTittle => 'We have sent code to your ';
 
   @override
   String get resend => 'Resend';
@@ -805,6 +826,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get changeText => 'Change';
+
+  @override
   String get validate => 'Validate';
 
   @override
@@ -813,6 +837,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signatureValidated => 'Signature validated successfully';
+
+  @override
+  String get accountCreatedSuccessfully => 'Account created successfully!';
+
+  @override
+  String get pinIncorrect => 'Pin is incorrect';
 
   @override
   String get clientSignature => 'Client Signature';
@@ -845,6 +875,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalReportsTitle => 'Digital Reports';
 
   @override
+  String get passwordText => 'Password';
+
+  @override
   String get digitalReportsDescription =>
       'Every inspection generates a time-stamped digital report that’s automatically shared with both the vehicle owner and the customer, creating a clear and trustworthy record.';
 
@@ -859,27 +892,4 @@ class AppLocalizationsEn extends AppLocalizations {
   String appVersion(Object version) {
     return 'App Version: $version';
   }
-
-  @override
-  // TODO: implement verifyEmailAddress
-  String get verifyEmailAddress => "Please verify your email address first";
-
-  @override
-  // TODO: implement agreeTermsPrivacy
-  String get agreeTermsPrivacy => "Please agree to the Terms & Privacy";
-
-
-  @override
-  // TODO: implement agreeTermsPrivacy
-  String get enterEmail => "Please enter your email address first";
-
-  @override
-  // TODO: implement agreeTermsPrivacy
-  String get verificationOtpMsg => "Verification code sent to your email!";
-
-  @override
-  // TODO: implement emailSuccessfully
-  String get emailSuccessfully => "Email verified successfully!";
-
-
 }

@@ -402,7 +402,7 @@ class _CustomDropdownNewState extends State<CustomDropdownNew> {
               width: widget.width,
               height: 48,
               decoration: BoxDecoration(
-                border: Border.all(color: AppColor().darkCharcoalBlueColor),
+                border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 2),
                 borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
               ),
               child: Row(

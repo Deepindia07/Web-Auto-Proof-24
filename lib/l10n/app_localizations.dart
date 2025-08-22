@@ -170,6 +170,78 @@ abstract class AppLocalizations {
   /// **'Privacy'**
   String get privacy;
 
+  /// No description provided for @createAccountNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Free Account Now'**
+  String get createAccountNow;
+
+  /// No description provided for @staticTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get 3 free Inspections '**
+  String get staticTitle;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get selectLanguage;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @frenchText.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get frenchText;
+
+  /// No description provided for @verifyEmailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please verify your email address first'**
+  String get verifyEmailAddress;
+
+  /// No description provided for @agreeTermsPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the Terms & Privacy'**
+  String get agreeTermsPrivacy;
+
+  /// No description provided for @enterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email address first'**
+  String get enterEmail;
+
+  /// No description provided for @emailSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verified successfully!'**
+  String get emailSuccessfully;
+
+  /// No description provided for @verificationOtpMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code sent to your email!'**
+  String get verificationOtpMsg;
+
+  /// No description provided for @subTitleText1.
+  ///
+  /// In en, this message translates to:
+  /// **'The smart vehicle inspection app.'**
+  String get subTitleText1;
+
+  /// No description provided for @subTitleText2.
+  ///
+  /// In en, this message translates to:
+  /// **'Digitize your condition reports.'**
+  String get subTitleText2;
+
   /// No description provided for @deleteButton.
   ///
   /// In en, this message translates to:
@@ -223,11 +295,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login successful!'**
   String get loginSuccessful;
-  String get verifyEmailAddress;
-  String get agreeTermsPrivacy;
-  String get enterEmail;
-  String get emailSuccessfully;
-
 
   /// No description provided for @pleaseEnterPassword.
   ///
@@ -546,13 +613,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change Language'**
   String get changeLanguage;
-  String get createAccountNow;
-  String get  staticTitle;
-  String get  subTitleText1;
-  String get  subTitleText2;
-  String get  selectLanguage;
-  String get  englishText;
-  String get  frenchText;
+  String get emailSentMessageTittle;
 
   /// No description provided for @generalSettings.
   ///
@@ -1634,6 +1695,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @changeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get changeText;
+
+  /// No description provided for @passwordText.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordText;
+
   /// No description provided for @validate.
   ///
   /// In en, this message translates to:
@@ -1652,6 +1725,18 @@ abstract class AppLocalizations {
   /// **'Signature validated successfully'**
   String get signatureValidated;
 
+  /// No description provided for @accountCreatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created successfully!'**
+  String get accountCreatedSuccessfully;
+
+  /// No description provided for @pinIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin is incorrect'**
+  String get pinIncorrect;
+
   /// No description provided for @clientSignature.
   ///
   /// In en, this message translates to:
@@ -1669,7 +1754,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About the App'**
   String get aboutTheAppTitle;
-  String get verificationOtpMsg;
 
   /// No description provided for @aboutTheAppDescription.
   ///

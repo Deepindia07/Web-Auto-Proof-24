@@ -432,9 +432,14 @@
   "selectLanguage": "Sélectionnez la langue",
   "english": "Anglaise",
   "enterEmail": "Veuillez d'abord saisir votre adresse e-mail",
-   "verificationOtpMsg": "Code de vérification envoyé à votre email !",
+  "verificationOtpMsg": "Code de vérification envoyé à votre email !",
   "frenchText": "Anglaise",
-    "emailSuccessfully": "E-mail vérifié avec succès!",
+  "accountCreatedSuccessfully": "Compte créé avec succès!",
+  "passwordText": "Mot de passe",
+  "emailSentMessageTittle": "Nous avons envoyé le code à votre",
+ "changeText": "Changement",
+   "pinIncorrect": "Le code PIN est incorrect",
+   "emailSuccessfully": "E-mail vérifié avec succès!",
   "verifyEmailAddress": "Veuillez d'abord vérifier votre adresse e-mail",
   "agreeTermsPrivacy": "Veuillez accepter les conditions générales et la confidentialité",
   "aboutTheAppDescription": "Auto Proof 24 est une application simple et intuitive pour l’inspection numérique des voitures, conçue pour rendre les enregistrements et sorties de véhicules plus rapides, clairs et fiables. Que vous gériez un service de location, un concessionnaire ou que vous souhaitiez simplement garder un suivi de l’état de votre voiture, cette application est faite pour vous.",
@@ -446,9 +451,10 @@
   "digitalReportsDescription": "Chaque inspection génère un rapport numérique horodaté automatiquement partagé avec le propriétaire du véhicule et le client, créant un enregistrement clair et fiable.",
   "whoItsForTitle": "Pour qui c'est",
   "whoItsForDescription": "Que vous gériez une flotte ou un seul véhicule, Auto Proof 24 vous offre un moyen intelligent et fiable de documenter l'état de votre voiture — à tout moment, n'importe où.",
-  "appVersion": "Version de l'application : {version}"
- "createAccountNow": "Créez un compte gratuit maintenant",
+  "appVersion": "Version de l'application : {version}",
+  "createAccountNow": "Créez un compte gratuit maintenant",
   "staticTitle": "Obtenez 3 inspections gratuites",
-   "subTitleText1": "L'application d'inspection de véhicule intelligente.",
-   "subTitleText2": "Numérisez vos rapports d'état.",
+  "subTitleText1": "L'application d'inspection de véhicule intelligente.",
+  "subTitleText2": "Numérisez vos rapports d'état."
+
 }

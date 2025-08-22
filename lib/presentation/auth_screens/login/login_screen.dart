@@ -164,7 +164,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
+                        /*   Text(
                           AppLocalizations.of(context)!.selectLanguage,
                           style: MontserratStyles.montserratSemiBoldTextStyle(
                             size: 12,
@@ -218,7 +218,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                 },
                                 children: [
                                   Text(
-                                    AppLocalizations.of(context)!.englishText,
+                                    AppLocalizations.of(context)!.english,
                                     style:
                                         MontserratStyles.montserratSemiBoldTextStyle(
                                           size: 12,
@@ -241,7 +241,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           },
                         ),
 
-                        vGap(screenHeight * 0.02),
+                        vGap(screenHeight * 0.02),*/
                         Image.asset(
                           appLogo,
                           height: screenHeight * 0.126,
@@ -302,10 +302,11 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
         if (widget.userRole != "instructor") vGap(verticalSpacing),
         if (widget.userRole != "instructor")
           CustomTextField(
+            borderWidth: 2,
+            borderColor: AppColor().darkCharcoalBlueColor,
             contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
             controller: _emailOrPhoneController,
             fillColor: Colors.white,
-            borderWidth: 2,
             borderRadius: 30,
 
             hintText: AppLocalizations.of(context)!.emailOrPhone,
@@ -323,6 +324,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
         if (widget.userRole != "instructor") vGap(verticalSpacing),
         if (widget.userRole != "instructor")
           CustomPasswordField(
+            borderColor: AppColor().darkCharcoalBlueColor,
             obscuringCharacter: "*",
             onSubmitted: (value) {
               _onLoginPressed();
@@ -372,7 +374,6 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
         ? screenHeight * 0.025
         : screenHeight * 0.0162;
 
-
     return Column(
       children: [
         vGap(verticalSpacing),
@@ -383,16 +384,15 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                 context,
                 AppLocalizations.of(context)!.loginSuccessful,
               );
-              print("Regular user login successful");
               context.go(AppRoute.homeScreen);
             } else if (state is EmployeeLoginSuccess) {
               CherryToast.success(
                 context,
                 AppLocalizations.of(context)!.loginSuccessful,
               );
-              print("Employee/Instructor login successful");
               context.go(AppRoute.homeScreen);
             } else if (state is LoginFailure) {
+              // add localization text --------------
               CherryToast.error(context, state.error);
             } else if (state is EmailValidationSuccess) {
               CherryToast.success(
@@ -407,6 +407,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                 },
               );
             } else if (state is EmailValidationFailure) {
+              // add localization text --------------
               CherryToast.error(context, state.error);
             }
           },
@@ -499,5 +500,4 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
       ],
     );
   }
-
 }

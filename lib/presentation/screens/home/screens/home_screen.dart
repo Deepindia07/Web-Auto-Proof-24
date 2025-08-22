@@ -9,6 +9,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScreenType currentScreen = ScreenType.dashboard;
+  late DioClient dioClient;
   String? selectedInspectorId;
   void updateScreen(ScreenType type, {String? inspectorId}) {
     setState(() {
@@ -157,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   case ScreenType.paymentHistory:
                                     return PaymentHistoryScreen();
                                   case ScreenType.newInspection:
-                                    return WebInspectionScreen();
+                                    return InstructionScreen();
                                   case ScreenType.notification:
                                     return NotificationScreen(
                                       isBacked: false,
@@ -182,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                     );
                                   case ScreenType.deleteAccount:
-                                  return   Container();
+                                    return Container();
                                 }
                               },
                             ),
@@ -199,71 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
-/*  void _showAccountDeleteDialog(BuildContext context, VoidCallback onConfirm) {
-    final localizations = AppLocalizations.of(context)!;
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppColor().backgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          title: Text(
-            localizations.accountDelete, // e.g. "Delete Account"
-            style: MontserratStyles.montserratBoldTextStyle(
-              size: 18,
-              color: AppColor().darkCharcoalBlueColor,
-            ),
-          ),
-          content: Text(
-            localizations.accountDeleteConfirm,
-            style: MontserratStyles.montserratMediumTextStyle(
-              size: 15,
-              color: AppColor().darkCharcoalBlueColor,
-            ),
-          ),
-          actions: [
-            CustomButton(
-              width: 120,
-              height: 40,
-              borderRadius: 10,
-              text: localizations.cancelButton,
-              textStyle: MontserratStyles.montserratSemiBoldTextStyle(
-                color: AppColor().yellowWarmColor,
-                size: 14,
-              ),
-              backgroundColor: AppColor().darkCharcoalBlueColor,
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            CustomButton(
-              width: 120,
-              height: 40,
-              borderRadius: 10,
-              text: localizations.deleteButton,
-              textStyle: MontserratStyles.montserratSemiBoldTextStyle(
-                color: AppColor().darkCharcoalBlueColor,
-                size: 14,
-              ),
-              backgroundColor: AppColor().darkYellowColor,
-              onPressed: () {
-                Navigator.of(context).pop();
-                onConfirm(); // Trigger delete
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }*/
-
 }
-
-
 
 enum ScreenType {
   dashboard,
@@ -346,14 +283,14 @@ class CreateInspectionButton extends StatelessWidget {
         ),
         onPressed: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Create a new Inspection',
-                style: MontserratStyles.montserratSemiBoldTextStyle(
-                  size: 20,
+                style: MontserratStyles.montserratMediumTextStyle(
+                  size: 18,
                   color: AppColor().darkCharcoalBlueColor,
                 ),
               ),

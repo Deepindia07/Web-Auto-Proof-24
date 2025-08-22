@@ -99,8 +99,8 @@ class SubscriptionCard extends StatefulWidget {
 }
 
 class _SubscriptionCardState extends State<SubscriptionCard> {
-  final TextEditingController _qtyController = TextEditingController(text: "1");
-  int _quantity = 1;
+  final TextEditingController _qtyController = TextEditingController(text: "3");
+  int _quantity = 3;
   void _updateQuantity() {
     final int? qty = int.tryParse(_qtyController.text);
     setState(() {
@@ -159,7 +159,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
                 ...widget.plan.mainFeatures.map((f) => _buildFeature(f, false)),
                 const SizedBox(height: 4),
                 ...widget.plan.features.map((f) => _buildFeature(f, true)),
-
+                const SizedBox(height: 4),
                 // 👇 Spacer pushes button to the bottom
                 _buildActionButton(),
               ],
@@ -180,7 +180,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
             ),
             const SizedBox(height: 4),
             Text(
-              "${totalPrice} ${(widget.plan.showQuantitySelector) ? "€ Unit": "€ Total"}",
+              "$totalPrice ${(widget.plan.showQuantitySelector) ? "€ (${widget.plan.price} € /Unit)": "€ Total"}",
               style: MontserratStyles.montserratSemiBoldTextStyle(
                 size: 14,
                 color: AppColor().yellowWarmColor,

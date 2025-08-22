@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 import 'auth/server/observer/app_bloc_observer.dart';
 import 'constants/const_color.dart';
 import 'l10n_controller/l10n_switcher_bloc.dart';

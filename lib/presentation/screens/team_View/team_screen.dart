@@ -1,10 +1,7 @@
 part of "team_screen_route_imple.dart";
 
-
-
 class MyTeamScreen extends StatefulWidget {
   final void Function(ScreenType type, {String? inspectorId}) onScreenChange;
-
 
   const MyTeamScreen({super.key, required this.onScreenChange});
 
@@ -14,6 +11,7 @@ class MyTeamScreen extends StatefulWidget {
 
 class _MyTeamScreenState extends State<MyTeamScreen> {
   List<GetTeamUserData>? getTeamUserData;
+
   @override
   void initState() {
     context.read<TeamScreenBloc>().add(LoadTeamMembers());
@@ -27,7 +25,6 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           double maxWidth = constraints.maxWidth;
-          bool isMobile = maxWidth < 800;
 
           return Align(
             alignment: Alignment.topCenter,
@@ -57,10 +54,10 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
                             Text(
                               "Add Team",
                               style:
-                                  MontserratStyles.montserratRegularTextStyle(
-                                    size: 12,
-                                    color: AppColor().silverShadeGrayColor,
-                                  ),
+                              MontserratStyles.montserratRegularTextStyle(
+                                size: 12,
+                                color: AppColor().silverShadeGrayColor,
+                              ),
                             ),
                             hGap(10),
                             Image.asset(addIcon, height: 20, width: 20),
@@ -76,19 +73,53 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
                         if (state is TeamScreenLoaded) {
                           getTeamUserData = state.teamMembers;
                         }
+if(state is TeamScreenError){}
                       },
                       builder: (context, state) {
-                        return ListView.separated(
-                          itemCount: getTeamUserData?.length ?? 0,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 1),
-                          itemBuilder: (context, index) {
-                            return _teamItem(
-                              name: getTeamUserData?[index].firstName ?? "",
-                              email: getTeamUserData?[index].email ?? "", id: getTeamUserData?[index].inspectorId ?? "",
+                        if (state is TeamScreenLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state is TeamScreenLoaded) {
+                          if (getTeamUserData == null ||
+                              getTeamUserData!.isEmpty || getTeamUserData == []) {
+                            return Center(
+                              child: Text(
+                                "No team members yet.\nPlease add a team first.",
+                                textAlign: TextAlign.center,
+                                style: MontserratStyles
+                                    .montserratRegularTextStyle(
+                                  size: 14,
+                                  color: AppColor().silverShadeGrayColor,
+                                ),
+                              ),
                             );
-                          },
-                        );
+                          }
+                          return ListView.separated(
+                            itemCount: getTeamUserData!.length,
+                            separatorBuilder: (context, index) =>
+                            const SizedBox(height: 1),
+                            itemBuilder: (context, index) {
+                              return _teamItem(
+                                name: getTeamUserData![index].firstName ?? "",
+                                email: getTeamUserData![index].email ?? "",
+                                id: getTeamUserData![index].inspectorId ?? "",
+                              );
+                            },
+                          );
+                        } else if (state is TeamScreenError) {
+                          return Center(
+                            child: Text(
+                              "Failed to load team members",
+                              style: MontserratStyles
+                                  .montserratSemiBoldTextStyle(
+                                size: 14,
+                                color: AppColor().darkCharcoalBlueColor,
+                              ),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
                       },
                     ),
                   ),
@@ -101,7 +132,11 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
     );
   }
 
-  Widget _teamItem({required String name, required String email,required String id}) {
+  Widget _teamItem({
+    required String name,
+    required String email,
+    required String id,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppColor().backgroundColor,
@@ -145,7 +180,6 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
                 ScreenType.viewTeamProfile,
                 inspectorId: id,
               );
-             /* widget.onScreenChange(ScreenType.viewTeamProfile);*/
             },
             child: Container(
               alignment: Alignment.center,
@@ -156,7 +190,7 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Text(
-                "view",
+                "View",
                 style: MontserratStyles.montserratSemiBoldTextStyle(
                   size: 14,
                   color: AppColor().darkCharcoalBlueColor,

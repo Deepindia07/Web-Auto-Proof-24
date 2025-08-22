@@ -560,6 +560,7 @@ class CustomPasswordField extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final double borderRadius;
   final Color? fillColor;
+  final Color? borderColor;
   final double borderWidth;
   final String? obscuringCharacter;
   final ValueChanged<String>? onSubmitted;
@@ -576,7 +577,7 @@ class CustomPasswordField extends StatefulWidget {
     this.borderRadius = 8.0,
     this.borderWidth = 1.0,
     this.obscuringCharacter,
-    this.hintStyle, this.onSubmitted,
+    this.hintStyle, this.onSubmitted, this.borderColor,
   }) : super(key: key);
 
   @override
@@ -597,7 +598,7 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
       prefixIcon: widget.prefix,
       hintStyle: widget.hintStyle,
       borderRadius: widget.borderRadius,
-      fillColor: widget.fillColor,
+      fillColor: widget.fillColor,borderColor: widget.borderColor,
       borderWidth: widget.borderWidth,
       onChanged: widget.onChanged,
       validator: widget.validator,

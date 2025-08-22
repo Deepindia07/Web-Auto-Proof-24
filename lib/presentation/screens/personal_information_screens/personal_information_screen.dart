@@ -38,8 +38,12 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: isWide ? 100 : 30,
-              vertical: 30,
+              horizontal: Responsive.isDesktop(context)
+                  ? screenWidth / 6
+                  : Responsive.isTablet(context)
+                  ? 40
+                  : 16,
+              vertical: Responsive.isDesktop(context) ? 60 : 30,
             ),
             child: Container(
               padding: const EdgeInsets.all(30),
@@ -55,7 +59,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                 ],*/
               ),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 700),
+                constraints: BoxConstraints(
+                  maxWidth: Responsive.isDesktop(context) ? 800 : 600,
+                ),
                 child: BlocConsumer<PersonalInformationBloc, PersonalInformationState>(
                   listener: (context, state) {
                     if (state is GetPersonalInfoSuccess) {
@@ -90,7 +96,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             'My personal information',
                             textAlign: TextAlign.center,
                             style: MontserratStyles.montserratSemiBoldTextStyle(
-                              size: 30,
+                              size: Responsive.isDesktop(context) ? 30 :20,
                               color: AppColor().darkCharcoalBlueColor,
                             ),
                           ),
@@ -100,6 +106,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             children: [
                               Expanded(
                                 child: CustomTextField(
+                                  borderWidth: 2,
+                                  borderColor: AppColor().darkCharcoalBlueColor,
                                   controller: firstNameController,
                                   validator: InputValidators.validateFirstName,
                                   hintText: "First Name",
@@ -114,6 +122,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: CustomTextField(
+                                  borderWidth: 2,
+                                  borderColor: AppColor().darkCharcoalBlueColor,
                                   validator: InputValidators.validateLastName,
                                   controller: lastNameController,
                                   hintStyle:
@@ -130,6 +140,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
                           const SizedBox(height: 16),
                           CustomTextField(
+                            borderWidth: 2,
+                            borderColor: AppColor().darkCharcoalBlueColor,
                             validator: InputValidators.validateEmail,
                             controller: emailNameController,
                             hintStyle:
@@ -197,6 +209,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           ),
                           const SizedBox(height: 16),
                           CustomTextField(
+                            borderWidth: 2,
+                            borderColor: AppColor().darkCharcoalBlueColor,
                             validator: InputValidators.validateAddress,
                             controller: addressController,
                             maxLines: 4,
@@ -222,8 +236,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                             is PersonalInformationSuccess) {
                                           CherryToast.success(
                                             context,
-                                            "Update/....",
+                                            "Personal profile updated.",
                                           );
+                                          context
+                                              .read<PersonalInformationBloc>()
+                                              .add(GetPersonalInfoApiEvent());
                                         }
                                       },
                                       child: CustomButtonWeb(

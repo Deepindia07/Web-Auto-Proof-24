@@ -511,9 +511,15 @@
     "validateSignature": "Validate Signature",
     "validateSignatureQuestion": "Are you sure you want to validate this signature?",
     "cancel": "Cancel",
+    "changeText": "Change",
+    "passwordText": "Password",
+     "emailSentMessageTittle": "We have sent code to your ",
+
     "validate": "Validate",
     "provideSignatureError": "Please provide a signature before validating",
     "signatureValidated": "Signature validated successfully",
+    "accountCreatedSuccessfully": "Account created successfully!",
+    "pinIncorrect": "Pin is incorrect",
 
     "clientSignature": "Client Signature",
     "autoProofTitle": "Auto Proof 24",

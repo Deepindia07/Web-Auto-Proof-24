@@ -50,7 +50,7 @@ class MontserratStyles {
     return GoogleFonts.montserrat(
       fontSize: size,
       height: height,      letterSpacing: letterSpacing,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w500,
       color: color,
       decoration: underLineNeeded
           ? TextDecoration.underline

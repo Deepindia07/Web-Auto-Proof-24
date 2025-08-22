@@ -7,14 +7,19 @@ class OtpScreen extends StatelessWidget {
   const OtpScreen({
     required this.email,
     required this.isEmailFromSignUp,
-    super.key, required this.otpType,
+    super.key,
+    required this.otpType,
   });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OtpViewBloc>(
       create: (context) => OtpViewBloc(apiService: AuthenticationApiCall()),
-      child: OtpScreenView(email: email!, isEmailFromSignUp: isEmailFromSignUp, otpType: otpType,),
+      child: OtpScreenView(
+        email: email!,
+        isEmailFromSignUp: isEmailFromSignUp,
+        otpType: otpType,
+      ),
     );
   }
 }
@@ -44,7 +49,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
   void initState() {
     super.initState();
 
-    print("email0----->${widget.email}");
+    log("email0----->${widget.email}");
     _pulseController = AnimationController(
       duration: Duration(seconds: 2),
       vsync: this,
@@ -61,15 +66,11 @@ class _OtpScreenViewState extends State<OtpScreenView>
 
     pinController.dispose();
 
-
     super.dispose();
   }
 
-
   void _verifyCode() {
     if (pinController.text.length == 4) {
-
-
       context.read<OtpViewBloc>().add(
         VerifyOtpEvent(otp: pinController.text, email: widget.email!),
       );
@@ -82,9 +83,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
   }
 
   void _resendCode() {
-    // Clear all input fields
-
-    pinController.clear();
+     pinController.clear();
     context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
   }
 
@@ -129,9 +128,11 @@ class _OtpScreenViewState extends State<OtpScreenView>
           } else {
             CustomLoader.hidePopupLoader(context);
             if (state is OtpViewSuccess) {
-              print("hh----${widget.email}");
+              log("hh----${widget.email}");
               String email = widget.email.toString();
-              if(widget.otpType == "1"){  context.push(AppRoute.signUpScreen, extra: email);}else {
+              if (widget.otpType == "1") {
+                context.push(AppRoute.signUpScreen, extra: email);
+              } else {
                 context.push(AppRoute.resetPasswordScreen, extra: email);
               }
 
@@ -140,10 +141,13 @@ class _OtpScreenViewState extends State<OtpScreenView>
                 AppLocalizations.of(context)!.otpVerified,
               );
             } else if (state is OtpViewFailure) {
+              // add localization text --------------
               CherryToast.error(context, state.error);
             } else if (state is OtpResendSuccess) {
-              CherryToast.success(context, state.message);
+
+              CherryToast.success(context,  AppLocalizations.of(context)!.otpVerified);
             } else if (state is OtpResendFailure) {
+              // add localization text --------------
               CherryToast.error(context, state.error);
             }
           }
@@ -200,7 +204,8 @@ class _OtpScreenViewState extends State<OtpScreenView>
               // Header section
               Expanded(
                 flex: 1,
-                child: Align(alignment: Alignment.bottomCenter,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
                   child: Container(
                     width: double.infinity,
                     child: Column(
@@ -250,10 +255,11 @@ class _OtpScreenViewState extends State<OtpScreenView>
                               ),
                               TextSpan(
                                 text: maskEmail(widget.email!),
-                                style: MontserratStyles.montserratNormalTextStyle(
-                                  color: AppColor().darkCharcoalBlueColor,
-                                  size: 13,
-                                ),
+                                style:
+                                    MontserratStyles.montserratNormalTextStyle(
+                                      color: AppColor().darkCharcoalBlueColor,
+                                      size: 13,
+                                    ),
                               ),
                             ],
                           ),
@@ -301,7 +307,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
                         if (value == pinController.text) {
                           return null; // Correct
                         } else {
-                          return 'Pin is incorrect';
+                          return  AppLocalizations.of(context)!.pinIncorrect;
                         }
                       },
 
@@ -360,10 +366,11 @@ class _OtpScreenViewState extends State<OtpScreenView>
                             text: state is OtpViewLoading
                                 ? AppLocalizations.of(context)!.verified
                                 : AppLocalizations.of(context)!.verify,
-                            textStyle: MontserratStyles.montserratMediumTextStyle(
-                              color: AppColor().darkCharcoalBlueColor,
-                              size: 18,
-                            ),
+                            textStyle:
+                                MontserratStyles.montserratMediumTextStyle(
+                                  color: AppColor().darkCharcoalBlueColor,
+                                  size: 18,
+                                ),
                           ),
                         );
                       },
