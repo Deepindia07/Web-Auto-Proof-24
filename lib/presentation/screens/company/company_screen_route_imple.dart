@@ -6,7 +6,6 @@ import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_toast.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
 import 'package:auto_proof/utilities/input_validation.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

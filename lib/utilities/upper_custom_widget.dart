@@ -2,18 +2,17 @@ import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../constants/const_color.dart';
 import 'custom_textstyle.dart';
-import 'custom_widgets.dart';
 
 class UpperContainerWidget extends StatelessWidget {
-  final double height ;
+  final double height;
   const UpperContainerWidget({super.key, required this.height});
 
   @override
   Widget build(BuildContext context) {
-    return   Container(
+    return Container(
       width: double.infinity,
 
-      padding: const EdgeInsets.only(left: 30,right: 30,bottom: 20),
+      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
       decoration: BoxDecoration(
         color: AppColor().darkCharcoalBlueColor,
         borderRadius: BorderRadius.only(
@@ -26,7 +25,6 @@ class UpperContainerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-
           const Text(
             '...',
             style: TextStyle(
@@ -55,14 +53,10 @@ class UpperContainerWidget extends StatelessWidget {
                 // ),
                 TextSpan(
                   text: AppLocalizations.of(context)!.createYourAccount,
-                  style:
-                  MontserratStyles.montserratLitleBoldTextStyle(
+                  style: MontserratStyles.montserratLitleBoldTextStyle(
                     color: AppColor().yellowWarmColor,
                     size: 35,
-                  ).copyWith(
-                    height: 1.0,
-                    letterSpacing: -1.0,
-                  ),
+                  ).copyWith(height: 1.0, letterSpacing: -1.0),
                 ),
               ],
             ),
@@ -72,5 +66,3 @@ class UpperContainerWidget extends StatelessWidget {
     );
   }
 }
-
-

@@ -33,37 +33,38 @@ class SideMenu extends StatelessWidget {
                   MenuItem(
                     selected: currentScreen == ScreenType.dashboard,
                     icon: dashboardIcon,
-                    title: 'Dashboard',
+                    title: AppLocalizations.of(context)!.dashboardText,
                     onTap: () => onMenuSelected(ScreenType.dashboard),
                   ),
                   MenuItem(
                     selected: currentScreen == ScreenType.subscription,
                     icon: prizeIcon,
-                    title: 'My Package',
+                    title: /*AppLocalizations.of(context)!.myProfile*/
+                        "My Package",
                     onTap: () => onMenuSelected(ScreenType.subscription),
                   ),
                   MenuItem(
                     selected: currentScreen == ScreenType.profile,
                     icon: whitePersonIcon,
-                    title: 'My Profile',
+                    title: AppLocalizations.of(context)!.myProfileText,
                     onTap: () => onMenuSelected(ScreenType.profile),
                   ),
                   MenuItem(
                     selected: currentScreen == ScreenType.companyInformation,
                     icon: companyInfoIcon,
-                    title: 'Company Information',
+                    title: AppLocalizations.of(context)!.companyInformation,
                     onTap: () => onMenuSelected(ScreenType.companyInformation),
                   ),
                   MenuItem(
                     selected: currentScreen == ScreenType.myTeam,
                     icon: teamIcon,
-                    title: 'My Team',
+                    title: AppLocalizations.of(context)!.myTeam,
                     onTap: () => onMenuSelected(ScreenType.myTeam),
                   ),
                   MenuItem(
                     selected: currentScreen == ScreenType.myVehicle,
                     icon: car4Icon,
-                    title: 'My Vehicle',
+                    title: AppLocalizations.of(context)!.myVehicles,
                     onTap: () => onMenuSelected(ScreenType.myVehicle),
                   ),
                   MenuItem(
@@ -101,12 +102,14 @@ class SideMenu extends StatelessWidget {
                         icon: deleteImage,
                         title: localizations.accountDelete,
                         onTap: () {
-                          final token = SharedPrefsHelper.instance.getString(localToken);
+                          final token = SharedPrefsHelper.instance.getString(
+                            localToken,
+                          );
                           log("token----token --$token");
                           _showAccountDeleteDialog(context, () async {
-                            context.read<DeleteAccountBloc>().add(DeleteAccountApiEvent());
-
-
+                            context.read<DeleteAccountBloc>().add(
+                              DeleteAccountApiEvent(),
+                            );
                           });
                         },
                       );
@@ -143,6 +146,7 @@ class SideMenu extends StatelessWidget {
       ),
     );
   }
+
   void _showAccountDeleteDialog(BuildContext context, VoidCallback onConfirm) {
     final localizations = AppLocalizations.of(context)!;
 
@@ -202,6 +206,7 @@ class SideMenu extends StatelessWidget {
       },
     );
   }
+
   ImageProvider _buildImageProviderSafe(String imagePath) {
     if (imagePath.isEmpty) {
       return AssetImage('assets/image/profile.png');
@@ -296,5 +301,4 @@ class SideMenu extends StatelessWidget {
       },
     );
   }
-
 }

@@ -351,7 +351,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
               InkWell(
                 onTap: _onForgetPasswordPressed,
                 child: Text(
-                  AppLocalizations.of(context)!.forgotPassword,
+                  AppLocalizations.of(context)!.forgotPasswordText,
                   style: MontserratStyles.montserratSemiBoldTextStyle(
                     color: AppColor().darkCharcoalBlueColor,
                     size: isLandscape ? 11 : 14,

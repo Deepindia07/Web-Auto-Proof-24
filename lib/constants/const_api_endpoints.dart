@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static const String baseUrl = "https://ec2-15-237-106-50.eu-west-3.compute.amazonaws.com:3002";
+  static const String baseUrl = "https://api.autoproof24.com";
   static const String login = "/api/auth/login";
   static const String register = "/api/auth/signUp";
   static const String verifyOtpEmail = "/api/auth/verifyOtpForEmail";
@@ -11,7 +11,7 @@ class ApiEndPoints {
   static const String profileApiEnd = "/api/profile/user-profile";
   static const String profilePictureUpdate =
       "/api/profile/update-profile-image";
-  static const String teamApiEnd = "/api/admin/team/";
+  static const String teamApiEnd = "/api/admin/team";
   static const String updateInspectorDetailsEnd =
       "/api/inspector/update-inspector-details";
   static const String getInspectionApiEnd =

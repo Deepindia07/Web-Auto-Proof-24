@@ -124,6 +124,9 @@
     "validUntil": "Valid until",
     "action": "Action",
     "createNewInspection": "Create a new Inspection",
+    "dashboardText": "Dashboard",
+    "myProfileText": "My Profile",
+
     "welcomeBack": "Welcome Back!",
     "myProfile": "My Profile",
     "newInspection": "New Inspection",
@@ -134,9 +137,10 @@
     "signOutConfirm": "Are you sure you want to sign out?",
     "signOutButton": "Sign Out",
     "cancelButton": "Cancel",
-
+ "forgotPasswordText": "Forgot Password",
     "myPersonalInformation": "My Personal Information",
     "myCompanyInformation": "My Company Information",
+    "companyInformation": "Company Information",
     "informationType": "Information Type",
     "personal": "Personal",
     "company": "Company",
@@ -511,6 +515,9 @@
     "validateSignature": "Validate Signature",
     "validateSignatureQuestion": "Are you sure you want to validate this signature?",
     "cancel": "Cancel",
+    "forgotPassword": "Your password has been successfully forgot",
+
+
     "changeText": "Change",
     "passwordText": "Password",
      "emailSentMessageTittle": "We have sent code to your ",

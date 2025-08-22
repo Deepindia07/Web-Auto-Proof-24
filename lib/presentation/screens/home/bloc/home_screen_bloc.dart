@@ -1,7 +1,5 @@
 import 'package:auto_proof/auth/data/models/user_response_model.dart';
-import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
-import 'package:auto_proof/constants/const_string.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';

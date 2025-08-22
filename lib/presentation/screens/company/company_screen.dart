@@ -205,7 +205,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                               "VatNumber": vatNumberController
                                                   .text
                                                   .trim(),
-                                              "companyLogo": "",
+                                              "companyLogo": "https://dummyimage.com/600x400/000/fff",
                                               "companyRegistrationNumber":
                                                   registrationNoController.text
                                                       .trim(),

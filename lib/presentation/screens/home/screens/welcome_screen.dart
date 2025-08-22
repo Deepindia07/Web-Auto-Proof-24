@@ -17,7 +17,7 @@ class WelcomeCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-       isVisible == false ? SizedBox.shrink():   Text('Welcome Back!', style: TextStyle(fontSize: 12)),
+       isVisible == false ? SizedBox.shrink():   Text('Welcome !', style: TextStyle(fontSize: 12)),
           GestureDetector(
               onTap: onTap,
               child: Image.asset(layerIcon, height: 30, width: 30)),

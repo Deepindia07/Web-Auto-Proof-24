@@ -155,8 +155,9 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:
-  /// **'Forget Password ?'**
+  /// **'Your password has been successfully forgot'**
   String get forgotPassword;
+  String get forgotPasswordText;
 
   /// No description provided for @terms.
   ///
@@ -613,7 +614,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change Language'**
   String get changeLanguage;
-  String get emailSentMessageTittle;
 
   /// No description provided for @generalSettings.
   ///
@@ -723,6 +723,18 @@ abstract class AppLocalizations {
   /// **'Create a new Inspection'**
   String get createNewInspection;
 
+  /// No description provided for @dashboardText.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboardText;
+
+  /// No description provided for @myProfileText.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get myProfileText;
+
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:
@@ -794,6 +806,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My Company Information'**
   String get myCompanyInformation;
+
+  /// No description provided for @companyInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Information'**
+  String get companyInformation;
 
   /// No description provided for @informationType.
   ///
@@ -1706,6 +1724,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password'**
   String get passwordText;
+
+  /// No description provided for @emailSentMessageTittle.
+  ///
+  /// In en, this message translates to:
+  /// **'We have sent code to your '**
+  String get emailSentMessageTittle;
 
   /// No description provided for @validate.
   ///

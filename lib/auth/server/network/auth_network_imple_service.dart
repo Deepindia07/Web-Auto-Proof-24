@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'package:auto_proof/presentation/screens/company/models/get_company_model.dart';
-import 'package:http_parser/http_parser.dart';
-
 import 'package:auto_proof/auth/data/models/change_password_response_model.dart';
 import 'package:auto_proof/auth/data/models/check_out_response_model.dart';
 import 'package:auto_proof/auth/data/models/contact_us_response_model.dart';

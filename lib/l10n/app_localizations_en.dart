@@ -36,7 +36,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'Password';
 
   @override
-  String get forgotPassword => 'Forget Password ?';
+  String get forgotPassword => 'Your password has been successfully forgot';
+
+  @override
+  String get forgotPasswordText => 'Forgot Password';
 
   @override
   String get terms => ' Terms';
@@ -189,11 +192,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get emailSentMessage => 'We have sent code to your email';
 
-
   @override
   String get dontReceiveCode => 'Don’t receive code ?';
-  @override
-  String get emailSentMessageTittle => 'We have sent code to your ';
 
   @override
   String get resend => 'Resend';
@@ -329,6 +329,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createNewInspection => 'Create a new Inspection';
 
   @override
+  String get dashboardText => 'Dashboard';
+
+  @override
+  String get myProfileText => 'My Profile';
+
+  @override
   String get welcomeBack => 'Welcome Back!';
 
   @override
@@ -363,6 +369,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myCompanyInformation => 'My Company Information';
+
+  @override
+  String get companyInformation => 'Company Information';
 
   @override
   String get informationType => 'Information Type';
@@ -829,6 +838,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changeText => 'Change';
 
   @override
+  String get passwordText => 'Password';
+
+  @override
+  String get emailSentMessageTittle => 'We have sent code to your ';
+
+  @override
   String get validate => 'Validate';
 
   @override
@@ -873,9 +888,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get digitalReportsTitle => 'Digital Reports';
-
-  @override
-  String get passwordText => 'Password';
 
   @override
   String get digitalReportsDescription =>

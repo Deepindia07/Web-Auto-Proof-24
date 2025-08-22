@@ -55,7 +55,10 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
           }
 
           if (state is ForgotScreenSuccess) {
-            CherryToast.success(context, state.message);
+          /*  CherryToast.success(
+              context,
+              AppLocalizations.of(context)!.forgotPasswordMsg,*/
+           /* );*/
             log("email----${state.email}");
             context.push(
               AppRoute.otpScreen,
@@ -66,6 +69,7 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
               },
             );
           } else if (state is ForgotScreenError) {
+            // add localization text --------------
             CherryToast.error(context, state.error);
           }
         },
@@ -124,12 +128,12 @@ class _ForgotScreenViewState extends State<ForgotScreenView> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 9), // Reduced from 10
+                  const SizedBox(height: 9),
                   Text(
                     AppLocalizations.of(context)!.resetInstructionsMessage,
                     style: MontserratStyles.montserratNormalTextStyle(
                       color: AppColor().darkCharcoalBlueColor,
-                      size: 14, // Reduced from 18
+                      size: 14,
                     ),
                     textAlign: TextAlign.center,
                   ),

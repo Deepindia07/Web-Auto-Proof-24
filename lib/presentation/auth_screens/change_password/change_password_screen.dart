@@ -301,7 +301,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                       fillColor:
                                           AppColor().darkCharcoalBlueColor,
                                       borderRadius: 30,
-                                      hintText: "New Password",
+                                      hintText:  AppLocalizations.of(context)!.newPassword,
                                       // textCapitalization: TextCapitalization.none,
                                       onChanged: (value) =>
                                           _validatePasswords(),
@@ -382,7 +382,7 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                   borderRadius: 48,
                                   backgroundColor: AppColor().yellowWarmColor,
                                   onPressed: _changePassword,
-                                  text: "Change Password",
+                                  text:  AppLocalizations.of(context)!.changePassword,
                                   textStyle:
                                       MontserratStyles.montserratMediumTextStyle(
                                         color: AppColor().darkCharcoalBlueColor,

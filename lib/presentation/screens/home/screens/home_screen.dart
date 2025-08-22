@@ -9,6 +9,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScreenType currentScreen = ScreenType.dashboard;
+  String? companyId;
   late DioClient dioClient;
   String? selectedInspectorId;
   void updateScreen(ScreenType type, {String? inspectorId}) {
@@ -22,7 +23,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    fetchWelcome();
     super.initState();
+  }
+  Future<void> fetchWelcome() async {
+    final url = Uri.parse('https://api.autoproof24.com/api/welcome');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        print("Response: ${response.body}");
+      } else {
+        print("Failed: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   @override
@@ -86,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ?.companyName ??
                                       "",
                                 );
+                              companyId = state.userProfile.user?.company?.companyId;
                               }
                             },
                             builder: (context, state) {
@@ -171,7 +187,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   case ScreenType.changePassword:
                                     return ChangePasswordScreen();
                                   case ScreenType.addInspector:
-                                    return AddInspectorScreen();
+                                    return AddInspectorScreen(
+                                      companyId: companyId ?? "" ,
+                                    );
+
+
+
                                   case ScreenType.viewTeamProfile:
                                     return MyTeamDetailsScreen(
                                       inspectorId: selectedInspectorId ?? '',
@@ -288,7 +309,7 @@ class CreateInspectionButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Create a new Inspection',
+              AppLocalizations.of(context)!.createNewInspection,
                 style: MontserratStyles.montserratMediumTextStyle(
                   size: 18,
                   color: AppColor().darkCharcoalBlueColor,
@@ -302,249 +323,3 @@ class CreateInspectionButton extends StatelessWidget {
     );
   }
 }
-
-/*class ProfileResponsiveScreen extends StatelessWidget {
-  const ProfileResponsiveScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // full screen size
-    final media = MediaQuery.of(context);
-    final screenWidth = media.size.width;
-    final screenHeight = media.size.height;
-
-    // simple breakpoints for desktop responsiveness (adjust as needed)
-    double maxCardWidth;
-    double horizontalPadding;
-    double avatarSize;
-    double titleSize;
-    double labelSize;
-    double valueSize;
-    double verticalGap;
-
-    if (screenWidth >= 1600) {
-      // very large desktop
-      maxCardWidth = 900;
-      horizontalPadding = 180;
-      avatarSize = 120;
-      titleSize = 28;
-      labelSize = 14;
-      valueSize = 14;
-      verticalGap = 28;
-    } else if (screenWidth >= 1200) {
-      // large desktop
-      maxCardWidth = 760;
-      horizontalPadding = 140;
-      avatarSize = 110;
-      titleSize = 26;
-      labelSize = 14;
-      valueSize = 14;
-      verticalGap = 24;
-    } else if (screenWidth >= 900) {
-      // medium desktop / small laptop
-      maxCardWidth = 720;
-      horizontalPadding = 100;
-      avatarSize = 100;
-      titleSize = 24;
-      labelSize = 13;
-      valueSize = 13;
-      verticalGap = 20;
-    } else {
-      // narrow / tablet
-      maxCardWidth = screenWidth * 0.92;
-      horizontalPadding = 16;
-      avatarSize = 84;
-      titleSize = 20;
-      labelSize = 12;
-      valueSize = 12;
-      verticalGap = 16;
-    }
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF2F6FB),
-      body: SafeArea(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            // keep card centered with some left/right padding
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: maxCardWidth,
-                // ensure it can grow vertically
-                minHeight: screenHeight * 0.8,
-              ),
-              child: Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: max(24, maxCardWidth * 0.04),
-                    vertical: verticalGap,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Title
-                      Text(
-                        'My Profile',
-                        style: TextStyle(
-                          fontSize: titleSize,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF233142),
-                        ),
-                      ),
-                      SizedBox(height: verticalGap / 2),
-
-                      // Avatar
-                      CircleAvatar(
-                        radius: avatarSize / 2,
-                        backgroundImage: NetworkImage(
-                          'https://i.pravatar.cc/300',
-                        ), // replace with your image
-                      ),
-                      SizedBox(height: 12),
-
-                      // Name
-                      Text(
-                        'Name: James Paul',
-                        style: TextStyle(
-                          fontSize: valueSize + 1,
-                          color: const Color(0xFF233142),
-                        ),
-                      ),
-                      SizedBox(height: verticalGap),
-
-                      // Details list (label on left, value right)
-                      _buildInfoRow(
-                        label: 'Gmail:',
-                        value: 'preet@gamil.com',
-                        labelStyle: TextStyle(
-                          fontSize: labelSize,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF2F4658),
-                        ),
-                        valueStyle: TextStyle(
-                          fontSize: valueSize,
-                          color: const Color(0xFF2F4658),
-                        ),
-                      ),
-                      _divider(),
-
-                      _buildInfoRow(
-                        label: 'Phone Number',
-                        value: '638364839',
-                        labelStyle: TextStyle(
-                          fontSize: labelSize,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF2F4658),
-                        ),
-                        valueStyle: TextStyle(
-                          fontSize: valueSize,
-                          color: const Color(0xFF2F4658),
-                        ),
-                      ),
-                      _divider(),
-
-                      _buildInfoRow(
-                        label: 'Inspection',
-                        value: '39',
-                        labelStyle: TextStyle(
-                          fontSize: labelSize,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF2F4658),
-                        ),
-                        valueStyle: TextStyle(
-                          fontSize: valueSize,
-                          color: const Color(0xFF2F4658),
-                        ),
-                      ),
-                      _divider(),
-
-                      _buildInfoRow(
-                        label: 'Upcoming',
-                        value: '3',
-                        labelStyle: TextStyle(
-                          fontSize: labelSize,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF2F4658),
-                        ),
-                        valueStyle: TextStyle(
-                          fontSize: valueSize,
-                          color: const Color(0xFF2F4658),
-                        ),
-                      ),
-                      _divider(),
-
-                      _buildInfoRow(
-                        label: 'Completed:',
-                        value: '69',
-                        labelStyle: TextStyle(
-                          fontSize: labelSize,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF2F4658),
-                        ),
-                        valueStyle: TextStyle(
-                          fontSize: valueSize,
-                          color: const Color(0xFF2F4658),
-                        ),
-                      ),
-                      _divider(),
-
-                      _buildInfoRow(
-                        label: 'Ongoing',
-                        value: '6',
-                        labelStyle: TextStyle(
-                          fontSize: labelSize,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF2F4658),
-                        ),
-                        valueStyle: TextStyle(
-                          fontSize: valueSize,
-                          color: const Color(0xFF2F4658),
-                        ),
-                      ),
-                      SizedBox(height: verticalGap),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // helper builder for each row
-  Widget _buildInfoRow({
-    required String label,
-    required String value,
-    required TextStyle labelStyle,
-    required TextStyle valueStyle,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Expanded(flex: 3, child: Text(label, style: labelStyle)),
-          Expanded(
-            flex: 2,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(value, style: valueStyle),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-
-  Widget _divider() {
-    return const Divider(height: 1, thickness: 1, color: Color(0xFFE0E6EB));
-  }
-}*/

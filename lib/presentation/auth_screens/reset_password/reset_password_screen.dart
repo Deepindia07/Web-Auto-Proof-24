@@ -141,6 +141,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
             );
             context.pushNamed('login');
           } else if (state is ResetPasswordScreenFailure) {
+            // add localization text --------------
             CherryToast.error(context, state.error);
           }
         }

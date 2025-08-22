@@ -36,7 +36,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get password => 'Mot de passe';
 
   @override
-  String get forgotPassword => 'Mot de passe oublié ?';
+  String get forgotPassword => 'Your password has been successfully forgot';
 
   @override
   String get terms => ' Termes';
@@ -332,6 +332,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createNewInspection => 'Créer une nouvelle inspection';
 
   @override
+  String get dashboardText => 'Tableau de bord';
+
+  @override
+  String get myProfileText => 'Mon profil';
+
+  @override
   String get welcomeBack => 'Bon retour !';
 
   @override
@@ -366,6 +372,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get myCompanyInformation => 'Informations sur \nmon entreprise';
+
+  @override
+  String get companyInformation => 'Informations sur l\'entreprise';
 
   @override
   String get informationType => 'Type d\'information';
@@ -841,6 +850,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get passwordText => 'Mot de passe';
 
   @override
+  String get emailSentMessageTittle => 'Nous avons envoyé le code à votre';
+
+  @override
   String get validate => 'Valider';
 
   @override
@@ -901,8 +913,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String appVersion(Object version) {
     return 'Version de l\'application : $version';
   }
-
   @override
-  // TODO: implement emailSentMessageTittle
-  String get emailSentMessageTittle => "Nous avons envoyé le code à votre";
+  String get forgotPasswordText => 'Mot de passe oublié';
 }

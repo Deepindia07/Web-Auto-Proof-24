@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import '../../../../auth/server/default_db/sharedprefs_method.dart';
 import '../../../../auth/server/network/auth_network_imple_service.dart';
 import '../models/get_company_model.dart';
 part 'create_company_event.dart';
@@ -44,6 +45,7 @@ class CreateCompanyBloc extends Bloc<CreateCompanyEvent, CreateCompanyState> {
 
       if (result.isSuccess) {
         final getCompanyModel = result.data;
+        SharedPrefsHelper.instance.setString("companyId", getCompanyModel.companyId ?? "");
         emit(GetCompanySuccess(getCompanyModel: getCompanyModel));
       } else {
         emit(GetCompanyError(error: result.error));

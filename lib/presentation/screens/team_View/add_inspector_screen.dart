@@ -1,7 +1,9 @@
 part of "team_screen_route_imple.dart";
 
 class AddInspectorScreen extends StatefulWidget {
-  const AddInspectorScreen({super.key});
+  final String companyId;  // 👈 add this
+
+  const AddInspectorScreen({super.key, required this.companyId});
 
   @override
   State<AddInspectorScreen> createState() => _AddInspectorScreenState();
@@ -186,7 +188,7 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
                                             .trim()
                                             .toString(),
                                         "companyId":
-                                            "57706f01-b48c-43f0-89e1-b4daf7a96937",
+                                            widget.companyId,
                                       },
                                       adminID: adminId ?? "",
                                     ),
