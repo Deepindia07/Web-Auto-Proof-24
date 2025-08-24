@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get password;
 
+  /// No description provided for @phoneSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number verified successfully!'**
+  String get phoneSuccessfully;
+
   /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:

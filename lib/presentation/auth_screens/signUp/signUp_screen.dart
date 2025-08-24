@@ -101,7 +101,15 @@ class _SignUpScreenState extends State<SignUpScreen>
         );
         return;
       }
-
+      if (!isPhoneVerified) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.phoneInvalid),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
       String fullPhoneNumber = phoneController.text;
       String phoneNumber = fullPhoneNumber.replaceAll(RegExp(r'[^\d]'), '');
 
@@ -320,7 +328,17 @@ class _SignUpScreenState extends State<SignUpScreen>
           // Clear verification status after successful registration
           _saveEmailVerificationStatus(false);
           context.pushNamed("login");
-        } else if (state is SignUpScreenError) {
+        } else if (state is SignUpSendOtpOnPhoneSuccess) {
+          setState(() {
+            isPhoneSendingOtp = false;
+            isPhoneVerified = true;
+          });
+          CherryToast.success(
+            context,
+            AppLocalizations.of(context)!.phoneSuccessfully,
+          );
+        }
+        else if (state is SignUpScreenError) {
           CustomLoader.hidePopupLoader(context);
           CherryToast.error(context, state.message);
         } else if (state is SignUpSendOtpScreenLoading) {
@@ -435,9 +453,9 @@ class _SignUpScreenState extends State<SignUpScreen>
                       Container(height: 15),
                       PhoneNumberField(
                         suffixIcon: TextButton(
-                          onPressed: () {
-                            // TODO: Implement phone verification
-                          },
+                          onPressed: !_isEmailVerified || isPhoneVerified
+                              ? null
+                              : _handlePhoneVerification, // only enable if email verified
                           child: Text(
                             isPhoneVerified
                                 ? AppLocalizations.of(context)!.verified
@@ -446,14 +464,18 @@ class _SignUpScreenState extends State<SignUpScreen>
                             style: MontserratStyles.montserratMediumTextStyle(
                               color: isPhoneVerified
                                   ? Colors.green
-                                  : AppColor().darkYellowColor,
+                                  : _isEmailVerified
+                                  ? AppColor().darkYellowColor
+                                  : Colors.grey, // greyed out if email not verified
                             ),
                           ),
                         ),
                         controller: phoneController,
-                        isVerified: false,
+                        enabled: _isEmailVerified, // ✅ disable typing until email verified
+                        isVerified: isPhoneVerified,
                         onVerify: () {},
                       ),
+
 
                       Container(height: 15),
                       CustomTextField(

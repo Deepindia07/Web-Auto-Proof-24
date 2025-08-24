@@ -77,6 +77,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                       ),
                                 ),
                                 const SizedBox(height: 8),
+                                ///-------company logo----------------
                                 GestureDetector(
                                   onTap: () {
                                     _pickImage();
@@ -111,7 +112,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                           ),
                                   ),
                                 ),
-
+///// back up -------------
                                 /* GestureDetector(
                                   onTap: () {
                                     _pickImage();

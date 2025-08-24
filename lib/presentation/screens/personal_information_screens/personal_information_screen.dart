@@ -28,15 +28,18 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   }
   // normalize API or backend values (like MALE/FEMALE) to UI values
   String? normalizeGender(String? value) {
-    if (value == null) return null;
-    switch (value.toLowerCase()) {
-      case "male":
-        return "Male";
-      case "female":
-        return "Female";
-      default:
-        return null; // unknown values won't break dropdown
-    }
+
+      if (value == null) return null;
+      switch (value.toLowerCase()) {
+        case "male":
+          return "MALE";
+        case "female":
+          return "FEMALE";
+        default:
+          return null;
+      }
+
+
   }
   @override
   Widget build(BuildContext context) {
@@ -271,7 +274,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
                                           print(
-                                            "object-----${firstNameController.text.trim().toString()}",
+                                            "object-----${firstNameController.text.trim().toString()}---${(selectedGender ?? "").toUpperCase()}",
                                           );
                                           ProfileModel profile = ProfileModel(
                                             userType: "individual",

@@ -51,3 +51,15 @@ class SignUpSendOtpPhoneLoading extends SignUpScreenState{
   List<Object> get props => [];
 }
 
+class SignUpSendOtpOnPhoneSuccess extends SignUpScreenState {
+  final OtpForEmailResponseModel response;
+
+  SignUpSendOtpOnPhoneSuccess(this.response);
+}
+
+class SignUpSendOtpOnPhoneError extends SignUpScreenState {
+  final String message;
+
+  SignUpSendOtpOnPhoneError(this.message);
+}
+

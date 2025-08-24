@@ -36,6 +36,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'Password';
 
   @override
+  String get phoneSuccessfully => 'Phone Number verified successfully!';
+
+  @override
   String get forgotPassword => 'Your password has been successfully forgot';
 
   @override
