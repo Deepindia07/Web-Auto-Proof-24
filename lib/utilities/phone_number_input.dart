@@ -13,6 +13,7 @@ class PhoneNumberField extends StatelessWidget {
   final VoidCallback onVerify;
   final double? borderRadius;
   final bool? visible;
+  final Widget? suffixIcon;
   final ValueChanged<CountryCode>? onChanged;
   final Color? color;
   final BorderRadiusGeometry? borderRadiusGeometry;
@@ -30,7 +31,7 @@ class PhoneNumberField extends StatelessWidget {
     this.onChanged,
     this.color,
     this.borderRadiusGeometry,
-    this.initialCountryCode, // 👈 Added
+    this.initialCountryCode, this.suffixIcon, // 👈 Added
   });
 
   @override
@@ -39,7 +40,7 @@ class PhoneNumberField extends StatelessWidget {
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius ?? 30),
-        border: Border.all(color: AppColor().darkCharcoalBlueColor, width: 2),
+        border: Border.all(color: AppColor().darkCharcoalBlueColor, width: 1),
         color: color ?? Colors.white,
       ),
       child: Row(
@@ -80,7 +81,7 @@ class PhoneNumberField extends StatelessWidget {
             child: TextField(
               controller: controller,
               keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
+              decoration: InputDecoration(suffixIcon: suffixIcon,
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 8,

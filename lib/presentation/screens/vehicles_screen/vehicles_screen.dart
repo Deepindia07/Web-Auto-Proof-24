@@ -303,7 +303,8 @@ class VehicleDetailsScreen extends StatelessWidget {
 }*/
 
 class VehiclesScreen extends StatefulWidget {
-  const VehiclesScreen({super.key});
+  final void Function(ScreenType type) onScreenChange;
+  const VehiclesScreen({super.key, required this.onScreenChange});
 
   @override
   State<VehiclesScreen> createState() => _VehiclesScreenState();
@@ -335,6 +336,7 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
 
   @override
   void initState() {
+
     context.read<VehiclesScreenBloc>().add(LoadVehiclesEvent());
     super.initState();
   }
@@ -447,7 +449,11 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
           ),
           GestureDetector(
             onTap: () {
-              context.push(AppRoute.myTeamDetailsScreen);
+              widget.onScreenChange(
+                ScreenType.viewVehicleProfile,
+
+              );
+              print("ScreenType.viewVehicleProfile--------${ScreenType.viewVehicleProfile}");
             },
             child: Container(
               alignment: Alignment.center,

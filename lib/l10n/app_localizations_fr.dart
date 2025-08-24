@@ -157,7 +157,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get retypePassword => 'Retaper le mot de passe';
 
   @override
-  String get agreeTerms => 'J\'accepte les';
+  String get agreeTerms => 'J\'ai lu, compris et j\'accepte Auto Proof 24';
 
   @override
   String get termsPrivacy => ' Conditions et la politique de confidentialité';
@@ -169,7 +169,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get creatingAccount => 'Création du compte...';
 
   @override
-  String get haveAccount => 'Vous avez déjà un compte ?';
+  String get haveAccount => 'Vous avez déjà un compte? ';
 
   @override
   String get signIn => 'Se connecter';
@@ -290,6 +290,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get changePassword => 'Changer le mot de passe';
 
   @override
+  String get companyInformationSuccessfully =>
+      'Créer des informations sur l\'entreprise avec succès';
+
+  @override
   String get information => 'Informations';
 
   @override
@@ -366,6 +370,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get cancelButton => 'Annuler';
+
+  @override
+  String get forgotPasswordText => 'Mot de passe oublié';
 
   @override
   String get myPersonalInformation => 'Mes informations \npersonnelles';
@@ -913,6 +920,4 @@ class AppLocalizationsFr extends AppLocalizations {
   String appVersion(Object version) {
     return 'Version de l\'application : $version';
   }
-  @override
-  String get forgotPasswordText => 'Mot de passe oublié';
 }

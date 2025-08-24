@@ -8,6 +8,7 @@ import 'package:auto_proof/presentation/screens/personal_information_screens/blo
 import 'package:auto_proof/presentation/screens/personal_information_screens/models/personal_information_api_model.dart';
 import 'package:auto_proof/responsive.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
+import 'package:auto_proof/utilities/custom_loader.dart';
 import 'package:auto_proof/utilities/custom_textfields.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:auto_proof/utilities/custom_toast.dart';

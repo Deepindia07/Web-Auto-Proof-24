@@ -21,7 +21,9 @@ class _SignUpScreenState extends State<SignUpScreen>
   final TextEditingController approvalController = TextEditingController();
   bool _agreeToTerms = false;
   bool _isEmailVerified = false;
+  bool isPhoneVerified = false;
   bool _isSendingOtp = false;
+  bool isPhoneSendingOtp = false;
   bool _isCheckingVerification = false;
   String selectedCountryCode = "+33";
   late final SignUpScreenBloc _signUpBloc;
@@ -129,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     if (emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.enterEmail),
+          content: Text(AppLocalizations.of(context)!.enterEmailOrPhone),
           backgroundColor: Colors.red,
         ),
       );
@@ -153,6 +155,37 @@ class _SignUpScreenState extends State<SignUpScreen>
 
     _signUpBloc.add(
       SendOtpEmailSignUpEvent(email: emailController.text.trim()),
+    );
+  }
+
+  void _handlePhoneVerification() async {
+    if (phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.phoneNumber),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(phoneController.text.trim())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.phoneInvalid),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      isPhoneSendingOtp = true;
+    });
+
+    _signUpBloc.add(
+      SendOtpEmailSignUpEvent(email: phoneController.text.trim()),
     );
   }
 
@@ -344,7 +377,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                               borderRadius: 30,
                               fillColor: Colors.transparent,
                               borderColor: AppColor().darkCharcoalBlueColor,
-                              borderWidth: 2,
+                              borderWidth: 1,
                             ),
                           ),
                           SizedBox(width: 10),
@@ -358,7 +391,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                               borderRadius: 30,
                               fillColor: Colors.transparent,
                               borderColor: AppColor().darkCharcoalBlueColor,
-                              borderWidth: 2,
+                              borderWidth: 1,
                             ),
                           ),
                         ],
@@ -391,7 +424,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                         borderRadius: 48,
                         fillColor: Colors.transparent,
                         borderColor: AppColor().darkCharcoalBlueColor,
-                        borderWidth: 2,
+                        borderWidth: 1,
                         onChanged: (value) {
                           if (_isEmailVerified) {
                             _resetEmailVerification();
@@ -401,10 +434,27 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       Container(height: 15),
                       PhoneNumberField(
+                        suffixIcon: TextButton(
+                          onPressed: () {
+                            // TODO: Implement phone verification
+                          },
+                          child: Text(
+                            isPhoneVerified
+                                ? AppLocalizations.of(context)!.verified
+                                : AppLocalizations.of(context)!.verify,
+                            textAlign: TextAlign.center,
+                            style: MontserratStyles.montserratMediumTextStyle(
+                              color: isPhoneVerified
+                                  ? Colors.green
+                                  : AppColor().darkYellowColor,
+                            ),
+                          ),
+                        ),
                         controller: phoneController,
                         isVerified: false,
                         onVerify: () {},
                       ),
+
                       Container(height: 15),
                       CustomTextField(
                         obscureText: obscurePassword,
@@ -428,7 +478,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                         borderRadius: 30,
                         fillColor: Colors.transparent,
                         borderColor: AppColor().darkCharcoalBlueColor,
-                        borderWidth: 2,
+                        borderWidth: 1,
                       ),
                       Container(height: 15),
                       CustomTextField(
@@ -457,102 +507,99 @@ class _SignUpScreenState extends State<SignUpScreen>
                         borderRadius: 30,
                         fillColor: Colors.transparent,
                         borderColor: AppColor().darkCharcoalBlueColor,
-                        borderWidth: 2,
+                        borderWidth: 1,
                       ),
 
                       SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40.0),
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value: _agreeToTerms,
-                              onChanged: (value) {
-                                setState(() {
-                                  _agreeToTerms = value ?? false;
-                                });
-                              },
-                              activeColor: const Color(0xFF2D3748),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _agreeToTerms,
+                            onChanged: (value) {
+                              setState(() {
+                                _agreeToTerms = value ?? false;
+                              });
+                            },
+                            activeColor: const Color(0xFF2D3748),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          //  & .
+                          Flexible(
+                            child: RichText(
+                              text: TextSpan(
+                                text: AppLocalizations.of(context)!.agreeTerms,
+                                style:
+                                    MontserratStyles.montserratMediumTextStyle(
+                                      size: 14,
+                                      color: AppColor().silverShadeGrayColor,
+                                    ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    _agreeToTerms = !_agreeToTerms;
+                                    setState(() {});
+                                    print("Agree Terms clicked");
+                                  },
+                                children: [
+                                  TextSpan(
+                                    text: /*AppLocalizations.of(context)!.terms*/
+                                        "Terms of Use",
+                                    style:
+                                        MontserratStyles.montserratMediumTextStyle(
+                                          size: 14,
+                                          color:
+                                              AppColor().darkCharcoalBlueColor,
+                                        ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _openLink(
+                                          "https://www.autoproof24.com/termes-et-conditions/",
+                                        );
+                                        // 👉 Link 1
+                                        print(
+                                          "Terms clicked - open Terms link",
+                                        );
+                                        // launchUrl(Uri.parse("https://example.com/terms"));
+                                      },
+                                  ),
+                                  TextSpan(
+                                    text: " & ", // connector
+                                    style:
+                                        MontserratStyles.montserratMediumTextStyle(
+                                          size: 14,
+                                          color:
+                                              AppColor().darkCharcoalBlueColor,
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: /*AppLocalizations.of(
+                                      context,
+                                    )!.privacy*/
+                                        "Privacy Statement",
+                                    style:
+                                        MontserratStyles.montserratMediumTextStyle(
+                                          size: 14,
+                                          color:
+                                              AppColor().darkCharcoalBlueColor,
+                                        ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _openLink(
+                                          "https://www.autoproof24.com/politique-de-confidentialite/",
+                                        );
+                                        // 👉 Link 2
+                                        print(
+                                          "Privacy clicked - open Privacy link",
+                                        );
+                                        // launchUrl(Uri.parse("https://example.com/privacy"));
+                                      },
+                                  ),
+                                ],
                               ),
                             ),
-
-                            Flexible(
-                              child: RichText(
-                                text: TextSpan(
-                                  text: AppLocalizations.of(
-                                    context,
-                                  )!.agreeTerms,
-                                  style:
-                                      MontserratStyles.montserratMediumTextStyle(
-                                        size: 14,
-                                        color: AppColor().silverShadeGrayColor,
-                                      ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      _agreeToTerms = !_agreeToTerms;
-                                      setState(() {});
-                                      print("Agree Terms clicked");
-                                    },
-                                  children: [
-                                    TextSpan(
-                                      text: AppLocalizations.of(context)!.terms,
-                                      style:
-                                          MontserratStyles.montserratMediumTextStyle(
-                                            size: 14,
-                                            color: AppColor()
-                                                .darkCharcoalBlueColor,
-                                          ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _openLink(
-                                            "https://www.autoproof24.com/termes-et-conditions/",
-                                          );
-                                          // 👉 Link 1
-                                          print(
-                                            "Terms clicked - open Terms link",
-                                          );
-                                          // launchUrl(Uri.parse("https://example.com/terms"));
-                                        },
-                                    ),
-                                    TextSpan(
-                                      text: " & ", // connector
-                                      style:
-                                          MontserratStyles.montserratMediumTextStyle(
-                                            size: 14,
-                                            color: AppColor()
-                                                .darkCharcoalBlueColor,
-                                          ),
-                                    ),
-                                    TextSpan(
-                                      text: AppLocalizations.of(
-                                        context,
-                                      )!.privacy,
-                                      style:
-                                          MontserratStyles.montserratMediumTextStyle(
-                                            size: 14,
-                                            color: AppColor()
-                                                .darkCharcoalBlueColor,
-                                          ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _openLink(
-                                            "https://www.autoproof24.com/politique-de-confidentialite/",
-                                          );
-                                          // 👉 Link 2
-                                          print(
-                                            "Privacy clicked - open Privacy link",
-                                          );
-                                          // launchUrl(Uri.parse("https://example.com/privacy"));
-                                        },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 15),
                       SizedBox(
@@ -633,10 +680,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   Future<void> _openLink(String url) async {
     final Uri uri = Uri.parse(url);
 
-    if (!await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    )) {
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       // add localization text --------------
       throw Exception("Could not launch $url");
     }

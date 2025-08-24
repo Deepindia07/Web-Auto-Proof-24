@@ -1,6 +1,7 @@
 import 'package:auto_proof/presentation/screens/company/bloc/create_company_bloc.dart';
 import 'package:auto_proof/presentation/screens/home/bloc/delete_account_bloc/delete_account_bloc.dart';
 import 'package:auto_proof/presentation/screens/personal_information_screens/bloc/personal_information_bloc/personal_information_bloc.dart';
+import 'package:auto_proof/presentation/screens/subscription/bloc/get_subscription_bloc.dart';
 import 'package:auto_proof/presentation/screens/team_View/bloc/team_screen_bloc.dart';
 import 'package:auto_proof/presentation/screens/vehicles_screen/bloc/vehicles_screen_bloc.dart';
 import 'package:auto_proof/presentation/splash/bloc/splash_screen_bloc.dart';
@@ -27,6 +28,7 @@ class AppProviders extends StatelessWidget {
         ),
 
         BlocProvider<SplashScreenBloc>(create: (context) => SplashScreenBloc()),
+        BlocProvider<GetSubscriptionBloc>(create: (context) => GetSubscriptionBloc( AuthenticationApiCall())),
         BlocProvider<CreateCompanyBloc>(
           create: (context) =>
               CreateCompanyBloc(apiRepository: AuthenticationApiCall()),

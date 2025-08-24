@@ -222,7 +222,7 @@ class _MyTeamDetailsScreenState extends State<MyTeamDetailsScreen> {
                               },
                               color: AppColor().darkCharcoalBlueColor,
                               textColor: AppColor().yellowWarmColor,
-                              borderRadius: 10,
+                              borderRadius: 7,
                             ),
                           ),
                         ],

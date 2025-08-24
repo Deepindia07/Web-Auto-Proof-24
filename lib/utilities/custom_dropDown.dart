@@ -73,7 +73,8 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
   @override
   void dispose() {
     _safeCloseDropdown(); // ✅ Safe version (calls reverse + removes overlay)
-    _animationController.dispose(); // Only dispose after dropdown animation is complete
+    _animationController
+        .dispose(); // Only dispose after dropdown animation is complete
     super.dispose();
   }
 
@@ -93,7 +94,6 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
       });
     }
   }
-
 
   void _toggleDropdown() {
     if (!widget.enabled) return;
@@ -354,7 +354,6 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
   }
 }
 
-
 class CustomDropdownNew extends StatefulWidget {
   final List<String> items;
   final String title;
@@ -363,7 +362,6 @@ class CustomDropdownNew extends StatefulWidget {
   final double? borderRadius;
   final String? value;
   final void Function(String? val) onChanged;
-  final double width;
 
   const CustomDropdownNew({
     super.key,
@@ -372,7 +370,6 @@ class CustomDropdownNew extends StatefulWidget {
     required this.hint,
     required this.value,
     required this.onChanged,
-    required this.width,
     this.borderRadius,
     this.preFix,
   });
@@ -387,97 +384,157 @@ class _CustomDropdownNewState extends State<CustomDropdownNew> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.title,
-          style: MontserratStyles.montserratSemiBoldTextStyle(
-            size: 16,
-            color: AppColor().darkCharcoalBlueColor,
+        // Title
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            widget.title,
+            style:   MontserratStyles.montserratSemiBoldTextStyle(size: 15,color: AppColor().darkCharcoalBlueColor),
           ),
         ),
-        const SizedBox(height: 8),
-        DropdownButtonHideUnderline(
-          child: DropdownButton2<String>(
-            customButton: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              width: widget.width,
-              height: 48,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColor().darkCharcoalBlueColor,width: 2),
-                borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
-              ),
-              child: Row(
-                children: [
-                  SizedBox(child: widget.preFix),
 
+        // Dropdown
+        DropdownButtonFormField<String>(
+          value: widget.value?.isEmpty ?? true ? null : widget.value,
+          decoration: InputDecoration(
+            prefixIcon: widget.preFix,
+            hintText: widget.hint,
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 12,
+            ),
 
-                  Expanded(
-                    child: Text(
-                      widget.value ?? widget.hint,
-                      style: MontserratStyles.montserratRegularTextStyle(
-                        size: 15,
-                        color:  widget.value != null
-                            ? Colors.black
-                            : AppColor().silverShadeGrayColor,
-                      ),
-                    ),
-                  ),
-                  Image.asset(downArrowImage, height: 10, width: 16),
-                ],
+            // 👇 set border for all states
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
+              borderSide: BorderSide(
+                color: AppColor().darkCharcoalBlueColor,
+                width: 1,
               ),
             ),
-            items: widget.items
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
+              borderSide: BorderSide(
+                color: AppColor().darkCharcoalBlueColor,
+                width: 1,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
+              borderSide: BorderSide(
+                color:AppColor().darkCharcoalBlueColor,
+                width: 1,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
+              borderSide: BorderSide(
+                color: Colors.red, // 👈 error state color
+                width: 1,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
+              borderSide: BorderSide(
+                color: Colors.red,
+                width:1,
+              ),
+            ),
+          ),
+          selectedItemBuilder: (context) {
+            return widget.items
                 .map(
-                  (item) => DropdownMenuItem<String>(
-                value: item,
+                  (e) => Align(alignment: Alignment.centerLeft, child: Text(e)),
+                )
+                .toList();
+          },
+
+          items: widget.items.map((e) {
+            return DropdownMenuItem<String>(
+              value: e,
+              // 👇 reduce height here
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4.0,
+                ), // reduce item height
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(item, style: const TextStyle(fontSize: 16)),
-                    const SizedBox(width: 8),
-
-                    Container(
-                      height: 20,
-                      width: 20,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: widget.value == item
-                              ? AppColor().darkCharcoalBlueColor
-                              : Colors.grey,
-                          width: 2,
-                        ),
-                      ),
-                      child: widget.value == item
-                          ? Center(
-                        child: Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            color: AppColor().darkCharcoalBlueColor,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      )
-                          : null,
+                    Text(
+                      e,
+                      style: const TextStyle(fontSize: 14),
+                    ), // smaller text
+                    Radio<String>(
+                      value: e,
+                      groupValue: widget.value,
+                      onChanged: (_) {
+                        widget.onChanged(e);
+                        Navigator.pop(context);
+                      },
+                      visualDensity: VisualDensity.compact,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   ],
                 ),
               ),
-            )
-                .toList(),
-            onChanged: widget.onChanged,
-            dropdownStyleData: DropdownStyleData(
-              width: widget.width /1.9,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColor().darkCharcoalBlueColor),
-                borderRadius: BorderRadius.circular(10),
+            );
+          }).toList(),
+
+          onChanged: widget.onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class GenderDropdownExample extends StatefulWidget {
+  const GenderDropdownExample({super.key});
+
+  @override
+  State<GenderDropdownExample> createState() => _GenderDropdownExampleState();
+}
+
+class _GenderDropdownExampleState extends State<GenderDropdownExample> {
+  String? selectedGender;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Example: If API returns uppercase like "MALE"
+    String? apiGender = "MALE"; // this comes from your backend response
+
+    // Normalize value to match dropdown items
+    if (apiGender != null) {
+      if (apiGender.toLowerCase() == "male") {
+        selectedGender = "Male";
+      } else if (apiGender.toLowerCase() == "female") {
+        selectedGender = "Female";
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomDropdownNew(
+                items: const ['Male', 'Female'],
+                title: 'Gender',
+                hint: 'Select Gender',
+                value: selectedGender,
+                onChanged: (val) {
+                  setState(() => selectedGender = val);
+                },
               ),
             ),
-          ),
+          ],
         ),
-
-        const SizedBox(height: 10),
-      ],
+      ),
     );
   }
 }

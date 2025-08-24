@@ -2,9 +2,11 @@ part of "home_screen_route_imple.dart";
 
 class SideMenu extends StatelessWidget {
   final ScreenType? currentScreen;
+  final String userName;
+  final String? companyId;
   final Function(ScreenType) onMenuSelected;
 
-  const SideMenu({super.key, required this.onMenuSelected, this.currentScreen});
+  const SideMenu({super.key, required this.onMenuSelected, this.currentScreen, required this.userName, required this.companyId});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,8 @@ class SideMenu extends StatelessWidget {
                   const SizedBox(height: 32),
                   ProfileImageUploader(),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Jonathan Patterson',
+                   Text(
+                    userName ?? "",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -55,7 +57,7 @@ class SideMenu extends StatelessWidget {
                     title: AppLocalizations.of(context)!.companyInformation,
                     onTap: () => onMenuSelected(ScreenType.companyInformation),
                   ),
-                  MenuItem(
+                companyId == "" ?SizedBox.shrink() :  MenuItem(
                     selected: currentScreen == ScreenType.myTeam,
                     icon: teamIcon,
                     title: AppLocalizations.of(context)!.myTeam,

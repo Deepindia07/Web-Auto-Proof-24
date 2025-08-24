@@ -1,7 +1,6 @@
 part of 'sign_up_screen_bloc.dart';
 
-@immutable
-abstract class SignUpScreenEvent {}
+abstract class SignUpScreenEvent extends Equatable{}
 
 class RegisterUser extends SignUpScreenEvent {
   final String firstName;
@@ -23,23 +22,42 @@ class RegisterUser extends SignUpScreenEvent {
     required this.isEmailVerified,
     required this.termsAndConditions,
   });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props =>  [];
 }
 
 class SendOtpEmailEvent extends SignUpScreenEvent {
   final String email;
 
-  SendOtpEmailEvent({
-    required this.email,
-  });
+  SendOtpEmailEvent({required this.email});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props =>  [];
 }
+
 class SendOtpEmailSignUpEvent extends SignUpScreenEvent {
   final String email;
 
-  SendOtpEmailSignUpEvent({
-    required this.email,
-  });
+  SendOtpEmailSignUpEvent({required this.email});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props =>  [];
+}
+
+class ResetToInitialState extends SignUpScreenEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
 }
 
 
-
-class ResetToInitialState extends SignUpScreenEvent {}
+class SendOtpPhoneEvent extends SignUpScreenEvent{
+  final String phoneNumber;
+   SendOtpPhoneEvent({required this.phoneNumber});
+  @override
+  List<Object> get props => [];
+}

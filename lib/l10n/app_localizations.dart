@@ -157,7 +157,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your password has been successfully forgot'**
   String get forgotPassword;
-  String get forgotPasswordText;
 
   /// No description provided for @terms.
   ///
@@ -384,7 +383,7 @@ abstract class AppLocalizations {
   /// No description provided for @agreeTerms.
   ///
   /// In en, this message translates to:
-  /// **'I agree to the'**
+  /// **'I have read, understand, and agree to Auto proof 24 '**
   String get agreeTerms;
 
   /// No description provided for @termsPrivacy.
@@ -408,7 +407,7 @@ abstract class AppLocalizations {
   /// No description provided for @haveAccount.
   ///
   /// In en, this message translates to:
-  /// **'Have an account?'**
+  /// **'Have an account? '**
   String get haveAccount;
 
   /// No description provided for @signIn.
@@ -639,6 +638,12 @@ abstract class AppLocalizations {
   /// **'Change Password'**
   String get changePassword;
 
+  /// No description provided for @companyInformationSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Create company information successfully'**
+  String get companyInformationSuccessfully;
+
   /// Label for the information section
   ///
   /// In en, this message translates to:
@@ -794,6 +799,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancelButton;
+
+  /// No description provided for @forgotPasswordText.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get forgotPasswordText;
 
   /// No description provided for @myPersonalInformation.
   ///

@@ -96,7 +96,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       },
                       color: AppColor().darkCharcoalBlueColor,
                       textColor: AppColor().yellowWarmColor,
-                      borderRadius: 30,
+                      borderRadius: 7,
                     );
                   },
                 ),
@@ -142,11 +142,11 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Color(0xFF1F2D4A)),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(7),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Color(0xFF1F2D4A), width: 2),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(7),
             ),
           ),
         ),

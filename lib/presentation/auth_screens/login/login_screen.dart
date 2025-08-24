@@ -164,7 +164,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        /*   Text(
+                        Text(
                           AppLocalizations.of(context)!.selectLanguage,
                           style: MontserratStyles.montserratSemiBoldTextStyle(
                             size: 12,
@@ -179,12 +179,10 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           builder: (context, state) {
                             final currentLocale =
                                 state.locale ?? const Locale('en');
-
                             // Map locale to index
                             selectedIndex = currentLocale.languageCode == 'en'
                                 ? 0
                                 : 1;
-
                             return Container(
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade200,
@@ -241,7 +239,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           },
                         ),
 
-                        vGap(screenHeight * 0.02),*/
+                        vGap(screenHeight * 0.02),
                         Image.asset(
                           appLogo,
                           height: screenHeight * 0.126,

@@ -23,14 +23,14 @@ class SubscriptionCard extends StatelessWidget {
                 Text(
                   'Starter Pack',
                   style: MontserratStyles.montserratMediumTextStyle(
-                    size: 20,
+                    size: 25,
                   ),
                 ),
                 hGap(15),
                 Text(
                   '0€',
                   style: MontserratStyles.montserratMediumTextStyle(
-                    size: 20,
+                    size: 25,
                     color: AppColor().yellowWarmColor,
                   ),
                 ),
@@ -41,7 +41,7 @@ class SubscriptionCard extends StatelessWidget {
             Text(
               '• 3 Inspection Units Free for New Accounts',
               style: MontserratStyles.montserratMediumTextStyle(
-                size: 10,
+                size: 20,
                 color: Colors.white,
               ),
             ),
@@ -49,7 +49,7 @@ class SubscriptionCard extends StatelessWidget {
             Text(
               '• Units Expire in 1 Year',
               style: MontserratStyles.montserratMediumTextStyle(
-                size: 10,
+                size: 20,
                 color: Colors.white,
               ),
             ),
@@ -66,7 +66,7 @@ class SubscriptionCard extends StatelessWidget {
                       '• Free Account',
                       style:
                       MontserratStyles.montserratRegularTextStyle(
-                        size: 10,
+                        size: 16,
                         color: AppColor().yellowWarmColor,
                       ),
                     ),
@@ -74,7 +74,7 @@ class SubscriptionCard extends StatelessWidget {
                       '• No Commitment',
                       style:
                       MontserratStyles.montserratRegularTextStyle(
-                        size: 10,
+                        size: 16,
                         color: AppColor().yellowWarmColor,
                       ),
                     ),
@@ -89,7 +89,7 @@ class SubscriptionCard extends StatelessWidget {
                       '•  Try Before You Buy',
                       style:
                       MontserratStyles.montserratRegularTextStyle(
-                        size: 10,
+                        size: 16,
                         color: AppColor().yellowWarmColor,
                       ),
                     ),
@@ -97,7 +97,7 @@ class SubscriptionCard extends StatelessWidget {
                       '•  1 Year History Saving',
                       style:
                       MontserratStyles.montserratRegularTextStyle(
-                        size: 10,
+                        size: 16,
                         color: AppColor().yellowWarmColor,
                       ),
                     ),

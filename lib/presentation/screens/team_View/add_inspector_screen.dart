@@ -1,9 +1,9 @@
 part of "team_screen_route_imple.dart";
 
 class AddInspectorScreen extends StatefulWidget {
-  final String companyId;  // 👈 add this
+  final String getCompanyId; // 👈 add this
 
-  const AddInspectorScreen({super.key, required this.companyId});
+  const AddInspectorScreen({super.key, required this.getCompanyId});
 
   @override
   State<AddInspectorScreen> createState() => _AddInspectorScreenState();
@@ -22,7 +22,7 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
 
   @override
   void initState() {
-
+    print("companyId-----${widget.getCompanyId}");
     adminId = SharedPrefsHelper.instance.getString(userId);
     super.initState();
   }
@@ -67,7 +67,7 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child: CustomTextField(
+                            child: CustomTextField(borderWidth: 1, borderColor: AppColor().darkCharcoalBlueColor,
                               controller: firstNameController,
                               validator: InputValidators.validateFirstName,
                               hintText: "First Name",
@@ -81,7 +81,7 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
                           ),
                           const SizedBox(width: 16),
                           Expanded(
-                            child: CustomTextField(
+                            child: CustomTextField(borderWidth: 1, borderColor: AppColor().darkCharcoalBlueColor,
                               validator: InputValidators.validateLastName,
                               controller: lastNameController,
                               hintStyle:
@@ -131,7 +131,7 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
                         onVerify: () {},
                       ),
                       const SizedBox(height: 16),
-                      Row(
+                      /*   Row(
                         children: [
                           Expanded(
                             child: CustomDropdownNew(
@@ -145,9 +145,31 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
                             ),
                           ),
                         ],
+                      ),*/
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomDropdownNew(
+                              items: ['Male', 'Female'],
+                              title: 'Gender',
+                              hint: 'Select Gender',
+                              value: selectedGender != null
+                                  ? (selectedGender!.toLowerCase() == "male"
+                                  ? "Male"
+                                  : selectedGender!.toLowerCase() == "female"
+                                  ? "Female"
+                                  : null)
+                                  : null,
+
+                              onChanged: (val) => setState(() => selectedGender = val),
+                            ),
+
+                          ),
+                        ],
                       ),
+
                       const SizedBox(height: 16),
-                      CustomTextField(
+                      CustomTextField(borderWidth: 1, borderColor: AppColor().darkCharcoalBlueColor,
                         validator: InputValidators.validateAddress,
                         controller: addressController,
                         maxLines: 4,
@@ -163,42 +185,67 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child: CustomButtonWeb(
-                              text: 'Create',
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<InspectorCreateAdminBloc>().add(
-                                    CreateInspectorEvent(
-                                      body: {
-                                        "firstName": firstNameController.text
-                                            .trim()
-                                            .toString(),
-                                        "lastName": lastNameController.text
-                                            .trim()
-                                            .toString(),
-                                        "email": emailNameController.text
-                                            .trim()
-                                            .toString(),
-                                        "phoneNumber": phoneNumberController
-                                            .text
-                                            .trim()
-                                            .toString(),
-                                        "countryCode": selectDialCode ?? "",
-                                        "address": addressController.text
-                                            .trim()
-                                            .toString(),
-                                        "companyId":
-                                            widget.companyId,
+                            child:
+                                BlocConsumer<
+                                  InspectorCreateAdminBloc,
+                                  InspectorCreateAdminState
+                                >(
+                                  listener: (context, state) {
+                                    if (state is InspectorCreateAdminSuccess) {
+
+                                      CherryToast.success(
+                                        context,
+                                        "Team add successfully.",
+                                      );
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    return CustomButtonWeb(
+                                      text: 'Create',
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          context
+                                              .read<InspectorCreateAdminBloc>()
+                                              .add(
+                                                CreateInspectorEvent(
+                                                  body: {
+                                                    "firstName":
+                                                        firstNameController.text
+                                                            .trim()
+                                                            .toString(),
+                                                    "lastName":
+                                                        lastNameController.text
+                                                            .trim()
+                                                            .toString(),
+                                                    "email": emailNameController
+                                                        .text
+                                                        .trim()
+                                                        .toString(),
+                                                    "phoneNumber":
+                                                        phoneNumberController
+                                                            .text
+                                                            .trim()
+                                                            .toString(),
+                                                    "countryCode":
+                                                        selectDialCode ?? "",
+                                                    "address": addressController
+                                                        .text
+                                                        .trim()
+                                                        .toString(),
+                                                    "companyId":
+                                                        widget.getCompanyId,
+                                                  },
+                                                  adminID: adminId ?? "",
+                                                ),
+                                              );
+                                        }
                                       },
-                                      adminID: adminId ?? "",
-                                    ),
-                                  );
-                                }
-                              },
-                              color: AppColor().darkCharcoalBlueColor,
-                              textColor: AppColor().yellowWarmColor,
-                              borderRadius: 10,
-                            ),
+                                      color: AppColor().darkCharcoalBlueColor,
+                                      textColor: AppColor().yellowWarmColor,
+                                      borderRadius: 7,
+                                    );
+                                  },
+                                ),
                           ),
                         ],
                       ),

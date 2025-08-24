@@ -1,9 +1,9 @@
 part of 'subscription_screen_route_imple.dart';
 
-class SubscriptionScreen extends StatelessWidget {
+class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
-
-  static const List<SubscriptionPlan> plans = [
+  /*
+  static const List< List<GetSubscriptionPlanData>? plans = [
     SubscriptionPlan(
       title: "Flexible Pack",
       price: "1.99 ",
@@ -41,8 +41,15 @@ class SubscriptionScreen extends StatelessWidget {
       buttonText: "Buy 500 Units",
       mainFeatures: ["25% Off Regular Price", "Units Expire in 1 Year"],
     ),
-  ];
+  ];*/
 
+  @override
+  State<SubscriptionScreen> createState() => _SubscriptionScreenState();
+}
+
+class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  GetSubscriptionPlanModel? getSubscriptionPlanModel;
+  List<GetSubscriptionPlanData>? getSubscriptionPlanModelData;
   double getAspectRatioForLargeTablet(
     double containerWidth,
     double containerHeight, {
@@ -52,47 +59,63 @@ class SubscriptionScreen extends StatelessWidget {
     final totalSpacing = spacing * (cols - 1);
     final cardWidth = (math.max(300.0, containerWidth) - totalSpacing) / cols;
 
-    // ✅ Now using actual container height, not screen height
     final desiredHeight = (containerHeight * 0.42).clamp(240.0, 460.0);
-
     double ratio = cardWidth / desiredHeight;
     return ratio.clamp(0.6, 1.5);
+  }
+
+  @override
+  void initState() {
+    context.read<GetSubscriptionBloc>().add(GetSubscriptionApiEvent());
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Responsive(
-      mobile: SubscriptionMobile(plans: plans),
-      desktop: SubscriptionDesktop(
-        plans: plans,
-        childAspectRatio: 1,
-        type: 'desktop',
-      ),
-      tab: SubscriptionDesktop(
-        plans: plans,
-        childAspectRatio: 1.2,
-        crossAxisCount: 2,
-        type: 'tab',
-      ),
-      largeTablet: SubscriptionDesktop(
-        plans: plans,
-        crossAxisCount: 2,
-        childAspectRatio: getAspectRatioForLargeTablet(
-          screenWidth,
-          screenHeight,
-        ),
-        type: 'larger',
-      ),
+    return BlocConsumer<GetSubscriptionBloc, GetSubscriptionState>(
+      listener: (context, state) {
+        if (state is GetSubscriptionSuccess) {
+          getSubscriptionPlanModel = state.getSubscriptionPlanModel;
+          getSubscriptionPlanModelData = getSubscriptionPlanModel?.data;
+        }
+      },
+      builder: (context, state) {
+        return Responsive(
+          mobile: SubscriptionMobile(plans: getSubscriptionPlanModelData ?? []),
+          desktop: SubscriptionDesktop(
+            plans: getSubscriptionPlanModelData ?? [],
+            childAspectRatio: 1,
+            type: 'desktop',
+          ),
+          tab: SubscriptionDesktop(
+            plans: getSubscriptionPlanModelData ?? [],
+            childAspectRatio: 1.2,
+            crossAxisCount: 2,
+            type: 'tab',
+          ),
+          largeTablet: SubscriptionDesktop(
+            plans: getSubscriptionPlanModelData ?? [],
+            crossAxisCount: 2,
+            childAspectRatio: getAspectRatioForLargeTablet(
+              screenWidth,
+              screenHeight,
+            ),
+            type: 'larger',
+          ),
+        );
+      },
     );
   }
 }
 
 class SubscriptionCard extends StatefulWidget {
-  final SubscriptionPlan plan;
+  final List<GetSubscriptionPlanData> plan;
+  final int index;
 
-  const SubscriptionCard({super.key, required this.plan});
+  const SubscriptionCard({super.key, required this.plan, required this.index});
 
   @override
   State<SubscriptionCard> createState() => _SubscriptionCardState();
@@ -110,8 +133,11 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
 
   double get totalPrice {
     // Assuming price in plan.price is like "₹100" or "$99"
-    final String numeric = widget.plan.price.replaceAll(RegExp(r'[^0-9.]'), "");
-    final double basePrice = double.tryParse(numeric) ?? 0;
+    final String? numeric = widget.plan[widget.index].planPrice?.replaceAll(
+      RegExp(r'[^0-9.]'),
+      "",
+    );
+    final double basePrice = double.tryParse(numeric ?? "") ?? 0;
     return basePrice * _quantity;
   }
 
@@ -141,11 +167,64 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...widget.plan.mainFeatures.map((f) => _buildFeature(f, false)),
-                      const SizedBox(height: 4),
-                      ...widget.plan.features.map((f) => _buildFeature(f, true)),
-                      const Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: widget.plan[widget.index].planDescription!
+                            .split(".") // split by "."
+                            .where((line) => line.trim().isNotEmpty)
+                            .map(
+                              (line) => Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Text(
+                                  "• ${line.trim()}",
+                                  style:
+                                      MontserratStyles.montserratMediumTextStyle(
+                                        size: 16,
+                                        color: Colors.white,
+                                      ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                      vGap(10),
 
+                      widget.plan[widget.index].features?.freeAccount == true
+                          ? Text(
+                              "• Free Account ",
+                              style: MontserratStyles.montserratMediumTextStyle(
+                                size: 16,
+                                color: AppColor().yellowWarmColor,
+                              ),
+                            )
+                          : SizedBox.shrink(),
+
+                      Text(
+                        "• ${(widget.plan[widget.index].features?.prepaidUnits != null) ?
+                        "Prepaid ${widget.plan[widget.index].features?.prepaidUnits ?? 0} Units" : "Scalable On Demand"}  ",
+                        style: MontserratStyles.montserratMediumTextStyle(
+                          size: 16,
+                          color: AppColor().yellowWarmColor,
+                        ),
+                      ),
+                      Text(
+                        "• ${(widget.index == 0) ? "Pay Only for What You Use" : (widget.index == 1) ? "Great for Small Teams" : "Best Price per Unit"}  ",
+                        style: MontserratStyles.montserratMediumTextStyle(
+                          size: 16,
+                          color: AppColor().yellowWarmColor,
+                        ),
+                      ),
+                    (  widget.plan[widget.index].features?.historySaving == null  || widget.plan[widget.index].features?.historySaving == ""    ) ?SizedBox.shrink()
+                        :  Text(
+                        "• ${widget.plan[widget.index].features?.historySaving} History Saving",
+                        style: MontserratStyles.montserratMediumTextStyle(
+                          size: 16,
+                          color: AppColor().yellowWarmColor,
+                        ),
+                      ),
+
+                      /*   ...widget.plan[widget.index].features?.map((f) => _buildFeature(f, false)),*/
+                      const Spacer(),
                     ],
                   ),
                 ),
@@ -156,9 +235,26 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(),
-                ...widget.plan.mainFeatures.map((f) => _buildFeature(f, false)),
-                const SizedBox(height: 4),
-                ...widget.plan.features.map((f) => _buildFeature(f, true)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.plan[widget.index].planDescription!
+                      .split(".") // split by "."
+                      .where((line) => line.trim().isNotEmpty)
+                      .map(
+                        (line) => Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            "• ${line.trim()}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
                 const SizedBox(height: 4),
                 // 👇 Spacer pushes button to the bottom
                 _buildActionButton(),
@@ -175,21 +271,24 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.plan.title,
-              style: MontserratStyles.montserratSemiBoldTextStyle(size: 16),
+              widget.plan[widget.index].planTitle ?? "",
+              style: MontserratStyles.montserratSemiBoldTextStyle(size: 20),
             ),
             const SizedBox(height: 4),
             Text(
-              "$totalPrice ${(widget.plan.showQuantitySelector) ? "€ (${widget.plan.price} € /Unit)": "€ Total"}",
-              style: MontserratStyles.montserratSemiBoldTextStyle(
-                size: 14,
-                color: AppColor().yellowWarmColor,
-              ),
+              (widget.plan[widget.index].planTitle == "Flexible Pack")
+                  ? ("$totalPrice € / Unit ")
+                  : "${(widget.plan[widget.index].planPrice ?? "")} € Total",
+              /* "$totalPrice ${(widget.plan[widget.index].planPrice.toString()) ? "€ (${widget.plan[widget.index].planPrice} € /Unit)": "€ Total"}",*/ style:
+                  MontserratStyles.montserratSemiBoldTextStyle(
+                    size: 14,
+                    color: AppColor().yellowWarmColor,
+                  ),
             ),
-
           ],
         ),
-        if (widget.plan.showQuantitySelector) _buildQuantitySelector(),
+        if (widget.plan[widget.index].planTitle == "Flexible Pack")
+          _buildQuantitySelector(),
       ],
     );
   }
@@ -214,9 +313,10 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
             SizedBox(
               width: 40,
               height: 28,
-              child: TextFormField(onChanged: (v){
-                _updateQuantity();
-              },
+              child: TextFormField(
+                onChanged: (v) {
+                  _updateQuantity();
+                },
 
                 textAlign: TextAlign.center,
                 style: MontserratStyles.montserratSemiBoldTextStyle(
@@ -241,21 +341,6 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
     );
   }
 
-  Widget _buildFeature(String feature, bool isHighlight) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Text(
-        "• $feature",
-        style: isHighlight
-            ? MontserratStyles.montserratNormalTextStyle(
-                size: 13,
-                color: AppColor().yellowWarmColor,
-              )
-            : MontserratStyles.montserratMediumTextStyle(size: 13),
-      ),
-    );
-  }
-
   Widget _buildActionButton() {
     return SizedBox(
       width: double.infinity,
@@ -267,7 +352,13 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         ),
-        child: Text(widget.plan.buttonText),
+        child: Text(
+          "${(widget.plan[widget.index].planTitle == "Flexible Pack ") ? "Start Now" : "Buy ${widget.plan[widget.index].planUnits} Units"} ",
+          style: MontserratStyles.montserratMediumTextStyle(
+            size: 15,
+            color: AppColor().darkCharcoalBlueColor,
+          ),
+        ),
       ),
     );
   }

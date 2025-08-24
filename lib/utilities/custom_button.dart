@@ -44,7 +44,7 @@ class CustomButton extends StatelessWidget {
       width: width,
       height: height ?? 48.0,
       child: ElevatedButton(
-        onPressed:  onPressed,
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? AppColor().darkCharcoalBlueColor,
           foregroundColor: textColor ?? Colors.white,
@@ -228,7 +228,6 @@ class CustomButtonWeb extends StatelessWidget {
   final Color? containerColor;
   final bool? isLoading;
 
-
   const CustomButtonWeb({
     super.key,
     required this.text,
@@ -240,58 +239,63 @@ class CustomButtonWeb extends StatelessWidget {
     this.containerColor,
     this.width,
     this.textSize,
-    this.height, this.isLoading,
+    this.height,
+    this.isLoading,
   });
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
-        padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius),
-          color: containerColor ?? Colors.white,
-          boxShadow: containerColor != null
-              ? []
-              : [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 5,
-                    offset: Offset(0, 4), // Shadow position
-                  ),
-                ],
-        ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onPressed,
         child: Container(
-          width: width,
-          padding:
-              padding ??
-              EdgeInsets.symmetric(vertical: height ?? 10, horizontal: 20),
+          margin: EdgeInsets.symmetric(vertical: 5),
+          padding: EdgeInsets.all(2),
           decoration: BoxDecoration(
-            color: color, // Button color
-            borderRadius: BorderRadius.circular(
-              borderRadius,
-            ), // Rounded corners
+            borderRadius: BorderRadius.circular(borderRadius),
+            color: containerColor ?? Colors.white,
+            boxShadow: containerColor != null
+                ? []
+                : [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 5,
+                      offset: Offset(0, 4), // Shadow position
+                    ),
+                  ],
           ),
-          child: isLoading == true?
-               Center(
-                 child: SizedBox(
-                             height:  18,
-                             width:  18,
-                             child: CircularProgressIndicator(
-                               strokeWidth: 2,
-                               color: AppColor().yellowWarmColor,
-                             ),
-                           ),
-               ) : Text(
-            textAlign: TextAlign.center,
-            text,
-            style: MontserratStyles.montserratMediumTextStyle(
-              size: textSize ?? 14,
-              color: textColor,
+          child: Container(
+            width: width,
+            padding:
+                padding ??
+                EdgeInsets.symmetric(vertical: height ?? 10, horizontal: 20),
+            decoration: BoxDecoration(
+              color: color, // Button color
+              borderRadius: BorderRadius.circular(
+                borderRadius,
+              ), // Rounded corners
             ),
+            child: isLoading == true
+                ? Center(
+                    child: SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColor().yellowWarmColor,
+                      ),
+                    ),
+                  )
+                : Text(
+                    textAlign: TextAlign.center,
+                    text,
+                    style: MontserratStyles.montserratMediumTextStyle(
+                      size: textSize ?? 14,
+                      color: textColor,
+                    ),
+                  ),
           ),
         ),
       ),

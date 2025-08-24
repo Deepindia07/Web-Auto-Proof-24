@@ -3,6 +3,7 @@ import 'package:auto_proof/auth/server/logger/app_logger.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:auto_proof/constants/const_string.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../auth/data/models/otp_response_model.dart';

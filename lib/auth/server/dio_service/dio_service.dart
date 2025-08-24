@@ -122,7 +122,7 @@ class DioClient {
         ProgressCallback? onReceiveProgress,
       }) async {
     try {
-      debugPrint("🔹 Sending PUT to ${ApiEndPoints.baseUrl}$url");
+      debugPrint("🔹 Sending post to ${ApiEndPoints.baseUrl}$url");
       final response = await _dio.post(
         url,
         data: data,

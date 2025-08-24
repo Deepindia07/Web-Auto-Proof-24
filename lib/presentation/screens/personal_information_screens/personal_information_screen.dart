@@ -17,18 +17,37 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   final _formKey = GlobalKey<FormState>();
   String? selectedGender;
   String? selectDialCode;
-
+  String? apiGender = "MALE";
   @override
   void initState() {
     context.read<PersonalInformationBloc>().add(GetPersonalInfoApiEvent());
+
+    selectedGender = normalizeGender(apiGender); // ensures it matches items
+
     super.initState();
   }
-
+  // normalize API or backend values (like MALE/FEMALE) to UI values
+  String? normalizeGender(String? value) {
+    if (value == null) return null;
+    switch (value.toLowerCase()) {
+      case "male":
+        return "Male";
+      case "female":
+        return "Female";
+      default:
+        return null; // unknown values won't break dropdown
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final genderItems = const ['Male', 'Female'];
 
+    // extra safety: if selectedGender is not in items, reset to null
+    if (selectedGender != null && !genderItems.contains(selectedGender)) {
+      selectedGender = null;
+    }
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: LayoutBuilder(
@@ -39,11 +58,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: Responsive.isDesktop(context)
-                  ? screenWidth / 6
+                  ? screenWidth /10
                   : Responsive.isTablet(context)
-                  ? 40
+                  ? 30
                   : 16,
-              vertical: Responsive.isDesktop(context) ? 60 : 30,
+              vertical: Responsive.isDesktop(context) ? 20 : 30,
             ),
             child: Container(
               padding: const EdgeInsets.all(30),
@@ -58,112 +77,115 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                   ),
                 ],*/
               ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: Responsive.isDesktop(context) ? 800 : 600,
-                ),
-                child: BlocConsumer<PersonalInformationBloc, PersonalInformationState>(
-                  listener: (context, state) {
-                    if (state is GetPersonalInfoSuccess) {
-                      final user = state.userProfile;
+              child: BlocConsumer<PersonalInformationBloc, PersonalInformationState>(
+                listener: (context, state) {
+                  if(state is GetPersonalInfoLoading){
+                    CustomLoader.showPopupLoader(context);
+                  } if(state is GetPersonalInfoError){
+                    CustomLoader.hidePopupLoader(context);
+                  }
+                  if (state is GetPersonalInfoSuccess) {
+                    CustomLoader.hidePopupLoader(context);
+                    final user = state.userProfile;
 
-                      setState(() {
-                        firstNameController.text = user.user?.firstName ?? "";
-                        lastNameController.text = user.user?.lastName ?? "";
-                        emailNameController.text = user.user?.email ?? "";
-                        phoneNumberController.text =
-                            user.user?.phoneNumber ?? "";
-                        addressController.text = user.user?.address ?? "";
-                        selectedGender = user.user?.gender ?? "";
-                        selectDialCode = user.user?.countryCode ?? "";
-                      });
-                      print(
-                        "object-----${firstNameController.text.trim().toString()}",
-                      );
-                    }
+                    setState(() {
+                      firstNameController.text = user.user?.firstName ?? "";
+                      lastNameController.text = user.user?.lastName ?? "";
+                      emailNameController.text = user.user?.email ?? "";
+                      phoneNumberController.text = user.user?.phoneNumber ?? "";
+                      addressController.text = user.user?.address ?? "";
+                      selectedGender = normalizeGender(user.user?.gender);
+                      selectDialCode = user.user?.countryCode ?? "";
+                    });
+                    print(
+                      "object-----${firstNameController.text.trim().toString()}",
+                    );
+                  }
 
-                    if (state is GetPersonalInfoError) {
-                      CherryToast.error(context, state.error);
-                    }
-                  },
-                  builder: (context, state) {
-                    return Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'My personal information',
-                            textAlign: TextAlign.center,
-                            style: MontserratStyles.montserratSemiBoldTextStyle(
-                              size: Responsive.isDesktop(context) ? 30 :20,
-                              color: AppColor().darkCharcoalBlueColor,
-                            ),
+                  if (state is GetPersonalInfoError) {
+                    CherryToast.error(context, state.error);
+                  }
+                },
+                builder: (context, state) {
+                  return Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'My personal information',
+                          textAlign: TextAlign.center,
+                          style: MontserratStyles.montserratSemiBoldTextStyle(
+                            size: Responsive.isDesktop(context) ? 30 : 20,
+                            color: AppColor().darkCharcoalBlueColor,
                           ),
-                          const SizedBox(height: 24),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomTextField(
-                                  borderWidth: 2,
-                                  borderColor: AppColor().darkCharcoalBlueColor,
-                                  controller: firstNameController,
-                                  validator: InputValidators.validateFirstName,
-                                  hintText: "First Name",
-                                  labelText: "First Name",
-                                  hintStyle:
-                                      MontserratStyles.montserratRegularTextStyle(
-                                        size: 15,
-                                        color: AppColor().silverShadeGrayColor,
-                                      ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: CustomTextField(
-                                  borderWidth: 2,
-                                  borderColor: AppColor().darkCharcoalBlueColor,
-                                  validator: InputValidators.validateLastName,
-                                  controller: lastNameController,
-                                  hintStyle:
-                                      MontserratStyles.montserratRegularTextStyle(
-                                        size: 15,
-                                        color: AppColor().silverShadeGrayColor,
-                                      ),
-                                  hintText: "Last Name",
-                                  labelText: "Last Name",
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 16),
-                          CustomTextField(
-                            borderWidth: 2,
-                            borderColor: AppColor().darkCharcoalBlueColor,
-                            validator: InputValidators.validateEmail,
-                            controller: emailNameController,
-                            hintStyle:
-                                MontserratStyles.montserratRegularTextStyle(
-                                  size: 15,
-                                  color: AppColor().silverShadeGrayColor,
-                                ),
-                            hintText: "Email ID",
-                            labelText: "Email ID",
-                          ),
-                          const SizedBox(height: 16),
-                          /* CustomTextField(
-                        validator: InputValidators.validatePhoneNumber,
-                        controller: phoneNumberController,
-                        hintStyle: MontserratStyles.montserratRegularTextStyle(
-                          size: 15,
-                          color: AppColor().silverShadeGrayColor,
                         ),
-                        hintText: "Phone Number",
-                        labelText: "Phone Number",
-                      ),*/
-                          Padding(
+                        const SizedBox(height: 24),
+
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                borderWidth: 1,
+                                borderColor: AppColor().darkCharcoalBlueColor,
+                                controller: firstNameController,
+                                validator: InputValidators.validateFirstName,
+                                hintText: "First Name",
+                                labelText: "First Name",
+                                hintStyle:
+                                    MontserratStyles.montserratRegularTextStyle(
+                                      size: 15,
+                                      color: AppColor().silverShadeGrayColor,
+                                    ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: CustomTextField(
+                                borderWidth: 1,
+                                borderColor: AppColor().darkCharcoalBlueColor,
+                                validator: InputValidators.validateLastName,
+                                controller: lastNameController,
+                                hintStyle:
+                                    MontserratStyles.montserratRegularTextStyle(
+                                      size: 15,
+                                      color: AppColor().silverShadeGrayColor,
+                                    ),
+                                hintText: "Last Name",
+                                labelText: "Last Name",
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          borderWidth: 1,
+                          borderColor: AppColor().darkCharcoalBlueColor,
+                          validator: InputValidators.validateEmail,
+                          controller: emailNameController,
+                          hintStyle:
+                              MontserratStyles.montserratRegularTextStyle(
+                                size: 15,
+                                color: AppColor().silverShadeGrayColor,
+                              ),
+                          hintText: "Email ID",
+                          labelText: "Email ID",
+                        ),
+                        const SizedBox(height: 16),
+                        /* CustomTextField(
+                      validator: InputValidators.validatePhoneNumber,
+                      controller: phoneNumberController,
+                      hintStyle: MontserratStyles.montserratRegularTextStyle(
+                        size: 15,
+                        color: AppColor().silverShadeGrayColor,
+                      ),
+                      hintText: "Phone Number",
+                      labelText: "Phone Number",
+                    ),*/
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Text(
                               "Phone Number",
@@ -174,132 +196,130 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                             ),
                           ),
-                          PhoneNumberField(
-                            initialCountryCode: selectDialCode ?? "+33",
-                            color: Colors.transparent,
-                            borderRadiusGeometry: BorderRadius.only(),
-                            borderRadius: 10,
-                            onChanged: (countryCode) {
-                              log("Country: ${countryCode.name}");
-                              log("Code: ${countryCode.dialCode}");
-                              selectDialCode = countryCode.dialCode;
-                              log(
-                                "Code: ${countryCode.dialCode}-----$selectDialCode",
-                              );
-                            },
-                            controller: phoneNumberController,
-                            isVerified: false,
-                            onVerify: () {},
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomDropdownNew(
-                                  items: ['Male', 'Female'],
-                                  title: 'Gender',
-                                  hint: 'Select Gender',
-                                  value: selectedGender,
-                                  width: screenWidth,
-                                  onChanged: (val) =>
-                                      setState(() => selectedGender = val),
-                                ),
+                        ),
+                        PhoneNumberField(
+                          initialCountryCode: selectDialCode ?? "+33",
+                          color: Colors.transparent,
+                          borderRadiusGeometry: BorderRadius.only(),
+                          borderRadius: 10,
+                          onChanged: (countryCode) {
+                            log("Country: ${countryCode.name}");
+                            log("Code: ${countryCode.dialCode}");
+                            selectDialCode = countryCode.dialCode;
+                            log(
+                              "Code: ${countryCode.dialCode}-----$selectDialCode",
+                            );
+                          },
+                          controller: phoneNumberController,
+                          isVerified: false,
+                          onVerify: () {},
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomDropdownNew(
+                                items: genderItems,
+                                title: 'Gender',
+                                hint: 'Select Gender',
+                                value: selectedGender,
+                                onChanged: (val) {
+                                  setState(() => selectedGender = val);
+                                },
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextField(
-                            borderWidth: 2,
-                            borderColor: AppColor().darkCharcoalBlueColor,
-                            validator: InputValidators.validateAddress,
-                            controller: addressController,
-                            maxLines: 4,
-                            hintStyle:
-                                MontserratStyles.montserratRegularTextStyle(
-                                  size: 15,
-                                  color: AppColor().silverShadeGrayColor,
-                                ),
-                            hintText: "Enter Address",
-                            labelText: "Address",
-                          ),
-                          vGap(10),
-                          Row(
-                            children: [
-                              Expanded(
-                                child:
-                                    BlocListener<
-                                      PersonalInformationBloc,
-                                      PersonalInformationState
-                                    >(
-                                      listener: (context, state) {
-                                        if (state
-                                            is PersonalInformationSuccess) {
-                                          CherryToast.success(
-                                            context,
-                                            "Personal profile updated.",
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          borderWidth: 1,
+                          borderColor: AppColor().darkCharcoalBlueColor,
+                          validator: InputValidators.validateAddress,
+                          controller: addressController,
+                          maxLines: 4,
+                          hintStyle:
+                              MontserratStyles.montserratRegularTextStyle(
+                                size: 15,
+                                color: AppColor().silverShadeGrayColor,
+                              ),
+                          hintText: "Enter Address",
+                          labelText: "Address",
+                        ),
+                        vGap(10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child:
+                                  BlocListener<
+                                    PersonalInformationBloc,
+                                    PersonalInformationState
+                                  >(
+                                    listener: (context, state) {
+                                      if (state is PersonalInformationSuccess) {
+                                        CherryToast.success(
+                                          context,
+                                          "Personal profile updated.",
+                                        );
+                                        context
+                                            .read<PersonalInformationBloc>()
+                                            .add(GetPersonalInfoApiEvent());
+                                      }
+                                    },
+                                    child: CustomButtonWeb(
+                                      text: 'Update',
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          print(
+                                            "object-----${firstNameController.text.trim().toString()}",
                                           );
+                                          ProfileModel profile = ProfileModel(
+                                            userType: "individual",
+                                            firstName: firstNameController.text
+                                                .trim()
+                                                .toString(),
+                                            lastName: lastNameController.text
+                                                .trim()
+                                                .toString(),
+                                            email: emailNameController.text
+                                                .trim()
+                                                .toString(),
+                                            phoneNumber: phoneNumberController
+                                                .text
+                                                .trim()
+                                                .toString(),
+                                            countryCode: selectDialCode ?? "",
+                                            /*    profileImage: firstNameController.text
+                                            .trim()
+                                            .toString(),*/
+                                            address: addressController.text
+                                                .trim()
+                                                .toString(),
+                                            rememberSettings: false,
+                                            gender:  (selectedGender ?? "").toUpperCase(),
+                                          );
+
                                           context
                                               .read<PersonalInformationBloc>()
-                                              .add(GetPersonalInfoApiEvent());
+                                              .add(
+                                                UpdateProfileEvent(
+                                                  profile: profile,
+                                                ),
+                                              );
                                         }
                                       },
-                                      child: CustomButtonWeb(
-                                        text: 'Update',
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            print(
-                                              "object-----${firstNameController.text.trim().toString()}",
-                                            );
-                                            ProfileModel profile = ProfileModel(
-                                              userType: "individual",
-                                              firstName: firstNameController
-                                                  .text
-                                                  .trim()
-                                                  .toString(),
-                                              lastName: lastNameController.text
-                                                  .trim()
-                                                  .toString(),
-                                              email: emailNameController.text
-                                                  .trim()
-                                                  .toString(),
-                                              phoneNumber: phoneNumberController
-                                                  .text
-                                                  .trim()
-                                                  .toString(),
-                                              countryCode: selectDialCode ?? "",
-                                              /*    profileImage: firstNameController.text
-                                              .trim()
-                                              .toString(),*/
-                                              address: addressController.text
-                                                  .trim()
-                                                  .toString(),
-                                              rememberSettings: false,
-                                              gender: selectedGender ?? "",
-                                            );
-
-                                            context
-                                                .read<PersonalInformationBloc>()
-                                                .add(
-                                                  UpdateProfileEvent(
-                                                    profile: profile,
-                                                  ),
-                                                );
-                                          }
-                                        },
-                                        color: AppColor().darkCharcoalBlueColor,
-                                        textColor: AppColor().yellowWarmColor,
-                                        borderRadius: 10,
-                                      ),
+                                      color: AppColor().darkCharcoalBlueColor,
+                                      textColor: AppColor().yellowWarmColor,
+                                      borderRadius: 7,
                                     ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           );

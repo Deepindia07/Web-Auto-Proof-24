@@ -39,9 +39,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPassword => 'Your password has been successfully forgot';
 
   @override
-  String get forgotPasswordText => 'Forgot Password';
-
-  @override
   String get terms => ' Terms';
 
   @override
@@ -155,7 +152,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retypePassword => 'Retype Password';
 
   @override
-  String get agreeTerms => 'I agree to the';
+  String get agreeTerms =>
+      'I have read, understand, and agree to Auto proof 24 ';
 
   @override
   String get termsPrivacy => ' Terms & Privacy';
@@ -167,7 +165,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get creatingAccount => 'Creating Account...';
 
   @override
-  String get haveAccount => 'Have an account?';
+  String get haveAccount => 'Have an account? ';
 
   @override
   String get signIn => 'Sign In';
@@ -287,6 +285,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changePassword => 'Change Password';
 
   @override
+  String get companyInformationSuccessfully =>
+      'Create company information successfully';
+
+  @override
   String get information => 'Information';
 
   @override
@@ -363,6 +365,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancelButton => 'Cancel';
+
+  @override
+  String get forgotPasswordText => 'Forgot Password';
 
   @override
   String get myPersonalInformation => 'My Personal Information';

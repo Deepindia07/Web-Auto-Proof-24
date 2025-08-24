@@ -1,7 +1,7 @@
 part of 'subscription_screen_route_imple.dart';
 
 class SubscriptionDesktop extends StatelessWidget {
-  final List<SubscriptionPlan> plans;
+  final List<GetSubscriptionPlanData> plans;
   final int crossAxisCount;
   final double childAspectRatio;
   final String type;
@@ -45,7 +45,7 @@ print("type---$type");
                       childAspectRatio: childAspectRatio,
                     ),
                     itemBuilder: (context, index) =>
-                        SubscriptionCard(plan: plans[index]),
+                        SubscriptionCard(plan: plans ,index: index),
                   ),
                 )
               ],

@@ -1,6 +1,5 @@
 part of 'sign_up_screen_bloc.dart';
 
-@immutable
 abstract class SignUpScreenState {}
 
 class SignUpScreenInitial extends SignUpScreenState {}
@@ -46,3 +45,9 @@ class SignUpSendOtpOnEmailError extends SignUpScreenState {
 
   SignUpSendOtpOnEmailError(this.message);
 }
+
+
+class SignUpSendOtpPhoneLoading extends SignUpScreenState{
+  List<Object> get props => [];
+}
+

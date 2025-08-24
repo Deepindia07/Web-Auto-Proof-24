@@ -1,5 +1,6 @@
 library home_screen_route_imple.dart;
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -33,6 +34,7 @@ import '../../personal_information_screens/bloc/personal_information_bloc/person
 import '../../subscription/subscription_screen_route_imple.dart';
 import '../../team_View/team_screen_route_imple.dart';
 import 'package:http/http.dart' as http;
+import '../../vehicles_screen/vehicale_details_screen.dart';
 import '../../vehicles_screen/vehicles_screen_route_imple.dart';
 part 'home_screen.dart';
 part 'side_menu_screen.dart';

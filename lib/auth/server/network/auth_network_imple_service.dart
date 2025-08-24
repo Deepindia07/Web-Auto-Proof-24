@@ -18,6 +18,7 @@ import 'package:auto_proof/auth/server/dio_service/dio_service.dart';
 import 'package:auto_proof/auth/server/dio_service/error/exception.dart';
 import 'package:auto_proof/auth/server/network/auth_abstract_network_imple.dart';
 import 'package:auto_proof/constants/const_api_endpoints.dart';
+import 'package:auto_proof/presentation/screens/subscription/models/get_subscription_model.dart';
 import 'package:auto_proof/presentation/screens/team_View/models/get_single_team_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -381,23 +382,19 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $error');
     }
   }
-    Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
+
+  Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
     Map<String, dynamic>? dataBody,
-  /*  Uint8List? imageBytes, // image file bytes
+    /*  Uint8List? imageBytes, // image file bytes
     String? fileName,*/
   }) async {
     try {
+      final response = await dioClient.post(
+        ApiEndPoints.createCompanyProfile,
+        data: dataBody,
+      );
 
-
-
-
-        final response = await dioClient.post(
-          ApiEndPoints.createCompanyProfile,
-          data: dataBody,
-        );
-
-
-    /*  //////
+      /*  //////
 
       // Send request as multipart
       final response = await dioClient.post(
@@ -422,14 +419,7 @@ class AuthenticationApiCall implements AuthAbstraction {
     }
   }
 
-
-
-
-
-
-
-
-/*  Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
+  /*  Future<Result<ContactUsResponseModel, String>> createCompanyApiCall({
     Map<String, dynamic>? dataBody,
   }) async {
     try {
@@ -449,11 +439,6 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $error');
     }
   }*/
-
-
-
-
-
 
   Future<Result<GetCompanyModel, String>> getCompanyApiCall({
     Map<String, dynamic>? dataBody,
@@ -604,6 +589,7 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $e');
     }
   }
+
   Future<Result<UpdateAccountModel, String>> updateCompanyApi() async {
     try {
       final response = await dioClient.put(ApiEndPoints.updateCompanyProfile);
@@ -611,7 +597,6 @@ class AuthenticationApiCall implements AuthAbstraction {
       final Map<String, dynamic> data = response.data;
       debugPrint("Api response data : ${response.data}");
       final dataResponse = UpdateAccountModel.fromJson(data);
-
 
       return Result.success(dataResponse);
     } on DioException catch (dioError) {
@@ -623,4 +608,21 @@ class AuthenticationApiCall implements AuthAbstraction {
     }
   }
 
+  Future<Result<GetSubscriptionPlanModel, String>>
+  getSubscriptionApiCall() async {
+    try {
+      final response = await dioClient.get(ApiEndPoints.getSubscriptionPlans);
+
+      final Map<String, dynamic> data = response.data;
+      debugPrint("Api response data : ${response.data}");
+      final dataResponse = GetSubscriptionPlanModel.fromJson(data);
+      return Result.success(dataResponse);
+    } on DioException catch (dioError) {
+      debugPrint("Api response data : $dioError");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (e) {
+      debugPrint("error generated: => ${e.toString()}");
+      return Result.failure('Unexpected error occurred: $e');
+    }
+  }
 }

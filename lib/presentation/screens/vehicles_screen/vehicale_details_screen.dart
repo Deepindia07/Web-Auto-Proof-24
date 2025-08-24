@@ -1,11 +1,19 @@
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
+import 'package:auto_proof/presentation/screens/home/screens/home_screen_route_imple.dart';
+import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:flutter/material.dart';
 import '../../../../utilities/custom_textstyle.dart';
 
-class MyVehicleDetailsScreen extends StatelessWidget {
-  const MyVehicleDetailsScreen({super.key});
+class MyVehicleDetailsScreen extends StatefulWidget {
+  final void Function(ScreenType type,) onScreenChange;
+  const MyVehicleDetailsScreen({super.key, required this.onScreenChange});
 
+  @override
+  State<MyVehicleDetailsScreen> createState() => _MyVehicleDetailsScreenState();
+}
+
+class _MyVehicleDetailsScreenState extends State<MyVehicleDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -18,7 +26,7 @@ class MyVehicleDetailsScreen extends StatelessWidget {
     double valueFontSize = screenWidth * 0.014;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F6FB),
+      backgroundColor:  AppColor().backgroundColor,
       body: Center(
         child: Container(
           width: screenWidth > 900 ? 600 : screenWidth * 0.9,
@@ -27,14 +35,14 @@ class MyVehicleDetailsScreen extends StatelessWidget {
             vertical: 20,
           ),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
+
             borderRadius: BorderRadius.circular(12),
           ),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 20),
+
                 Text(
                   "My Vehicle",
                   style: MontserratStyles.montserratBoldTextStyle(
@@ -74,7 +82,12 @@ class MyVehicleDetailsScreen extends StatelessWidget {
                 Divider(color: AppColor().silverShadeGrayColor),
                 buildRow("Gas Level", "1/2", labelFontSize, valueFontSize),
                 Divider(color: AppColor().silverShadeGrayColor),
-                buildRow("Tyre condition", "Good", labelFontSize, valueFontSize),
+                buildRow(
+                  "Tyre condition",
+                  "Good",
+                  labelFontSize,
+                  valueFontSize,
+                ),
                 Divider(color: AppColor().silverShadeGrayColor),
                 buildRow("Km/day Level", "60", labelFontSize, valueFontSize),
                 Divider(color: AppColor().silverShadeGrayColor),
@@ -83,6 +96,22 @@ class MyVehicleDetailsScreen extends StatelessWidget {
                 buildRow("Km/day Level", "1/2", labelFontSize, valueFontSize),
                 Divider(color: AppColor().silverShadeGrayColor),
                 SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomButtonWeb(
+                        text: "Previous",
+                        onPressed: () {
+                          widget.onScreenChange(ScreenType.myVehicle);
+
+                        },
+                        color: AppColor().darkCharcoalBlueColor,
+                        textColor: AppColor().yellowWarmColor,
+                        borderRadius: 7,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

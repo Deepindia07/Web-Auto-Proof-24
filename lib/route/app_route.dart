@@ -2,7 +2,7 @@ part of 'app_route_imple.dart';
 
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: AppRoute.homeScreen,
+    initialLocation: AppRoute.loginScreen,
     routes: [
       GoRoute(
         path: AppRoute.splashScreen,
@@ -70,7 +70,10 @@ class AppRouter {
         name: 'MyVehicleDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: MyVehicleDetailsScreen(),
+          child: MyVehicleDetailsScreen(  onScreenChange: (screen, {inspectorId}) {
+            // Handle navigation or state here
+            debugPrint("Navigated to $screen with inspectorId: $inspectorId");
+          },),
           animation: AppAnimations.fadeIn,
           duration: const Duration(milliseconds: 800),
         ),
@@ -389,7 +392,7 @@ class AppRouter {
         name: 'vehiclesScreenView',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: VehiclesScreen(),
+          child: VehiclesScreen(onScreenChange: (ScreenType type,) {   },),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),

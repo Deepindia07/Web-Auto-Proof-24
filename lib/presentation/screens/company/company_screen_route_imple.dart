@@ -1,6 +1,7 @@
 library company_screen_route_imple.dart;
 
 import 'dart:convert';
+import 'package:auto_proof/l10n/app_localizations.dart';
 import 'package:auto_proof/presentation/screens/company/bloc/create_company_bloc.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_toast.dart';

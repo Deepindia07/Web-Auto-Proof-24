@@ -34,6 +34,7 @@ import 'package:auto_proof/presentation/screens/vehicles_screen/vehicles_screen_
 import 'package:auto_proof/presentation/splash/splash_screen_route_imple.dart';
 import 'package:auto_proof/utilities/extensions/routing_animation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 part 'app_route.dart';

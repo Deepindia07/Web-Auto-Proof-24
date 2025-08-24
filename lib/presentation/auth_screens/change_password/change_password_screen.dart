@@ -181,11 +181,12 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
+                                  top: 5,
                                   left: 20.0,
                                   right: 20,
                                 ),
                                 child: Text(
-                                  '${AppLocalizations.of(context)!.emailSentMessageTittle}\ndevesh***29gmail.com',
+                                  'Update your current password to\n keep your account secure',
                                   textAlign: TextAlign.center,
                                   style:
                                       MontserratStyles.montserratNormalTextStyle(
@@ -301,7 +302,9 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                       fillColor:
                                           AppColor().darkCharcoalBlueColor,
                                       borderRadius: 30,
-                                      hintText:  AppLocalizations.of(context)!.newPassword,
+                                      hintText: AppLocalizations.of(
+                                        context,
+                                      )!.newPassword,
                                       // textCapitalization: TextCapitalization.none,
                                       onChanged: (value) =>
                                           _validatePasswords(),
@@ -382,7 +385,9 @@ class _ChangePasswordScreenViewState extends State<ChangePasswordScreenView> {
                                   borderRadius: 48,
                                   backgroundColor: AppColor().yellowWarmColor,
                                   onPressed: _changePassword,
-                                  text:  AppLocalizations.of(context)!.changePassword,
+                                  text: AppLocalizations.of(
+                                    context,
+                                  )!.changePassword,
                                   textStyle:
                                       MontserratStyles.montserratMediumTextStyle(
                                         color: AppColor().darkCharcoalBlueColor,

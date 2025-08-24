@@ -1,7 +1,7 @@
 part of 'subscription_screen_route_imple.dart';
 
 class SubscriptionMobile extends StatelessWidget {
-  final List<SubscriptionPlan> plans;
+  final List<GetSubscriptionPlanData> plans;
 
   const SubscriptionMobile({super.key, required this.plans});
 
@@ -28,7 +28,7 @@ class SubscriptionMobile extends StatelessWidget {
               itemCount: plans.length,
               separatorBuilder: (_, __) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
-                return SubscriptionCard(plan: plans[index]);
+                return SubscriptionCard(plan: plans, index: index,);
               },
             ),
           ],
