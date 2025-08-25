@@ -357,21 +357,24 @@ class _RadioDropdownFieldState extends State<RadioDropdownField>
 class CustomDropdownNew extends StatefulWidget {
   final List<String> items;
   final String title;
+  final TextStyle? textStyle;
   final String hint;
   final Widget? preFix;
   final double? borderRadius;
   final String? value;
+  bool? isRequired = false;
   final void Function(String? val) onChanged;
 
-  const CustomDropdownNew({
+   CustomDropdownNew({
     super.key,
     required this.items,
     required this.title,
+     this.isRequired,
     required this.hint,
     required this.value,
     required this.onChanged,
     this.borderRadius,
-    this.preFix,
+    this.preFix,  this.textStyle,
   });
 
   @override
@@ -387,9 +390,13 @@ class _CustomDropdownNewState extends State<CustomDropdownNew> {
         // Title
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            widget.title,
-            style:   MontserratStyles.montserratSemiBoldTextStyle(size: 15,color: AppColor().darkCharcoalBlueColor),
+          child: Row(
+            children: [
+              Text(
+                widget.title,
+                style: widget.textStyle ??   MontserratStyles.montserratSemiBoldTextStyle(size: 15,color: AppColor().darkCharcoalBlueColor),
+              ), if (widget.isRequired == true) Text(' *', style: TextStyle(color: Colors.red)),
+            ],
           ),
         ),
 
@@ -402,10 +409,8 @@ class _CustomDropdownNewState extends State<CustomDropdownNew> {
             isDense: true,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 10,
-              vertical: 12,
+              vertical: 10,
             ),
-
-            // 👇 set border for all states
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
               borderSide: BorderSide(
@@ -430,7 +435,7 @@ class _CustomDropdownNewState extends State<CustomDropdownNew> {
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
               borderSide: BorderSide(
-                color: Colors.red, // 👈 error state color
+                color: Colors.red,
                 width: 1,
               ),
             ),
@@ -464,7 +469,7 @@ class _CustomDropdownNewState extends State<CustomDropdownNew> {
                     Text(
                       e,
                       style: const TextStyle(fontSize: 14),
-                    ), // smaller text
+                    ),
                     Radio<String>(
                       value: e,
                       groupValue: widget.value,
@@ -501,11 +506,7 @@ class _GenderDropdownExampleState extends State<GenderDropdownExample> {
   @override
   void initState() {
     super.initState();
-
-    // Example: If API returns uppercase like "MALE"
-    String? apiGender = "MALE"; // this comes from your backend response
-
-    // Normalize value to match dropdown items
+    String? apiGender = "MALE";
     if (apiGender != null) {
       if (apiGender.toLowerCase() == "male") {
         selectedGender = "Male";

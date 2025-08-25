@@ -10,4 +10,5 @@ class AppColor {
   final Color desaturatedBlueColor = Color(0xff28334A);
   final Color figmaColor = Color(0xffD9D9D9);
   final Color newBgColor = Color(0xffF6FAFD);
+  final Color borderColor = Color(0xFF979DA3);
 }

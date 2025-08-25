@@ -392,8 +392,8 @@
     "@checklist": {
         "description": "Label for the checklist section"
     },
-
-    "softyPack": "Softy Pack",
+   "softyPack": "Safety Pack",
+ "selectLeaseStartDate": "Lease Start Date & Time",
     "@softyPack": {
         "description": "Label for softy pack checklist item"
     },
@@ -478,12 +478,13 @@
             }
         }
     },
-
+   "gpsMandatory": "GPS is mandatory and cannot be turned off.",
     "licenseInstruction": "I checked and took picture of the original driver's license. (Copy not accepted)",
     "licenseInstructionId": "I checked and took picture of the original driver's ID. (Copy not accepted)",
     "birthDate": "Birth Date",
     "drivingLicense": "Driving License",
     "dateOfIssue": "Date of Issue",
+    "selectGasType": "Select Gas Type",
     "rentalDuration": "Rental Duration",
     "leaseEndDateTime": "Lease end date & time",
     "mandatoryPicture": "Mandatory Picture",
@@ -494,6 +495,9 @@
     "rearLeftWheel": "Rear Left Wheel",
     "rearSide": "Rear Side",
     "backRightWheel": "Back Right Wheel",
+    "addCar": "Add Car",
+    "agentDetails": "Agent Details",
+    "addAgent": "Add Agent",
     "rearRightSide": "Rear Right Side",
     "frontRightSide": "Front Right Side",
     "frontRightWheel": "Front Right Wheel",

@@ -685,7 +685,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get checklist => 'Liste de vérification';
 
   @override
-  String get softyPack => 'Pack souple';
+  String get softyPack => 'Pack Sécurité';
+
+  @override
+  String get selectLeaseStartDate =>
+      'Sélectionnez la date l\'heure de début bail';
 
   @override
   String get spareWheel => 'Roue de secours';
@@ -736,6 +740,10 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get gpsMandatory =>
+      'Le GPS est obligatoire et ne peut pas être désactivé.';
+
+  @override
   String get licenseInstruction =>
       'J\'ai vérifié et pris une photo du permis de conduire original. (Copie non acceptée)';
 
@@ -751,6 +759,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get dateOfIssue => 'Date de délivrance';
+
+  @override
+  String get selectGasType => 'Sélectionnez le type de gaz';
 
   @override
   String get rentalDuration => 'Durée de location';
@@ -781,6 +792,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get backRightWheel => 'Roue arrière droite';
+
+  @override
+  String get addCar => 'Ajouter une voiture';
+
+  @override
+  String get agentDetails => 'Détails de l\'agent';
+
+  @override
+  String get addAgent => 'Ajouter un agent';
 
   @override
   String get rearRightSide => 'Côté arrière droit';

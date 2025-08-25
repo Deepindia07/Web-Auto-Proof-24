@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case ScreenType.paymentHistory:
         return PaymentHistoryScreen();
       case ScreenType.newInspection:
-        return InstructionScreen();
+        return InstructionScreen(carDetails: CarDetailsModel(),);
       case ScreenType.notification:
         return NotificationScreen(isBacked: false, onBack: () {});
       case ScreenType.contactUs:
@@ -276,7 +276,7 @@ class CreateInspectionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: SystemMouseCursors.click, // ✅ Hand cursor
+      cursor: SystemMouseCursors.click,
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(

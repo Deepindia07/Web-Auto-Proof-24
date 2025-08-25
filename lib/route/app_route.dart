@@ -270,7 +270,7 @@ class AppRouter {
         name: 'instructionScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const InstructionScreen(),
+          child: InstructionScreen(carDetails: CarDetailsModel(),),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -290,7 +290,7 @@ class AppRouter {
         name: 'ownerDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const OwnerDetailsScreen(),
+          child: OwnerDetailsScreen(ownerDetailsScreenBloc: OwnerDetailsScreenBloc(),),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -300,7 +300,7 @@ class AppRouter {
         name: 'clientDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const ClientDetailsScreen(),
+          child: ClientDetailsScreen(bloc: ClientDetailsScreenBloc(),),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -310,7 +310,7 @@ class AppRouter {
         name: 'carImageInpectionScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const CarImInpectionScreen(),
+          child: CarImInpectionScreen(carDetailsModel: CarDetailsModel(),),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -334,23 +334,26 @@ class AppRouter {
       GoRoute(
         path: AppRoute.ownerSignatureViewScreen,
         name: 'ownerSignatureViewScreen',
-        pageBuilder: (context, state) => _buildPageWithAnimation(
-          state: state,
-          child: const OwnerSignatureScreen(),
-          animation: AppAnimations.slideFromRightWithScale,
-          duration: const Duration(milliseconds: 500),
-        ),
+        pageBuilder: (context, state) {
+          final carDetailsModel = state.extra as CarDetailsModel;
+      return    _buildPageWithAnimation(
+            state: state,
+            child: OwnerSignatureScreen(carDetailsModel: carDetailsModel),
+            animation: AppAnimations.slideFromRightWithScale,
+            duration: const Duration(milliseconds: 500),
+          );
+        },
       ),
-      GoRoute(
+   /*   GoRoute(
         path: AppRoute.clientSignatureViewScreen,
         name: 'clientSignatureViewScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: const ClientSignatureScreenView(),
+          child: const ClientSignatureScreenView(carDetailsModel: null,),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
-      ),
+      ),*/
       GoRoute(
         path: AppRoute.inpectionScreenViewScreen,
         name: 'inpectionScreenViewScreen',

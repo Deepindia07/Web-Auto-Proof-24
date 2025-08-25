@@ -1415,8 +1415,14 @@ abstract class AppLocalizations {
   /// Label for softy pack checklist item
   ///
   /// In en, this message translates to:
-  /// **'Softy Pack'**
+  /// **'Safety Pack'**
   String get softyPack;
+
+  /// No description provided for @selectLeaseStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Lease Start Date & Time'**
+  String get selectLeaseStartDate;
 
   /// Label for spare wheel checklist item
   ///
@@ -1508,6 +1514,12 @@ abstract class AppLocalizations {
   /// **'Error selecting image: {error}'**
   String errorSelectingImage(String error);
 
+  /// No description provided for @gpsMandatory.
+  ///
+  /// In en, this message translates to:
+  /// **'GPS is mandatory and cannot be turned off.'**
+  String get gpsMandatory;
+
   /// No description provided for @licenseInstruction.
   ///
   /// In en, this message translates to:
@@ -1537,6 +1549,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date of Issue'**
   String get dateOfIssue;
+
+  /// No description provided for @selectGasType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Gas Type'**
+  String get selectGasType;
 
   /// No description provided for @rentalDuration.
   ///
@@ -1597,6 +1615,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back Right Wheel'**
   String get backRightWheel;
+
+  /// No description provided for @addCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Car'**
+  String get addCar;
+
+  /// No description provided for @agentDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent Details'**
+  String get agentDetails;
+
+  /// No description provided for @addAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Agent'**
+  String get addAgent;
 
   /// No description provided for @rearRightSide.
   ///

@@ -15,13 +15,6 @@ import 'package:auto_proof/presentation/screens/company/company_screen_route_imp
 import 'package:auto_proof/presentation/screens/contact_us/contact_us_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/history/history_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/home/screens/home_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/inspection/Instruction_screen/instruction_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/inspection/car_im_inpection/car_im_inpection_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/inspection/client_details/client_details_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/inspection/client_singature/client_signature_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/inspection/inpection_list/inspection_list_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/inspection/owner_details/owner_details_screen_route_imple.dart';
-import 'package:auto_proof/presentation/screens/inspection/owner_signature/owner_signature_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/inspector_create_admin/inspection_create_admin_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/notification/notification_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/payment/payment_screen_route_imple.dart';
@@ -36,5 +29,16 @@ import 'package:auto_proof/utilities/extensions/routing_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../presentation/screens/inpection/Instruction_screen/instruction_screen_route_imple.dart';
+import '../presentation/screens/inpection/car_details/model/car_details_model.dart';
+import '../presentation/screens/inpection/car_im_inpection/car_im_inpection_screen_route_imple.dart';
+import '../presentation/screens/inpection/client_details/bloc/client_details_screen_bloc.dart';
+import '../presentation/screens/inpection/client_details/client_details_screen_route_imple.dart';
+import '../presentation/screens/inpection/client_singature/client_signature_screen_route_imple.dart';
+import '../presentation/screens/inpection/inpection_list/inpection_list_screen_route_imple.dart';
+import '../presentation/screens/inpection/owner_details/bloc/owner_details_screen_bloc.dart';
+import '../presentation/screens/inpection/owner_details/owner_details_screen_route_imple.dart';
+import '../presentation/screens/inpection/owner_signature/owner_signature_screen_route_imple.dart';
 
 part 'app_route.dart';

@@ -677,7 +677,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checklist => 'Checklist';
 
   @override
-  String get softyPack => 'Softy Pack';
+  String get softyPack => 'Safety Pack';
+
+  @override
+  String get selectLeaseStartDate => 'Lease Start Date & Time';
 
   @override
   String get spareWheel => 'Spare Wheel';
@@ -727,6 +730,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get gpsMandatory => 'GPS is mandatory and cannot be turned off.';
+
+  @override
   String get licenseInstruction =>
       'I checked and took picture of the original driver\'s license. (Copy not accepted)';
 
@@ -742,6 +748,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dateOfIssue => 'Date of Issue';
+
+  @override
+  String get selectGasType => 'Select Gas Type';
 
   @override
   String get rentalDuration => 'Rental Duration';
@@ -772,6 +781,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backRightWheel => 'Back Right Wheel';
+
+  @override
+  String get addCar => 'Add Car';
+
+  @override
+  String get agentDetails => 'Agent Details';
+
+  @override
+  String get addAgent => 'Add Agent';
 
   @override
   String get rearRightSide => 'Rear Right Side';

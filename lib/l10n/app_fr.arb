@@ -38,6 +38,11 @@
   "creatingAccount": "Création du compte...",
   "haveAccount": "Vous avez déjà un compte? ",
   "signIn": "Se connecter",
+  "addCar": "Ajouter une voiture",
+  "agentDetails": "Détails de l'agent",
+  "addAgent": "Ajouter un agent",
+   "gpsMandatory": "Le GPS est obligatoire et ne peut pas être désactivé.",
+  "selectGasType": "Sélectionnez le type de gaz",
   "resetInstructionsMessage": "Pas de souci, nous vous enverrons les instructions de réinitialisation",
   "enterEmailOrPhone": "Entrez votre e-mail ou numéro de téléphone",
   "pleaseEnterEmailOrPhone": "Veuillez entrer votre e-mail ou numéro de téléphone",
@@ -317,7 +322,8 @@
   "@checklist": {
     "description": "Label pour la section liste de vérification"
   },
-  "softyPack": "Pack souple",
+  "softyPack": "Pack Sécurité",
+  "selectLeaseStartDate": "Sélectionnez la date l'heure de début bail",
   "@softyPack": {
     "description": "Label pour l'élément pack souple de la liste de vérification"
   },

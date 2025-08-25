@@ -372,10 +372,12 @@ class CustomTextField extends StatefulWidget {
   final TextAlign textAlign;
   final bool autovalidateMode;
   final String? obscuringCharacter;
+  bool? isRequired = false;
 
-  const CustomTextField({
+  CustomTextField({
     Key? key,
     this.hintText,
+    this.isRequired,
     this.labelText,
     this.errorText,
     this.helperText,
@@ -460,13 +462,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
         if (widget.labelText != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              widget.labelText!,
-              style:
-                  widget.labelStyle ??
-                 MontserratStyles.montserratSemiBoldTextStyle(size: 15,color: AppColor().darkCharcoalBlueColor),
+            child: Row(
+              children: [
+                Text(
+                  widget.labelText!,
+                  style:
+                      widget.labelStyle ??
+                      MontserratStyles.montserratSemiBoldTextStyle(
+                        size: 15,
+                        color: AppColor().darkCharcoalBlueColor,
+                      ),
+                ), if (widget.isRequired == true)
+                  Text(' *', style: TextStyle(color: Colors.red)),
+              ],
             ),
           ),
+
         TextFormField(
           controller: widget.controller,
           focusNode: _focusNode,
@@ -577,7 +588,9 @@ class CustomPasswordField extends StatefulWidget {
     this.borderRadius = 8.0,
     this.borderWidth = 1.0,
     this.obscuringCharacter,
-    this.hintStyle, this.onSubmitted, this.borderColor,
+    this.hintStyle,
+    this.onSubmitted,
+    this.borderColor,
   }) : super(key: key);
 
   @override
@@ -589,7 +602,8 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomTextField(onSubmitted: widget.onSubmitted,
+    return CustomTextField(
+      onSubmitted: widget.onSubmitted,
       hintText: widget.hintText,
       textStyle: widget.textStyle,
       controller: widget.controller,
@@ -598,7 +612,8 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
       prefixIcon: widget.prefix,
       hintStyle: widget.hintStyle,
       borderRadius: widget.borderRadius,
-      fillColor: widget.fillColor,borderColor: widget.borderColor,
+      fillColor: widget.fillColor,
+      borderColor: widget.borderColor,
       borderWidth: widget.borderWidth,
       onChanged: widget.onChanged,
       validator: widget.validator,
