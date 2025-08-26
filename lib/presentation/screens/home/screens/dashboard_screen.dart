@@ -29,7 +29,8 @@ class DashboardScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SubscriptionCard(),
+                        _buildSubscriptionSection(context),
+                        /*SubscriptionCard(),*/
                         SizedBox(height: 16),
                         CreateInspectionButton(onTap: onTap),
                       ],
@@ -40,6 +41,133 @@ class DashboardScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+  Widget _buildSubscriptionSection(BuildContext context) {
+    return CustomContainer(
+      padding: EdgeInsets.only(top: 22),
+      borderRadius: BorderRadius.circular(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(
+            height: 1,
+            color: AppColor().darkYellowColor,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.autoProofTitle,
+                            style: MontserratStyles.montserratSemiBoldTextStyle(
+                              color: AppColor().darkYellowColor,
+                              size: 16,
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.freeAccount,
+                            style: MontserratStyles.montserratBoldTextStyle(
+                              color: AppColor().backgroundColor,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 18),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Units",
+                      style: MontserratStyles.montserratSemiBoldTextStyle(
+                        color: AppColor().backgroundColor,
+                        size: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 7),
+                    RichText(text: TextSpan(children: [
+                      TextSpan(text: "3  ", style: MontserratStyles.montserratRegularTextStyle(color: AppColor().darkYellowColor, size: 10,),),
+                      TextSpan(text:"Left", style: MontserratStyles.montserratRegularTextStyle(color: AppColor().backgroundColor, size: 10,),
+                      )]),)],),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Valid Until",
+                      style: MontserratStyles.montserratSemiBoldTextStyle(
+                        color: AppColor().backgroundColor,
+                        size: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 7),
+                    Text("20th Aug 2026",
+                      style: MontserratStyles.montserratRegularTextStyle(
+                        color: AppColor().backgroundColor,
+                        size: 10,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "Status",
+                      style: MontserratStyles.montserratSemiBoldTextStyle(
+                        color: AppColor().backgroundColor,
+                        size: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 7),
+                    // Text("Active",
+                    //   style: MontserratStyles.montserratRegularTextStyle(
+                    //     color: AppColor().backgroundColor,
+                    //     size: 10,
+                    //   ),
+                    // ),
+                    /// upcoming plan button
+                    Container(
+                      height: 20,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: AppColor().darkYellowColor
+                      ),
+                      child: Text("Upgrade Plan", style: TextStyle(
+                        fontSize: 8, fontWeight: FontWeight.w600,
+                      ),),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

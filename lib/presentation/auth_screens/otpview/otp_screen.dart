@@ -1,11 +1,11 @@
 part of 'otp_screen_route_imple.dart';
 
 class OtpScreen extends StatelessWidget {
-  final String? email;
+  final String? value;
   final bool isEmailFromSignUp;
   final String otpType;
   const OtpScreen({
-    required this.email,
+    required this.value,
     required this.isEmailFromSignUp,
     super.key,
     required this.otpType,
@@ -16,7 +16,7 @@ class OtpScreen extends StatelessWidget {
     return BlocProvider<OtpViewBloc>(
       create: (context) => OtpViewBloc(apiService: AuthenticationApiCall()),
       child: OtpScreenView(
-        email: email!,
+        value: value!,
         isEmailFromSignUp: isEmailFromSignUp,
         otpType: otpType,
       ),
@@ -25,11 +25,11 @@ class OtpScreen extends StatelessWidget {
 }
 
 class OtpScreenView extends StatefulWidget {
-  final String? email;
+  final String? value;
   final bool isEmailFromSignUp;
   final String otpType;
   const OtpScreenView({
-    required this.email,
+    required this.value,
     required this.isEmailFromSignUp,
     required this.otpType,
     super.key,
@@ -49,7 +49,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
   void initState() {
     super.initState();
 
-    log("email0----->${widget.email}");
+    log("email0----->${widget.value}");
     _pulseController = AnimationController(
       duration: Duration(seconds: 2),
       vsync: this,
@@ -71,9 +71,17 @@ class _OtpScreenViewState extends State<OtpScreenView>
 
   void _verifyCode() {
     if (pinController.text.length == 4) {
-      context.read<OtpViewBloc>().add(
-        VerifyOtpEvent(otp: pinController.text, email: widget.email!),
-      );
+      widget.otpType == "1"
+          ? context.read<OtpViewBloc>().add(
+              VerifyOtpEvent(otp: pinController.text, email: widget.value!),
+            )
+          : context.read<OtpViewBloc>().add(
+              //  verifyOtpOnSMS
+              VerifyPhoneOtpEvent(
+                otp: pinController.text,
+                phone: widget.value!,
+              ),
+            );
     } else {
       CherryToast.warning(
         context,
@@ -83,8 +91,8 @@ class _OtpScreenViewState extends State<OtpScreenView>
   }
 
   void _resendCode() {
-     pinController.clear();
-    context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
+    pinController.clear();
+    context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.value!));
   }
 
   void _showSnackBar(String message, Color color) {
@@ -115,6 +123,13 @@ class _OtpScreenViewState extends State<OtpScreenView>
     return email;
   }
 
+  String maskPhoneNumber(String phone) {
+    if (phone.length < 2) return phone; // handle short numbers
+    final visiblePart = phone.substring(phone.length - 2);
+    final masked = '*' * (phone.length - 2);
+    return '$masked$visiblePart';
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -125,31 +140,45 @@ class _OtpScreenViewState extends State<OtpScreenView>
         listener: (context, state) {
           if (state is OtpViewLoading) {
             CustomLoader.showPopupLoader(context);
-          } else {
+          } else if (state is OtpViewSuccess) {
             CustomLoader.hidePopupLoader(context);
-            if (state is OtpViewSuccess) {
-              log("hh----${widget.email}");
-              String email = widget.email.toString();
-              if (widget.otpType == "1") {
-                context.push(AppRoute.signUpScreen, extra: email);
-              } else {
-                context.push(AppRoute.resetPasswordScreen, extra: email);
-              }
-
-              CherryToast.success(
-                context,
-                AppLocalizations.of(context)!.otpVerified,
-              );
-            } else if (state is OtpViewFailure) {
-              // add localization text --------------
-              CherryToast.error(context, state.error);
-            } else if (state is OtpResendSuccess) {
-
-              CherryToast.success(context,  AppLocalizations.of(context)!.otpVerified);
-            } else if (state is OtpResendFailure) {
-              // add localization text --------------
-              CherryToast.error(context, state.error);
+            log("hh----${widget.value}");
+            String email = widget.value.toString();
+            if (widget.otpType == "1") {
+              context.push(AppRoute.signUpScreen, extra: email);
+            } else {
+              context.push(AppRoute.resetPasswordScreen, extra: email);
             }
+
+            CherryToast.success(
+              context,
+              AppLocalizations.of(context)!.otpVerified,
+            );
+          }else if (state is OtpVerifyPhoneSuccess) {
+            CustomLoader.hidePopupLoader(context);
+            log("hh----${widget.value}");
+            String email = widget.value.toString();
+            if (widget.otpType == "2") {
+              context.push(AppRoute.signUpScreen, extra: email);
+            } else {
+              context.push(AppRoute.resetPasswordScreen, extra: email);
+            }
+
+            CherryToast.success(
+              context,
+              AppLocalizations.of(context)!.otpVerified,
+            );
+          } else if (state is OtpViewFailure) {
+            // add localization text --------------
+            CherryToast.error(context, state.error);
+          } else if (state is OtpResendSuccess) {
+            CherryToast.success(
+              context,
+              AppLocalizations.of(context)!.otpVerified,
+            );
+          } else if (state is OtpResendFailure) {
+            // add localization text --------------
+            CherryToast.error(context, state.error);
           }
         },
         child: Responsive.isDesktop(context)
@@ -220,7 +249,9 @@ class _OtpScreenViewState extends State<OtpScreenView>
                         ),
                         vGap(10),
                         Text(
-                          AppLocalizations.of(context)!.email,
+                          widget.otpType == "1"
+                              ? AppLocalizations.of(context)!.email
+                              : AppLocalizations.of(context)!.phone,
                           style: MontserratStyles.montserratLitleBoldTextStyle(
                             size: 35,
                             color: AppColor().darkCharcoalBlueColor,
@@ -245,8 +276,9 @@ class _OtpScreenViewState extends State<OtpScreenView>
                             ),
                             children: [
                               TextSpan(
-                                text:
-                                    '${AppLocalizations.of(context)!.emailSentMessage}\n',
+                                text: widget.otpType == "1"
+                                    ? '${AppLocalizations.of(context)!.emailSentMessage}\n'
+                                    : 'We have sent code to your Phone\n',
                                 style:
                                     MontserratStyles.montserratRegularTextStyle(
                                       color: AppColor().silverShadeGrayColor,
@@ -254,7 +286,9 @@ class _OtpScreenViewState extends State<OtpScreenView>
                                     ),
                               ),
                               TextSpan(
-                                text: maskEmail(widget.email!),
+                                text: widget.otpType == "1"
+                                    ? maskEmail(widget.value!)
+                                    : maskPhoneNumber(widget.value!),
                                 style:
                                     MontserratStyles.montserratNormalTextStyle(
                                       color: AppColor().darkCharcoalBlueColor,
@@ -307,7 +341,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
                         if (value == pinController.text) {
                           return null; // Correct
                         } else {
-                          return  AppLocalizations.of(context)!.pinIncorrect;
+                          return AppLocalizations.of(context)!.pinIncorrect;
                         }
                       },
 

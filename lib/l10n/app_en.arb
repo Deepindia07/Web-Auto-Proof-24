@@ -151,6 +151,9 @@
     "phoneHint": "000-000-0000",
     "phoneRequired": "Phone number is required",
     "phoneInvalid": "Phone number must be at least 10 digits",
+    "checkInOut": "Check in / out",
+    "selectGasLevel": "Select Gas Level",
+
     "address": "Address",
     "addressHint": "123 Anywhere St, Any City, ST 12345",
     "addressRequired": "Address is required",
@@ -238,7 +241,7 @@
         "description": "Label for number plate field"
     },
 
-    "numberPlateHint": "LL-DDD-LL",
+    "numberPlateHint": "LL-000-00",
     "@numberPlateHint": {
         "description": "Hint text for number plate format"
     },
@@ -433,7 +436,7 @@
         "description": "Hint text for comment field"
     },
 
-    "dropTheFile": "Drop the file",
+    "dropTheFile": "Upload Insurance",
     "@dropTheFile": {
         "description": "Text shown in file upload area"
     },

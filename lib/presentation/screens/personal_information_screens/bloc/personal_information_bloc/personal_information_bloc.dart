@@ -29,7 +29,7 @@ class PersonalInformationBloc
     emit(PersonalInformationLoading());
 
     try {
-      log("Personal Info Payload: ${event.profile}");
+      log("Personal Info Payload: ${event.profile}------${event.profile.gender}");
 
       final result = await authenticationApiCall.userUpdateProfileApiCall(
         dataBody: event.profile.toJson(),

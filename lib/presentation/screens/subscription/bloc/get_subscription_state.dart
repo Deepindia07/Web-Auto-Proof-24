@@ -11,23 +11,42 @@ final class GetSubscriptionInitial extends GetSubscriptionState {
 
 ///------------
 
-final class GetSubscriptionLoading extends GetSubscriptionState{
+final class GetSubscriptionLoading extends GetSubscriptionState {
   @override
   List<Object> get props => [];
 }
 
-
- class GetSubscriptionSuccess extends GetSubscriptionState{
-  GetSubscriptionPlanModel? getSubscriptionPlanModel ;
+class GetSubscriptionSuccess extends GetSubscriptionState {
+  GetSubscriptionPlanModel? getSubscriptionPlanModel;
   GetSubscriptionSuccess({required this.getSubscriptionPlanModel});
   @override
   List<Object?> get props => [getSubscriptionPlanModel];
-
 }
 
 class GetSubscriptionError extends GetSubscriptionState {
-  final String error ;
+  final String error;
   GetSubscriptionError({required this.error});
   @override
   List<Object?> get props => [error];
+}
+
+///----
+///
+
+class PaymentPlanLoading extends GetSubscriptionState {
+  @override
+  List<Object> get props => [];
+}
+
+class PaymentPlanSuccess extends GetSubscriptionState {
+  @override
+  List<Object> get props => [];
+}
+
+class PaymentPlanError extends GetSubscriptionState {
+  final String error;
+  const PaymentPlanError({required this.error});
+
+  @override
+  List<Object> get props => [];
 }

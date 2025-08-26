@@ -39,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     emailController.text = widget.email.toString();
+    phoneController.text = widget.email.toString();
     _signUpBloc = SignUpScreenBloc(apiRepository: AuthenticationApiCall());
     _loadEmailVerificationStatus();
     super.initState();
@@ -177,8 +178,8 @@ class _SignUpScreenState extends State<SignUpScreen>
       return;
     }
 
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(phoneController.text.trim())) {
+    final phoneRegex = RegExp(r'^[6-9]\d{9}$');
+    if (!phoneRegex.hasMatch(phoneController.text.trim())) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.phoneInvalid),
@@ -193,19 +194,17 @@ class _SignUpScreenState extends State<SignUpScreen>
     });
 
     _signUpBloc.add(
-      SendOtpEmailSignUpEvent(email: phoneController.text.trim()),
+      SendOtpPhoneEvent(
+        phoneNumber: "$selectedCountryCode ${phoneController.text.trim()}",
+      ),
     );
   }
 
-  void _navigateToOtpScreen() async {
+  void _navigateToOtpScreen(String otpType, String value) async {
     print("email-----${emailController.text}");
     final result = await context.push(
       AppRoute.otpScreen,
-      extra: {
-        'email': emailController.text,
-        'isEmailFromSignUp': true,
-        'otpType': '1',
-      },
+      extra: {'value': value, 'isEmailFromSignUp': true, 'otpType': otpType},
     );
 
     _loadEmailVerificationStatus();
@@ -328,17 +327,7 @@ class _SignUpScreenState extends State<SignUpScreen>
           // Clear verification status after successful registration
           _saveEmailVerificationStatus(false);
           context.pushNamed("login");
-        } else if (state is SignUpSendOtpOnPhoneSuccess) {
-          setState(() {
-            isPhoneSendingOtp = false;
-            isPhoneVerified = true;
-          });
-          CherryToast.success(
-            context,
-            AppLocalizations.of(context)!.phoneSuccessfully,
-          );
-        }
-        else if (state is SignUpScreenError) {
+        } else if (state is SignUpScreenError) {
           CustomLoader.hidePopupLoader(context);
           CherryToast.error(context, state.message);
         } else if (state is SignUpSendOtpScreenLoading) {
@@ -346,6 +335,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         }
         // Handle OTP send success
         else if (state is SignUpSendOtpOnEmailSuccess) {
+          CustomLoader.hidePopupLoader(context);
           setState(() {
             _isSendingOtp = false;
           });
@@ -353,10 +343,32 @@ class _SignUpScreenState extends State<SignUpScreen>
             context,
             AppLocalizations.of(context)!.verificationOtpMsg,
           );
-          _navigateToOtpScreen();
+          _navigateToOtpScreen("1", emailController.text.trim().toString());
+        } else if (state is SignUpSendOtpOnPhoneSuccess) {
+          CustomLoader.hidePopupLoader(context);
+          setState(() {
+            _isSendingOtp = false;
+          });
+          CherryToast.success(
+            context,
+            AppLocalizations.of(context)!.verificationOtpMsg,
+          );
+          _navigateToOtpScreen(
+            "2",
+            "$selectedCountryCode ${phoneController.text.trim().toString()}",
+          );
         }
         // Handle OTP send error
         else if (state is SignUpSendOtpOnEmailError) {
+          CustomLoader.hidePopupLoader(context);
+          setState(() {
+            _isSendingOtp = false;
+          });
+
+          // add localization text --------------
+          CherryToast.error(context, state.message);
+        } else if (state is SignUpSendOtpOnPhoneError) {
+          CustomLoader.hidePopupLoader(context);
           setState(() {
             _isSendingOtp = false;
           });
@@ -466,16 +478,22 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   ? Colors.green
                                   : _isEmailVerified
                                   ? AppColor().darkYellowColor
-                                  : Colors.grey, // greyed out if email not verified
+                                  : Colors
+                                        .grey, // greyed out if email not verified
                             ),
                           ),
                         ),
                         controller: phoneController,
-                        enabled: _isEmailVerified, // ✅ disable typing until email verified
+                        enabled:
+                            _isEmailVerified, // ✅ disable typing until email verified
                         isVerified: isPhoneVerified,
                         onVerify: () {},
-                      ),
+                        onChanged: (v) {
+                          print("dialCode-------${v.dialCode}");
 
+                          selectedCountryCode = v.dialCode.toString();
+                        },
+                      ),
 
                       Container(height: 15),
                       CustomTextField(

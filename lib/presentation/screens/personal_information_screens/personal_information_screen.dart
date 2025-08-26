@@ -18,16 +18,18 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   String? selectedGender;
   String? selectDialCode;
   String? apiGender = "MALE";
+  final genderItems = const ['Male', 'Female'];
+
   @override
   void initState() {
     context.read<PersonalInformationBloc>().add(GetPersonalInfoApiEvent());
 
-    selectedGender = normalizeGender(apiGender); // ensures it matches items
 
     super.initState();
   }
+
   // normalize API or backend values (like MALE/FEMALE) to UI values
-  String? normalizeGender(String? value) {
+  /*  String? normalizeGender(String? value) {
 
       if (value == null) return null;
       switch (value.toLowerCase()) {
@@ -40,12 +42,23 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       }
 
 
+  }*/
+  String? normalizeGender(String? value) {
+    if (value == null) return null;
+    switch (value.toUpperCase()) {
+      case "MALE":
+        return "Male";   // ✅ Matches dropdown items
+      case "FEMALE":
+        return "Female";
+      default:
+        return null;
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    final genderItems = const ['Male', 'Female'];
 
     // extra safety: if selectedGender is not in items, reset to null
     if (selectedGender != null && !genderItems.contains(selectedGender)) {
@@ -61,7 +74,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: Responsive.isDesktop(context)
-                  ? screenWidth /10
+                  ? screenWidth / 10
                   : Responsive.isTablet(context)
                   ? 30
                   : 16,
@@ -82,9 +95,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
               ),
               child: BlocConsumer<PersonalInformationBloc, PersonalInformationState>(
                 listener: (context, state) {
-                  if(state is GetPersonalInfoLoading){
+                  if (state is GetPersonalInfoLoading) {
                     CustomLoader.showPopupLoader(context);
-                  } if(state is GetPersonalInfoError){
+                  }
+                  if (state is GetPersonalInfoError) {
                     CustomLoader.hidePopupLoader(context);
                   }
                   if (state is GetPersonalInfoSuccess) {
@@ -101,7 +115,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                       selectDialCode = user.user?.countryCode ?? "";
                     });
                     print(
-                      "object-----${firstNameController.text.trim().toString()}",
+                      "object-     --selectedGender-----$selectedGender--${firstNameController.text.trim().toString()}",
                     );
                   }
 
@@ -273,9 +287,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       text: 'Update',
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
-                                          print(
-                                            "object-----${firstNameController.text.trim().toString()}---${(selectedGender ?? "").toUpperCase()}",
-                                          );
                                           ProfileModel profile = ProfileModel(
                                             userType: "individual",
                                             firstName: firstNameController.text
@@ -299,9 +310,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                 .trim()
                                                 .toString(),
                                             rememberSettings: false,
-                                            gender:  (selectedGender ?? "").toUpperCase(),
+                                           gender: (selectedGender ?? "").toUpperCase(),
                                           );
-
+                                          print(
+                                            "object-${profile.gender}----${firstNameController.text.trim().toString()}---${(selectedGender ?? "").toUpperCase()}",
+                                          );
                                           context
                                               .read<PersonalInformationBloc>()
                                               .add(

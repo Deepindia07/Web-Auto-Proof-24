@@ -9,6 +9,8 @@ const String profileImageCopy = "assets/image/profile.png";
 const String loginImage = "assets/image/login_image.png";
 const String loginAutoLogoImage = "assets/image/login_auto_logo.png";
 const String deleteImage = "assets/image/Delete (2).png";
+const String carIconImage = "assets/icon/Car.png";
+const String uploadIcon = "assets/icon/upload_icon.png";
 
 /// Icons
 

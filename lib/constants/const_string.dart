@@ -13,6 +13,7 @@ const String companyId = "companyId";
 const String vehicleId = "vehicleId";
 const String roleKey = "roleKey";
 const String isVerifiedEmail = "isVerifiedEmail";
+const String isVerifiedPhone = "isVerifiedPhone";
 const String isEmailFromSignUp = "isEmailFromSignUp";
 const String isSubscribedRoutingKey = 'isSubscribedRoutingKey';
 

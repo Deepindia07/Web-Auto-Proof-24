@@ -406,6 +406,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get phoneInvalid => 'Phone number must be at least 10 digits';
 
   @override
+  String get checkInOut => 'Check in / out';
+
+  @override
+  String get selectGasLevel => 'Select Gas Level';
+
+  @override
   String get address => 'Address';
 
   @override
@@ -584,7 +590,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get numberPlate => 'Number Plate';
 
   @override
-  String get numberPlateHint => 'LL-DDD-LL';
+  String get numberPlateHint => 'LL-000-00';
 
   @override
   String get brand => 'Brand';
@@ -704,7 +710,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterComments => 'Enter Comments';
 
   @override
-  String get dropTheFile => 'Drop the file';
+  String get dropTheFile => 'Upload Insurance';
 
   @override
   String get errorLoadingImage => 'Error loading image';

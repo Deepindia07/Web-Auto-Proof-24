@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ✅ Sidebar for Desktop
-                    if (Responsive.isDesktop(context))
+
                       BlocConsumer<PersonalInformationBloc,
                           PersonalInformationState>(
                         listener: (context, state) {
@@ -84,17 +84,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               "${state.userProfile.user?.firstName ?? ""} ${state.userProfile.user?.lastName ?? ""}";
                               companyId = state.userProfile.user?.company
                                   ?.companyId ??
-                                  "";
+                                  "";    print("userName--------$userName");
+                              print("companyId--------$companyId");
                             });
+
                           }
                         },
                         builder: (context, state) {
-                          return SideMenu(
+                          return    (Responsive.isDesktop(context)) ? SideMenu(
                             onMenuSelected: updateScreen,
                             currentScreen: currentScreen,
                             userName: userName,
                             companyId: companyId,
-                          );
+                          ) : SizedBox();
                         },
                       ),
 
@@ -197,6 +199,9 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       case ScreenType.deleteAccount:
         return Container();
+      case ScreenType.inspectionList:
+
+        return InspectionListScreen();
     }
   }
 }
@@ -217,6 +222,7 @@ enum ScreenType {
   viewTeamProfile,
   viewVehicleProfile,
   deleteAccount,
+  inspectionList,
 }
 
 class MenuItem extends StatelessWidget {

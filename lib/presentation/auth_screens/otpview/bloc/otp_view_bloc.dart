@@ -1,4 +1,4 @@
-
+import 'dart:async';
 
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/logger/app_logger.dart';
@@ -18,6 +18,7 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
   OtpViewBloc({required this.apiService}) : super(OtpViewInitial()) {
     on<VerifyOtpEvent>(_onVerifyOtp);
     on<ResendOtpEvent>(_onResendOtp);
+    on<VerifyPhoneOtpEvent>(_onVerifyPhoneOtpEvent);
   }
 
   Future<void> _onVerifyOtp(
@@ -27,7 +28,7 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
     emit(OtpViewLoading());
 
     try {
-      final dataBody = { 'email': event.email,'otp': event.otp,};
+      final dataBody = {'email': event.email, 'otp': event.otp};
 
       final result = await apiService.verifyOtpForResetPasswordApiCall(
         dataBody: dataBody,
@@ -51,9 +52,6 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
       emit(OtpViewFailure(error: 'An unexpected error occurred'));
     }
   }
-
-
-
 
   Future<void> _onResendOtp(
     ResendOtpEvent event,
@@ -85,6 +83,36 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
       emit(
         OtpResendFailure(error: 'Failed to resend OTP: ${error.toString()}'),
       );
+    }
+  }
+
+  Future<void> _onVerifyPhoneOtpEvent(
+    VerifyPhoneOtpEvent event,
+    Emitter<OtpViewState> emit,
+  ) async {
+    emit(OtpVerifyPhoneLoading());
+    try {
+      final dataBody = {"otp": event.otp, "phoneNumber": event.phone};
+
+      final result = await apiService.verifyOtpForPhoneApiCall(
+        dataBody: dataBody,
+      );
+      if (result.isSuccess) {
+        SharedPrefsHelper.instance.setBool(
+          isVerifiedPhone,
+          result.data.isEmailVerified ?? false,
+        );
+        final isVeriwfiedPhone = SharedPrefsHelper.instance.getBool(
+          isVerifiedPhone,
+        );
+        appLogger.w("is phone is verified := $isVeriwfiedPhone");
+        emit(OtpVerifyPhoneSuccess(response: result.data));
+      } else {
+        emit(OtpVerifyPhoneError(error: result.error));
+      }
+    } catch (e) {
+      appLogger.e("Error in _onVerifyOtp: $e");
+      emit(OtpViewFailure(error: 'An unexpected error occurred'));
     }
   }
 }

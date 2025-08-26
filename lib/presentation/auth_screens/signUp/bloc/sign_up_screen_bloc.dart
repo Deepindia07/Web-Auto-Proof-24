@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_proof/auth/server/default_db/sharedprefs_method.dart';
 import 'package:auto_proof/auth/server/logger/app_logger.dart';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
@@ -19,6 +21,7 @@ class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
     : super(SignUpScreenInitial()) {
     on<SendOtpEmailEvent>(_sendOtpOnEmail);
     on<SendOtpEmailSignUpEvent>(_getOtpOnSignUp);
+    on<SendOtpPhoneEvent>(_onSendOtpPhoneEvent);
     on<RegisterUser>(_onRegisterUser);
     on<ResetToInitialState>(_resetToInitialState);
   }
@@ -147,5 +150,27 @@ class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
     Emitter<SignUpScreenState> emit,
   ) {
     emit(SignUpScreenInitial());
+  }
+
+  Future<void> _onSendOtpPhoneEvent(
+    SendOtpPhoneEvent event,
+    Emitter<SignUpScreenState> emit,
+  ) async {
+    emit(SignUpSendOtpPhoneLoading());
+    try {
+      final Map<String, dynamic> dataBody = {
+        "phoneNumber": event.phoneNumber.trim().toLowerCase(),
+      };
+      print("payload------$dataBody");
+      final result = await apiRepository.getOtpOnSmS(dataBody: dataBody);
+      if (result.isSuccess) {
+        SharedPrefsHelper.instance.setBool(isEmailFromSignUp, true);
+        emit(SignUpSendOtpOnPhoneSuccess(result.data));
+      } else {
+        emit(SignUpSendOtpOnPhoneError(result.error));
+      }
+    } catch (e) {
+      emit(SignUpScreenError(e.toString()));
+    }
   }
 }

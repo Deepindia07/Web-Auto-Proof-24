@@ -157,6 +157,26 @@ class AuthenticationApiCall implements AuthAbstraction {
     }
   }
 
+  Future<Result<OtpForEmailResponseModel, String>> getOtpOnSmS({
+    Map<String, dynamic>? dataBody,
+  }) async {
+    try {
+      final response = await dioClient.post(
+        ApiEndPoints.sendOtpOnSMS,
+        data: dataBody,
+      );
+      final Map<String, dynamic> data = response.data;
+      final otpResponse = OtpForEmailResponseModel.fromJson(data);
+      print("Otp Data: ${otpResponse.generatedOtp}");
+      return Result.success(otpResponse);
+    } on DioException catch (dioError) {
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint(error.toString());
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
   @override
   Future<Result<PasswordSetupResponseModel, String>> resetPasswordApiCall({
     Map<String, dynamic>? dataBody,
@@ -533,6 +553,42 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $error');
     }
   }
+
+
+
+  Future<Result<VerifyOtpResponseModel, String>>
+  verifyOtpForPhoneApiCall({Map<String, dynamic>? dataBody}) async {
+    try {
+      log(ApiEndPoints.verifyOtpOnSMS);
+      log("Request Body: $dataBody");
+
+      final response = await dioClient.post(
+        ApiEndPoints.verifyOtpOnSMS,
+        data: dataBody, // This will be sent as raw JSON
+      );
+
+      log("Status Code: ${response.statusCode}");
+      log("Response: ${response.data}");
+
+      if (response.statusCode == 200) {
+        final otpResponse = VerifyOtpResponseModel.fromJson(response.data);
+        return Result.success(otpResponse);
+      } else {
+        final message =
+        (response.data is Map && response.data['message'] != null)
+            ? response.data['message']
+            : 'Error ${response.statusCode}';
+        return Result.failure(message);
+      }
+    } on DioException catch (dioError) {
+      log("Dio Error: ${handleDioError(dioError)}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+
 
   ///get single team member ---
 

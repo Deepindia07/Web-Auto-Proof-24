@@ -70,6 +70,13 @@ class SideMenu extends StatelessWidget {
                     onTap: () => onMenuSelected(ScreenType.myVehicle),
                   ),
                   MenuItem(
+                    selected: currentScreen == ScreenType.inspectionList,
+                    icon: car4Icon,
+                    title: AppLocalizations.of(context)!.checkInOut,
+                    onTap: () => onMenuSelected(ScreenType.inspectionList),
+                  ),
+
+                  MenuItem(
                     selected: currentScreen == ScreenType.paymentHistory,
                     icon: paymentIcon,
                     title: 'Payment History',

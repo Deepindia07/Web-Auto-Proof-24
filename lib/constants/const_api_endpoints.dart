@@ -35,6 +35,8 @@ class ApiEndPoints {
   static const String deleteAccount = '/api/personal-profile/delete';
   static const String updateCompanyProfile   = '/api/company-profile/update-company-profile';
   static const String getSubscriptionPlans   = "/api/admin/subscription/subscription-plans";
+  static const String sendOtpOnSMS   = "/api/auth/sendOtp-on-sms";
+  static const String verifyOtpOnSMS   = "/api/auth/verify-Otp-of-sms";
 
 }
 

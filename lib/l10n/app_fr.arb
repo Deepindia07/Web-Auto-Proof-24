@@ -198,7 +198,7 @@
   "@numberPlate": {
     "description": "Label pour le champ plaque d'immatriculation"
   },
-  "numberPlateHint": "LL-DDD-LL",
+  "numberPlateHint": "LL-000-00",
   "@numberPlateHint": {
     "description": "Texte d'aide pour le format de plaque d'immatriculation"
   },
@@ -247,6 +247,7 @@
     "description": "Option de type de carburant hybride"
   },
   "gasLevel": "Niveau de carburant",
+  "selectGasLevel": "Sélectionnez le niveau de gaz",
   "@gasLevel": {
     "description": "Label pour le menu déroulant niveau de carburant"
   },
@@ -323,6 +324,8 @@
     "description": "Label pour la section liste de vérification"
   },
   "softyPack": "Pack Sécurité",
+  "checkInOut": "Arrivée / Départ",
+
   "selectLeaseStartDate": "Sélectionnez la date l'heure de début bail",
   "@softyPack": {
     "description": "Label pour l'élément pack souple de la liste de vérification"
@@ -355,7 +358,7 @@
   "@enterComments": {
     "description": "Texte d'aide pour le champ commentaire"
   },
-  "dropTheFile": "Déposez le fichier",
+  "dropTheFile": "Télécharger l'assurance",
   "@dropTheFile": {
     "description": "Texte affiché dans la zone de téléchargement de fichier"
   },

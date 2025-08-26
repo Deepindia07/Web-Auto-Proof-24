@@ -30,3 +30,19 @@ class OtpResendFailure extends OtpViewState {
 
   OtpResendFailure({required this.error});
 }
+
+class OtpVerifyPhoneLoading extends OtpViewState{
+
+}
+
+class OtpVerifyPhoneSuccess extends OtpViewState{
+  final VerifyOtpResponseModel response;
+
+  OtpVerifyPhoneSuccess ({required this.response});
+
+}
+
+class OtpVerifyPhoneError extends OtpViewState{
+  final String error ;
+  OtpVerifyPhoneError({required this.error});
+}

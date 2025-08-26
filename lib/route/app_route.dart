@@ -171,7 +171,7 @@ class AppRouter {
           return _buildPageWithAnimation(
             state: state,
             child: OtpScreen(
-              email: extra['email'] as String?,
+              value: extra['value'] as String?,
               isEmailFromSignUp: extra['isEmailFromSignUp'] as bool,
               otpType: extra['otpType'] as String,
             ),

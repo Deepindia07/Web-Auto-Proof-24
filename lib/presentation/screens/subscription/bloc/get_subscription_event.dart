@@ -9,3 +9,8 @@ class  GetSubscriptionApiEvent extends GetSubscriptionEvent {
 List<Object> get props=> [];
 
 }
+
+class PaymentPlanApiEvent extends GetSubscriptionEvent {
+  @override
+  List<Object> get props => [];
+}

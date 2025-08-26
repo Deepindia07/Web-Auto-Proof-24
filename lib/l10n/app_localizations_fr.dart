@@ -411,6 +411,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get phoneInvalid => 'Le numéro doit contenir au moins 10 chiffres';
 
   @override
+  String get checkInOut => 'Arrivée / Départ';
+
+  @override
+  String get selectGasLevel => 'Sélectionnez le niveau de gaz';
+
+  @override
   String get address => 'Adresse';
 
   @override
@@ -592,7 +598,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get numberPlate => 'Plaque d\'immatriculation';
 
   @override
-  String get numberPlateHint => 'LL-DDD-LL';
+  String get numberPlateHint => 'LL-000-00';
 
   @override
   String get brand => 'Marque';
@@ -713,7 +719,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get enterComments => 'Entrez vos commentaires';
 
   @override
-  String get dropTheFile => 'Déposez le fichier';
+  String get dropTheFile => 'Télécharger l\'assurance';
 
   @override
   String get errorLoadingImage => 'Erreur de chargement de l\'image';

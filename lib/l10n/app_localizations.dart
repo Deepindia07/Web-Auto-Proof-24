@@ -878,6 +878,18 @@ abstract class AppLocalizations {
   /// **'Phone number must be at least 10 digits'**
   String get phoneInvalid;
 
+  /// No description provided for @checkInOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in / out'**
+  String get checkInOut;
+
+  /// No description provided for @selectGasLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Gas Level'**
+  String get selectGasLevel;
+
   /// No description provided for @address.
   ///
   /// In en, this message translates to:
@@ -1229,7 +1241,7 @@ abstract class AppLocalizations {
   /// Hint text for number plate format
   ///
   /// In en, this message translates to:
-  /// **'LL-DDD-LL'**
+  /// **'LL-000-00'**
   String get numberPlateHint;
 
   /// Label for car brand field
@@ -1469,7 +1481,7 @@ abstract class AppLocalizations {
   /// Text shown in file upload area
   ///
   /// In en, this message translates to:
-  /// **'Drop the file'**
+  /// **'Upload Insurance'**
   String get dropTheFile;
 
   /// Error message when image fails to load

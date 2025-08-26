@@ -15,3 +15,12 @@ class ResendOtpEvent extends OtpViewEvent {
 
   ResendOtpEvent({required this.email});
 }
+
+
+class VerifyPhoneOtpEvent extends OtpViewEvent{
+  final String otp;
+  final String phone ;
+
+  VerifyPhoneOtpEvent({required this.otp,required this.phone});
+}
+
