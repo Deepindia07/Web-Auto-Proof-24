@@ -100,7 +100,7 @@ class OtpViewBloc extends Bloc<OtpViewEvent, OtpViewState> {
       if (result.isSuccess) {
         SharedPrefsHelper.instance.setBool(
           isVerifiedPhone,
-          result.data.isEmailVerified ?? false,
+          result.data.isPhoneVerified ?? false,
         );
         final isVeriwfiedPhone = SharedPrefsHelper.instance.getBool(
           isVerifiedPhone,

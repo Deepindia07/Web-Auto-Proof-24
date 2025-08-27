@@ -1,8 +1,8 @@
 part of "home_screen_route_imple.dart";
 
 class DashboardScreen extends StatelessWidget {
-  final VoidCallback? onTap;
-  const DashboardScreen({super.key, this.onTap});
+  final VoidCallback? onTap;  final String? companyId;final String? inspectorID;
+  const DashboardScreen({super.key, this.onTap, this.companyId, this.inspectorID});
 
   @override
   Widget build(BuildContext context) {

@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ScreenType currentScreen = ScreenType.dashboard;
   String companyId = "";
+
   String userName = "Unknown";
   late DioClient dioClient;
   String? selectedInspectorId;
@@ -25,13 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-
     context.read<PersonalInformationBloc>().add(GetPersonalInfoApiEvent());
     super.initState();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +44,18 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: Responsive.isDesktop(context)
           ? null
           : AppBar(
-        backgroundColor: AppColor().backgroundColor,
-        elevation: 0,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu,
-                color: AppColor().darkCharcoalBlueColor),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-      ),
+              backgroundColor: AppColor().backgroundColor,
+              elevation: 0,
+              leading: Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: AppColor().darkCharcoalBlueColor,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+            ),
 
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -74,31 +73,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ✅ Sidebar for Desktop
-
-                      BlocConsumer<PersonalInformationBloc,
-                          PersonalInformationState>(
-                        listener: (context, state) {
-                          if (state is GetPersonalInfoSuccess) {
-                            setState(() {
-                              userName =
-                              "${state.userProfile.user?.firstName ?? ""} ${state.userProfile.user?.lastName ?? ""}";
-                              companyId = state.userProfile.user?.company
-                                  ?.companyId ??
-                                  "";    print("userName--------$userName");
-                              print("companyId--------$companyId");
-                            });
-
-                          }
-                        },
-                        builder: (context, state) {
-                          return    (Responsive.isDesktop(context)) ? SideMenu(
-                            onMenuSelected: updateScreen,
-                            currentScreen: currentScreen,
-                            userName: userName,
-                            companyId: companyId,
-                          ) : SizedBox();
-                        },
-                      ),
+                    BlocConsumer<
+                      PersonalInformationBloc,
+                      PersonalInformationState
+                    >(
+                      listener: (context, state) {
+                        if (state is GetPersonalInfoSuccess) {
+                          setState(() {
+                            userName =
+                                "${state.userProfile.user?.firstName ?? ""} ${state.userProfile.user?.lastName ?? ""}";
+                            companyId =
+                                state.userProfile.user?.company?.companyId ??
+                                "";
+                            debugPrint("userName--------$userName");
+                            debugPrint("companyId--------$companyId");
+                          });
+                        }
+                      },
+                      builder: (context, state) {
+                        return (Responsive.isDesktop(context))
+                            ? SideMenu(
+                                onMenuSelected: updateScreen,
+                                currentScreen: currentScreen,
+                                userName: userName,
+                                companyId: companyId,
+                              )
+                            : SizedBox();
+                      },
+                    ),
 
                     const SizedBox(width: 20),
 
@@ -115,22 +117,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () {
                                 setState(() {
                                   currentScreen =
-                                  currentScreen == ScreenType.notification
+                                      currentScreen == ScreenType.notification
                                       ? ScreenType.dashboard
                                       : ScreenType.notification;
                                 });
                               },
-                              isVisible: currentScreen ==
-                                  ScreenType.newInspection ||
+                              isVisible:
+                                  currentScreen == ScreenType.newInspection ||
                                   currentScreen == ScreenType.dashboard,
                             ),
 
                           if (currentScreen != ScreenType.profile) vGap(10),
 
                           // ✅ Switch Screens
-                          Expanded(
-                            child: _buildScreen(currentScreen),
-                          ),
+                          Expanded(child: _buildScreen(currentScreen)),
                         ],
                       ),
                     ),
@@ -148,7 +148,28 @@ class _HomeScreenState extends State<HomeScreen> {
     switch (screen) {
       case ScreenType.dashboard:
         return DashboardScreen(
-          onTap: () => setState(() => currentScreen = ScreenType.newInspection),
+          onTap: () {
+            if (companyId.isEmpty) {
+              // ✅ Company not selected
+              debugPrint(
+                "Please create a company before starting an inspection.",
+              );
+              return;
+            }
+
+            if (selectedInspectorId == null || selectedInspectorId!.isEmpty) {
+              // ✅ Inspector not selected
+              debugPrint(
+                "Please create/select a team before starting an inspection.",
+              );
+              return;
+            }
+
+            // ✅ Both company and inspector exist → go to new inspection screen
+            setState(() {
+              currentScreen = ScreenType.newInspection;
+            });
+          },
         );
       case ScreenType.profile:
         return PersonalInformationScreen();
@@ -164,13 +185,15 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         );
       case ScreenType.myVehicle:
-        return VehiclesScreen(onScreenChange: (type) {
-          setState(() => currentScreen = type);
-        });
+        return VehiclesScreen(
+          onScreenChange: (type) {
+            setState(() => currentScreen = type);
+          },
+        );
       case ScreenType.paymentHistory:
         return PaymentHistoryScreen();
       case ScreenType.newInspection:
-        return InstructionScreen(carDetails: CarDetailsModel(),);
+        return InstructionScreen(carDetails: CarDetailsModel());
       case ScreenType.notification:
         return NotificationScreen(isBacked: false, onBack: () {});
       case ScreenType.contactUs:
@@ -180,7 +203,14 @@ class _HomeScreenState extends State<HomeScreen> {
       case ScreenType.changePassword:
         return ChangePasswordScreen();
       case ScreenType.addInspector:
-        return AddInspectorScreen(getCompanyId: companyId);
+        return AddInspectorScreen(
+          getCompanyId: companyId,
+          onScreenChange: (type, {inspectorId}) {
+            setState(() {
+
+            });
+          },
+        );
       case ScreenType.viewTeamProfile:
         return MyTeamDetailsScreen(
           inspectorId: selectedInspectorId ?? '',
@@ -188,6 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               currentScreen = type;
               selectedInspectorId = inspectorId;
+              print("selectedInspectorId----__$selectedInspectorId");
             });
           },
         );
@@ -200,7 +231,6 @@ class _HomeScreenState extends State<HomeScreen> {
       case ScreenType.deleteAccount:
         return Container();
       case ScreenType.inspectionList:
-
         return InspectionListScreen();
     }
   }
@@ -250,23 +280,20 @@ class MenuItem extends StatelessWidget {
             icon,
             height: 20,
             width: 20,
-            color:
-            selected ? AppColor().darkCharcoalBlueColor : Colors.white,
+            color: selected ? AppColor().darkCharcoalBlueColor : Colors.white,
           ),
           title: Text(
             title,
             style: MontserratStyles.montserratMediumTextStyle(
               size: 12,
-              color:
-              selected ? AppColor().darkCharcoalBlueColor : Colors.white,
+              color: selected ? AppColor().darkCharcoalBlueColor : Colors.white,
             ),
           ),
           trailing: Image.asset(
             rightArrowIcon,
             height: 20,
             width: 20,
-            color:
-            selected ? AppColor().darkCharcoalBlueColor : Colors.white,
+            color: selected ? AppColor().darkCharcoalBlueColor : Colors.white,
           ),
           onTap: onTap,
         ),

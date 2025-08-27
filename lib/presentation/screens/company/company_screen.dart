@@ -217,6 +217,9 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                         )!.companyInformationSuccessfully,
                                       );
                                     }
+                                    if (state is CreateCompanyError) {
+                                      CherryToast.error(context, state.error);
+                                    }
                                   },
                                   builder: (context, state) {
                                     return CustomButtonWeb(

@@ -2,7 +2,14 @@ part of 'signUp_screen_route_imple.dart';
 
 class SignUpScreen extends StatefulWidget {
   final String email;
-  const SignUpScreen({super.key, required this.email});
+  final String phone;
+  final String typeScreen;
+  const SignUpScreen({
+    super.key,
+    required this.email,
+    required this.phone,
+    required this.typeScreen,
+  });
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -21,10 +28,12 @@ class _SignUpScreenState extends State<SignUpScreen>
   final TextEditingController approvalController = TextEditingController();
   bool _agreeToTerms = false;
   bool _isEmailVerified = false;
-  bool isPhoneVerified = false;
+  bool _isPhoneVerified = false;
   bool _isSendingOtp = false;
-  bool isPhoneSendingOtp = false;
+
+  bool _isSendingPhoneOtp = false;
   bool _isCheckingVerification = false;
+  bool _isCheckingPhoneVerification = false;
   String selectedCountryCode = "+33";
   late final SignUpScreenBloc _signUpBloc;
   String? phoneError = "";
@@ -35,14 +44,42 @@ class _SignUpScreenState extends State<SignUpScreen>
   bool obscurePassword = true;
   bool obscureRePassword = false;
 
-  @override
+  /*  @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    emailController.text = widget.email.toString();
-    phoneController.text = widget.email.toString();
+    if (widget.typeScreen == "1") {
+      emailController.text = widget.email.toString();
+      print("object${emailController.text}=======${widget.email.toString()}");
+    } else {
+      getPhoneNumber();
+    }
+
     _signUpBloc = SignUpScreenBloc(apiRepository: AuthenticationApiCall());
     _loadEmailVerificationStatus();
     super.initState();
+  }*/
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+
+    if (widget.typeScreen == "1") {
+      emailController.text = widget.email.toString();
+      print("object${emailController.text}=======${widget.email.toString()}");
+    } else if (widget.typeScreen == "2") {
+      emailController.text = widget.email.toString();
+      if (!mounted) return;
+      setState(() {
+        final parts = splitPhoneNumber(widget.phone.toString());
+        selectedCountryCode = parts["countryCode"] ?? "";
+        phoneController.text = parts["phoneNumber"] ?? "";
+      });
+    }
+    print("object${selectedCountryCode}=======${phoneController.text}");
+    _signUpBloc = SignUpScreenBloc(apiRepository: AuthenticationApiCall());
+    _loadEmailVerificationStatus();
+    _loadPhoneVerificationStatus();
   }
 
   @override
@@ -50,22 +87,51 @@ class _SignUpScreenState extends State<SignUpScreen>
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       _loadEmailVerificationStatus();
+      _loadPhoneVerificationStatus();
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _signUpBloc.close();
     fullNameController.dispose();
     lastNameController.dispose();
+    emailController.dispose();
     phoneController.dispose();
-    phoneController.dispose();
+    selectedCountryCode = "+33";
     retypePasController.dispose();
-    _signUpBloc.close();
+
     super.dispose();
   }
 
+  Map<String, String> splitPhoneNumber(String input) {
+    // Remove extra spaces
+    input = input.trim();
+
+    // Regex: match country code (+xx, +xxx, 00xx, etc.)
+    final regex = RegExp(r'^(\+?\d{1,4})[\s\-()]*([\d\s\-()]*)$');
+
+    final match = regex.firstMatch(input);
+    if (match != null) {
+      final countryCode = match.group(1) ?? "";
+      // remove all spaces, dashes, and parentheses from number
+      final phoneNumber = (match.group(2) ?? "").replaceAll(
+        RegExp(r'[\s\-()]'),
+        "",
+      );
+      return {"countryCode": countryCode, "phoneNumber": phoneNumber};
+    }
+
+    // fallback: return entire input as phoneNumber
+    return {
+      "countryCode": "",
+      "phoneNumber": input.replaceAll(RegExp(r'[\s\-()]'), ""),
+    };
+  }
+
   void _loadEmailVerificationStatus() async {
+    if (!mounted) return;
     setState(() {
       _isCheckingVerification = true;
     });
@@ -74,20 +140,45 @@ class _SignUpScreenState extends State<SignUpScreen>
       final isVerified = await SharedPrefsHelper.instance.getBool(
         isVerifiedEmail,
       );
-      if (mounted) {
-        setState(() {
-          _isEmailVerified = isVerified ?? false;
-          _isCheckingVerification = false;
-        });
-      }
+
+      if (!mounted) return; // check again after await
+      setState(() {
+        _isEmailVerified = isVerified ?? false;
+        _isCheckingVerification = false;
+      });
     } catch (e) {
       print('Error loading email verification status: $e');
-      if (mounted) {
-        setState(() {
-          _isEmailVerified = false;
-          _isCheckingVerification = false;
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        _isEmailVerified = false;
+        _isCheckingVerification = false;
+      });
+    }
+  }
+
+  void _loadPhoneVerificationStatus() async {
+    if (!mounted) return;
+    setState(() {
+      _isCheckingPhoneVerification = true;
+    });
+
+    try {
+      final isVerified = await SharedPrefsHelper.instance.getBool(
+        isVerifiedPhone,
+      );
+
+      if (!mounted) return; // check again after await
+      setState(() {
+        _isPhoneVerified = isVerified ?? false;
+        _isCheckingPhoneVerification = false;
+      });
+    } catch (e) {
+      print('Error loading email verification status: $e');
+      if (!mounted) return;
+      setState(() {
+        _isPhoneVerified = false;
+        _isCheckingPhoneVerification = false;
+      });
     }
   }
 
@@ -102,7 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         );
         return;
       }
-      if (!isPhoneVerified) {
+      if (!_isPhoneVerified) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.phoneInvalid),
@@ -177,9 +268,9 @@ class _SignUpScreenState extends State<SignUpScreen>
       );
       return;
     }
-
     final phoneRegex = RegExp(r'^[6-9]\d{9}$');
-    if (!phoneRegex.hasMatch(phoneController.text.trim())) {
+
+    if (!phoneRegex.hasMatch(phoneController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.phoneInvalid),
@@ -190,7 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     }
 
     setState(() {
-      isPhoneSendingOtp = true;
+      _isSendingPhoneOtp = true;
     });
 
     _signUpBloc.add(
@@ -200,14 +291,24 @@ class _SignUpScreenState extends State<SignUpScreen>
     );
   }
 
-  void _navigateToOtpScreen(String otpType, String value) async {
+  void _navigateToOtpScreen({
+    required String otpType,
+    String? email,
+    String? phone,
+  }) async {
     print("email-----${emailController.text}");
     final result = await context.push(
       AppRoute.otpScreen,
-      extra: {'value': value, 'isEmailFromSignUp': true, 'otpType': otpType},
+      extra: {
+        'email': email,
+        "phone": phone,
+        'isEmailFromSignUp': true,
+        'otpType': otpType,
+      },
     );
 
     _loadEmailVerificationStatus();
+    _loadPhoneVerificationStatus();
 
     if (result == true) {
       if (mounted) {
@@ -266,6 +367,29 @@ class _SignUpScreenState extends State<SignUpScreen>
       textAlign: TextAlign.center,
       style: MontserratStyles.montserratMediumTextStyle(
         color: _isEmailVerified ? Colors.green : AppColor().darkYellowColor,
+      ),
+    );
+  }
+
+  Widget _buildPhoneVerificationButton() {
+    if (_isSendingPhoneOtp) {
+      return SizedBox(
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(AppColor().darkYellowColor),
+        ),
+      );
+    }
+
+    return Text(
+      _isPhoneVerified
+          ? AppLocalizations.of(context)!.verified
+          : AppLocalizations.of(context)!.verify,
+      textAlign: TextAlign.center,
+      style: MontserratStyles.montserratMediumTextStyle(
+        color: _isPhoneVerified ? Colors.green : AppColor().darkYellowColor,
       ),
     );
   }
@@ -343,19 +467,24 @@ class _SignUpScreenState extends State<SignUpScreen>
             context,
             AppLocalizations.of(context)!.verificationOtpMsg,
           );
-          _navigateToOtpScreen("1", emailController.text.trim().toString());
+          _navigateToOtpScreen(
+            otpType: '1',
+            email: emailController.text.trim().toString(),
+          );
         } else if (state is SignUpSendOtpOnPhoneSuccess) {
           CustomLoader.hidePopupLoader(context);
           setState(() {
-            _isSendingOtp = false;
+            _isSendingPhoneOtp = false;
           });
           CherryToast.success(
             context,
             AppLocalizations.of(context)!.verificationOtpMsg,
           );
           _navigateToOtpScreen(
-            "2",
-            "$selectedCountryCode ${phoneController.text.trim().toString()}",
+            otpType: "2",
+            email: emailController.text.trim().toString(),
+            phone:
+                "$selectedCountryCode ${phoneController.text.trim().toString()}",
           );
         }
         // Handle OTP send error
@@ -370,7 +499,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         } else if (state is SignUpSendOtpOnPhoneError) {
           CustomLoader.hidePopupLoader(context);
           setState(() {
-            _isSendingOtp = false;
+            _isSendingPhoneOtp = false;
           });
 
           // add localization text --------------
@@ -380,6 +509,10 @@ class _SignUpScreenState extends State<SignUpScreen>
         else if (state is SignUpSendOtpScreenLoading) {
           setState(() {
             _isSendingOtp = true;
+          });
+        } else if (state is SignUpSendOtpPhoneLoading) {
+          setState(() {
+            _isSendingPhoneOtp = true;
           });
         }
       },
@@ -464,29 +597,32 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       Container(height: 15),
                       PhoneNumberField(
+                        initialCountryCode: selectedCountryCode,
                         suffixIcon: TextButton(
-                          onPressed: !_isEmailVerified || isPhoneVerified
+                          onPressed:
+                              (_isPhoneVerified ||
+                                  _isSendingPhoneOtp ||
+                                  _isCheckingPhoneVerification)
                               ? null
                               : _handlePhoneVerification, // only enable if email verified
                           child: Text(
-                            isPhoneVerified
+                            _isPhoneVerified
                                 ? AppLocalizations.of(context)!.verified
                                 : AppLocalizations.of(context)!.verify,
                             textAlign: TextAlign.center,
                             style: MontserratStyles.montserratMediumTextStyle(
-                              color: isPhoneVerified
+                              color: _isPhoneVerified
                                   ? Colors.green
-                                  : _isEmailVerified
-                                  ? AppColor().darkYellowColor
-                                  : Colors
-                                        .grey, // greyed out if email not verified
+                                  : AppColor()
+                                        .darkYellowColor, // greyed out if email not verified
                             ),
                           ),
                         ),
                         controller: phoneController,
-                        enabled:
-                            _isEmailVerified, // ✅ disable typing until email verified
-                        isVerified: isPhoneVerified,
+                         enabled:
+                            _isEmailVerified,
+                        // ✅ disable typing until email verified
+                        isVerified: _isPhoneVerified,
                         onVerify: () {},
                         onChanged: (v) {
                           print("dialCode-------${v.dialCode}");
@@ -742,5 +878,23 @@ class _SignUpScreenState extends State<SignUpScreen>
 
     print("User input: $input");
     print("Detected type: $inputType");
+  }
+
+  void getPhoneNumber() {
+    final parts = splitPhoneNumber(widget.phone.toString());
+
+    String countryCode = parts["countryCode"] ?? "";
+    String phoneNumber = parts["phoneNumber"] ?? "";
+
+    print(countryCode); // +91
+    print(phoneNumber); // 9501734723
+    selectedCountryCode = countryCode;
+    phoneController.text = phoneNumber;
+    if (mounted) {
+      setState(() {});
+    }
+    print(
+      "objec--___$selectedCountryCode     t${phoneController.text}=======${widget.phone.toString()}",
+    );
   }
 }

@@ -126,15 +126,24 @@ class AppRouter {
         path: AppRoute.signUpScreen,
         name: 'signUp',
         pageBuilder: (context, state) {
-          final email = (state.extra as String?) ?? '';
+          final data = state.extra as Map<String, dynamic>? ?? {};
+          final email = data['email'] ?? '';
+          final phone = data['phone'] ?? '';
+          final typeScreen = data['typeScreen'] ?? '';
+
           return _buildPageWithAnimation(
             state: state,
-            child: SignUpScreen(email: email), // pass email here
+            child: SignUpScreen(
+              email: email,
+              phone: phone,
+              typeScreen: typeScreen,
+            ),
             animation: AppAnimations.slideFromRightWithScale,
             duration: const Duration(milliseconds: 500),
           );
         },
       ),
+
 
       GoRoute(
         path: AppRoute.onDashboardScreen,
@@ -164,22 +173,22 @@ class AppRouter {
         path: AppRoute.otpScreen,
         name: 'otp',
         pageBuilder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>;
-          final isEmailFromRegister = SharedPrefsHelper.instance.getBool(
-            isEmailFromSignUp,
-          );
+          final extra = (state.extra as Map<String, dynamic>?) ?? {};
+
           return _buildPageWithAnimation(
             state: state,
             child: OtpScreen(
-              value: extra['value'] as String?,
-              isEmailFromSignUp: extra['isEmailFromSignUp'] as bool,
-              otpType: extra['otpType'] as String,
+              email: extra['email'] as String? ?? "",
+              phone: extra['phone'] as String? ?? "",
+              isEmailFromSignUp: extra['isEmailFromSignUp'] as bool? ?? false,
+              otpType: extra['otpType'] as String? ?? "unknown",
             ),
             animation: AppAnimations.slideFromBottom,
             duration: const Duration(milliseconds: 500),
           );
         },
       ),
+
       GoRoute(
         path: AppRoute.resetPasswordScreen,
         name: 'resetpassword',

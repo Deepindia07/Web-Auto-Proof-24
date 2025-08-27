@@ -1,11 +1,13 @@
 part of 'otp_screen_route_imple.dart';
 
 class OtpScreen extends StatelessWidget {
-  final String? value;
+  final String? email;
+  final String? phone;
   final bool isEmailFromSignUp;
   final String otpType;
   const OtpScreen({
-    required this.value,
+    required this.email,
+    required this.phone,
     required this.isEmailFromSignUp,
     super.key,
     required this.otpType,
@@ -16,7 +18,8 @@ class OtpScreen extends StatelessWidget {
     return BlocProvider<OtpViewBloc>(
       create: (context) => OtpViewBloc(apiService: AuthenticationApiCall()),
       child: OtpScreenView(
-        value: value!,
+        email: email!,
+        phone: phone!,
         isEmailFromSignUp: isEmailFromSignUp,
         otpType: otpType,
       ),
@@ -25,11 +28,13 @@ class OtpScreen extends StatelessWidget {
 }
 
 class OtpScreenView extends StatefulWidget {
-  final String? value;
+  final String? email;
+  final String? phone;
   final bool isEmailFromSignUp;
   final String otpType;
   const OtpScreenView({
-    required this.value,
+    required this.email,
+    required this.phone,
     required this.isEmailFromSignUp,
     required this.otpType,
     super.key,
@@ -49,7 +54,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
   void initState() {
     super.initState();
 
-    log("email0----->${widget.value}");
+    log("email0----->${widget.phone}->${widget.email}-------${widget.otpType}");
     _pulseController = AnimationController(
       duration: Duration(seconds: 2),
       vsync: this,
@@ -73,13 +78,13 @@ class _OtpScreenViewState extends State<OtpScreenView>
     if (pinController.text.length == 4) {
       widget.otpType == "1"
           ? context.read<OtpViewBloc>().add(
-              VerifyOtpEvent(otp: pinController.text, email: widget.value!),
+              VerifyOtpEvent(otp: pinController.text, email: widget.email!),
             )
           : context.read<OtpViewBloc>().add(
               //  verifyOtpOnSMS
               VerifyPhoneOtpEvent(
                 otp: pinController.text,
-                phone: widget.value!,
+                phone: widget.phone!,
               ),
             );
     } else {
@@ -92,7 +97,7 @@ class _OtpScreenViewState extends State<OtpScreenView>
 
   void _resendCode() {
     pinController.clear();
-    context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.value!));
+    context.read<OtpViewBloc>().add(ResendOtpEvent(email: widget.email!));
   }
 
   void _showSnackBar(String message, Color color) {
@@ -142,10 +147,19 @@ class _OtpScreenViewState extends State<OtpScreenView>
             CustomLoader.showPopupLoader(context);
           } else if (state is OtpViewSuccess) {
             CustomLoader.hidePopupLoader(context);
-            log("hh----${widget.value}");
-            String email = widget.value.toString();
+            log("hh----${widget.email}");
+            String email = widget.email.toString();
             if (widget.otpType == "1") {
-              context.push(AppRoute.signUpScreen, extra: email);
+              context.push(
+                AppRoute.signUpScreen,
+                extra: {
+                  'email': email,
+                  'phone': '',
+                  'typeScreen': '1',
+                },
+              );
+
+           /*   context.push(AppRoute.signUpScreen, extra: email);*/
             } else {
               context.push(AppRoute.resetPasswordScreen, extra: email);
             }
@@ -154,15 +168,21 @@ class _OtpScreenViewState extends State<OtpScreenView>
               context,
               AppLocalizations.of(context)!.otpVerified,
             );
-          }else if (state is OtpVerifyPhoneSuccess) {
+          } else if (state is OtpVerifyPhoneSuccess) {
             CustomLoader.hidePopupLoader(context);
-            log("hh----${widget.value}");
-            String email = widget.value.toString();
+
             if (widget.otpType == "2") {
-              context.push(AppRoute.signUpScreen, extra: email);
-            } else {
-              context.push(AppRoute.resetPasswordScreen, extra: email);
-            }
+              log("hh--teste--${widget.phone}");
+              String phone = widget.phone.toString();
+              String email = widget.email.toString();
+              context.push(AppRoute.signUpScreen,  extra: {
+                'email': email,
+                'phone': phone,
+                'typeScreen': '2',
+              },);
+            } /*else {
+              context.push(AppRoute.resetPasswordScreen, extra: phone);
+            }*/
 
             CherryToast.success(
               context,
@@ -287,8 +307,8 @@ class _OtpScreenViewState extends State<OtpScreenView>
                               ),
                               TextSpan(
                                 text: widget.otpType == "1"
-                                    ? maskEmail(widget.value!)
-                                    : maskPhoneNumber(widget.value!),
+                                    ? maskEmail(widget.email!)
+                                    : maskPhoneNumber(widget.phone!),
                                 style:
                                     MontserratStyles.montserratNormalTextStyle(
                                       color: AppColor().darkCharcoalBlueColor,

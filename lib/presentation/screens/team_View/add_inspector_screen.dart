@@ -2,8 +2,8 @@ part of "team_screen_route_imple.dart";
 
 class AddInspectorScreen extends StatefulWidget {
   final String getCompanyId; // 👈 add this
-
-  const AddInspectorScreen({super.key, required this.getCompanyId});
+  final void Function(ScreenType type, {String? inspectorId}) onScreenChange;
+  const AddInspectorScreen({super.key, required this.getCompanyId, required this.onScreenChange});
 
   @override
   State<AddInspectorScreen> createState() => _AddInspectorScreenState();
@@ -196,6 +196,14 @@ class _AddInspectorScreenState extends State<AddInspectorScreen> {
                                       CherryToast.success(
                                         context,
                                         "Team add successfully.",
+                                      );
+                                      widget.onScreenChange(ScreenType.myTeam);
+                                      //back to
+                                    } if (state is InspectorCreateAdminError) {
+
+                                      CherryToast.error(
+                                        context,
+                                        state.error,
                                       );
                                     }
                                   },
