@@ -157,13 +157,13 @@ class _HomeScreenState extends State<HomeScreen> {
               return;
             }
 
-            if (selectedInspectorId == null || selectedInspectorId!.isEmpty) {
+        /*    if (selectedInspectorId == null || selectedInspectorId!.isEmpty) {
               // ✅ Inspector not selected
               debugPrint(
                 "Please create/select a team before starting an inspection.",
               );
               return;
-            }
+            }*/
 
             // ✅ Both company and inspector exist → go to new inspection screen
             setState(() {
@@ -182,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
               currentScreen = type;
               selectedInspectorId = inspectorId;
             });
-          },
+          }, screenType: '',
         );
       case ScreenType.myVehicle:
         return VehiclesScreen(
@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case ScreenType.paymentHistory:
         return PaymentHistoryScreen();
       case ScreenType.newInspection:
-        return InstructionScreen(carDetails: CarDetailsModel());
+        return InstructionScreen();
       case ScreenType.notification:
         return NotificationScreen(isBacked: false, onBack: () {});
       case ScreenType.contactUs:
@@ -232,6 +232,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return Container();
       case ScreenType.inspectionList:
         return InspectionListScreen();
+      case ScreenType.ownerDetailsScreen:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 }
@@ -250,6 +253,7 @@ enum ScreenType {
   changePassword,
   addInspector,
   viewTeamProfile,
+  ownerDetailsScreen,
   viewVehicleProfile,
   deleteAccount,
   inspectionList,

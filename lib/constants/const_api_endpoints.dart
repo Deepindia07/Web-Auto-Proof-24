@@ -18,7 +18,7 @@ class ApiEndPoints {
       "/api/admin/team/getAllInspectorMembersList/";
   static const String updateProfileApiEnd = "/api/admin/profile/update-profile";
   static const String inspectionLoginEnd = "/api/inspector/login";
-  static const String checkOutEnd = "/api/inspector/inspection/check-in/";
+  static const String checkOutEnd = "/api/inspection/check-out";
   static const String checkInEnd = "/api/inspector/inspection/check-in/";
   static const String contactUsEnd = "/api/contact-us/";
   static const String vehicleListEnd =

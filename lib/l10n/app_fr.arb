@@ -222,7 +222,7 @@
   "@mileage": {
     "description": "Label pour le champ kilométrage de voiture"
   },
-  "mileageHint": "7,7 km/l",
+  "mileageHint": "7,7 km",
   "@mileageHint": {
     "description": "Texte d'aide pour le kilométrage de voiture"
   },
@@ -299,7 +299,7 @@
   "@kmDay": {
     "description": "Label pour le champ kilomètres par jour"
   },
-  "extraKm": "KM supplémentaire (€)",
+  "extraKm": "KM supplémentaire ",
   "@extraKm": {
     "description": "Label pour le champ coût kilomètres supplémentaires"
   },
@@ -307,7 +307,7 @@
   "@euroSymbol": {
     "description": "Symbole de la monnaie euro"
   },
-  "priceTotal": "Prix total (€)",
+  "priceTotal": "Prix total ",
   "@priceTotal": {
     "description": "Label pour le champ prix total"
   },
@@ -327,6 +327,7 @@
   "checkInOut": "Arrivée / Départ",
 
   "selectLeaseStartDate": "Sélectionnez la date l'heure de début bail",
+  "selectLeaseEndDate": "Date et heure de fin du bail",
   "@softyPack": {
     "description": "Label pour l'élément pack souple de la liste de vérification"
   },

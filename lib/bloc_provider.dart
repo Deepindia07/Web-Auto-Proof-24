@@ -1,5 +1,6 @@
 import 'package:auto_proof/presentation/screens/company/bloc/create_company_bloc.dart';
 import 'package:auto_proof/presentation/screens/home/bloc/delete_account_bloc/delete_account_bloc.dart';
+import 'package:auto_proof/presentation/screens/inpection/owner_details/bloc/owner_details_screen_bloc.dart';
 import 'package:auto_proof/presentation/screens/personal_information_screens/bloc/personal_information_bloc/personal_information_bloc.dart';
 import 'package:auto_proof/presentation/screens/subscription/bloc/get_subscription_bloc.dart';
 import 'package:auto_proof/presentation/screens/team_View/bloc/team_screen_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth/server/network/auth_network_imple_service.dart';
 import 'l10n_controller/l10n_switcher_bloc.dart';
 import 'presentation/screens/contact_us/bloc/contact_us_screen_bloc.dart';
+import 'presentation/screens/inpection/Instruction_screen/bloc/instruction_screen_bloc.dart';
 import 'presentation/screens/inspector_create_admin/bloc/inspector_create_admin_bloc.dart';
 
 class AppProviders extends StatelessWidget {
@@ -28,6 +30,7 @@ class AppProviders extends StatelessWidget {
         ),
 
         BlocProvider<SplashScreenBloc>(create: (context) => SplashScreenBloc()),
+        BlocProvider<OwnerDetailsScreenBloc>(create: (context) => OwnerDetailsScreenBloc()),
         BlocProvider<GetSubscriptionBloc>(create: (context) => GetSubscriptionBloc( AuthenticationApiCall())),
         BlocProvider<CreateCompanyBloc>(
           create: (context) =>

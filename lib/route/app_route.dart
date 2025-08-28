@@ -70,10 +70,12 @@ class AppRouter {
         name: 'MyVehicleDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: MyVehicleDetailsScreen(  onScreenChange: (screen, {inspectorId}) {
-            // Handle navigation or state here
-            debugPrint("Navigated to $screen with inspectorId: $inspectorId");
-          },),
+          child: MyVehicleDetailsScreen(
+            onScreenChange: (screen, {inspectorId}) {
+              // Handle navigation or state here
+              debugPrint("Navigated to $screen with inspectorId: $inspectorId");
+            },
+          ),
           animation: AppAnimations.fadeIn,
           duration: const Duration(milliseconds: 800),
         ),
@@ -143,7 +145,6 @@ class AppRouter {
           );
         },
       ),
-
 
       GoRoute(
         path: AppRoute.onDashboardScreen,
@@ -279,7 +280,7 @@ class AppRouter {
         name: 'instructionScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: InstructionScreen(carDetails: CarDetailsModel(),),
+          child: InstructionScreen(),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -299,7 +300,13 @@ class AppRouter {
         name: 'ownerDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: OwnerDetailsScreen(ownerDetailsScreenBloc: OwnerDetailsScreenBloc(),),
+          child: OwnerDetailsScreen(
+            ownerDetailsScreenBloc: OwnerDetailsScreenBloc(),
+            onScreenChange: (screen, {inspectorId}) {
+              // Handle navigation or state here
+              debugPrint("Navigated to $screen with inspectorId: $inspectorId");
+            },
+          ),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -309,7 +316,7 @@ class AppRouter {
         name: 'clientDetailsScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: ClientDetailsScreen(bloc: ClientDetailsScreenBloc(),),
+          child: ClientDetailsScreen(bloc: ClientDetailsScreenBloc()),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -319,7 +326,7 @@ class AppRouter {
         name: 'carImageInpectionScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: CarImInpectionScreen(carDetailsModel: CarDetailsModel(),),
+          child: CarImInpectionScreen(carDetailsModel: CarDetailsModel()),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),
@@ -345,7 +352,7 @@ class AppRouter {
         name: 'ownerSignatureViewScreen',
         pageBuilder: (context, state) {
           final carDetailsModel = state.extra as CarDetailsModel;
-      return    _buildPageWithAnimation(
+          return _buildPageWithAnimation(
             state: state,
             child: OwnerSignatureScreen(carDetailsModel: carDetailsModel),
             animation: AppAnimations.slideFromRightWithScale,
@@ -353,7 +360,7 @@ class AppRouter {
           );
         },
       ),
-   /*   GoRoute(
+      /*   GoRoute(
         path: AppRoute.clientSignatureViewScreen,
         name: 'clientSignatureViewScreen',
         pageBuilder: (context, state) => _buildPageWithAnimation(
@@ -386,17 +393,23 @@ class AppRouter {
       GoRoute(
         path: AppRoute.teamSreenView,
         name: 'teamScreen',
-        pageBuilder: (context, state) => _buildPageWithAnimation(
-          state: state,
-          child: MyTeamScreen(
-            onScreenChange: (screen, {inspectorId}) {
-              // Handle navigation or state here
-              debugPrint("Navigated to $screen with inspectorId: $inspectorId");
-            },
-          ), // ✅ works now
-          animation: AppAnimations.slideFromRightWithScale,
-          duration: const Duration(milliseconds: 500),
-        ),
+        pageBuilder: (context, state) {
+          final screenType = state.extra as String? ?? "";
+          return _buildPageWithAnimation(
+            state: state,
+            child: MyTeamScreen(
+              onScreenChange: (screen, {inspectorId}) {
+                // Handle navigation or state here
+                debugPrint(
+                  "Navigated to $screen with inspectorId: $inspectorId",
+                );
+              },
+              screenType: screenType,
+            ), // ✅ works now
+            animation: AppAnimations.slideFromRightWithScale,
+            duration: const Duration(milliseconds: 500),
+          );
+        },
       ),
 
       GoRoute(
@@ -404,7 +417,7 @@ class AppRouter {
         name: 'vehiclesScreenView',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: VehiclesScreen(onScreenChange: (ScreenType type,) {   },),
+          child: VehiclesScreen(onScreenChange: (ScreenType type) {}),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),

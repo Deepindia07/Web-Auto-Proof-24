@@ -616,7 +616,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mileage => 'Kilométrage';
 
   @override
-  String get mileageHint => '7,7 km/l';
+  String get mileageHint => '7,7 km';
 
   @override
   String get gasType => 'Type de carburant';
@@ -673,13 +673,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get kmDay => 'Km/jour';
 
   @override
-  String get extraKm => 'KM supplémentaire (€)';
+  String get extraKm => 'KM supplémentaire ';
 
   @override
   String get euroSymbol => '€';
 
   @override
-  String get priceTotal => 'Prix total (€)';
+  String get priceTotal => 'Prix total ';
 
   @override
   String get uploadInsurance => 'Téléch.assurance';
@@ -696,6 +696,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get selectLeaseStartDate =>
       'Sélectionnez la date l\'heure de début bail';
+
+  @override
+  String get selectLeaseEndDate => 'Date et heure de fin du bail';
 
   @override
   String get spareWheel => 'Roue de secours';

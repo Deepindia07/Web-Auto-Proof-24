@@ -83,21 +83,24 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         }
       },
       builder: (context, state) {
+        final filteredPlans = (getSubscriptionPlanModelData ?? [])
+            .where((plan) => plan.planTitle != "Custom Plan")
+            .toList();
         return Responsive(
-          mobile: SubscriptionMobile(plans: getSubscriptionPlanModelData ?? []),
+          mobile: SubscriptionMobile(plans: filteredPlans),
           desktop: SubscriptionDesktop(
-            plans: getSubscriptionPlanModelData ?? [],
+            plans: filteredPlans,
             childAspectRatio: 1,
             type: 'desktop',
           ),
           tab: SubscriptionDesktop(
-            plans: getSubscriptionPlanModelData ?? [],
+            plans: filteredPlans,
             childAspectRatio: 1.2,
             crossAxisCount: 2,
             type: 'tab',
           ),
           largeTablet: SubscriptionDesktop(
-            plans: getSubscriptionPlanModelData ?? [],
+            plans: filteredPlans,
             crossAxisCount: 2,
             childAspectRatio: getAspectRatioForLargeTablet(
               screenWidth,
@@ -132,7 +135,6 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
   }
 
   double get totalPrice {
-    // Assuming price in plan.price is like "₹100" or "$99"
     final String? numeric = widget.plan[widget.index].planPrice?.replaceAll(
       RegExp(r'[^0-9.]'),
       "",
@@ -200,28 +202,38 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
                           : SizedBox.shrink(),
 
                       Text(
-                        "• ${(widget.plan[widget.index].features?.prepaidUnits != null) ?
-                        "Prepaid ${widget.plan[widget.index].features?.prepaidUnits ?? 0} Units" : "Scalable On Demand"}  ",
+                        "• ${(widget.plan[widget.index].features?.prepaidUnits != null) ? "Prepaid ${widget.plan[widget.index].features?.prepaidUnits ?? 0} Units" : "Scalable On Demand"}  ",
                         style: MontserratStyles.montserratMediumTextStyle(
                           size: 16,
                           color: AppColor().yellowWarmColor,
                         ),
                       ),
                       Text(
-                        "• ${(widget.index == 0) ? "Pay Only for What You Use" : (widget.index == 1) ? "Great for Small Teams" : "Best Price per Unit"}  ",
+                        "• ${(widget.index == 0)
+                            ? "Pay Only for What You Use"
+                            : (widget.index == 1)
+                            ? "Great for Small Teams"
+                            : "Best Price per Unit"}  ",
                         style: MontserratStyles.montserratMediumTextStyle(
                           size: 16,
                           color: AppColor().yellowWarmColor,
                         ),
                       ),
-                    (  widget.plan[widget.index].features?.historySaving == null  || widget.plan[widget.index].features?.historySaving == ""    ) ?SizedBox.shrink()
-                        :  Text(
-                        "• ${widget.plan[widget.index].features?.historySaving} History Saving",
-                        style: MontserratStyles.montserratMediumTextStyle(
-                          size: 16,
-                          color: AppColor().yellowWarmColor,
-                        ),
-                      ),
+                      (widget.plan[widget.index].features?.historySaving ==
+                                  null ||
+                              widget
+                                      .plan[widget.index]
+                                      .features
+                                      ?.historySaving ==
+                                  "")
+                          ? SizedBox.shrink()
+                          : Text(
+                              "• ${widget.plan[widget.index].features?.historySaving} History Saving",
+                              style: MontserratStyles.montserratMediumTextStyle(
+                                size: 16,
+                                color: AppColor().yellowWarmColor,
+                              ),
+                            ),
 
                       /*   ...widget.plan[widget.index].features?.map((f) => _buildFeature(f, false)),*/
                       const Spacer(),
@@ -308,12 +320,14 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(width: 8),
-
-            // 👇 Looks like textfield, fixed size
             SizedBox(
               width: 40,
               height: 28,
               child: TextFormField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly, // only numbers
+                  maxValueFormatter(199),
+                ],
                 onChanged: (v) {
                   _updateQuantity();
                 },
@@ -372,6 +386,20 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
       ),
       child: Icon(icon, color: AppColor().yellowWarmColor, size: 14),
     );
+  }
+
+  TextInputFormatter maxValueFormatter(int max) {
+    return TextInputFormatter.withFunction((oldValue, newValue) {
+      if (newValue.text.isEmpty) return newValue;
+
+      final int? value = int.tryParse(newValue.text);
+      if (value == null) return oldValue;
+
+      if (value > max) {
+        return oldValue; // block input > max
+      }
+      return newValue;
+    });
   }
 }
 

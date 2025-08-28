@@ -606,8 +606,9 @@ class AuthenticationApiCall implements AuthAbstraction {
     } on DioException catch (dioError) {
       debugPrint("Api response data : $dioError");
       return Result.failure(handleDioError(dioError).toString());
-    } catch (e) {
+    } catch (e,s) {
       debugPrint("error generated: => ${e.toString()}");
+      debugPrint("error generated: => ${s.toString()}");
       return Result.failure('Unexpected error occurred: $e');
     }
   }

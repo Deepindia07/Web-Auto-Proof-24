@@ -47,14 +47,14 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                Text(
+               /* Text(
                   "Write us",
                   style: MontserratStyles.montserratBoldTextStyle(
                     size: 24,
                     color: AppColor().darkCharcoalBlueColor,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 20),*/
                 _buildInput(
                   "Subject",
                   "Enter Subject",

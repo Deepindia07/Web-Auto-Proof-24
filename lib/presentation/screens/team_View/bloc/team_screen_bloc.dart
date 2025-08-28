@@ -131,7 +131,8 @@ class TeamScreenBloc extends Bloc<TeamScreenEvent, TeamScreenState> {
       } else {
         emit(GetSingleTeamMemberError(error: result.error));
       }
-    } catch (error) {
+    } catch (error,s) {
+      print("state ----$s");
       emit(GetSingleTeamMemberError(error: error.toString()));
     }
   }

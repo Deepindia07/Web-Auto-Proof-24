@@ -608,7 +608,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mileage => 'Mileage';
 
   @override
-  String get mileageHint => '7.7 kmpl';
+  String get mileageHint => '7.7 km';
 
   @override
   String get gasType => 'Gas Type';
@@ -665,13 +665,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kmDay => 'Km/day';
 
   @override
-  String get extraKm => 'Extra KM (€)';
+  String get extraKm => 'Extra KM';
 
   @override
   String get euroSymbol => '€';
 
   @override
-  String get priceTotal => 'Price Total (€)';
+  String get priceTotal => 'Price Total ';
 
   @override
   String get uploadInsurance => 'Up.insurance';
@@ -689,10 +689,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectLeaseStartDate => 'Lease Start Date & Time';
 
   @override
+  String get selectLeaseEndDate => 'Lease End Date & Time';
+
+  @override
   String get spareWheel => 'Spare Wheel';
 
   @override
-  String get phoneOlder => 'Phone older';
+  String get phoneOlder => 'Phone holder';
 
   @override
   String get gps => 'GPS';

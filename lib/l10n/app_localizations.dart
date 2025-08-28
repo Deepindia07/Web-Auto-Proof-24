@@ -1277,7 +1277,7 @@ abstract class AppLocalizations {
   /// Hint text for car mileage
   ///
   /// In en, this message translates to:
-  /// **'7.7 kmpl'**
+  /// **'7.7 km'**
   String get mileageHint;
 
   /// Label for gas type dropdown
@@ -1391,7 +1391,7 @@ abstract class AppLocalizations {
   /// Label for extra kilometers cost field
   ///
   /// In en, this message translates to:
-  /// **'Extra KM (€)'**
+  /// **'Extra KM'**
   String get extraKm;
 
   /// Euro currency symbol
@@ -1403,7 +1403,7 @@ abstract class AppLocalizations {
   /// Label for total price field
   ///
   /// In en, this message translates to:
-  /// **'Price Total (€)'**
+  /// **'Price Total '**
   String get priceTotal;
 
   /// Label for upload insurance button
@@ -1436,6 +1436,12 @@ abstract class AppLocalizations {
   /// **'Lease Start Date & Time'**
   String get selectLeaseStartDate;
 
+  /// No description provided for @selectLeaseEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Lease End Date & Time'**
+  String get selectLeaseEndDate;
+
   /// Label for spare wheel checklist item
   ///
   /// In en, this message translates to:
@@ -1445,7 +1451,7 @@ abstract class AppLocalizations {
   /// Label for phone older checklist item
   ///
   /// In en, this message translates to:
-  /// **'Phone older'**
+  /// **'Phone holder'**
   String get phoneOlder;
 
   /// Label for GPS checklist item

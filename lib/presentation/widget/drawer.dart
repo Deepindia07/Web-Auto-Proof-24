@@ -187,7 +187,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   icon: userIcon,
                   title: AppLocalizations.of(context)!.myTeam,
                   onTap: () {
-                    context.push(AppRoute.teamSreenView);
+                    context.push(AppRoute.teamSreenView,extra: "");
                   },
                 ),
                 _buildDrawerItem(

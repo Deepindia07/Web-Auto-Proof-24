@@ -271,7 +271,7 @@
         "description": "Label for car mileage field"
     },
 
-    "mileageHint": "7.7 kmpl",
+    "mileageHint": "7.7 km",
     "@mileageHint": {
         "description": "Hint text for car mileage"
     },
@@ -366,7 +366,7 @@
         "description": "Label for kilometers per day field"
     },
 
-    "extraKm": "Extra KM (€)",
+    "extraKm": "Extra KM",
     "@extraKm": {
         "description": "Label for extra kilometers cost field"
     },
@@ -376,7 +376,7 @@
         "description": "Euro currency symbol"
     },
 
-    "priceTotal": "Price Total (€)",
+    "priceTotal": "Price Total ",
     "@priceTotal": {
         "description": "Label for total price field"
     },
@@ -397,6 +397,7 @@
     },
    "softyPack": "Safety Pack",
  "selectLeaseStartDate": "Lease Start Date & Time",
+ "selectLeaseEndDate": "Lease End Date & Time",
     "@softyPack": {
         "description": "Label for softy pack checklist item"
     },
@@ -406,7 +407,7 @@
         "description": "Label for spare wheel checklist item"
     },
 
-    "phoneOlder": "Phone older",
+    "phoneOlder": "Phone holder",
     "@phoneOlder": {
         "description": "Label for phone older checklist item"
     },
