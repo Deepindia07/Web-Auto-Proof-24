@@ -33,7 +33,9 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
   var extraKmController = TextEditingController();
   var priceTotalController = TextEditingController();
   var commentController = TextEditingController();
-
+  var carNameController = TextEditingController();
+  GetSingleVehicleModel? getSingleVehicleModel;
+  SingleVehicleModel? singleVehicleModel;
   String selectedGasType = 'Diesel';
   String selectedGasLevel = '1/8';
   String selectedTyreCondition = 'Good';
@@ -137,27 +139,54 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Form(
               key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.carDetails,
-                      style: MontserratStyles.montserratSemiBoldTextStyle(
-                        size: 30,
-                        color: AppColor().darkCharcoalBlueColor,
+              child: BlocConsumer<VehiclesScreenBloc, VehiclesScreenState>(
+                listener: (context, state) {
+                  if (state is SingleVehiclesScreenLoaded) {
+                    getSingleVehicleModel = state.getSingleVehicleModel;
+                    singleVehicleModel = getSingleVehicleModel?.vehicle;
+                    numberPlateController.text =
+                        singleVehicleModel?.numberPlate ?? "";
+                    tyreConditionsController.text =
+                        singleVehicleModel?.tyresCondition ?? "";
+                    brandController.text = singleVehicleModel?.brand ?? "";
+                    modelController.text = singleVehicleModel?.model ?? "";
+                    mileageController.text =
+                        singleVehicleModel?.mileage.toString() ?? "";
+                    kmDayController.text =
+                        singleVehicleModel?.kmPerDay.toString() ?? "";
+                    extraKmController.text =
+                        singleVehicleModel?.extraKm.toString() ?? "";
+                    priceTotalController.text =
+                        singleVehicleModel?.priceTotal.toString() ?? "";
+                    commentController.text =
+                        singleVehicleModel?.comments.toString() ?? "";
+                    //carNameController.text = singleVehicleModel?.c.toString() ?? "";
+                  }
+                },
+                builder: (context, state) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.carDetails,
+                          style: MontserratStyles.montserratSemiBoldTextStyle(
+                            size: 30,
+                            color: AppColor().darkCharcoalBlueColor,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  _buildInformationSection(),
-                  SizedBox(height: 18), // Reduced from 24
-                  _buildChecklistSection(),
-                  SizedBox(height: 18), // Reduced from 24
-                  _buildCommentSection(),
-                  SizedBox(height: 18), // Reduced from 24
-                  // _buildActionButtons(state),
-                ],
+                      SizedBox(height: 12),
+                      _buildInformationSection(),
+                      SizedBox(height: 18), // Reduced from 24
+                      _buildChecklistSection(),
+                      SizedBox(height: 18), // Reduced from 24
+                      _buildCommentSection(),
+                      SizedBox(height: 18), // Reduced from 24
+                      // _buildActionButtons(state),
+                    ],
+                  );
+                },
               ),
             ),
           );
@@ -191,11 +220,32 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
               height: 40,
               padding: EdgeInsets.symmetric(horizontal: 40),
               side: BorderSide.none,
-              onPressed: () {
-                print("Button pressed");
+              onPressed: () async {
+                final vehicleId = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VehiclesScreen(
+                      screenType: "AddCar",
+                      onScreenChange: (screen, {vehicleId}) {
+                        // Handle navigation or state here
+                        debugPrint(
+                          "Navigated to $screen with inspectorId: $vehicleId",
+                        );
+                      },
+                    ),
+                  ),
+                );
+
+                if (vehicleId != null) {
+                  print("api call on back button ");
+                  context.read<VehiclesScreenBloc>().add(
+                    SingleVehiclesEvent(vehicleId: vehicleId),
+                  );
+                }
+                /*   print("Button pressed");
                 context.push(AppRoute.vehiclesScreenView);
-                /*      Navigator.push(context, MaterialPageRoute(builder: (context) => VehiclesScreen()));*/
-                setState(() {});
+                */ /*      Navigator.push(context, MaterialPageRoute(builder: (context) => VehiclesScreen()));*/ /*
+                setState(() {});*/
               },
               borderRadius: 10,
               text: AppLocalizations.of(context)!.addCar,
@@ -245,27 +295,26 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 label: "Car Name",
                 keyboardType: TextInputType.text,
                 hintText: "Car Name",
-                controller: modelController,
+                controller: carNameController,
                 isRequired: true,
               ),
-            ),  SizedBox(width: 12),
+            ),
+            SizedBox(width: 12),
             Expanded(
               flex: 1,
               child: _buildTextField(
                 label: AppLocalizations.of(context)!.model,
-                keyboardType: TextInputType.text,
-                hintText: AppLocalizations.of(context)!.modelHint,
+                keyboardType: TextInputType.number,
+                hintText: "0000",
                 controller: modelController,
                 isRequired: true,
               ),
             ),
-
           ],
         ),
         SizedBox(height: 12),
         Row(
           children: [
-
             Expanded(
               flex: 1,
               child: _buildTextField(
@@ -275,7 +324,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 controller: mileageController,
                 isRequired: true,
               ),
-            ),  SizedBox(width: 12),
+            ),
+            SizedBox(width: 12),
             Expanded(
               flex: 1,
               child: CustomDropdownNew(
@@ -289,7 +339,6 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 },
               ),
             ),
-
           ],
         ),
         SizedBox(height: 12),
@@ -311,7 +360,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                   color: AppColor().darkCharcoalBlueColor,
                 ),
               ),
-            ),SizedBox(width: 12),
+            ),
+            SizedBox(width: 12),
             Expanded(
               flex: 1,
               child: CustomDropdownNew(
@@ -329,7 +379,6 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 ),
               ),
             ),
-
           ],
         ),
 
@@ -349,7 +398,8 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                   maxValueFormatter(200),
                 ],
               ),
-            ),SizedBox(width: 12), // Reduced from 8
+            ),
+            SizedBox(width: 12), // Reduced from 8
             Expanded(
               flex: 1,
               child: _buildTextField(
@@ -360,24 +410,20 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 isRequired: true,
               ),
             ),
-
           ],
         ),
         SizedBox(height: 20),
+        _buildTextField(
+          keyboardType: TextInputType.number,
+          label: AppLocalizations.of(context)!.priceTotal,
+          hintText: "0",
+          controller: priceTotalController,
+          isRequired: true,
+        ),
+        SizedBox(height: 12),
         Row(
           children: [
-
-
-            Expanded(
-              flex: 1,
-              child: _buildTextField(
-                keyboardType: TextInputType.number,
-                label: AppLocalizations.of(context)!.priceTotal,
-                hintText: "0",
-                controller: priceTotalController,
-                isRequired: true,
-              ),
-            ),  SizedBox(width: 12), // Reduced from 8
+            // Reduced from 8
             Expanded(
               child: CustomContainer(
                 height: 90,
@@ -385,7 +431,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 onTap: () {
                   _updateProfileImage(context);
                 },
-                borderRadius: BorderRadius.circular(10), // Reduced from 12
+                borderRadius: BorderRadius.circular(10),
                 padding: EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 4,
@@ -396,12 +442,7 @@ class _CarDetailsScreenViewState extends State<CarDetailsScreenView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      uploadIcon,
-
-                      height: 28, // Reduced from 32
-                      width: 28, // Reduced from 32
-                    ),
+                    Image.asset(uploadIcon, height: 28, width: 28),
                     Text(
                       AppLocalizations.of(context)!.dropTheFile,
                       style: MontserratStyles.montserratMediumTextStyle(

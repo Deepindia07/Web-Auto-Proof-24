@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:auto_proof/utilities/custom_toast.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../../auth/server/network/auth_network_imple_service.dart';
 import '../../car_details/model/car_details_model.dart';
-import '../model/owner_details_model.dart';
 
 part 'owner_details_screen_event.dart';
 part 'owner_details_screen_state.dart';
@@ -57,7 +55,7 @@ class OwnerDetailsScreenBloc extends Bloc<OwnerDetailsScreenEvent, OwnerDetailsS
 
       if (response!.isSuccess) {
 
-        emit(OnSubmittingAgentLoaded(response: response.data.message));
+        emit(OnSubmittingAgentLoadedSuccess(message: "${response.data.message}"));
       }
       else {
         print("Failed to submit inspection data");

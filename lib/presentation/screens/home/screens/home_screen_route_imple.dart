@@ -1,6 +1,5 @@
 library home_screen_route_imple.dart;
 
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -30,14 +29,11 @@ import '../../../../utilities/custom_container.dart';
 import '../../../../utilities/custom_widgets.dart';
 import '../../../../utilities/profile_image.dart';
 import '../../inpection/Instruction_screen/instruction_screen_route_imple.dart';
-import '../../inpection/car_details/model/car_details_model.dart';
 import '../../inpection/inpection_list/inpection_list_screen_route_imple.dart';
 import '../../payment/payment_screen_route_imple.dart';
 import '../../personal_information_screens/bloc/personal_information_bloc/personal_information_bloc.dart';
 import '../../subscription/subscription_screen_route_imple.dart';
 import '../../team_View/team_screen_route_imple.dart';
-import 'package:http/http.dart' as http;
-import '../../vehicles_screen/vehicale_details_screen.dart';
 import '../../vehicles_screen/vehicles_screen_route_imple.dart';
 part 'home_screen.dart';
 part 'side_menu_screen.dart';

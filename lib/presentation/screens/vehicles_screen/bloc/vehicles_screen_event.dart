@@ -1,8 +1,25 @@
 part of 'vehicles_screen_bloc.dart';
 
-@immutable
-abstract class VehiclesScreenEvent {}
+abstract class VehiclesScreenEvent extends Equatable{}
 
-class LoadVehiclesEvent extends VehiclesScreenEvent {}
+class LoadVehiclesEvent extends VehiclesScreenEvent {
+  @override
 
-class RefreshVehiclesEvent extends VehiclesScreenEvent {}
+  List<Object?> get props => [];
+}
+
+class RefreshVehiclesEvent extends VehiclesScreenEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+
+class SingleVehiclesEvent extends VehiclesScreenEvent {
+  final String vehicleId;
+
+  SingleVehiclesEvent({required this.vehicleId});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}

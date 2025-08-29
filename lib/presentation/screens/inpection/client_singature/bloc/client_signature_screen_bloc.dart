@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
-import 'package:auto_proof/presentation/screens/inpection/car_im_inpection/datasource/models.dart';
-import 'package:auto_proof/presentation/screens/inpection/owner_signature/datasource/model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
@@ -11,8 +9,6 @@ import 'package:signature/signature.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../car_details/model/car_details_model.dart';
-import '../../client_details/datasource/client_details_model.dart';
-import '../../owner_details/model/owner_details_model.dart';
 import '../model/model.dart';
 
 part 'client_signature_screen_event.dart';

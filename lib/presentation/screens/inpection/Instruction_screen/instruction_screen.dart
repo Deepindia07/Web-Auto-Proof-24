@@ -34,6 +34,7 @@ class InstructionScreen extends StatelessWidget {
     );
   }
 }
+
 class InstructionScreenView extends StatefulWidget {
   const InstructionScreenView({super.key});
 
@@ -88,23 +89,52 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
 
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  _buildProgressIndicator(),
-                  vGap(16),
-                  Expanded(child: _buildStepContent(currentStep)),
-                  _buildNavigationButtons(l10n),
-                  vGap(10),
-                ],
+      body: BlocListener<OwnerDetailsScreenBloc, OwnerDetailsScreenState>(
+        bloc: _ownerDetailsScreenBloc,
+        listener: (context, state) {
+          if (state is OnSubmittingAgentLoadedSuccess) {
+            // ✅ Show success dialog and redirect to home
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Success"),
+                  content: Text(state.message),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // close dialog
+                        context.push(AppRoute.homeScreen);
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ],
+                );
+              },
+            );
+          } else if (state is OnSubmittingAgentLoadedError) {
+            _showValidationErrors(state.message);
+          }
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    _buildProgressIndicator(),
+                    vGap(16),
+                    Expanded(child: _buildStepContent(currentStep)),
+                    _buildNavigationButtons(l10n),
+                    vGap(10),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -312,43 +342,11 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
           ),
         hGap(12), // Reduced from 16
         Expanded(
-          child: BlocConsumer<OwnerDetailsScreenBloc, OwnerDetailsScreenState>(
-            listener: (context, state) {
-              if (state is OnSubmittingAgentLoading) {}
-
-              if (state is OnSubmittingAgentLoaded) {
-                print("Owner details submitted successfully.");
-                if (Navigator.canPop(context)) Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (_) => const AlertDialog(
-                    title: Text("✅ Success"),
-                    content: Text("Owner details submitted successfully."),
-                  ),
-                  useRootNavigator: true,
-                );
-              }
-
-              if (state is OnSubmittingAgentLoadedError) {
-                if (Navigator.canPop(context)) Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text("❌ Error"),
-                    content: Text(state.message),
-                  ),
-                  useRootNavigator: true,
-                );
-              }
-            },
-            builder: (context, state) {
-              return CustomButton(
-                textColor: AppColor().darkYellowColor,
-                onPressed: _nextStep,
-                text: currentStep < totalSteps - 1 ? l10n.next : "Submit",
-                side: BorderSide.none,
-              );
-            },
+          child: CustomButton(
+            textColor: AppColor().darkYellowColor,
+            onPressed: _nextStep,
+            text: currentStep < totalSteps - 1 ? l10n.next : "Submit",
+            side: BorderSide.none,
           ),
         ),
       ],
@@ -547,14 +545,6 @@ class _InstructionScreenViewState extends State<InstructionScreenView> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
-
-
-
-
-
-
-
-
 
 /*import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

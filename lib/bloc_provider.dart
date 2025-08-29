@@ -12,8 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth/server/network/auth_network_imple_service.dart';
 import 'l10n_controller/l10n_switcher_bloc.dart';
 import 'presentation/screens/contact_us/bloc/contact_us_screen_bloc.dart';
-import 'presentation/screens/inpection/Instruction_screen/bloc/instruction_screen_bloc.dart';
 import 'presentation/screens/inspector_create_admin/bloc/inspector_create_admin_bloc.dart';
+import 'presentation/screens/notification/bloc/notification_screen_bloc.dart';
 
 class AppProviders extends StatelessWidget {
   final Widget child;
@@ -30,6 +30,7 @@ class AppProviders extends StatelessWidget {
         ),
 
         BlocProvider<SplashScreenBloc>(create: (context) => SplashScreenBloc()),
+        BlocProvider<NotificationScreenBloc>(create: (context) => NotificationScreenBloc(authenticationApiCall: AuthenticationApiCall())),
         BlocProvider<OwnerDetailsScreenBloc>(create: (context) => OwnerDetailsScreenBloc()),
         BlocProvider<GetSubscriptionBloc>(create: (context) => GetSubscriptionBloc( AuthenticationApiCall())),
         BlocProvider<CreateCompanyBloc>(

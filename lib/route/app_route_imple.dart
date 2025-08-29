@@ -22,12 +22,10 @@ import 'package:auto_proof/presentation/screens/personal_information_screens/per
 import 'package:auto_proof/presentation/screens/subscription/subscription_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/team_View/team_screen_route_imple.dart';
 import 'package:auto_proof/presentation/screens/team_View/web_team_profile_screen.dart';
-import 'package:auto_proof/presentation/screens/vehicles_screen/vehicale_details_screen.dart';
 import 'package:auto_proof/presentation/screens/vehicles_screen/vehicles_screen_route_imple.dart';
 import 'package:auto_proof/presentation/splash/splash_screen_route_imple.dart';
 import 'package:auto_proof/utilities/extensions/routing_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../presentation/screens/inpection/Instruction_screen/instruction_screen_route_imple.dart';
@@ -35,7 +33,6 @@ import '../presentation/screens/inpection/car_details/model/car_details_model.da
 import '../presentation/screens/inpection/car_im_inpection/car_im_inpection_screen_route_imple.dart';
 import '../presentation/screens/inpection/client_details/bloc/client_details_screen_bloc.dart';
 import '../presentation/screens/inpection/client_details/client_details_screen_route_imple.dart';
-import '../presentation/screens/inpection/client_singature/client_signature_screen_route_imple.dart';
 import '../presentation/screens/inpection/inpection_list/inpection_list_screen_route_imple.dart';
 import '../presentation/screens/inpection/owner_details/bloc/owner_details_screen_bloc.dart';
 import '../presentation/screens/inpection/owner_details/owner_details_screen_route_imple.dart';

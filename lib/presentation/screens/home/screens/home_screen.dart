@@ -14,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String userName = "Unknown";
   late DioClient dioClient;
   String? selectedInspectorId;
+  String? selectedVehicleId;
 
   void updateScreen(ScreenType type, {String? inspectorId}) {
     setState(() {
@@ -157,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return;
             }
 
-        /*    if (selectedInspectorId == null || selectedInspectorId!.isEmpty) {
+            /*    if (selectedInspectorId == null || selectedInspectorId!.isEmpty) {
               // ✅ Inspector not selected
               debugPrint(
                 "Please create/select a team before starting an inspection.",
@@ -182,13 +183,18 @@ class _HomeScreenState extends State<HomeScreen> {
               currentScreen = type;
               selectedInspectorId = inspectorId;
             });
-          }, screenType: '',
+          },
+          screenType: '',
         );
       case ScreenType.myVehicle:
         return VehiclesScreen(
-          onScreenChange: (type) {
-            setState(() => currentScreen = type);
-          },
+          onScreenChange: (type, {vehicleId}) {
+            setState(() {
+              currentScreen = type;
+              selectedVehicleId = vehicleId;
+              print("selectedInspectorId----__$selectedVehicleId");
+            });
+          }, screenType: '',
         );
       case ScreenType.paymentHistory:
         return PaymentHistoryScreen();
@@ -206,9 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return AddInspectorScreen(
           getCompanyId: companyId,
           onScreenChange: (type, {inspectorId}) {
-            setState(() {
-
-            });
+            setState(() {});
           },
         );
       case ScreenType.viewTeamProfile:
@@ -224,9 +228,16 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       case ScreenType.viewVehicleProfile:
         return MyVehicleDetailsScreen(
-          onScreenChange: (type) {
-            setState(() => currentScreen = type);
+          onScreenChange: (type, {vehicleId}) {
+            setState(() {
+              currentScreen = type;
+              if (vehicleId != null) {
+                selectedVehicleId = vehicleId; // ✅ store latest vehicle id
+              }
+
+            });
           },
+          vehicleId: selectedVehicleId ?? "",
         );
       case ScreenType.deleteAccount:
         return Container();

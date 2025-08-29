@@ -71,10 +71,10 @@ class AppRouter {
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
           child: MyVehicleDetailsScreen(
-            onScreenChange: (screen, {inspectorId}) {
+            onScreenChange: (screen, {vehicleId}) {
               // Handle navigation or state here
-              debugPrint("Navigated to $screen with inspectorId: $inspectorId");
-            },
+              debugPrint("Navigated to $screen with inspectorId: $vehicleId");
+            }, vehicleId: '',
           ),
           animation: AppAnimations.fadeIn,
           duration: const Duration(milliseconds: 800),
@@ -417,7 +417,12 @@ class AppRouter {
         name: 'vehiclesScreenView',
         pageBuilder: (context, state) => _buildPageWithAnimation(
           state: state,
-          child: VehiclesScreen(onScreenChange: (ScreenType type) {}),
+          child: VehiclesScreen(  onScreenChange: (type, {vehicleId}) {
+          /*  setState(() {
+              currentScreen = type;
+              selectedInspectorId = vehicleId;
+            });*/
+          }, screenType: '',),
           animation: AppAnimations.slideFromRightWithScale,
           duration: const Duration(milliseconds: 500),
         ),

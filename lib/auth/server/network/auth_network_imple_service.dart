@@ -13,14 +13,15 @@ import 'package:auto_proof/auth/data/models/password_setup_response_model.dart';
 import 'package:auto_proof/auth/data/models/post_inspector_role_response_model.dart';
 import 'package:auto_proof/auth/data/models/registeration_response_model.dart';
 import 'package:auto_proof/auth/data/models/user_response_model.dart';
-import 'package:auto_proof/auth/data/models/vehicle_list_response_model.dart';
 import 'package:auto_proof/auth/data/models/verify_otp_response_model.dart';
 import 'package:auto_proof/auth/server/dio_service/dio_service.dart';
 import 'package:auto_proof/auth/server/dio_service/error/exception.dart';
 import 'package:auto_proof/auth/server/network/auth_abstract_network_imple.dart';
 import 'package:auto_proof/constants/const_api_endpoints.dart';
+import 'package:auto_proof/presentation/screens/notification/model/get_notification_model.dart';
 import 'package:auto_proof/presentation/screens/subscription/models/get_subscription_model.dart';
 import 'package:auto_proof/presentation/screens/team_View/models/get_single_team_model.dart';
+import 'package:auto_proof/presentation/screens/vehicles_screen/models/get_single_vehicle_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -28,6 +29,7 @@ import 'package:flutter/foundation.dart';
 import '../../../constants/const_string.dart';
 import '../../../presentation/screens/company/models/update_company_model.dart';
 import '../../../presentation/screens/team_View/models/update_team_info_model.dart';
+import '../../../presentation/screens/vehicles_screen/models/get_vehicle_model.dart';
 import '../default_db/sharedprefs_method.dart';
 
 class AuthenticationApiCall implements AuthAbstraction {
@@ -479,8 +481,26 @@ class AuthenticationApiCall implements AuthAbstraction {
     }
   }
 
+  Future<Result<GetNotificationModel, String>> getNotificationApiCall({
+    Map<String, dynamic>? dataBody,
+  }) async {
+    try {
+      final response = await dioClient.get(ApiEndPoints.getNotificationApi);
+      final Map<String, dynamic> data = response.data;
+      debugPrint("API Response Data: ${response.data}");
+      final getResponse = GetNotificationModel.fromJson(data);
+      return Result.success(getResponse);
+    } on DioException catch (dioError) {
+      debugPrint("error generated: => ${dioError.toString()}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint("error generated: => ${error.toString()}");
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
   @override
-  Future<Result<VehicleListResponseModel, String>> vehicleListApiCall({
+  Future<Result<GetVehicleModel, String>> vehicleListApiCall({
     Map<String, dynamic>? dataBody,
   }) async {
     try {
@@ -490,7 +510,7 @@ class AuthenticationApiCall implements AuthAbstraction {
       );
       final Map<String, dynamic> data = response.data;
       debugPrint("API Response Data: ${response.data}");
-      final otpResponse = VehicleListResponseModel.fromJson(data);
+      final otpResponse = GetVehicleModel.fromJson(data);
       return Result.success(otpResponse);
     } on DioException catch (dioError) {
       debugPrint("error generated: => ${dioError.toString()}");
@@ -500,6 +520,45 @@ class AuthenticationApiCall implements AuthAbstraction {
       return Result.failure('Unexpected error occurred: $error');
     }
   }
+
+  @override
+  Future<Result<GetSingleVehicleModel, String>> getDetailsVehicleListApiCall({
+    Map<String, dynamic>? dataBody,
+    required String id,
+  }) async {
+    try {
+      final response = await dioClient.get(
+        "${ApiEndPoints.singleVehicleListEnd}/$id",
+        data: dataBody,
+      );
+
+      debugPrint("API Raw Response Type: ${response.data.runtimeType}");
+      debugPrint("API Raw Response: ${response.data}");
+
+      Map<String, dynamic> data = {};
+
+      if (response.data is Map) {
+        // ✅ Safe cast
+        data = Map<String, dynamic>.from(response.data as Map);
+      } else if (response.data is String) {
+        // ✅ Sometimes backend sends JSON as raw string
+        data = jsonDecode(response.data) as Map<String, dynamic>;
+      } else {
+        throw Exception("Unexpected response type: ${response.data.runtimeType}");
+      }
+
+      final vehicleResponse = GetSingleVehicleModel.fromJson(data);
+      return Result.success(vehicleResponse);
+    } on DioException catch (dioError) {
+      debugPrint("Dio error: ${dioError.toString()}");
+      return Result.failure(handleDioError(dioError).toString());
+    } catch (error) {
+      debugPrint("Unexpected error: ${error.toString()}");
+      return Result.failure('Unexpected error occurred: $error');
+    }
+  }
+
+
 
   Future<Result<CheckOutResponseModel, String>> inspectionApiCall({
     Map<String, dynamic>? dataBody,

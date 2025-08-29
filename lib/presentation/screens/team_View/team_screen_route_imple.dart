@@ -9,7 +9,6 @@ import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/constants/const_image.dart';
 import 'package:auto_proof/constants/const_string.dart';
 import 'package:auto_proof/presentation/screens/inspector_create_admin/bloc/inspector_create_admin_bloc.dart';
-import 'package:auto_proof/responsive.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
 import 'package:auto_proof/utilities/custom_dropDown.dart';
 import 'package:auto_proof/utilities/custom_textfields.dart';

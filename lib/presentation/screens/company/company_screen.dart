@@ -203,112 +203,102 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child:
-                                BlocConsumer<
-                                  CreateCompanyBloc,
-                                  CreateCompanyState
-                                >(
-                                  listener: (context, state) {
-                                    if (state is CreateCompanySuccess) {
-                                      CherryToast.success(
-                                        context,
-                                        AppLocalizations.of(
-                                          context,
-                                        )!.companyInformationSuccessfully,
-                                      );
-                                    }
-                                    if (state is CreateCompanyError) {
-                                      CherryToast.error(context, state.error);
+                            child: BlocConsumer<CreateCompanyBloc, CreateCompanyState>(
+                              listener: (context, state) {
+                                if (state is CreateCompanySuccess) {
+                                  CherryToast.success(
+                                    context,
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.companyInformationSuccessfully,
+                                  );
+                                }
+                                if (state is CreateCompanyError) {
+                                  CherryToast.error(context, state.error);
+                                }
+                              },
+                              builder: (context, state) {
+                                return CustomButtonWeb(
+                                  isLoading: (state is CreateCompanyLoading)
+                                      ? true
+                                      : false,
+                                  text:
+                                      (getCompanyModel == null ||
+                                          getCompanyModel!.companyId == null)
+                                      ? "Save"
+                                      : "Update",
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      if (getCompanyModel == null ||
+                                          getCompanyModel?.companyId == null) {
+                                        // 👉 CREATE
+                                        context.read<CreateCompanyBloc>().add(
+                                          CreateCompanyApiEvent(
+                                            body: {
+                                              "companyName":
+                                                  companyNameController.text
+                                                      .trim(),
+                                              "website": webSiteController.text
+                                                  .trim(),
+                                              "VatNumber": vatNumberController
+                                                  .text
+                                                  .trim(),
+                                              "companyLogo":
+                                                  "https://dummyimage.com/600x400/000/fff",
+                                              "companyRegistrationNumber":
+                                                  registrationNoController.text
+                                                      .trim(),
+                                              "shareCapital": int.tryParse(
+                                                shareController.text.trim(),
+                                              ),
+                                              "termAndConditions":
+                                                  termController.text.trim(),
+                                              "privacyPolicy": privacyController
+                                                  .text
+                                                  .trim(),
+                                            },
+                                          ),
+                                        );
+                                      } else {
+                                        // 👉 UPDATE
+                                        context.read<CreateCompanyBloc>().add(
+                                          UpdateCompanyApiEvent(
+                                            body: {
+                                              "companyName":
+                                                  companyNameController.text
+                                                      .trim(),
+                                              "website": webSiteController.text
+                                                  .trim(),
+                                              "VatNumber": vatNumberController
+                                                  .text
+                                                  .trim(),
+                                              "companyLogo":
+                                                  "https://dummyimage.com/600x400/000/fff",
+                                              "companyRegistrationNumber":
+                                                  registrationNoController.text
+                                                      .trim(),
+                                              "shareCapital": int.tryParse(
+                                                shareController.text.trim(),
+                                              ),
+
+                                              "termAndConditions":
+                                                  termController.text.trim(),
+                                              "privacyPolicy": privacyController
+                                                  .text
+                                                  .trim(),
+                                            },
+                                          ),
+                                        );
+                                      }
                                     }
                                   },
-                                  builder: (context, state) {
-                                    return CustomButtonWeb(
-                                      isLoading: (state is CreateCompanyLoading)
-                                          ? true
-                                          : false,
-                                      text:
-                                          (getCompanyModel == null ||
-                                              getCompanyModel!.companyId ==
-                                                  null)
-                                          ? "Save"
-                                          : "Update",
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          if (getCompanyModel == null ||
-                                              getCompanyModel?.companyId ==
-                                                  null) {
-                                            // 👉 CREATE
-                                            context.read<CreateCompanyBloc>().add(
-                                              CreateCompanyApiEvent(
-                                                body: {
-                                                  "companyName":
-                                                      companyNameController.text
-                                                          .trim(),
-                                                  "website": webSiteController
-                                                      .text
-                                                      .trim(),
-                                                  "VatNumber":
-                                                      vatNumberController.text
-                                                          .trim(),
-                                                  "companyLogo": previewBase64,
-                                                  "companyRegistrationNumber":
-                                                      registrationNoController
-                                                          .text
-                                                          .trim(),
-                                                  "shareCapital": int.tryParse(
-                                                    shareController.text.trim(),
-                                                  ),
-                                                  "termAndConditions":
-                                                      termController.text
-                                                          .trim(),
-                                                  "privacyPolicy":
-                                                      privacyController.text
-                                                          .trim(),
-                                                },
-                                              ),
-                                            );
-                                          } else {
-                                            // 👉 UPDATE
-                                            context.read<CreateCompanyBloc>().add(
-                                              UpdateCompanyApiEvent(
-                                                body: {
-                                                  "companyName":
-                                                      companyNameController.text
-                                                          .trim(),
-                                                  "website": webSiteController
-                                                      .text
-                                                      .trim(),
-                                                  "VatNumber":
-                                                      vatNumberController.text
-                                                          .trim(),
-                                                  "companyLogo": previewBase64,
-                                                  "companyRegistrationNumber":
-                                                      registrationNoController
-                                                          .text
-                                                          .trim(),
-                                                  "shareCapital": int.tryParse(
-                                                    shareController.text.trim(),
-                                                  ),
 
-                                                  "termAndConditions":
-                                                      termController.text
-                                                          .trim(),
-                                                  "privacyPolicy":
-                                                      privacyController.text
-                                                          .trim(),
-                                                },
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      },
-
-                                      color: AppColor().darkCharcoalBlueColor,
-                                      textColor: AppColor().yellowWarmColor,
-                                      borderRadius: 7,
-                                    );
-                                  },
-                                ),
+                                  color: AppColor().darkCharcoalBlueColor,
+                                  textColor: AppColor().yellowWarmColor,
+                                  borderRadius: 7,
+                                );
+                              },
+                            ),
                           ),
                         ],
                       ),

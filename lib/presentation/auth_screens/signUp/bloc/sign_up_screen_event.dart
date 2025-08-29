@@ -40,8 +40,10 @@ class SendOtpEmailEvent extends SignUpScreenEvent {
 
 class SendOtpEmailSignUpEvent extends SignUpScreenEvent {
   final String email;
+  final String firstName;
+  final String lastName;
 
-  SendOtpEmailSignUpEvent({required this.email});
+  SendOtpEmailSignUpEvent({required this.email,required this.firstName, required this.lastName, });
 
   @override
   // TODO: implement props

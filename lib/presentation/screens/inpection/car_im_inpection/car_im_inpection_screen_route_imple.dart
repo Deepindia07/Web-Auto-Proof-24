@@ -8,12 +8,8 @@ import 'package:auto_proof/presentation/screens/inpection/car_im_inpection/bloc/
 import 'package:auto_proof/presentation/screens/inpection/car_im_inpection/datasource/models.dart';
 import 'package:auto_proof/utilities/custom_container.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
-import 'package:auto_proof/utilities/utils.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../utilities/cusom_image_picker.dart';

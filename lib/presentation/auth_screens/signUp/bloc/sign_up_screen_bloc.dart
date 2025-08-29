@@ -6,7 +6,6 @@ import 'package:auto_proof/auth/server/network/auth_network_imple_service.dart';
 import 'package:auto_proof/constants/const_string.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../auth/data/models/otp_response_model.dart';
 import '../../../../auth/data/models/registeration_response_model.dart';
@@ -64,8 +63,13 @@ class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
 
     try {
       final Map<String, dynamic> dataBody = {
+        "firstName":event.firstName,
+        "lastName":event.lastName,
         "email": event.email.trim().toLowerCase(),
       };
+
+
+
       appLogger.w("email data :$dataBody");
       final result = await apiRepository.getOtpOnSignUp(dataBody: dataBody);
 

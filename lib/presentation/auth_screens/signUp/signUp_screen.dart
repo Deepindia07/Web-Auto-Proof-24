@@ -193,7 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         );
         return;
       }
-      if (!_isPhoneVerified) {
+   /*   if (!_isPhoneVerified) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.phoneInvalid),
@@ -201,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen>
           ),
         );
         return;
-      }
+      }*/
       String fullPhoneNumber = phoneController.text;
       String phoneNumber = fullPhoneNumber.replaceAll(RegExp(r'[^\d]'), '');
 
@@ -254,11 +254,67 @@ class _SignUpScreenState extends State<SignUpScreen>
     });
 
     _signUpBloc.add(
-      SendOtpEmailSignUpEvent(email: emailController.text.trim()),
+      SendOtpEmailSignUpEvent(
+        email: emailController.text.trim(),
+        firstName: fullNameController.text.trim(),
+        lastName: lastNameController.text.trim(),
+      ),
     );
   }
 
   void _handlePhoneVerification() async {
+    final validationError = validatePhoneNumber(phoneController.text, context);
+
+    if (validationError != null) {
+      // Show snackbar if validation failed
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(validationError), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    setState(() {
+      _isSendingPhoneOtp = true;
+    });
+
+    _signUpBloc.add(
+      SendOtpPhoneEvent(
+        phoneNumber: "$selectedCountryCode ${phoneController.text.trim()}",
+      ),
+    );
+  }
+
+  /// ✅ Centralized validation method
+  static String? validatePhoneNumber(String? value, BuildContext context) {
+    if (value == null || value.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Please enter your phone number"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return 'Please enter your phone number';
+    }
+
+    final phone = value.trim();
+
+    // ✅ Generic validation: allows + and 7–15 digits (E.164 standard)
+    final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
+
+    if (!phoneRegex.hasMatch(phone)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Enter a valid phone number (7–15 digits, with optional +)"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return 'Enter a valid phone number (7–15 digits, with optional +)';
+    }
+
+    return null; // ✅ Valid
+  }
+
+  /* void _handlePhoneVerification() async {
     if (phoneController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -289,7 +345,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         phoneNumber: "$selectedCountryCode ${phoneController.text.trim()}",
       ),
     );
-  }
+  }*/
 
   void _navigateToOtpScreen({
     required String otpType,
@@ -564,7 +620,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       CustomTextField(
                         keyboardType: TextInputType.emailAddress,
                         readOnly: _isEmailVerified,
-                        validator: InputValidators.validateEmailOrPhone,
+                        validator: InputValidators.validateEmail,
                         controller: emailController,
 
                         prefixIcon: Icon(
@@ -619,8 +675,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                           ),
                         ),
                         controller: phoneController,
-                         enabled:
-                            _isEmailVerified,
+                        //enabled: _isEmailVerified,
                         // ✅ disable typing until email verified
                         isVerified: _isPhoneVerified,
                         onVerify: () {},

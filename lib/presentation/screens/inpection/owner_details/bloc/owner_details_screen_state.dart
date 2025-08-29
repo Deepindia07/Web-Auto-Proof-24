@@ -28,3 +28,8 @@ class OnSubmittingAgentLoadedError extends OwnerDetailsScreenState {
 
   OnSubmittingAgentLoadedError({required this.message});
 }
+
+class OnSubmittingAgentLoadedSuccess extends OwnerDetailsScreenState {
+  final String message;
+  OnSubmittingAgentLoadedSuccess({required this.message});
+}

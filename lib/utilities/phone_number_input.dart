@@ -15,6 +15,7 @@ class PhoneNumberField extends StatelessWidget {
   final bool? visible;
   final bool? enabled;
   final Widget? suffixIcon;
+  final FormFieldValidator<String>? validator;
   final ValueChanged<CountryCode>? onChanged;
   final Color? color;
   final BorderRadiusGeometry? borderRadiusGeometry;
@@ -32,7 +33,7 @@ class PhoneNumberField extends StatelessWidget {
     this.onChanged,
     this.color,
     this.borderRadiusGeometry,
-    this.initialCountryCode, this.suffixIcon, this.enabled, // 👈 Added
+    this.initialCountryCode, this.suffixIcon, this.enabled, this.validator, // 👈 Added
   });
 
   @override
@@ -79,7 +80,7 @@ class PhoneNumberField extends StatelessWidget {
 
           // Phone Number Input
           Expanded(
-            child: TextField(enabled: enabled,
+            child: TextFormField(enabled: enabled,validator: validator,
               controller: controller,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(suffixIcon: suffixIcon,

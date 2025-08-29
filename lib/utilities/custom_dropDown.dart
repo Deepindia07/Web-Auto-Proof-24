@@ -1,9 +1,6 @@
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/utilities/custom_widgets.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-
-import '../constants/const_image.dart';
 import 'custom_textstyle.dart';
 
 class RadioDropdownOption {

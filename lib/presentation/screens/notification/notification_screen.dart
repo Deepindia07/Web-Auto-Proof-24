@@ -11,10 +11,7 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<NotificationScreenBloc>(
-      create: (context) => NotificationScreenBloc(),
-      child: NotificationScreenView(isBacked: isBacked, onBack: onBack),
-    );
+    return NotificationScreenView(isBacked: isBacked, onBack: onBack);
   }
 }
 

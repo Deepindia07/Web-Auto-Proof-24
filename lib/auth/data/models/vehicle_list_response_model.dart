@@ -28,6 +28,11 @@ class VehicleListResponseModel {
 
 }
 
+
+
+
+
+
 class Vehicle {
   Vehicle({
     required this.vehicleId,

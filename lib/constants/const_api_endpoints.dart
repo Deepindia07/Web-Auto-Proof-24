@@ -1,5 +1,6 @@
 class ApiEndPoints {
   static const String baseUrl = "https://api.autoproof24.com";
+  //static const String baseUrl = "http://192.168.1.13:3002";
   static const String login = "/api/auth/login";
   static const String register = "/api/auth/signUp";
   static const String verifyOtpEmail = "/api/auth/verifyOtpForEmail";
@@ -21,8 +22,12 @@ class ApiEndPoints {
   static const String checkOutEnd = "/api/inspection/check-out";
   static const String checkInEnd = "/api/inspector/inspection/check-in/";
   static const String contactUsEnd = "/api/contact-us/";
+  static const String notificationApi = "/api/super-admin-pannel/notifications";
   static const String vehicleListEnd =
       '/api/admin/vehicle/get-all-vehicle-detailList';
+
+  static const String singleVehicleListEnd =
+      '/api/admin/vehicle/get-vehicle-detail';
   static const String sendOtpApi = '/api/auth/send-otp';
   static const String getTeamMember =
       '/api/admin/team/getInspectorMemberDetails/';
@@ -37,6 +42,7 @@ class ApiEndPoints {
   static const String getSubscriptionPlans   = "/api/admin/subscription/subscription-plans";
   static const String sendOtpOnSMS   = "/api/auth/sendOtp-on-sms";
   static const String verifyOtpOnSMS   = "/api/auth/verify-Otp-of-sms";
+  static const String getNotificationApi   = "/api/super-admin-pannel/notifications";
 
 }
 

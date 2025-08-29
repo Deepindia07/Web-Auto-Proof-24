@@ -26,6 +26,7 @@ class _MyTeamDetailsScreenState extends State<MyTeamDetailsScreen> {
   TextEditingController phoneNoController = TextEditingController();
   @override
   void initState() {
+
     context.read<TeamScreenBloc>().add(
       GetSingleTeamMemberEvent(inspectorId: widget.inspectorId),
     );

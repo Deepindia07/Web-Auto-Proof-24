@@ -218,8 +218,8 @@ class CompletedInspectionCard extends StatelessWidget {
               children: [
                 // 🚗 Car Icon
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 56,
+                  height: 56,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7.48),
                     color: Colors.grey[100],

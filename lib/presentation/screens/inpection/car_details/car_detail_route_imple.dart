@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:auto_proof/constants/const_color.dart';
 import 'package:auto_proof/presentation/screens/inpection/car_details/bloc/car_details_screen_bloc.dart';
+import 'package:auto_proof/presentation/screens/vehicles_screen/models/get_single_vehicle_model.dart';
 import 'package:auto_proof/presentation/screens/vehicles_screen/vehicles_screen_route_imple.dart';
 import 'package:auto_proof/utilities/cusom_image_picker.dart';
 import 'package:auto_proof/utilities/custom_button.dart';
@@ -12,21 +13,18 @@ import 'package:auto_proof/utilities/custom_dropDown.dart';
 import 'package:auto_proof/utilities/custom_textfields.dart';
 import 'package:auto_proof/utilities/custom_textstyle.dart';
 import 'package:auto_proof/utilities/custom_toast.dart';
-import 'package:auto_proof/utilities/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import "package:mime/mime.dart";
 
 import '../../../../auth/server/default_db/sharedprefs_method.dart';
 import '../../../../constants/const_image.dart';
-import '../../../../constants/const_route_string.dart';
 import '../../../../constants/const_string.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../utilities/custom_switch_button.dart';
+import '../../vehicles_screen/bloc/vehicles_screen_bloc.dart';
 import 'model/car_details_model.dart';
 
 part 'car_details_screen.dart';

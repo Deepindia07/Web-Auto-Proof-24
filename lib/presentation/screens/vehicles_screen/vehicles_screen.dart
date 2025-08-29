@@ -303,103 +303,96 @@ class VehicleDetailsScreen extends StatelessWidget {
 }*/
 
 class VehiclesScreen extends StatefulWidget {
-  final void Function(ScreenType type) onScreenChange;
-  const VehiclesScreen({super.key, required this.onScreenChange});
+  final String screenType;
+  final void Function(ScreenType type, {String? vehicleId}) onScreenChange;
+  const VehiclesScreen({super.key, required this.onScreenChange, required this.screenType});
 
   @override
   State<VehiclesScreen> createState() => _VehiclesScreenState();
 }
 
 class _VehiclesScreenState extends State<VehiclesScreen> {
-  final List<MyVehicleModel> myVehicleModelList = [
-    MyVehicleModel(
-      numberPlate: "00 - 000 - 00",
-      carName: "Jan 24, 2024",
-      vehicleImages: car1Icon,
-    ),
-    MyVehicleModel(
-      numberPlate: "00 - 000 - 00",
-      carName: "Jan 24, 2024",
-      vehicleImages: car2Icon,
-    ),
-    MyVehicleModel(
-      numberPlate: "00 - 000 - 00",
-      carName: "Jan 24, 2024",
-      vehicleImages: carCopy,
-    ),
-    MyVehicleModel(
-      numberPlate: "00 - 000 - 00",
-      carName: "Jan 24, 2024",
-      vehicleImages: carIcon,
-    ),
-  ];
+  GetVehicleModel? getVehicleModel;
+  List<Vehicle>? getVehicleList;
 
   @override
   void initState() {
-
     context.read<VehiclesScreenBloc>().add(LoadVehiclesEvent());
     super.initState();
   }
-
-  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor().backgroundColor,
+      body: widget.screenType == "AddCar"
+          ? _buildSelectVehicleLayout(context)
+          : LayoutBuilder(
+        builder: (context, constraints) {
+          return Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1400),
+              child: customBody(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+/*  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          double maxWidth = constraints.maxWidth;
 
-          bool isMobile = maxWidth < 800;
 
           return Align(
             alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1400),
               child: BlocConsumer<VehiclesScreenBloc, VehiclesScreenState>(
-                  builder: (context, state) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [vGap(5),
-                        Text(
-                          "My Vehicle",
-                          style: MontserratStyles.montserratBoldTextStyle(
-                            size: 14,
-                            color: AppColor().darkCharcoalBlueColor,
-                          ),
-                        ), vGap(10),
-                        Expanded(
-                          child: Container(
-                            color: AppColor().backgroundColor,
-                            child: ListView.separated(
-
-                              itemCount: myVehicleModelList.length,
-                              separatorBuilder: (context, index) =>
-                                  SizedBox(height: 1,),
-                              itemBuilder: (context, index) {
-                                final vehicleList = myVehicleModelList[index];
-                                return _vehicleItem(vehicleList);
-                              },
-                            ),
+                builder: (context, state) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      vGap(5),
+                      Text(
+                        "My Vehicle",
+                        style: MontserratStyles.montserratBoldTextStyle(
+                          size: 14,
+                          color: AppColor().darkCharcoalBlueColor,
+                        ),
+                      ),
+                      vGap(10),
+                      Expanded(
+                        child: Container(
+                          color: AppColor().backgroundColor,
+                          child: ListView.separated(padding: EdgeInsets.only(bottom: 20),
+                            itemCount: getVehicleList?.length ?? 0,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 1),
+                            itemBuilder: (context, index) {
+                              return _vehicleItem(
+                                getVehicleList ?? <Vehicle>[],
+                                index,
+                              );
+                            },
                           ),
                         ),
-                      ],
-                    );
-                  },
-                listener: (BuildContext context, VehiclesScreenState state) {
-
-                    if (state is VehiclesScreenLoading) {
-                  Center(
-                  child: CustomLoader(),
-                );
-              } else if (state is VehiclesScreenLoaded) {
-                if (state.vehicles.isEmpty) {
-                  Center(
-                    child: universalNull(),
+                      ),
+                    ],
                   );
-                }
-
-              }
-
+                },
+                listener: (BuildContext context, VehiclesScreenState state) {
+                  if (state is VehiclesScreenLoading) {
+                    Center(child: CustomLoader());
+                  } else if (state is VehiclesScreenLoaded) {
+                    getVehicleModel = state.getVehicleModel;
+                    getVehicleList = getVehicleModel?.vehicles;
+                    *//*  if (state.vehicles.isEmpty) {
+                      Center(child: universalNull());
+                    }*//*
+                  }
                 },
               ),
             ),
@@ -407,22 +400,150 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
         },
       ),
     );
-  }
+  }*/
+  /// 📌 Vehicle selection popup style
+  Widget _buildSelectVehicleLayout(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        double containerWidth;
 
-  Widget _vehicleItem(MyVehicleModel payment) {
+        if (screenWidth > 1000) {
+          containerWidth = 600;
+        } else if (screenWidth > 600) {
+          containerWidth = screenWidth * 0.8;
+        } else {
+          containerWidth = screenWidth * 0.95;
+        }
+
+        return Center(
+          child: Container(
+            width: containerWidth,
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth < 600 ? 16 : 24,
+                vertical: 30,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomAppBar(
+
+                    backgroundColor:Colors.white,title: "Select Vehicle",onBackPressed: (){
+                    Navigator.pop(context);
+                  },),
+                  Center(
+                    child: Text(
+                      "",
+                      style: MontserratStyles.montserratBoldTextStyle(
+                        size: 22,
+                        color: AppColor().darkCharcoalBlueColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(child: customBody()),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  Widget customBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        widget.screenType == "AddCar"
+            ? const SizedBox.shrink()
+            : Text(
+          "My Vehicle",
+          style: MontserratStyles.montserratBoldTextStyle(
+            size: 14,
+            color: AppColor().darkCharcoalBlueColor,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: BlocConsumer<VehiclesScreenBloc, VehiclesScreenState>(
+            listener: (context, state) {
+              if (state is VehiclesScreenLoaded) {
+                getVehicleModel = state.getVehicleModel;
+                getVehicleList = getVehicleModel?.vehicles;
+              }
+            },
+            builder: (context, state) {
+              if (state is VehiclesScreenLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is VehiclesScreenLoaded) {
+                if (getVehicleList == null || getVehicleList!.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No vehicles found.",
+                      textAlign: TextAlign.center,
+                      style: MontserratStyles.montserratRegularTextStyle(
+                        size: 14,
+                        color: AppColor().silverShadeGrayColor,
+                      ),
+                    ),
+                  );
+                }
+                return ListView.separated(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  itemCount: getVehicleList!.length,
+                  separatorBuilder: (context, index) =>
+                  const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    return _vehicleItem(getVehicleList ?? <Vehicle>[],index
+                    );
+                  },
+                );
+              } else if (state is VehiclesScreenError) {
+                return Center(
+                  child: Text(
+                    "Failed to load vehicles",
+                    style: MontserratStyles.montserratSemiBoldTextStyle(
+                      size: 14,
+                      color: AppColor().darkCharcoalBlueColor,
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+  Widget _vehicleItem(List<Vehicle> payment, int index) {
     return Container(
-      decoration: BoxDecoration(color: AppColor().backgroundColor,
+      decoration: BoxDecoration(
+        color: AppColor().backgroundColor,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 1, color: AppColor().silverShadeGrayColor),
       ),
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-      margin: EdgeInsets.symmetric(vertical: 5,),
+      margin: EdgeInsets.only(top: 5, bottom: 5),
 
       child: Row(
         children: [
           const CircleAvatar(
             radius: 32,
-            backgroundImage: AssetImage('assets/image/profile.png'),
+            backgroundImage: AssetImage(carIconImage),
           ),
           SizedBox(width: 16),
           Expanded(
@@ -430,7 +551,7 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  payment.carName,
+                  payment[index].brand?.name ?? "",
                   style: MontserratStyles.montserratSemiBoldTextStyle(
                     size: 14,
                     color: AppColor().darkCharcoalBlueColor,
@@ -438,7 +559,7 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "Number Plate: ${payment.numberPlate}",
+                  "Number Plate: ${payment[index].numberPlate ?? ""}",
                   style: MontserratStyles.montserratRegularTextStyle(
                     size: 12,
                     color: AppColor().darkCharcoalBlueColor,
@@ -449,22 +570,31 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
           ),
           GestureDetector(
             onTap: () {
-              widget.onScreenChange(
-                ScreenType.viewVehicleProfile,
 
-              );
-              print("ScreenType.viewVehicleProfile--------${ScreenType.viewVehicleProfile}");
+              if (widget.screenType == "AddCar") {
+
+                Navigator.of(context).pop(payment[index].vehicleId);
+                //widget.onScreenChange(ScreenType.ownerDetailsScreen, inspectorId: id);
+              } else {
+                // ✅ Normal case → open profile view
+                widget.onScreenChange(
+                    ScreenType.viewVehicleProfile,
+                    vehicleId:payment[index].vehicleId ?? "");
+              }
+
+
+
             },
             child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
               alignment: Alignment.center,
-              width: 180,
-              height: 50,
+
               decoration: BoxDecoration(
                 color: AppColor().yellowWarmColor,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Text(
-                "view",
+             widget.screenType == "AddCar" ?"Select car" :   "view",
                 style: MontserratStyles.montserratSemiBoldTextStyle(
                   size: 14,
                   color: AppColor().darkCharcoalBlueColor,
@@ -476,66 +606,16 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
       ),
     );
   }
-/* return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      color: Colors.white,
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 25,
-            decoration: BoxDecoration(
-              color: Colors.black87,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Image.asset(payment.vehicleImages, height: 16, width: 16),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  payment.carName,
-                  style: MontserratStyles.montserratSemiBoldTextStyle(
-                    size: 14,
-                    color: AppColor().darkCharcoalBlueColor,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "Number Plate:${payment.numberPlate}",
-                  style: MontserratStyles.montserratRegularTextStyle(
-                    size: 12,
-                    color: AppColor().darkCharcoalBlueColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              context.push(AppRoute.myVehicleDetailsScreen);
-            },
-            child: Container(
-              alignment: Alignment.center,
-              width: 180,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColor().yellowWarmColor,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Text(
-                "view",
-                style: MontserratStyles.montserratSemiBoldTextStyle(
-                  size: 14,
-                  color: AppColor().darkCharcoalBlueColor,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );*/
 
 }
+
+
+
+
+
+
+
+
+
+
+

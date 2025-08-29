@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../../presentation/screens/vehicles_screen/models/get_vehicle_model.dart';
 import '../../data/models/change_password_response_model.dart';
 import '../../data/models/contact_us_response_model.dart';
 import '../../data/models/employee_login_response_model.dart';
@@ -11,7 +12,6 @@ import '../../data/models/password_setup_response_model.dart';
 import '../../data/models/post_inspector_role_response_model.dart';
 import '../../data/models/registeration_response_model.dart';
 import '../../data/models/user_response_model.dart';
-import '../../data/models/vehicle_list_response_model.dart';
 import '../../data/models/verify_otp_response_model.dart';
 import '../dio_service/error/exception.dart';
 
@@ -33,5 +33,5 @@ abstract class AuthAbstraction{
   Future<Result<List<GetTeamUserData>, String>> getAllInspectionListApiCall({Map<String, dynamic>? dataBody});
   Future<Result<OtpForEmailResponseModel, String>> getOtpforEmailVerificationApiCall({Map<String, dynamic>? dataBody});
   Future<Result<ContactUsResponseModel, String>> contactUsApiCall({Map<String, dynamic>? dataBody});
-  Future<Result<VehicleListResponseModel, String>> vehicleListApiCall({Map<String, dynamic>? dataBody});
+  Future<Result<GetVehicleModel, String>> vehicleListApiCall({Map<String, dynamic>? dataBody});
 }
